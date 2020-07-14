@@ -19,6 +19,7 @@
 * services - прослойка между моделями и api. Унифицирует используемые эндпоинты, добавляет возможность мокать не готовые к тестированию эндпоинты. Модели получают данные от сервисов, сервисы не порождают модели
 * pages - страницы, описывающие макрокод, определяющий внешний вид страницы. Каждый компонент, описанный в pages соответствует уникальному url, страницы используются только роутерами, роутеры используют только страницы
 * utils - Логически обособенные функции, выполняющие задачи, не касающиеся конкретного проекта
+* elements - Логически обособленные компоненты, не использующие модели и не специфичные для проекта
 * themes - глобальные настройки стилей, константы стилей, настройка antd, шрифты
 * Роутеры - cуществует два роутера: RootRouter, определяющий маршрутизацию до авторизации и AuthorizedRouter, определяющий маршрутизацию когда авторизация пройдена
 
@@ -44,15 +45,15 @@ import UserEditor from 'components/userEditor';
 @observer
 class UserEditorPage extends React.Component {
   state = { edditing: null };
-  
+
   componentDidMount() {
     this.setState{ edditing: this.props.users[this.props.id].clone() });
   }
-  
+
   onCommit = () => {
     this.props.users.updateUser(this.state.edditing);
   }
-  
+
   render() {
   	const { edditing } = this.state
     return (
@@ -72,11 +73,11 @@ import UserEditor from 'components/userEditor';
 
 @inject('users')
 @observer
-class UserEditorPage extends React.Component {  
+class UserEditorPage extends React.Component {
   onCommit = () => {
     this.props.users.updateUser(edditing: this.props.users[this.props.id]);
   }
-  
+
   render() {
   	const data = this.props.users[this.props.id];
     return (

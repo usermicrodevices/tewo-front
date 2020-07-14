@@ -33,7 +33,7 @@ const Dashboard = () => {
       <Card key="c" title="Card3 title">
         Card3 content
       </Card>
-      <div key="d" style={{backgroundColor:"red"}}>jsut div</div>
+      <div key="d" style={{ backgroundColor: 'red' }}>jsut div</div>
     </Grid>
   );
 };
