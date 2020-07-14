@@ -12,13 +12,13 @@
 
 ## Структура кода и архитектура приложения
 ### Файловая структура
-В src три 4 папки и роутеры:
+В src три 5 папок и роутеры:
 
 * compnents - для компонентов, касающихся специфики проекта, имплеменирующих конкретный модуль. Компоненты вызываются страницами и другими компонентами один раз, редко два
 * models - модели. Модели отвечают за состояние компонентов, подрузку данных с сервера
 * pages - страницы, описывающие макрокод, определяющий внешний вид страницы. Каждый компонент, описанный в pages соответствует уникальному url, страницы используются только роутерами, роутеры используют только страницы
 * utils - используемые в нескольких местах или не реализующие какую-то специфичную для проекта логику, упрощающие разработку основных компонентов. Утилзы не могут использовать компоненты
-* Роутеры - Компоненты, определённые вне папок и определяющие путь к страницам. Существует два основных роутера: RootRouter, определяющий url до авторизации и AuthorizedRouter, определяющий маршрутизацию когда авторизация пройдена
+* Роутеры - cуществует два роутера: RootRouter, определяющий маршрутизацию до авторизации и AuthorizedRouter, определяющий маршрутизацию когда авторизация пройдена
 
 
 ### Система инстанцирования моделей и буферизация
@@ -26,3 +26,65 @@
 
 ### Разработка компонентов, осуществляющих изменение данных с сервера
 Любые изменения данных, загружаемых в модели с сервера должны осуществляться транзакционно. Например, если мы разрабатываем компонент, осуществляющий изменение пользовательских данных то для компонента, определяющего интерфейс редактора должна создаваться копия модели пользователя и все изменения должны осщуествляться в этой копии и при нажатии "сохранить" изменённые данные должны передаваться модели, управляющей загруженными данными пользователя, эта модель должна выслать данные на сервер и после получения сообщения об успешном получении данных сервером должна изменять данные пользователя внутри себя. Недопустим прямой доступ полей ввода и других редактирующих компонентов в модели, хранящие данные, загруженные с сервера.
+#### Правильно
+```js
+import React from 'react';
+import { inject, observer } from 'mobx-react';
+
+import UserEditor from 'components/userEditor';
+
+@inject('users')
+@observer
+class UserEditorPage extends React.Component {
+  state = { edditing: null };
+  
+  componentDidMount() {
+    this.setState{ edditing: this.props.users[this.props.id].clone() });
+  }
+  
+  onCommit = () => {
+    this.props.users.updateUser(this.state.edditing);
+  }
+  
+  render() {
+  	const { edditing } = this.state
+    return (
+	  <UserEditor data={edditing} onCommit={this.onCommit} />
+	);
+  }
+}
+
+export default UserEditorPage;
+```
+#### Не правильно
+```js
+import React from 'react';
+import { inject, observer } from 'mobx-react';
+
+import UserEditor from 'components/userEditor';
+
+@inject('users')
+@observer
+class UserEditorPage extends React.Component {  
+  onCommit = () => {
+    this.props.users.updateUser(edditing: this.props.users[this.props.id]);
+  }
+  
+  render() {
+  	const data = this.props.users[this.props.id];
+    return (
+	  <UserEditor data={data} onCommit={this.onCommit} />
+	);
+  }
+}
+
+export default UserEditorPage;
+```
+
+### Используемый стек технологий
+* [React](https://reactjs.org/)
+* [Create React App](https://github.com/facebook/create-react-app)
+* [mobx](https://mobx.js.org/) используется в качестве state manager вместо redux
+* [sass](https://sass-lang.com/)
+* [antd](https://ant.design/) используется в качестве gui-ферймворка. Так же используется для управления формами ввода
+* [React Helmet](https://www.npmjs.com/package/react-helmet) для управления заголовком страницы
