@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import RootRouter from './rootRouter';
-import 'antd/dist/antd.css';
+import './themes/index.scss';
+import 'typeface-inter';
 
 ReactDOM.render(
   <RootRouter />,

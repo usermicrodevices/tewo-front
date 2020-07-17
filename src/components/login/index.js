@@ -1,13 +1,10 @@
 import React from 'react';
 import {
-  Form, Input, Button, Checkbox,
+  Form, Input, Button,
 } from 'antd';
+import { UserOutlined, UnlockOutlined } from '@ant-design/icons';
 import { login } from 'models/auth';
-
-const span = 8;
-const labelCol = { span };
-const layoutWrapperCol = { span };
-const buttonWrapperCol = { offset: span, span };
+import style from './style.module.scss';
 
 class Login extends React.Component {
   onFinish = (values) => {
@@ -16,39 +13,44 @@ class Login extends React.Component {
 
   render() {
     return (
-      <Form
-        wrapperCol={layoutWrapperCol}
-        labelCol={labelCol}
-        name="basic"
-        initialValues={{ remember: true }}
-        onFinish={this.onFinish}
-      >
-        <Form.Item
-          label="Пользователь"
-          name="username"
-          rules={[{ required: true, message: 'Пожалуйста введите имя пользователя' }]}
+      <div className={style.login}>
+        <h1>Telemetry.Work</h1>
+        <Form
+          name="basic"
+          initialValues={{ remember: true }}
+          onFinish={this.onFinish}
         >
-          <Input />
-        </Form.Item>
+          <h2>Войдите в свой аккаунт</h2>
+          <Form.Item
+            noStyle
+            name="username"
+            rules={[{ required: true, message: 'Пожалуйста введите имя пользователя' }]}
+          >
+            <Input placeholder="Логин" prefix={<UserOutlined className="site-form-item-icon" />} />
+          </Form.Item>
 
-        <Form.Item
-          label="Пароль"
-          name="password"
-          rules={[{ required: true, message: 'Пожалуйста введите пароль' }]}
-        >
-          <Input.Password />
-        </Form.Item>
+          <Form.Item
+            noStyle
+            name="password"
+            rules={[{ required: true, message: 'Пожалуйста введите пароль' }]}
+          >
+            <Input.Password placeholder="Пароль" prefix={<UnlockOutlined className="site-form-item-icon" />} />
+          </Form.Item>
 
-        <Form.Item wrapperCol={buttonWrapperCol} name="remember" valuePropName="checked">
-          <Checkbox>Запомнить меня</Checkbox>
-        </Form.Item>
-
-        <Form.Item wrapperCol={buttonWrapperCol}>
-          <Button type="primary" htmlType="submit">
-            Вход
-          </Button>
-        </Form.Item>
-      </Form>
+          <Form.Item noStyle>
+            <Button type="primary" htmlType="submit" block>
+              Войти
+            </Button>
+          </Form.Item>
+          <a>Не можете войти?</a>
+        </Form>
+        <p>
+          support@telemetry.work
+          <br />
+          +7 000 999 11 22
+        </p>
+        <p>version 0.0.0</p>
+      </div>
     );
   }
 }

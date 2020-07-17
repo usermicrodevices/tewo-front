@@ -96,3 +96,10 @@ export default UserEditorPage;
 * [sass](https://sass-lang.com/)
 * [antd](https://ant.design/) используется в качестве gui-ферймворка. Так же используется для управления формами ввода
 * [React Helmet](https://www.npmjs.com/package/react-helmet) для управления заголовком страницы
+
+
+### Некоторые вещи, которых вы, возможно, не знаете
+* В [CRA](https://create-react-app.dev/) проектах в именах .scss [нужно писать .module](https://create-react-app.dev/docs/adding-a-css-modules-stylesheet/)
+* config-overrides.js - файл, с помощью которого модуль [customize-cra](https://github.com/arackaf/customize-cra) кастомизирует конфиг вебпака внутри [CRA](https://create-react-app.dev/)
+* [customize-cra](https://github.com/arackaf/customize-cra) используется сразу для двух вещей: для включения декораторов и для настройки темы [antd](https://ant.design/)
+* less, less-loader и babel-plugin-import нужны только чтобы с помощью [customize-cra](https://github.com/arackaf/customize-cra) определить переменные темы для [antd](https://ant.design/), в остальном проекте они не используются

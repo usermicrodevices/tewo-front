@@ -1,0 +1,28 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100vh;
+    background-color: #EBF4F4;
+
+    form {
+        width: 330px;
+        background-color: white;
+        align-items: center;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 24px;
+        height: 313px;
+
+        h2 {
+            margin: 0px;
+        }
+
+        /*:global(.ant-form-item) {
+            width: 100%;
+        }*/
+    }
+}

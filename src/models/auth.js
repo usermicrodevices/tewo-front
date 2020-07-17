@@ -11,7 +11,7 @@ class Auth {
 }
 
 export function isAuthorized() {
-  return true;
+  return false;
 }
 
 export function login({ username, password }) {
