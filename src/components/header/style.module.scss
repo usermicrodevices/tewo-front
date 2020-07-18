@@ -1,0 +1,34 @@
+.head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+
+    h1 {
+        line-height: 64px;
+        margin: 0px;
+        font-size: 20px;
+    }
+
+    .menuButton {
+        font-size: 24px;
+        cursor: pointer;
+        user-select: none;
+        margin-left: 24px;
+        margin-right: -48px;
+    }
+
+    .settings {
+        margin-right: 24px;
+        margin-left: calc(-114.5px);
+        display: flex;
+        align-items: center;
+
+        .gear {
+            font-size: 24px;
+            margin-right: 8px;
+            margin-left: 8px;
+        }
+        cursor: pointer;
+    }
+}

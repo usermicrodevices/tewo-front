@@ -5,18 +5,18 @@ import {
   Route,
 } from 'react-router-dom';
 import { Provider } from 'mobx-react';
-import Menu from 'components/menu';
+
 import Auth from 'models/auth';
 import Dashboard from 'pages/dashboard';
+import AuthorizedPage from 'components/authorizedPage';
 
 class AuthorizedRouter extends React.Component {
   auth = new Auth();
 
   render() {
     return (
-      <div>
+      <AuthorizedPage>
         <Provider auth={this.auth}>
-          <Menu />
           <Router>
             <Switch>
               <Route path="/">
@@ -28,7 +28,7 @@ class AuthorizedRouter extends React.Component {
             </Switch>
           </Router>
         </Provider>
-      </div>
+      </AuthorizedPage>
     );
   }
 }
