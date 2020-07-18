@@ -1,0 +1,31 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100vh;
+    background-color: #EBF4F4;
+
+    >p.contacts {
+        flex-grow: 1000;
+        display: flex;
+        align-items: center;
+        text-align: center;
+    }
+
+    >h1 {
+        margin-top: calc(25vh / 2 - 24px);
+        margin-bottom: calc(25vh / 2 - 25px);
+    }
+
+    .hide {
+        opacity: 0;
+    }
+
+    .content {
+        padding: 24px;
+        width: 330px;
+        background-color: white;
+        border-radius: 8px;
+    }
+}
