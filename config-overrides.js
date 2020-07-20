@@ -5,6 +5,7 @@ const {
   fixBabelImports,
   addLessLoader,
 } = require('customize-cra');
+const antThemeModifications = require('./src/themes/antTheme.js');
 
 module.exports = override(
   addDecoratorsLegacy(),
@@ -17,7 +18,7 @@ module.exports = override(
   addLessLoader({
     lessOptions: {
       javascriptEnabled: true,
-      modifyVars: require('./src/themes/antTheme.js'),
+      modifyVars: antThemeModifications,
     },
   }),
 );

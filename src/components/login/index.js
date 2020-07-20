@@ -1,15 +1,18 @@
 import React from 'react';
+import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import {
   Form, Input, Button,
 } from 'antd';
 import { UserOutlined, UnlockOutlined } from '@ant-design/icons';
-import { login } from 'models/auth';
 import style from './style.module.scss';
 
+@inject('auth')
+@observer
 class Login extends React.Component {
   onFinish = (values) => {
-    login(values);
+    const { auth } = this.props;
+    auth.login(values);
   };
 
   render() {

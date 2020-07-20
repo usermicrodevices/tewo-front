@@ -6,17 +6,17 @@ import {
 } from 'react-router-dom';
 import { Provider } from 'mobx-react';
 
-import Auth from 'models/auth';
+import Session from 'models/session';
 import Dashboard from 'pages/dashboard';
 import AuthorizedPage from 'components/authorizedPage';
 
 class AuthorizedRouter extends React.Component {
-  auth = new Auth();
+  session = new Session();
 
   render() {
     return (
       <AuthorizedPage>
-        <Provider auth={this.auth}>
+        <Provider session={this.session}>
           <Router>
             <Switch>
               <Route path="/">

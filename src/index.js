@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'mobx-react';
+import 'typeface-inter';
+import Auth from 'models/auth';
 import RootRouter from './rootRouter';
 import './themes/index.scss';
-import 'typeface-inter';
+
+const auth = new Auth();
 
 ReactDOM.render(
-  <RootRouter />,
+  <Provider auth={auth}><RootRouter /></Provider>,
   document.getElementById('root'),
 );

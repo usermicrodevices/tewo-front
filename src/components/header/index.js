@@ -1,28 +1,40 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Dropdown } from 'antd';
-import { MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined } from '@ant-design/icons';
+import { Dropdown, Avatar, Menu } from 'antd';
+import { UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined } from '@ant-design/icons';
 
 import { appName } from 'config';
-import userMenu from 'components/userDropdownMenu';
 
 import style from './style.module.scss';
 
-@inject('menu')
+@inject(({ menu, auth }) => ({ menu, auth }))
 @observer
 class Header extends React.Component {
   onOpenMenu = () => {
     const { menu } = this.props;
     menu.isOpen = true;
-    console.log(menu.isOpen);
   }
 
   onCloseMenu = () => {
     const { menu } = this.props;
     menu.isOpen = false;
-    console.log(menu.isOpen);
   }
+
+  onLogout = () => {
+    const { auth } = this.props;
+    auth.logout();
+  }
+
+  menu = () => (
+    <Menu className={style.menu}>
+      <Menu.Item><Avatar icon={<UserOutlined />} /></Menu.Item>
+      <Menu.Item><Link>Личный кабинет</Link></Menu.Item>
+      <Menu.Item><Link>Настройки уведомлений</Link></Menu.Item>
+      <Menu.Item><Link>Список пользователей</Link></Menu.Item>
+      <Menu.Item onClick={this.onLogout}>Выйти</Menu.Item>
+    </Menu>
+  )
 
   render() {
     const { menu } = this.props;
@@ -34,7 +46,7 @@ class Header extends React.Component {
           : <MenuUnfoldOutlined className={style.menuButton} onClick={this.onOpenMenu} />
         }
         <h1><Link to="/">{appName}</Link></h1>
-        <Dropdown overlay={userMenu} placement="bottomRight">
+        <Dropdown overlay={this.menu} placement="bottomRight">
           <div className={style.settings}>
             <SettingOutlined className={style.gear} />
             Настройки
