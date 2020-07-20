@@ -2,6 +2,8 @@ import { observable, computed, action } from 'mobx';
 import localStorage from 'mobx-localstorage';
 import { BEARER_KEY } from 'utils/request';
 
+import { login } from 'services/user';
+
 class Auth {
   @observable user = undefined;
 
@@ -27,7 +29,7 @@ class Auth {
   }
 
   @action login(data) {
-    return new Promise((resolve) => { setTimeout(resolve, 500); })
+    return login(data)
       .then(() => {
         localStorage.setItem(BEARER_KEY, 'xxx');
         this.user = {};

@@ -2,7 +2,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import {
-  Form, Input, Button,
+  Form, Input, Button, message,
 } from 'antd';
 import { UserOutlined, UnlockOutlined, LoadingOutlined } from '@ant-design/icons';
 
@@ -22,7 +22,10 @@ class Login extends React.Component {
       return;
     }
     this.setState({ isAuthChecking: true });
-    auth.login(values).then(() => {
+    auth.login(values).catch((err) => {
+      console.log(err);
+      message.error('Произошла ошибка при обработке авторизационных данны');
+    }).finally(() => {
       this.setState({ isAuthChecking: false });
     });
   };
