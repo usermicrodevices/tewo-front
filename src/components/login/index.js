@@ -4,18 +4,31 @@ import { Link } from 'react-router-dom';
 import {
   Form, Input, Button,
 } from 'antd';
-import { UserOutlined, UnlockOutlined } from '@ant-design/icons';
+import { UserOutlined, UnlockOutlined, LoadingOutlined } from '@ant-design/icons';
+
+import routes from 'routes';
+
 import style from './style.module.scss';
 
 @inject('auth')
 @observer
 class Login extends React.Component {
+  state = { isAuthChecking: false };
+
   onFinish = (values) => {
     const { auth } = this.props;
-    auth.login(values);
+    const { isAuthChecking } = this.state;
+    if (isAuthChecking) {
+      return;
+    }
+    this.setState({ isAuthChecking: true });
+    auth.login(values).then(() => {
+      this.setState({ isAuthChecking: false });
+    });
   };
 
   render() {
+    const { isAuthChecking } = this.state;
     return (
       <Form
         className={style.form}
@@ -42,10 +55,11 @@ class Login extends React.Component {
 
         <Form.Item noStyle>
           <Button type="primary" htmlType="submit" block>
+            { isAuthChecking && <LoadingOutlined /> }
             Войти
           </Button>
         </Form.Item>
-        <Link to="/signup">Не можете войти?</Link>
+        <Link to={routes.signin.path}>Не можете войти?</Link>
       </Form>
     );
   }

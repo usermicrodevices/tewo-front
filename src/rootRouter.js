@@ -7,36 +7,33 @@ import {
 } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
-import Login from 'pages/login';
-import Signup from 'pages/signup';
-
 import UnauthorizedPage from 'elements/unauthorizedPage';
 import Loader from 'elements/loader';
 
 import AuthorizedRouter from './authorizedRouter';
+import { defaultAuthorizedRout, defaultUnauthorizedRout, unauthorizedRoutes as routes } from './routes';
 
 const RootRouter = inject('auth')(observer(({ auth }) => {
   if (auth.isAuthChecked === false) {
     return <Loader fullscreen />;
   }
-  const authorizedRedirect = auth.isAuthorized && <Redirect to="/" />;
+  const authorizedRedirect = auth.isAuthorized && <Redirect to={defaultAuthorizedRout.path} />;
+  const unauthorizedRedirect = !auth.isAuthorized && <Redirect to={defaultUnauthorizedRout.path} />;
   return (
     <Router>
       <Switch>
-        <Route path="/signin">
-          { authorizedRedirect }
-          <UnauthorizedPage>
-            <Login />
-          </UnauthorizedPage>
-        </Route>
-        <Route path="/signup">
-          { authorizedRedirect }
-          <UnauthorizedPage>
-            <Signup />
-          </UnauthorizedPage>
-        </Route>
+        {
+          routes.map(({ path, component: Component, exact }) => (
+            <Route key={path} path={path} exact={exact}>
+              { authorizedRedirect }
+              <UnauthorizedPage>
+                <Component />
+              </UnauthorizedPage>
+            </Route>
+          ))
+        }
         <Route>
-          { !auth.isAuthorized && <Redirect to="/signin" /> }
+          { unauthorizedRedirect }
           <AuthorizedRouter />
         </Route>
       </Switch>

@@ -1,12 +1,17 @@
 import { observable, computed, action } from 'mobx';
 import localStorage from 'mobx-localstorage';
-import { post, BEARER_KEY } from 'utils/request';
+import { BEARER_KEY } from 'utils/request';
 
 class Auth {
   @observable user = undefined;
 
   constructor() {
-    setTimeout(() => { this.user = localStorage.getItem(BEARER_KEY) === 'xxx' ? {} : null; }, 500);
+    console.log(localStorage.getItem(BEARER_KEY));
+    if (localStorage.getItem(BEARER_KEY) === null) {
+      this.logout();
+    } else {
+      setTimeout(() => { this.user = {}; }, 500);
+    }
   }
 
   @computed get isAuthorized() {

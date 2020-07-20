@@ -2,7 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Dropdown, Avatar, Menu } from 'antd';
-import { UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined } from '@ant-design/icons';
+import {
+  UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined,
+} from '@ant-design/icons';
 
 import { appName } from 'config';
 
