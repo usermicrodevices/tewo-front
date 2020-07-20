@@ -1,3 +1,5 @@
+@import 'src/themes/constants';
+
 .login {
     display: flex;
     flex-direction: column;
@@ -22,7 +24,7 @@
     }
 
     .content {
-        padding: 24px;
+        padding: $generic-margin;
         width: 330px;
         background-color: white;
         border-radius: 8px;

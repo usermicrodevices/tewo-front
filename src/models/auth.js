@@ -6,7 +6,6 @@ class Auth {
   @observable user = undefined;
 
   constructor() {
-    console.log(localStorage.getItem(BEARER_KEY));
     if (localStorage.getItem(BEARER_KEY) === null) {
       this.logout();
     } else {

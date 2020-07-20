@@ -1,3 +1,5 @@
+@import 'src/themes/constants';
+
 .head {
     display: flex;
     justify-content: space-between;
@@ -11,21 +13,22 @@
     }
 
     .menuButton {
-        font-size: 24px;
+        font-size: $generic-icon-size;
         cursor: pointer;
         user-select: none;
-        margin-left: 24px;
-        margin-right: -48px;
+        color: $link-color;
+        margin-left: $generic-margin;
+        margin-right: -$generic-margin + -$generic-icon-size;
     }
 
     .settings {
-        margin-right: 24px;
-        margin-left: calc(-114.5px);
+        margin-right: $generic-margin;
+        margin-left: -114.5px;
         display: flex;
         align-items: center;
 
         .gear {
-            font-size: 24px;
+            font-size: $generic-icon-size;
             margin-right: 8px;
             margin-left: 8px;
         }

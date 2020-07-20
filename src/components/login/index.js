@@ -59,7 +59,7 @@ class Login extends React.Component {
             Войти
           </Button>
         </Form.Item>
-        <Link to={routes.signin.path}>Не можете войти?</Link>
+        <Link to={routes.signup.path}>Не можете войти?</Link>
       </Form>
     );
   }
