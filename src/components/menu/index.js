@@ -3,6 +3,8 @@ import { Menu } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
 
+import style from './style.module.scss';
+
 const { SubMenu } = Menu;
 
 @inject('menu')
@@ -20,6 +22,7 @@ class Sider extends React.Component {
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
         mode="inline"
+        className={style.menu}
       >
         <SubMenu
           key="sub1"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'antd';
 
-import Grid from 'components/grid';
+import Grid from 'elements/grid';
 
 const GRID_LAYOUT_STORAGE_KEY = 'gridLayout';
 

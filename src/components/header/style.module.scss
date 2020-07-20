@@ -7,7 +7,7 @@
     background-color: white;
 
     h1 {
-        line-height: 64px;
+        line-height: $header-height;
         margin: 0px;
         font-size: 20px;
     }
@@ -18,7 +18,7 @@
         user-select: none;
         color: $link-color;
         margin-left: $generic-margin;
-        margin-right: -$generic-margin + -$generic-icon-size;
+        margin-right: -($generic-margin + $generic-icon-size);
     }
 
     .settings {
