@@ -12,11 +12,7 @@ function login(data) {
 }
 
 function me() {
-  return new Promise((resolve, reject) => {
-    get('user').then(({ data }) => {
-      resolve(data);
-    }).catch(reject);
-  });
+  return get('user').then(({ data }) => data);
 }
 
 export { login, me };
