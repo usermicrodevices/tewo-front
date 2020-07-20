@@ -2,7 +2,7 @@ import { observable, computed, action } from 'mobx';
 import localStorage from 'mobx-localstorage';
 import { BEARER_KEY } from 'utils/request';
 
-import { login } from 'services/user';
+import { login, me } from 'services/user';
 
 class Auth {
   @observable user = undefined;
@@ -11,7 +11,9 @@ class Auth {
     if (localStorage.getItem(BEARER_KEY) === null) {
       this.logout();
     } else {
-      setTimeout(() => { this.user = {}; }, 500);
+      me()
+        .then((user) => { this.user = user; })
+        .catch(() => { this.logout(); });
     }
   }
 
@@ -29,11 +31,20 @@ class Auth {
   }
 
   @action login(data) {
-    return login(data)
-      .then(() => {
-        localStorage.setItem(BEARER_KEY, 'xxx');
-        this.user = {};
-      });
+    return new Promise((resolve, reject) => {
+      login(data)
+        .then((token) => {
+          localStorage.setItem(BEARER_KEY, token);
+          me().then((user) => {
+            resolve(user);
+            this.user = user;
+          }).catch((err) => {
+            reject(err);
+            this.logout();
+          });
+        })
+        .catch(reject);
+    });
   }
 }
 

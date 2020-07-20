@@ -10,7 +10,7 @@ const request = () => axios.create({
   headers: (() => {
     const bearer = localStorage.getItem(BEARER_KEY);
     if (typeof bearer === 'string') {
-      return { auth: `bearer ${bearer}` };
+      return { authorization: `bearer ${bearer}` };
     }
     return {};
   })(),

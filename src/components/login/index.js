@@ -23,10 +23,13 @@ class Login extends React.Component {
     }
     this.setState({ isAuthChecking: true });
     auth.login(values).catch((err) => {
-      console.log(err);
-      message.error('Произошла ошибка при обработке авторизационных данны');
-    }).finally(() => {
       this.setState({ isAuthChecking: false });
+      const reason = err.response ? err.response.data : '';
+      if (JSON.stringify(reason) === JSON.stringify({ non_field_errors: ['Unable to log in with provided credentials.'] })) {
+        message.error('Неизвестное сочетание логина и пароля');
+      } else {
+        message.error('Произошла ошибка при обработке авторизационных данны');
+      }
     });
   };
 
