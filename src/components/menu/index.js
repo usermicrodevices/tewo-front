@@ -1,72 +1,57 @@
 import React from 'react';
 import { Menu } from 'antd';
 import { inject, observer } from 'mobx-react';
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { useLocation } from 'react-router-dom';
 
+import data from './data';
+import Item from './item';
+import Submenu from './submenu';
 import style from './style.module.scss';
 
-const { SubMenu } = Menu;
-
-@inject('menu')
-@observer
-class Sider extends React.Component {
-  handleClick = (e) => {
-    console.log('click ', e);
+const MenuComponent = inject('menu')(observer((props) => {
+  const { pathname: currentPathname } = useLocation();
+  const findCurrentElement = () => {
+    for (const { act, text } of data) {
+      if (Array.isArray(act)) {
+        for (const { act: itemAct, text: itemText } of act) {
+          if (typeof itemAct === 'object' && itemAct.path === currentPathname) {
+            return {
+              defaultSelectedKeys: [itemText],
+              defaultOpenKeys: [text],
+            };
+          }
+        }
+      } else if (typeof act === 'object' && act.path === currentPathname) {
+        return {
+          defaultSelectedKeys: [text],
+          defaultOpenKeys: [],
+        };
+      }
+    }
+    return {
+      defaultSelectedKeys: [],
+      defaultOpenKeys: [],
+    };
   };
+  const { defaultSelectedKeys, defaultOpenKeys } = findCurrentElement();
+  return (
+    <Menu
+      defaultSelectedKeys={defaultSelectedKeys}
+      defaultOpenKeys={defaultOpenKeys}
+      mode="inline"
+      className={style.menu}
+    >
+      {
+        data.map(({ icon, text, act }) => {
+          if (Array.isArray(act)) {
+            console.assert(typeof icon !== 'undefined');
+            return <Submenu key={text} icon={icon} items={act}>{text}</Submenu>;
+          }
+          return <Item icon={icon} key={text} act={act}>{text}</Item>;
+        })
+      }
+    </Menu>
+  );
+}));
 
-  render() {
-    return (
-      <Menu
-        onClick={this.handleClick}
-        style={{ width: 256 }}
-        defaultSelectedKeys={['1']}
-        defaultOpenKeys={['sub1']}
-        mode="inline"
-        className={style.menu}
-      >
-        <SubMenu
-          key="sub1"
-          title={(
-            <span>
-              <MailOutlined />
-              <span>Navigation One</span>
-            </span>
-          )}
-        >
-          <Menu.ItemGroup key="g1" title="Item 1">
-            <Menu.Item key="1">Option 1</Menu.Item>
-            <Menu.Item key="2">Option 2</Menu.Item>
-          </Menu.ItemGroup>
-          <Menu.ItemGroup key="g2" title="Item 2">
-            <Menu.Item key="3">Option 3</Menu.Item>
-            <Menu.Item key="4">Option 4</Menu.Item>
-          </Menu.ItemGroup>
-        </SubMenu>
-        <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Navigation Two">
-          <Menu.Item key="5">Option 5</Menu.Item>
-          <Menu.Item key="6">Option 6</Menu.Item>
-          <SubMenu key="sub3" title="Submenu">
-            <Menu.Item key="7">Option 7</Menu.Item>
-            <Menu.Item key="8">Option 8</Menu.Item>
-          </SubMenu>
-        </SubMenu>
-        <SubMenu
-          key="sub4"
-          title={(
-            <span>
-              <SettingOutlined />
-              <span>Navigation Three</span>
-            </span>
-          )}
-        >
-          <Menu.Item key="9">Option 9</Menu.Item>
-          <Menu.Item key="10">Option 10</Menu.Item>
-          <Menu.Item key="11">Option 11</Menu.Item>
-          <Menu.Item key="12">Option 12</Menu.Item>
-        </SubMenu>
-      </Menu>
-    );
-  }
-}
-
-export default Sider;
+export default MenuComponent;

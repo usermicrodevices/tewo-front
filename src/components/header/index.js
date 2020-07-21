@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Dropdown, Avatar, Menu, Space } from 'antd';
+import {
+  Dropdown, Avatar, Menu, Space,
+} from 'antd';
 import {
   UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined,
 } from '@ant-design/icons';
@@ -33,7 +35,7 @@ class Header extends React.Component {
     const { auth } = this.props;
     const userAvatar = auth.user.avatarSymbols.length > 0
       ? <Avatar>{ auth.user.avatarSymbols }</Avatar>
-      : <Avatar icon={<UserOutlined width={40} />} />;
+      : <Avatar icon={<UserOutlined />} />;
     return (
       <Menu className={style.menu}>
         <Menu.Item>
