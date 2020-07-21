@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Dropdown, Avatar, Menu } from 'antd';
+import { Dropdown, Avatar, Menu, Space } from 'antd';
 import {
   UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined,
 } from '@ant-design/icons';
 
 import { appName } from 'config';
+import { account, notifications, usersList } from 'routes';
 
 import style from './style.module.scss';
 
@@ -28,15 +29,26 @@ class Header extends React.Component {
     auth.logout();
   }
 
-  menu = () => (
-    <Menu className={style.menu}>
-      <Menu.Item><Avatar icon={<UserOutlined />} /></Menu.Item>
-      <Menu.Item><Link>Личный кабинет</Link></Menu.Item>
-      <Menu.Item><Link>Настройки уведомлений</Link></Menu.Item>
-      <Menu.Item><Link>Список пользователей</Link></Menu.Item>
-      <Menu.Item onClick={this.onLogout}>Выйти</Menu.Item>
-    </Menu>
-  )
+  menu = () => {
+    const { auth } = this.props;
+    const userAvatar = auth.user.avatarSymbols.length > 0
+      ? <Avatar>{ auth.user.avatarSymbols }</Avatar>
+      : <Avatar icon={<UserOutlined width={40} />} />;
+    return (
+      <Menu className={style.menu}>
+        <Menu.Item>
+          <Space>
+            { userAvatar }
+            { auth.user.name }
+          </Space>
+        </Menu.Item>
+        <Menu.Item><Link to={account.path}>Личный кабинет</Link></Menu.Item>
+        <Menu.Item><Link to={notifications.path}>Настройки уведомлений</Link></Menu.Item>
+        <Menu.Item><Link to={usersList.path}>Список пользователей</Link></Menu.Item>
+        <Menu.Item onClick={this.onLogout}>Выйти</Menu.Item>
+      </Menu>
+    );
+  }
 
   render() {
     const { menu } = this.props;

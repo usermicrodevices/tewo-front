@@ -33,7 +33,9 @@ function me() {
         username: 'string',
         user_permissions: 'array',
       };
-      if (!checkData(data, stouldBe)) {
+      if (!checkData(data, stouldBe, {}, {
+        username: (name) => name.length > 0,
+      })) {
         reject(new Error('type error'));
       }
 
@@ -42,7 +44,7 @@ function me() {
       for (const [jsonName, objectName] of Object.entries({
         id: 'id',
         email: 'email',
-        username: 'string',
+        username: 'username',
         first_name: 'firstName',
         last_name: 'lastName',
         is_active: 'isActive',

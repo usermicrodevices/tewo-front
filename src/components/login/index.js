@@ -6,7 +6,7 @@ import {
 } from 'antd';
 import { UserOutlined, UnlockOutlined, LoadingOutlined } from '@ant-design/icons';
 
-import routes from 'routes';
+import { signup } from 'routes';
 
 import style from './style.module.scss';
 
@@ -65,7 +65,7 @@ class Login extends React.Component {
             Войти
           </Button>
         </Form.Item>
-        <Link to={routes.signup.path}>Не можете войти?</Link>
+        <Link to={signup.path}>Не можете войти?</Link>
       </Form>
     );
   }

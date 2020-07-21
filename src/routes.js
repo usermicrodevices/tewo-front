@@ -1,47 +1,54 @@
 import Signin from 'pages/login';
 import Signup from 'pages/signup';
 import Dashboard from 'pages/dashboard';
+import Account from 'pages/user/account';
+import Notifications from 'pages/user/notifications';
+import UsersList from 'pages/user/usersList';
 
 class Rout {
   path;
 
   component;
 
-  isAuthRequired;
-
   isExact;
 
-  constructor(path, component, isAuthRequired, isExact) {
+  constructor(path, component, isExact) {
     this.path = path;
     this.component = component;
-    this.isAuthRequired = typeof isAuthRequired === 'undefined' ? true : isAuthRequired;
     this.isExact = typeof isExact === 'undefined' ? false : isExact;
   }
 }
 
-const routes = {
-  signup: new Rout('/signup', Signup, false),
-  signin: new Rout('/signin', Signin, false),
+const signup = new Rout('/signup', Signup);
+const signin = new Rout('/signin', Signin);
 
-  dashboard: new Rout('/', Dashboard, true, true),
-};
+const unauthorizedRoutes = [signup, signin];
 
-function splitRoutesByAuthSide(isAuthorized) {
-  return Object.values(routes).filter(({ isAuthRequired }) => isAuthRequired === isAuthorized);
-}
+const dashboard = new Rout('/', Dashboard, true);
+const account = new Rout('/account', Account);
+const notifications = new Rout('/notofications', Notifications);
+const usersList = new Rout('/userlist', UsersList);
 
-const unauthorizedRoutes = splitRoutesByAuthSide(false);
+const authorizedRoutes = [
+  account,
+  notifications,
+  usersList,
+  dashboard,
+];
 
-const authorizedRoutes = splitRoutesByAuthSide(true);
+const defaultAuthorizedRout = dashboard;
 
-const defaultAuthorizedRout = routes.dashboard;
-
-const defaultUnauthorizedRout = routes.signin;
+const defaultUnauthorizedRout = signin;
 
 export {
+  signup,
+  signin,
+  dashboard,
+  account,
+  notifications,
+  usersList,
   defaultAuthorizedRout,
   defaultUnauthorizedRout,
   unauthorizedRoutes,
   authorizedRoutes,
-  routes as default,
 };
