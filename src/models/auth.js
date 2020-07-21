@@ -39,6 +39,7 @@ class Auth {
             resolve(user);
             this.user = user;
           }).catch((err) => {
+            console.error(err);
             reject(err);
             this.logout();
           });
