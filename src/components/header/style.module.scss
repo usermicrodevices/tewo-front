@@ -16,7 +16,7 @@
         font-size: $generic-icon-size;
         cursor: pointer;
         user-select: none;
-        color: $link-color;
+        fill: $link-color;
         margin-left: $generic-margin;
         margin-right: -($generic-margin + $generic-icon-size);
     }

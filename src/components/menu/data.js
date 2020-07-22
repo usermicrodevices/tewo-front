@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  PieChartOutlined,
-  FlagOutlined,
-  ReadOutlined,
-  BarChartOutlined,
-  ExperimentOutlined,
-} from '@ant-design/icons';
+import Icon from 'elements/icon';
 import {
   dashboard,
   map,
@@ -28,17 +22,17 @@ class MenuItem {
 
 const items = [
   new MenuItem(
-    <PieChartOutlined />,
+    <Icon name="pie-chart-outline" size="16" />,
     'Панель управления',
     dashboard,
   ),
   new MenuItem(
-    <FlagOutlined />,
+    <Icon name="flag-outline" size="16" />,
     'Карта объектов',
     map,
   ),
   new MenuItem(
-    <BarChartOutlined />,
+    <Icon name="clipboard-outline" size="16" />,
     'Коммерческий раздел',
     [
       {
@@ -62,11 +56,11 @@ const items = [
     ],
   ),
   new MenuItem(
-    <ExperimentOutlined />,
+    <Icon name="code-download-outline" size="16" />,
     'Технический раздел',
   ),
   new MenuItem(
-    <ReadOutlined />,
+    <Icon name="book-open-outline" size="16" />,
     'Справочник',
     [
       {

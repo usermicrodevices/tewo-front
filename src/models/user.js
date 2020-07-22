@@ -36,7 +36,7 @@ class User {
       if (this.lastName.length > 0) {
         return this.lastName.slice(0, 2);
       }
-      return '';
+      return this.username.slice(0, 2);
     };
     return avatarContent().toUpperCase();
   }

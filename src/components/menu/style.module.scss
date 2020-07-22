@@ -2,18 +2,25 @@
 
 .menu {
   border-top-right-radius: $border-radius-base;
-  transition: all 0.5s;
 }
 
-:global .ant-menu-vertical.ant-menu-root {
-  width: 100px;
+$withd: 100px;
+$icon-size: 34px;
 
-  > .ant-menu-item, .ant-menu-submenu-vertical, .ant-menu-submenu-vertical > .ant-menu-submenu-title {
-    height: 100px;
-    transition: all 0.5s;
+:global .ant-menu-vertical.ant-menu-root {
+  width: $withd;
+
+  > .ant-menu-item, .ant-menu-submenu-vertical > .ant-menu-submenu-title {
+    height: $withd - 8px;
   }
 
-  :global .ant-menu-submenu-arrow {
+  .anticon {
+    font-size: 34px;
+    margin-left: $withd / 2 - $icon-size / 2 - 16px;
+    margin-top: $withd / 2 - $icon-size / 2 - 4px;
+  }
+
+  .ant-menu-submenu-arrow {
     display: none;
   }
 }

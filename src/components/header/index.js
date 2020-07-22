@@ -4,9 +4,7 @@ import { inject, observer } from 'mobx-react';
 import {
   Dropdown, Avatar, Menu, Space,
 } from 'antd';
-import {
-  UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined,
-} from '@ant-design/icons';
+import Icon from 'elements/icon';
 
 import { appName } from 'config';
 import { account, notifications, usersList } from 'routes';
@@ -16,14 +14,9 @@ import style from './style.module.scss';
 @inject(({ menu, auth }) => ({ menu, auth }))
 @observer
 class Header extends React.Component {
-  onOpenMenu = () => {
+  onMenuToggle = () => {
     const { menu } = this.props;
-    menu.isOpen = true;
-  }
-
-  onCloseMenu = () => {
-    const { menu } = this.props;
-    menu.isOpen = false;
+    menu.isOpen = !menu.isOpen;
   }
 
   onLogout = () => {
@@ -33,9 +26,12 @@ class Header extends React.Component {
 
   menu = () => {
     const { auth } = this.props;
+    if (auth.user === null) {
+      return null;
+    }
     const userAvatar = auth.user.avatarSymbols.length > 0
       ? <Avatar>{ auth.user.avatarSymbols }</Avatar>
-      : <Avatar icon={<UserOutlined />} />;
+      : <Avatar icon={<Icon name="person-outline" size="30px" />} />;
     return (
       <Menu className={style.menu}>
         <Menu.Item>
@@ -56,15 +52,11 @@ class Header extends React.Component {
     const { menu } = this.props;
     return (
       <div className={style.head}>
-        {
-        menu.isOpen
-          ? <MenuFoldOutlined className={style.menuButton} onClick={this.onCloseMenu} />
-          : <MenuUnfoldOutlined className={style.menuButton} onClick={this.onOpenMenu} />
-        }
+        <Icon className={style.menuButton} reflex={!menu.isOpen} name="menu-arrow-outline" color="primary" onClick={this.onMenuToggle} />
         <h1><Link to="/">{appName}</Link></h1>
         <Dropdown overlay={this.menu} placement="bottomRight">
           <div className={style.settings}>
-            <SettingOutlined className={style.gear} />
+            <Icon className={style.gear} color="text" name="settings-outline" />
             Настройки
           </div>
         </Dropdown>

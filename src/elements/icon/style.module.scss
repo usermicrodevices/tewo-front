@@ -1,0 +1,25 @@
+@import 'src/themes/constants';
+
+.generic {
+    transition: all $transition-duration;
+}
+
+:global .anticon {
+    fill: $text-color;
+}
+
+:global .ant-menu-item-disabled .anticon  {
+    fill: rgba(0, 0, 0, 0.25);
+}
+
+:global {
+    .ant-menu-item-selected .anticon,
+    .ant-menu-item-active .anticon,
+    .ant-menu-submenu-active .anticon {
+        fill: $link-color;
+    }
+}
+
+.reflex {
+    transform: scaleX(-1);
+}

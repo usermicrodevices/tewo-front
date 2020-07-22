@@ -2,7 +2,6 @@ import React from 'react';
 import { Menu } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { useLocation } from 'react-router-dom';
-import classNames from 'classnames';
 
 import data from './data';
 import Item from './item';
