@@ -2,4 +2,18 @@
 
 .menu {
   border-top-right-radius: $border-radius-base;
+  transition: all 0.5s;
+}
+
+:global .ant-menu-vertical.ant-menu-root {
+  width: 100px;
+
+  > .ant-menu-item, .ant-menu-submenu-vertical, .ant-menu-submenu-vertical > .ant-menu-submenu-title {
+    height: 100px;
+    transition: all 0.5s;
+  }
+
+  :global .ant-menu-submenu-arrow {
+    display: none;
+  }
 }
