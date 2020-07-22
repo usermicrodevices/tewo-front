@@ -1,5 +1,4 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
 import GridLayout from 'react-grid-layout';
 import { withSize } from 'react-sizeme';
 
