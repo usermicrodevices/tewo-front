@@ -10,12 +10,7 @@ const Icon = ({
   onClick,
   reflex,
   className,
-  size,
-  ...another
 }) => {
-  if (Object.keys(another).length > 0) {
-    console.warn(`unexpected ${name} icon arguments`, another);
-  }
   const { contents: icon } = name in icons ? icons[name] : icons['slash-outline'];
   return (
     <span role="img" aria-label="bar-chart" className="anticon anticon-bar-chart">

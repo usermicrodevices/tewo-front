@@ -13,8 +13,14 @@
     }
 
     content {
+        transition: all $transition-duration;
         overflow-x: hidden;
         overflow-y: auto;
         padding: 0 $generic-margin;
     };
+}
+
+.smallMenu.main {
+    grid-template-columns: 100px auto;
+    grid-template-rows: ($header-height + $generic-margin) auto;
 }

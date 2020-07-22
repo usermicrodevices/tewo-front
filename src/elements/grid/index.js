@@ -1,16 +1,17 @@
 import React from 'react';
-import GridLayout, { WidthProvider } from 'react-grid-layout';
+import { inject, observer } from 'mobx-react';
+import GridLayout from 'react-grid-layout';
+import { withSize } from 'react-sizeme';
 
 import style from './style.module.scss';
 
-const Layout = WidthProvider(GridLayout);
-
-const Grid = ({ children, layout }) => (
+const Grid = ({ children, layout, size }) => (
   <div className={style.wrapper}>
-    <Layout layout={layout} cols={2} draggableCancel="*" margin={[24, 24]}>
+    <GridLayout width={size.width} layout={layout} cols={2} margin={[24, 24]}>
       {children}
-    </Layout>
+      <div>{size}</div>
+    </GridLayout>
   </div>
 );
 
-export default Grid;
+export default withSize()(Grid);
