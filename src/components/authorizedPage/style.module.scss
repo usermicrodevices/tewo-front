@@ -21,6 +21,6 @@
 }
 
 .smallMenu.main {
-    grid-template-columns: 100px auto;
+    grid-template-columns: $small-menu-withd auto;
     grid-template-rows: ($header-height + $generic-margin) auto;
 }

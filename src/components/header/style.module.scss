@@ -6,10 +6,11 @@
     align-items: center;
     background-color: white;
 
-    h1 {
+    .title {
         line-height: $header-height;
         margin: 0px;
         font-size: 20px;
+        font-weight: 600;
     }
 
     .menuButton {

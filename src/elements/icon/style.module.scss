@@ -18,6 +18,10 @@
     .ant-menu-submenu-active .anticon {
         fill: $link-color;
     }
+
+    a span.anticon {
+        fill: $link-color;
+    }
 }
 
 .reflex {

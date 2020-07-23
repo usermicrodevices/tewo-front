@@ -7,7 +7,12 @@ import {
 import Icon from 'elements/icon';
 
 import { appName } from 'config';
-import { account, notifications, usersList } from 'routes';
+import {
+  account,
+  notifications,
+  usersList,
+  defaultAuthorizedRout,
+} from 'routes';
 
 import style from './style.module.scss';
 
@@ -53,7 +58,7 @@ class Header extends React.Component {
     return (
       <div className={style.head}>
         <Icon className={style.menuButton} reflex={!menu.isOpen} name="menu-arrow-outline" color="primary" onClick={this.onMenuToggle} />
-        <h1><Link to="/">{appName}</Link></h1>
+        <Link className={style.title} to={defaultAuthorizedRout.path}>{appName}</Link>
         <Dropdown overlay={this.menu} placement="bottomRight">
           <div className={style.settings}>
             <Icon className={style.gear} color="text" name="settings-outline" />

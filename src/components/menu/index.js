@@ -38,7 +38,7 @@ const MenuComponent = inject('menu')(observer(({ menu }) => {
   return (
     <Menu
       defaultSelectedKeys={defaultSelectedKeys}
-      defaultOpenKeys={defaultOpenKeys}
+      defaultOpenKeys={menu.isOpen ? defaultOpenKeys : []}
       mode={menu.mode}
       className={style.menu}
     >

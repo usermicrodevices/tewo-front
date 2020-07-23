@@ -1,0 +1,9 @@
+@import 'src/themes/constants';
+
+.title {
+    background-color: white;
+    margin-bottom: $generic-margin;
+    border: 1px solid #f0f0f0;
+    border-radius: $border-radius-base;
+    padding-bottom: 0px;
+}

@@ -59,7 +59,7 @@ function me() {
           reject(new Error('developing consistency error'));
         }
       }
-      // @todo check is all field defined
+      // @todo check is all fields defined
       resolve(user);
     }).catch(reject);
   });
