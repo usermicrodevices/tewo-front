@@ -88,14 +88,29 @@ class UserEditorPage extends React.Component {
 
 export default UserEditorPage;
 ```
+### Получение данных
+Для контроля получаемых данных используется utils/dataCheck, компонент принимает список ожидаемых данных и сыпет в консоль error если с ними что-то не так. В проде это должно приводить к появлению error, в дебаге к оишбке загрузке данных. Этот механизм создан для того, чтобы разработчик максимально рано узнавал о том, что api изменилось
+
+### Асинхронная подгрузка
+Одной из ключевых особенностей проекта является использование асинхронной модели подгрузки данных. Существует два подхода к обработке данных, зависящих от числа записей в соответствующей таблице:
+
+1.  Если данных не много (переменная окружения `REACT_ADD_SMALL_DATA_LIMIT`) данные выгружаются полностью, сортировка, фильтрация и поиск осуществляются на стороне клиента
+2.  Если данных много, то данные выгружаются постранично, к данным и интерфейсу предъявляются дополнительные требования:
+    1.  Доступна сортировка только по убыванию времени
+    2.  Данные могут добавляться только "свежее" чем все существующие
+    
+    При выполннии этих требований становится возможным получение новых записей и добавление из в начало кеша по таймеру
 
 ### Используемый стек технологий
 * [React](https://reactjs.org/)
 * [Create React App](https://github.com/facebook/create-react-app)
 * [mobx](https://mobx.js.org/) используется в качестве state manager вместо redux
 * [sass](https://sass-lang.com/)
-* [antd](https://ant.design/) используется в качестве gui-ферймворка. Так же используется для управления формами ввода
+* [antd](https://ant.design/) используется в качестве gui-ферймворка
 * [React Helmet](https://www.npmjs.com/package/react-helmet) для управления заголовком страницы
+* [react-virtualized](https://github.com/bvaughn/react-virtualized) для отображения больших таблиц
+* [apexcharts](https://apexcharts.com/) - наши графики
+* [eva-icons](https://akveo.github.io/eva-icons/)
 
 
 ### Некоторые вещи, которых вы, возможно, не знаете
@@ -103,3 +118,6 @@ export default UserEditorPage;
 * config-overrides.js - файл, с помощью которого модуль [customize-cra](https://github.com/arackaf/customize-cra) кастомизирует конфиг вебпака внутри [CRA](https://create-react-app.dev/)
 * [customize-cra](https://github.com/arackaf/customize-cra) используется сразу для двух вещей: для включения декораторов и для настройки темы [antd](https://ant.design/)
 * less, less-loader и babel-plugin-import нужны только чтобы с помощью [customize-cra](https://github.com/arackaf/customize-cra) определить переменные темы для [antd](https://ant.design/), в остальном проекте они не используются
+* [react-virtualized](https://github.com/bvaughn/react-virtualized) выбран по тому, что разработчик react-window [рекомендует](https://github.com/bvaughn/react-window#how-is-react-window-different-from-react-virtualized) его к использованию в простых случаях
+* Table из antd полностью не используется из-за того, что компонент принимает на себя обработку data что приводит к разделению логики между моделями и antd
+* На проекте все важные иконки (меню, кнопки редактирования) берутся из [eva-icons](https://akveo.github.io/eva-icons/), используйте их, если они уместны. Это деляется для того, чтобы иконки в мобильной части приложения были такими же. Для второстепенных иконок (лоадер, префиксы в полях ввода) допускается брать из [antd](https://ant.design/components/icon/)
