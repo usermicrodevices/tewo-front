@@ -3,6 +3,16 @@
 .menu {
   border-top-right-radius: $border-radius-base;
   padding-top: 37px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  direction:rtl;
+
+  >li {
+    * {
+      direction:ltr;
+    }
+    direction:ltr;
+  }
 }
 
 $icon-size: 34px;

@@ -6,6 +6,8 @@ import Auth from 'models/auth';
 
 import RootRouter from './rootRouter';
 
+import 'themes/style.scss';
+
 const auth = new Auth();
 
 ReactDOM.render(

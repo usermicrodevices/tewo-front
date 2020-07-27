@@ -21,6 +21,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-sizeme": "^2.6.12",
+    "react-window": "^1.8.5",
     "typeface-inter": "^3.12.0"
   },
   "scripts": {

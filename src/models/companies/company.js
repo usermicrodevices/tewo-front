@@ -12,6 +12,8 @@ class Comnpany {
   inn;
 
   account;
+
+  get key() { return this.id; }
 }
 
 export default Comnpany;

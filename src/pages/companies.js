@@ -5,7 +5,10 @@ import { inject, observer, Provider } from 'mobx-react';
 
 import CompaniesModel from 'models/companies';
 import Icon from 'elements/icon';
+import Table from 'elements/table';
 import Title from 'components/title';
+
+import style from './companies.module.scss';
 
 const companiesSubmenu = [
   {
@@ -28,6 +31,8 @@ const routes = [
 @inject('session')
 @observer
 class Companies extends React.Component {
+  state = {};
+
   static getDerivedStateFromProps(props) {
     const { session } = props;
     return { companiesModel: new CompaniesModel(session) };
@@ -43,9 +48,9 @@ class Companies extends React.Component {
             <Link to="companies/add" style={{ fontSize: 22 }}><Icon name="plus-circle-outline" /></Link>
           </Space>
         </Title>
-        <Card>
-          <Provider companies={companiesModel}>
-            Табличка
+        <Card className={style.card}>
+          <Provider table={companiesModel}>
+            <Table />
           </Provider>
         </Card>
       </>

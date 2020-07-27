@@ -7,7 +7,7 @@ class Session {
     if (this.companiesCache !== null) {
       return Promise.resolve(this.companiesCache);
     }
-    return getCompanies().then((companies) => { this.companiesCache = companies; });
+    return getCompanies().then((companies) => { this.companiesCache = companies; return companies; });
   }
 }
 

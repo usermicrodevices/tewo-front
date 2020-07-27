@@ -8,7 +8,6 @@ const Grid = ({ children, layout, size }) => (
   <div className={style.wrapper}>
     <GridLayout width={size.width} layout={layout} cols={2} margin={[24, 24]}>
       {children}
-      <div>{size}</div>
     </GridLayout>
   </div>
 );
