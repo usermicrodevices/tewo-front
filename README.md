@@ -108,7 +108,7 @@ export default UserEditorPage;
 * [sass](https://sass-lang.com/)
 * [antd](https://ant.design/) используется в качестве gui-ферймворка
 * [React Helmet](https://www.npmjs.com/package/react-helmet) для управления заголовком страницы
-* [react-virtualized](https://github.com/bvaughn/react-virtualized) для отображения больших таблиц
+* [react-window](https://github.com/bvaughn/react-window) для отображения больших таблиц
 * [apexcharts](https://apexcharts.com/) - наши графики
 * [eva-icons](https://akveo.github.io/eva-icons/)
 
@@ -118,6 +118,5 @@ export default UserEditorPage;
 * config-overrides.js - файл, с помощью которого модуль [customize-cra](https://github.com/arackaf/customize-cra) кастомизирует конфиг вебпака внутри [CRA](https://create-react-app.dev/)
 * [customize-cra](https://github.com/arackaf/customize-cra) используется сразу для двух вещей: для включения декораторов и для настройки темы [antd](https://ant.design/)
 * less, less-loader и babel-plugin-import нужны только чтобы с помощью [customize-cra](https://github.com/arackaf/customize-cra) определить переменные темы для [antd](https://ant.design/), в остальном проекте они не используются
-* [react-virtualized](https://github.com/bvaughn/react-virtualized) выбран по тому, что разработчик react-window [рекомендует](https://github.com/bvaughn/react-window#how-is-react-window-different-from-react-virtualized) его к использованию в простых случаях
 * Table из antd полностью не используется из-за того, что компонент принимает на себя обработку data что приводит к разделению логики между моделями и antd
 * На проекте все важные иконки (меню, кнопки редактирования) берутся из [eva-icons](https://akveo.github.io/eva-icons/), используйте их, если они уместны. Это деляется для того, чтобы иконки в мобильной части приложения были такими же. Для второстепенных иконок (лоадер, префиксы в полях ввода) допускается брать из [antd](https://ant.design/components/icon/)

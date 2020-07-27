@@ -5,6 +5,9 @@ import classNames from 'classnames';
 
 import styles from './style.module.scss';
 
+const ROW_HEIGHT = 54;
+const DEFAULT_PRESCROLL_HEIGHT = 2150;
+
 const Cell = (data, columns, columnStyles) => ({
   columnIndex, rowIndex, style,
 }) => (
@@ -27,17 +30,16 @@ function Content({ table, width, columnWidth }) {
     gridRef.current.resetAfterColumnIndex(0);
   }
   const { filteredData, columns } = table;
-  console.log(columnWidth);
   return (
     <Grid
       ref={gridRef}
       className={styles['virtual-grid']}
       columnCount={table.columns.length}
       columnWidth={(index) => columnWidth[index]}
-      height={2150}
+      height={DEFAULT_PRESCROLL_HEIGHT}
       rowCount={filteredData.length}
-      estimatedRowHeight={54}
-      rowHeight={() => 54}
+      estimatedRowHeight={ROW_HEIGHT}
+      rowHeight={() => ROW_HEIGHT}
       width={width}
     >
       {Cell(filteredData, columns.map(({ key }) => key), columns.map(({ align }) => ({ textAlign: align || 'left' })))}

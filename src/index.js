@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react';
 import 'typeface-inter';
 import Auth from 'models/auth';
+import 'mobx-react-lite/batchingForReactDom';
 
 import RootRouter from './rootRouter';
 

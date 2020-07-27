@@ -4,6 +4,8 @@ import {
   dashboard,
   map,
   companies,
+  salePoints,
+  beverage,
 } from 'routes';
 
 class MenuItem {
@@ -58,6 +60,24 @@ const items = [
   new MenuItem(
     <Icon name="code-download-outline" size="16" />,
     'Технический раздел',
+    [
+      {
+        text: 'Просроченные задачи',
+      },
+      {
+        text: 'Журнал событий',
+      },
+      {
+        text: 'Журнал наливов',
+        act: beverage,
+      },
+      {
+        text: 'Журнал очисток',
+      },
+      {
+        text: 'Статистика напряжения',
+      },
+    ],
   ),
   new MenuItem(
     <Icon name="book-open-outline" size="16" />,
@@ -69,6 +89,7 @@ const items = [
       },
       {
         text: 'Объекты',
+        act: salePoints,
       },
     ],
   ),

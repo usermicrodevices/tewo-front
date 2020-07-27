@@ -6,6 +6,8 @@ import Notifications from 'pages/user/notifications';
 import UsersList from 'pages/user/usersList';
 import MapPage from 'pages/map';
 import Companies from 'pages/companies';
+import SalePoints from 'pages/salePoints';
+import Beverage from 'pages/beverage';
 
 class Rout {
   path;
@@ -32,6 +34,8 @@ const notifications = new Rout('/notofications', Notifications);
 const usersList = new Rout('/userlist', UsersList);
 const map = new Rout('/map', MapPage);
 const companies = new Rout('/companies', Companies);
+const salePoints = new Rout('/sale_points', SalePoints);
+const beverage = new Rout('/beverage', Beverage);
 
 const authorizedRoutes = [
   account,
@@ -39,12 +43,21 @@ const authorizedRoutes = [
   usersList,
   map,
   companies,
+  salePoints,
+  beverage,
   dashboard,
 ];
 
 const defaultAuthorizedRout = dashboard;
 
 const defaultUnauthorizedRout = signin;
+
+const companiesSubmenu = [
+  {
+    path: companies.path,
+    text: 'Каталог',
+  },
+];
 
 export {
   signup,
@@ -59,4 +72,7 @@ export {
   defaultUnauthorizedRout,
   unauthorizedRoutes,
   authorizedRoutes,
+  salePoints,
+  beverage,
+  companiesSubmenu,
 };
