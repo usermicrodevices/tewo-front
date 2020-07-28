@@ -13,7 +13,7 @@ class Table {
 
   @observable data = null;
 
-  @observable allColumns
+  @observable allColumns;
 
   @observable columnsMap;
 
@@ -51,7 +51,7 @@ class Table {
       };
   }
 
-  setSort(key) {
+  @action setSort(key) {
     const currentSort = this.sort;
     if (key === currentSort.column && this.columnsMap[key].sortDirections === 'both') {
       localStorage.setItem(this.sortKey, {

@@ -1,11 +1,15 @@
+import { observable, computed } from 'mobx';
+
 import getCompanies from 'services/companies';
 import getSalePoints from 'services/salePoints';
-import { observable, computed } from 'mobx';
+import getLocations from 'services/locations';
 
 class Session {
   @observable companiesCache = getCompanies().then((companies) => { this.companiesCache = companies; return companies; });
 
   @observable pointsCache = getSalePoints().then((points) => { this.pointsCache = points; return points; });
+
+  @observable locationsCache = getLocations().then((towns) => { this.townsCache = towns; return towns; });
 
   @computed get companies() {
     if (Array.isArray(this.companiesCache)) {

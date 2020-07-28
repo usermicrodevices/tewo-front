@@ -4,7 +4,6 @@ function checkData(data, shouldBe, mayBe, tests) {
   const keysSet = Object.keys(data).reduce((set, datum) => ({ [datum]: datum, ...set }), {});
   for (const [key, type] of Object.entries(shouldBe)) {
     if (!(key in data)) {
-      console.error(`Не обнаружено обязательное поле ${key}`, data, shouldBe);
       return false;
     }
     if (!typecheck(data[key], key, type)) {
