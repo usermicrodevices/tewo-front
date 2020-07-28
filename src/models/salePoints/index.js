@@ -1,5 +1,4 @@
 import Table from 'models/table';
-import getSalePoints from 'services/salePoints';
 
 const COLUMNS = {
   id: {
@@ -58,7 +57,6 @@ class SalePoints extends Table {
         sessionedData[i].session = session;
       }
       this.data = sessionedData;
-      console.log('given session', this.data[0].session);
       if (data.filter(({ address }) => address !== null).length === 0) {
         this.removeColumn('address');
       }

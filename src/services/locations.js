@@ -7,7 +7,6 @@ const getLocations = () => Promise.all([
   get('/refs/cities/'),
 ]).then((locations) => {
   const [countriesData, regionsData, citiesData] = locations;
-  console.log(countriesData, regionsData, citiesData);
   for (const country of countriesData) {
     checkData(country, {
       name: 'string',
