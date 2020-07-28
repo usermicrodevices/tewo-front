@@ -13,7 +13,10 @@ function Content({ table, width, columnWidth }) {
   if (gridRef.current) {
     gridRef.current.resetAfterColumnIndex(0);
   }
-  const { filteredData, columns } = table;
+  const { filteredData, columns, hoverRow } = table;
+  const setHover = (row) => {
+    table.hoverRow = row;
+  };
   return (
     <Grid
       ref={gridRef}
@@ -26,7 +29,7 @@ function Content({ table, width, columnWidth }) {
       rowHeight={() => ROW_HEIGHT}
       width={width}
     >
-      {Cell(filteredData, columns)}
+      {Cell(filteredData, columns, hoverRow, setHover)}
     </Grid>
   );
 }

@@ -17,6 +17,8 @@ class Table {
 
   @observable columnsMap;
 
+  @observable hoverRow;
+
   constructor(columnsMap) {
     this.columnsMap = columnsMap;
     this.allColumns = Object.entries(columnsMap).map(columnDatumToAntdColumn);
