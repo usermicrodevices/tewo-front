@@ -12,6 +12,9 @@ const Title = ({
 }) => {
   const { pathname: currentPath } = useLocation();
   const findCurrentTab = () => {
+    if (!Array.isArray(tabs)) {
+      return [];
+    }
     for (const tab of tabs) {
       if (currentPath === tab.path) {
         return [tab.text];
@@ -26,16 +29,15 @@ const Title = ({
       breadcrumb={breadcrumb}
       nzGhost={false}
       className={style.title}
-      extra={buttons}
+      extra={buttons || []}
     >
       <Menu selectedKeys={currentTab} mode="horizontal">
-        {
-          tabs.map(({ icon, text, path }) => (
+        { tabs
+          && tabs.map(({ icon, text, path }) => (
             <Menu.Item key={text} icon={icon}>
               <Link to={path}>{text}</Link>
             </Menu.Item>
-          ))
-        }
+          )) }
       </Menu>
     </PageHeader>
   );

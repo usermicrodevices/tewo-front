@@ -16,8 +16,8 @@ const request = () => axios.create({
   })(),
 });
 
-const get = (endpoint) => request().get(endpoint);
+const get = (endpoint) => request().get(endpoint).then(({ data }) => data);
 
-const post = (endpoint, data) => request().post(endpoint, data);
+const post = (endpoint, data) => request().post(endpoint, data).then(({ data: result }) => result);
 
 export { get, post, BEARER_KEY };

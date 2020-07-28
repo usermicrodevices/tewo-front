@@ -5,17 +5,17 @@ import User from 'models/user';
 function login(data) {
   return new Promise((resolve, reject) => {
     post('login', data).then((response) => {
-      if (Object.keys(response.data).length !== 1 || typeof response.data.token !== 'string') {
+      if (Object.keys(response).length !== 1 || typeof response.token !== 'string') {
         reject(new Error(response));
       }
-      resolve(response.data.token);
+      resolve(response.token);
     }).catch(reject);
   });
 }
 
 function me() {
   return new Promise((resolve, reject) => {
-    get('user').then(({ data }) => {
+    get('user').then((data) => {
       const stouldBe = {
         id: 'number',
         date_joined: 'date',
@@ -55,7 +55,7 @@ function me() {
         if (jsonName in stouldBe) {
           user[objectName] = data[jsonName];
         } else {
-          console.error(`Плпытка извлечь непроверенные данные ${jsonName}`, stouldBe);
+          console.error(`Попытка извлечь непроверенные данные ${jsonName}`, stouldBe);
           reject(new Error('developing consistency error'));
         }
       }

@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer, Provider } from 'mobx-react';
 
 import SalePointsModel from 'models/salePoints';
-import SaleModelComponent from 'components/saleModel';
+import SaleModelComponent from 'components/salePoints';
 
 @inject('session')
 @observer
@@ -11,13 +11,13 @@ class SalePoints extends React.Component {
 
   static getDerivedStateFromProps(props) {
     const { session } = props;
-    return { companiesModel: new SalePointsModel(session) };
+    return { salePointsModel: new SalePointsModel(session) };
   }
 
   render() {
-    const { session } = this.props;
+    const { salePointsModel } = this.state;
     return (
-      <Provider session={session}>
+      <Provider salePoints={salePointsModel}>
         <SaleModelComponent />
       </Provider>
     );

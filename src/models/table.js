@@ -1,5 +1,5 @@
 /* eslint class-methods-use-this: "off" */
-import { computed, observable } from 'mobx';
+import { computed, observable, action } from 'mobx';
 import localStorage from 'mobx-localstorage';
 
 const columnDatumToAntdColumn = ([key, value]) => ({
@@ -11,16 +11,20 @@ const columnDatumToAntdColumn = ([key, value]) => ({
 class Table {
   @observable filter = '';
 
-  @observable data;
+  @observable data = null;
 
-  allColumns
+  @observable allColumns
 
-  columnsMap;
+  @observable columnsMap;
 
   constructor(columnsMap) {
     this.columnsMap = columnsMap;
     this.allColumns = Object.entries(columnsMap).map(columnDatumToAntdColumn);
-    console.log(this);
+  }
+
+  @action removeColumn(columnKey) {
+    this.allColumns.replace(this.allColumns.filter(({ key }) => key !== columnKey));
+    delete this.columnsMap[columnKey];
   }
 
   @computed get filteredData() {

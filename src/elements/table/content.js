@@ -1,28 +1,12 @@
 import React, { useRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import { VariableSizeGrid as Grid } from 'react-window';
-import classNames from 'classnames';
 
 import styles from './style.module.scss';
+import Cell from './cell';
 
 const ROW_HEIGHT = 54;
 const DEFAULT_PRESCROLL_HEIGHT = 2150;
-
-const Cell = (data, columns, columnStyles) => ({
-  columnIndex, rowIndex, style,
-}) => (
-  <div
-    style={{ ...style, ...columnStyles[columnIndex] }}
-    className={classNames(
-      styles['virtual-table-cell'],
-      {
-        [styles['virtual-table-cell-last']]: columnIndex === columns.length - 1,
-      },
-    )}
-  >
-    { data[rowIndex][columns[columnIndex]] }
-  </div>
-);
 
 function Content({ table, width, columnWidth }) {
   const gridRef = useRef();
@@ -42,7 +26,7 @@ function Content({ table, width, columnWidth }) {
       rowHeight={() => ROW_HEIGHT}
       width={width}
     >
-      {Cell(filteredData, columns.map(({ key }) => key), columns.map(({ align }) => ({ textAlign: align || 'left' })))}
+      {Cell(filteredData, columns)}
     </Grid>
   );
 }

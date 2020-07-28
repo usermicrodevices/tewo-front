@@ -49,8 +49,7 @@ class Companies extends Table {
   constructor(session) {
     super(COLUMNS_LIST);
 
-    this.data = null;
-    session.getCompanies()
+    session.companies
       .then((companies) => {
         this.data = this.applySort(companies);
       })

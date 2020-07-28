@@ -15,7 +15,7 @@ function checkData(data, shouldBe, mayBe, tests) {
   if (typeof mayBe !== 'undefined') {
     for (const [key, type] of Object.entries(mayBe)) {
       if (key in data) {
-        if (!typecheck(data[key], key, type)) {
+        if (data[key] !== null && !typecheck(data[key], key, type)) {
           return false;
         }
         delete keysSet[key];
@@ -69,8 +69,20 @@ function typecheck(datum, key, type) {
     console.error(`Для поля ${key} ожидается тип array, полученные данные не являются массивом`, datum);
     return false;
   }
+  if (type === 'location') {
+    if (typeof datum === 'string') {
+      const location = datum.split(',').map(parseFloat);
+      if (location.length === 2 && location.filter(isFinite).length === 2) {
+        return true;
+      }
+      console.error(`Для поля ${key} ожидается тип location, полученные данные содержат не два числа (${location.length})`, datum);
+      return false;
+    }
+    console.error(`Для поля ${key} ожидается тип location, полученные данные не являются строкой`, datum);
+    return false;
+  }
   if (typeof datum !== type) {
-    console.error(`Для поля ${key} ожидается тип array, обнаружен ${typeof datum}`);
+    console.error(`Для поля ${key} ожидается тип ${type}, обнаружен ${typeof datum}`);
     return false;
   }
   return true;
