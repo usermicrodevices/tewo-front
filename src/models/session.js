@@ -3,6 +3,7 @@ import { observable, computed } from 'mobx';
 import getCompanies from 'services/companies';
 import getSalePoints from 'services/salePoints';
 import getLocations from 'services/locations';
+import Beverages from './beverages';
 
 class Session {
   @observable companiesCache = getCompanies().then((companies) => { this.companiesCache = companies; return companies; });
@@ -10,6 +11,8 @@ class Session {
   @observable pointsCache = getSalePoints().then((points) => { this.pointsCache = points; return points; });
 
   @observable locationsCache = getLocations().then((towns) => { this.townsCache = towns; return towns; });
+
+  @observable beverageModel = new Beverages();
 
   @computed get companies() {
     if (Array.isArray(this.companiesCache)) {

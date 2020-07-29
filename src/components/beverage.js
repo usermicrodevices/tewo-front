@@ -1,5 +1,6 @@
 import React from 'react';
 import { Space } from 'antd';
+import { inject, observer, Provider } from 'mobx-react';
 import { Link } from 'react-router-dom';
 
 import Card from 'elements/card';
@@ -14,7 +15,7 @@ const companiesSubmenu = [
   },
 ];
 
-const Beverage = () => (
+const Beverage = ({ session }) => (
   <>
     <Title tabs={companiesSubmenu}>
       <Space>
@@ -23,9 +24,11 @@ const Beverage = () => (
       </Space>
     </Title>
     <Card>
-      <Table />
+      <Provider table={session.beverageModel}>
+        <Table />
+      </Provider>
     </Card>
   </>
 );
 
-export default Beverage;
+export default inject('session')(observer(Beverage));

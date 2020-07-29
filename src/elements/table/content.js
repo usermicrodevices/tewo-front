@@ -13,7 +13,7 @@ function Content({ table, width, columnWidth }) {
   if (gridRef.current) {
     gridRef.current.resetAfterColumnIndex(0);
   }
-  const { filteredData, columns, hoverRow } = table;
+  const { data, columns, hoverRow } = table;
   const setHover = (row) => {
     table.hoverRow = row;
   };
@@ -24,12 +24,12 @@ function Content({ table, width, columnWidth }) {
       columnCount={table.columns.length}
       columnWidth={(index) => columnWidth[index]}
       height={DEFAULT_PRESCROLL_HEIGHT}
-      rowCount={filteredData.length}
+      rowCount={data.length}
       estimatedRowHeight={ROW_HEIGHT}
       rowHeight={() => ROW_HEIGHT}
       width={width}
     >
-      {Cell(filteredData, columns, hoverRow, setHover)}
+      {Cell(data, columns, hoverRow, setHover)}
     </Grid>
   );
 }

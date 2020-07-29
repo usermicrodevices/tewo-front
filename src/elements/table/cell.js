@@ -9,7 +9,8 @@ const Cell = (data, columns, hover, setHover) => observer(({
   columnIndex, rowIndex, style,
 }) => {
   const { align, key, transform } = columns[columnIndex];
-  let datum = data[rowIndex][key];
+  const rowData = data[rowIndex];
+  let datum = typeof rowData === 'undefined' ? columnIndex === 0 && <Loader /> : rowData[key];
   if (transform) {
     datum = transform(datum);
   }

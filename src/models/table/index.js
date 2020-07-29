@@ -1,6 +1,10 @@
 /* eslint class-methods-use-this: "off" */
 import { computed, observable, action } from 'mobx';
 import localStorage from 'mobx-localstorage';
+import { table as constants } from 'config';
+
+import AsyncModel from './async';
+import StaticModel from './static';
 
 const columnDatumToAntdColumn = ([key, value]) => ({
   key,
@@ -11,7 +15,7 @@ const columnDatumToAntdColumn = ([key, value]) => ({
 class Table {
   @observable filter = '';
 
-  @observable data = null;
+  @observable dataModel = null;
 
   @observable allColumns;
 
@@ -19,7 +23,20 @@ class Table {
 
   @observable hoverRow;
 
-  constructor(columnsMap) {
+  constructor(partialLoader, columnsMap) {
+    partialLoader(constants.preloadLimit)
+      .then(({ count, results }) => {
+        if (count > constants.smallDataLimit) {
+          this.dataModel = new AsyncModel(partialLoader, count, results, this);
+        } else {
+          this.dataModel = new StaticModel(partialLoader, count, results, this);
+        }
+      })
+      .catch((err) => {
+        console.log('loading error');
+        this.dataModel = err;
+      });
+
     this.columnsMap = columnsMap;
     this.allColumns = Object.entries(columnsMap).map(columnDatumToAntdColumn);
   }
@@ -27,14 +44,6 @@ class Table {
   @action removeColumn(columnKey) {
     this.allColumns.replace(this.allColumns.filter(({ key }) => key !== columnKey));
     delete this.columnsMap[columnKey];
-  }
-
-  @computed get filteredData() {
-    const { filter } = this;
-    if (!Array.isArray(this.data)) {
-      return this.data;
-    }
-    return this.data.filter(({ name }) => name.indexOf(filter) >= 0);
   }
 
   @computed get visibleColumns() {
@@ -66,20 +75,6 @@ class Table {
         direction: this.columnsMap[key].sortDirections !== 'ascend' ? 'descend' : 'ascend',
       });
     }
-    this.data.replace(this.applySort(this.data.slice()));
-  }
-
-  applySort(data) {
-    const { column } = this.sort;
-    const direction = this.sort.direction === 'descend' ? -1 : 1;
-    return data.sort((a, b) => {
-      const left = a[column];
-      const right = b[column];
-      if (left === right) {
-        return Math.sign(a.id - b.id);
-      }
-      return (left > right ? 1 : -1) * direction;
-    });
   }
 
   set visibleColumns(data) {
@@ -98,12 +93,31 @@ class Table {
     return this.visibleColumns.map((key) => columnDatumToAntdColumn([key, this.columnsMap[key]]));
   }
 
-  @computed get isLoaded() {
-    return Array.isArray(this.data);
+  @computed get filterKey() {
+    for (const { isForFilter, key } of this.allColumns) {
+      if (isForFilter) {
+        return key;
+      }
+    }
+
+    return null;
   }
 
-  @computed get isLoading() {
-    return this.data === null;
+  @computed get data() {
+    if (this.isLoaded) {
+      if (this.filter !== '') {
+        const { filterKey } = this;
+        if (filterKey !== null) {
+          return this.dataModel.data.filter((datum) => datum[filterKey].toLowerCase().indexOf(this.filter) >= 0);
+        }
+      }
+      return this.dataModel.data;
+    }
+    return null;
+  }
+
+  @computed get isLoaded() {
+    return this.dataModel && this.dataModel.isLoaded;
   }
 }
 
