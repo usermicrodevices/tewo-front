@@ -2,7 +2,7 @@ import { get } from 'utils/request';
 import checkData from 'utils/dataCheck';
 
 const getBeverage = (limit, offset) => new Promise((resolve, reject) => {
-  get(`/data/beverages/?limit=${limit}`).then((response) => {
+  get(`/data/beverages/?limit=${limit}&offset=${offset || 0}`).then((response) => {
     const beverageMustBe = {
       cid: 'string',
       created_date: 'date',

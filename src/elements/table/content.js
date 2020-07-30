@@ -17,8 +17,13 @@ function Content({ table, width, columnWidth }) {
   const setHover = (row) => {
     table.hoverRow = row;
   };
+  const onScroll = ({ scrollTop }) => {
+    table.currentRow = Math.ceil(scrollTop / ROW_HEIGHT);
+    console.log('d');
+  };
   return (
     <Grid
+      onScroll={onScroll}
       ref={gridRef}
       className={styles['virtual-grid']}
       columnCount={table.columns.length}

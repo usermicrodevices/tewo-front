@@ -23,6 +23,8 @@ class Table {
 
   @observable hoverRow;
 
+  @observable currentRow;
+
   constructor(partialLoader, columnsMap) {
     partialLoader(constants.preloadLimit)
       .then(({ count, results }) => {
@@ -33,7 +35,6 @@ class Table {
         }
       })
       .catch((err) => {
-        console.log('loading error');
         this.dataModel = err;
       });
 
