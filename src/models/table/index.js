@@ -28,7 +28,7 @@ class Table {
   constructor(partialLoader, columnsMap) {
     partialLoader(constants.preloadLimit)
       .then(({ count, results }) => {
-        if (count > constants.smallDataLimit) {
+        if (count > constants.smallDataLimit && count !== results.length) {
           this.dataModel = new AsyncModel(partialLoader, count, results, this);
         } else {
           this.dataModel = new StaticModel(partialLoader, count, results, this);

@@ -1,5 +1,6 @@
 /* eslint class-methods-use-this: "off" */
 import Table from 'models/table';
+import getCompanies from 'services/companies';
 
 const COLUMNS_LIST = {
   id: {
@@ -47,15 +48,7 @@ const COLUMNS_LIST = {
 
 class Companies extends Table {
   constructor(session) {
-    super(COLUMNS_LIST);
-
-    session.companies
-      .then((companies) => {
-        this.data = this.applySort(companies);
-      })
-      .catch((err) => {
-        this.data = err;
-      });
+    super(getCompanies, COLUMNS_LIST);
   }
 
   toString() {

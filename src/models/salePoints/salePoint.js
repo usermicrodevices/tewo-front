@@ -13,11 +13,11 @@ class SalePoint {
 
   @observable mapPoint;
 
-  @observable session;
+  session;
 
   @computed get company() {
     if (!this.session) {
-      return null;
+      return undefined;
     }
     return this.session.getCompanyById(this.companyId);
   }

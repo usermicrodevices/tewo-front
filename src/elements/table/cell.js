@@ -14,7 +14,7 @@ const Cell = (data, columns, hover, setHover) => observer(({
   if (transform) {
     datum = transform(datum);
   }
-  if (datum === null) {
+  if (typeof datum === 'undefined') {
     datum = <Loader />;
   }
   return (

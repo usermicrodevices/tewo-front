@@ -23,6 +23,7 @@ class StaticDataManager {
   }
 
   constructor(partialLoader, amount, data, table) {
+    this.amount = amount;
     reaction(() => ({ data: this.data, sort: table.sort }), ({ data: unsorted, sort }) => {
       this.data.replace(applySort(unsorted.slice(), sort));
     });

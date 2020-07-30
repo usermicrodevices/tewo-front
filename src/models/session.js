@@ -1,38 +1,24 @@
-import { observable, computed } from 'mobx';
+import { observable } from 'mobx';
 
-import getCompanies from 'services/companies';
-import getSalePoints from 'services/salePoints';
 import getLocations from 'services/locations';
 import Beverages from './beverages';
+import Companies from './companies';
+import Points from './salePoints';
 
 class Session {
-  @observable companiesCache = getCompanies().then((companies) => { this.companiesCache = companies; return companies; });
+  @observable companiesModel = new Companies();
 
-  @observable pointsCache = getSalePoints().then((points) => { this.pointsCache = points; return points; });
+  @observable pointsModel = new Points(this);
 
   @observable locationsCache = getLocations().then((towns) => { this.townsCache = towns; return towns; });
 
   @observable beverageModel = new Beverages();
 
-  @computed get companies() {
-    if (Array.isArray(this.companiesCache)) {
-      return Promise.resolve(this.companiesCache);
-    }
-    return this.companiesCache;
-  }
-
-  @computed get salePoints() {
-    if (Array.isArray(this.pointsCache)) {
-      return Promise.resolve(this.pointsCache);
-    }
-    return this.pointsCache;
-  }
-
   getCompanyById(serchedId) {
-    if (!Array.isArray(this.companiesCache)) {
-      return null;
+    if (!this.companiesModel.isLoaded) {
+      return undefined;
     }
-    for (const company of this.companiesCache) {
+    for (const company of this.companiesModel.data) {
       if (company.id === serchedId) {
         return company;
       }

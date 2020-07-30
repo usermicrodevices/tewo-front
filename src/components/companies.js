@@ -9,11 +9,11 @@ import Table from 'elements/table';
 import Title from 'components/title';
 import { companiesSubmenu } from 'routes';
 
-@inject('companies')
+@inject('session')
 @observer
 class Companies extends React.Component {
   render() {
-    const { companies } = this.props;
+    const { session } = this.props;
     return (
       <>
         <Title tabs={companiesSubmenu}>
@@ -23,7 +23,7 @@ class Companies extends React.Component {
           </Space>
         </Title>
         <Card>
-          <Provider table={companies}>
+          <Provider table={session.companiesModel}>
             <Table />
           </Provider>
         </Card>

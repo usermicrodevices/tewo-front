@@ -19,7 +19,6 @@ function Content({ table, width, columnWidth }) {
   };
   const onScroll = ({ scrollTop }) => {
     table.currentRow = Math.ceil(scrollTop / ROW_HEIGHT);
-    console.log('d');
   };
   return (
     <Grid

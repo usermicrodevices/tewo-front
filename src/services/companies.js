@@ -25,7 +25,7 @@ function generateRandomCompany(_, id) {
 function getCompanies() {
   return new Promise((resolve, reject) => {
     const randomCompanies = new Array(10000).fill(null).map(generateRandomCompany);
-    setTimeout(() => { resolve(randomCompanies); }, 1500);
+    setTimeout(() => { resolve({ count: randomCompanies.length, results: randomCompanies }); }, 1500);
   });
 }
 

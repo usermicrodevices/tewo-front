@@ -1,4 +1,6 @@
+/* eslint class-methods-use-this: "off" */
 import Table from 'models/table';
+import getSalePoints from 'services/salePoints';
 
 const COLUMNS = {
   id: {
@@ -49,18 +51,11 @@ const COLUMNS = {
 
 class SalePoints extends Table {
   constructor(session) {
-    super(COLUMNS);
+    super(getSalePoints(session), COLUMNS);
+  }
 
-    session.salePoints.then((data) => {
-      const sessionedData = data.slice();
-      for (let i = 0; i < data.length; i += 1) {
-        sessionedData[i].session = session;
-      }
-      this.data = sessionedData;
-      if (data.filter(({ address }) => address !== null).length === 0) {
-        this.removeColumn('address');
-      }
-    });
+  toString() {
+    return 'SalePoints';
   }
 }
 
