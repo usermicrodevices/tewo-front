@@ -1,41 +1,63 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { VariableSizeGrid as Grid } from 'react-window';
 
 import styles from './style.module.scss';
 import Cell from './cell';
+import { reaction } from 'mobx';
 
 const ROW_HEIGHT = 54;
 const DEFAULT_PRESCROLL_HEIGHT = 2150;
 
-function Content({ table, width, columnWidth }) {
-  const gridRef = useRef();
-  if (gridRef.current) {
-    gridRef.current.resetAfterColumnIndex(0);
+@inject('table')
+@observer
+class Content extends React.Component {
+  gridRef;
+
+  constructor(props) {
+    super(props);
+
+    this.gridRef = React.createRef();
   }
-  const { data, columns, hoverRow } = table;
-  const setHover = (row) => {
+
+  setHover = (row) => {
+    const { table } = this.props;
     table.hoverRow = row;
   };
-  const onScroll = ({ scrollTop }) => {
+
+  onScroll = ({ scrollTop }) => {
+    const { table } = this.props;
     table.currentRow = Math.ceil(scrollTop / ROW_HEIGHT);
   };
-  return (
-    <Grid
-      onScroll={onScroll}
-      ref={gridRef}
-      className={styles['virtual-grid']}
-      columnCount={table.columns.length}
-      columnWidth={(index) => columnWidth[index]}
-      height={DEFAULT_PRESCROLL_HEIGHT}
-      rowCount={data.length}
-      estimatedRowHeight={ROW_HEIGHT}
-      rowHeight={() => ROW_HEIGHT}
-      width={width}
-    >
-      {Cell(data, columns, hoverRow, setHover)}
-    </Grid>
-  );
+
+  render() {
+    const { table, width, columnWidth } = this.props;
+    if (this.gridRef.current) {
+      this.gridRef.current.resetAfterColumnIndex(0);
+    }
+    const {
+      data,
+      columns,
+      hoverRow,
+      freshItems,
+    } = table;
+    return (
+      <Grid
+        onScroll={this.onScroll}
+        ref={this.gridRef}
+        className={styles['virtual-grid']}
+        columnCount={table.columns.length}
+        columnWidth={(index) => columnWidth[index]}
+        height={DEFAULT_PRESCROLL_HEIGHT}
+        rowCount={data.length}
+        estimatedRowHeight={ROW_HEIGHT}
+        rowHeight={() => ROW_HEIGHT}
+        width={width}
+      >
+        {Cell(data, columns, hoverRow, this.setHover, freshItems)}
+      </Grid>
+    );
+  }
 }
 
-export default inject('table')(observer(Content));
+export default Content;

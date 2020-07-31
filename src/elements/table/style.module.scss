@@ -18,10 +18,15 @@
     padding: 16px;
     border-bottom: 1px solid #e8e8e8;
     background: #FFF;
+    transition: background-color 1s linear;
   }
 
   .hover {
-    background: #fafafa;
+    background-color: #fafafa;
+  }
+
+  .highlightnew {
+    background-color: #fffffa;
   }
 
   .loader {

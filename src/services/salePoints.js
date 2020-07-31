@@ -3,9 +3,9 @@ import SalePoint from 'models/salePoints/salePoint';
 import checkData from 'utils/dataCheck';
 
 const getSalePoints = (session) => () => new Promise((resolve, reject) => {
-  get('/refs/sale_points').then((salePoints) => {
+  get('/refs/sale_points/').then((salePoints) => {
     if (!Array.isArray(salePoints)) {
-      console.error('/refs/sale_points ожидаеся в ответ массив, получен ', salePoints);
+      console.error(`/refs/sale_points ожидаеся в ответ массив, получен ${typeof salePoints}`, salePoints);
       reject(salePoints);
       return;
     }

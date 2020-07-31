@@ -10,6 +10,10 @@ import { authorizedRoutes as routes } from './routes';
 class AuthorizedRouter extends React.Component {
   session = new Session();
 
+  componentWillUnmount() {
+    this.session.destruct();
+  }
+
   render() {
     return (
       <AuthorizedPage>

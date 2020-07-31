@@ -120,6 +120,26 @@ class Table {
   @computed get isLoaded() {
     return this.dataModel && this.dataModel.isLoaded;
   }
+
+  @computed get freshItems() {
+    if (!this.isLoaded) {
+      return 0;
+    }
+    return this.dataModel.freshItems || 0;
+  }
+
+  @computed get isAsync() {
+    if (!this.isLoaded) {
+      return false;
+    }
+    return typeof this.dataModel.partialLoader !== 'undefined';
+  }
+
+  destruct() {
+    if (this.isAsync) {
+      this.data.destruct();
+    }
+  }
 }
 
 export default Table;

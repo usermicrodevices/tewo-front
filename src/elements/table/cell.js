@@ -5,7 +5,7 @@ import Loader from 'elements/loader';
 import classNames from 'classnames';
 import styles from './style.module.scss';
 
-const Cell = (data, columns, hover, setHover) => observer(({
+const Cell = (data, columns, hover, setHover, freshItems) => observer(({
   columnIndex, rowIndex, style,
 }) => {
   const { align, key, transform } = columns[columnIndex];
@@ -25,6 +25,7 @@ const Cell = (data, columns, hover, setHover) => observer(({
       className={classNames(
         styles['virtual-table-cell'],
         {
+          [styles.highlightnew]: freshItems > rowIndex && hover !== rowIndex,
           [styles.hover]: hover === rowIndex,
           [styles['virtual-table-cell-last']]: columnIndex === columns.length - 1,
         },
