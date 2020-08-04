@@ -1,12 +1,7 @@
 /* eslint class-methods-use-this: "off" */
-import React from 'react';
 import Table from 'models/table';
 import getBeverages from 'services/beverage';
-import TimeAgo from 'react-timeago';
-import rusStrings from 'react-timeago/lib/language-strings/ru';
-import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
-
-const formatter = buildFormatter(rusStrings);
+import TimeAgo from 'elements/timeago';
 
 const COLUMNS = {
   id: {
@@ -14,13 +9,13 @@ const COLUMNS = {
     title: 'ID',
     width: 70,
   },
-  created_date: {
+  device_date: {
     bydefault: true,
     title: 'Момент налива',
     grow: 1,
-    sortDirections: 'descend',
+    sortDirections: 'both',
     sortDefault: true,
-    transform: (data) => data && <TimeAgo date={data} formatter={formatter} />,
+    transform: (date) => date && TimeAgo({ date }),
   },
   cid: {
     bydefault: true,

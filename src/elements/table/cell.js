@@ -5,11 +5,11 @@ import Loader from 'elements/loader';
 import classNames from 'classnames';
 import styles from './style.module.scss';
 
-const Cell = (data, columns, hover, setHover, freshItems) => observer(({
+const Cell = (data, columns, hover, setHover, freshItems, rowFunc) => observer(({
   columnIndex, rowIndex, style,
 }) => {
   const { align, key, transform } = columns[columnIndex];
-  const rowData = data[rowIndex];
+  const rowData = data[rowFunc(rowIndex)];
   let datum = typeof rowData === 'undefined' ? columnIndex === 0 && <Loader /> : rowData[key];
   if (transform) {
     datum = transform(datum);

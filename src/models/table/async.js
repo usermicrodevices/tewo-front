@@ -3,10 +3,15 @@ import {
 } from 'mobx';
 import { table as constants } from 'config';
 
+// Как часто перезапрашивать данные с начала таблицы
 const INVALIDATION_INTERVAL = 3000;
+// Сколько подождать после изменения currentRow, чтобы начать дозагрузку
 const NEW_CHANGES_WAIT_DELAY = 300;
+// Сколько строк максимум может быть видно
 const MAX_VISIBLE_ROWS_AMOUNT = 100;
+// Сколько строк закружарть выше видимой области
 const UP_ROWS_STOCK = Math.floor((constants.preloadLimit - MAX_VISIBLE_ROWS_AMOUNT) / 2);
+// Сколько времени элемент помечен как новый
 const NEW_ELEMENTS_ADDICTIVE_TIME = 1000;
 
 /** Модель асинхронной подгрузки данных
@@ -26,7 +31,7 @@ class AsyncCahceManager {
 
   @observable amount;
 
-  @observable freshItems = 0;
+  newElements = observable.map();
 
   isLoaded = true;
 
@@ -34,13 +39,12 @@ class AsyncCahceManager {
 
   table;
 
-  validationInterval;
+  validationTimeout;
 
   validateAddition = null;
 
   constructor(partialLoader, amount, results, table) {
     this.partialLoader = partialLoader;
-    this.amount = amount;
     this.table = table;
 
     reaction(() => table.currentRow, (currentRow) => {
@@ -51,19 +55,26 @@ class AsyncCahceManager {
       }, NEW_CHANGES_WAIT_DELAY);
     });
 
-    this.setDataHead(results);
+    reaction(() => table.sort, () => {
+      this.makeVisibleDataValidateAddition();
+    });
 
-    this.validationInterval = setInterval(() => { this.validateCache(); }, INVALIDATION_INTERVAL);
+    this.setDataHead(results, amount);
+
+    this.keepNewElementsAttention();
+  }
+
+  keepNewElementsAttention() {
+    this.validationTimeout = setTimeout(() => { this.validateCache(); }, INVALIDATION_INTERVAL);
   }
 
   forceValidation() {
     this.destruct();
-    this.validationInterval = setInterval(() => { this.validateCache(); }, INVALIDATION_INTERVAL);
     this.validateCache();
   }
 
-  @action setDataHead(itms) {
-    this.data.replace(itms.concat(new Array(this.amount - itms.length)));
+  @action setDataHead(itms, amount) {
+    this.data.replace(itms.concat(new Array(amount - itms.length)));
   }
 
   debugGivenData(results) {
@@ -96,31 +107,85 @@ class AsyncCahceManager {
     const headCheck = this.partialLoader(constants.preloadLimit);
     headCheck.then(({ count, results }) => {
       transaction(() => {
+        // В некоторых ситуациях при подгрузке после скрола в начало могут добавляться элементы
         const firstLoadedElementIndex = this.data.findIndex((itm) => typeof itm !== 'undefined');
-        const mergePoint = (() => {
-          const soughtId = this.data[firstLoadedElementIndex].id;
-          return results.findIndex(({ id }) => id === soughtId);
+        // Срезаем у данных голову до лимита загрузки, чтобы все старые элементы из подгруженных сейчас были точно найдены
+        const dataHead = this.data.slice(firstLoadedElementIndex, constants.preloadLimit);
+        // Создаём таблицу соответствий старых элементов новым
+        const appearences = (() => {
+          const result = results.reduce((prev, { id, device_date: newTime }, index) => (
+            {
+              [id]: {
+                new: index,
+                old: null,
+                newTime,
+                oldTime: null,
+              },
+              ...prev,
+            }
+          ), {});
+          dataHead.forEach(({ id, device_date: date }, index) => {
+            if (id in result) {
+              result[id].old = index;
+              result[id].oldTime = date;
+            }
+          });
+          return result;
         })();
-        if (mergePoint === -1) {
-          this.amount = count;
-          this.setDataHead(results);
+        // Находим первый элемент, который не подгружен с сервера
+        const firstOld = dataHead.findIndex(({ id }) => !(id in appearences));
+        // Ничего не подгружено. Все новые элементы найдены среди старых
+        if (firstOld < 0) {
+          // Можно ввообще проверить массивы на тождественность но ограничимся чем попроще
+          console.assert(firstLoadedElementIndex === 0, 'implementation consistency error');
           return;
         }
-        if (mergePoint === 0) {
-          this.checkValidationResults(results);
+        // Запоминаем индексы новых элементов
+        for (const { old, new: newIndex } of Object.values(appearences)) {
+          if (old === null) {
+            this.newElements.set(newIndex, newIndex);
+          }
+        }
+        // Ставим таймер на исключение элементов из новых
+        setTimeout(() => { this.newElements.clear(); }, NEW_ELEMENTS_ADDICTIVE_TIME);
+        // Это значит, что все элементы новые. Так быть не должно. значит в данных точно есть разрыв
+        if (firstOld === 0) {
+          console.error('validation algorythm parameners fail', appearences, dataHead, results);
           return;
         }
-        console.log(this.amount, count, mergePoint, count - this.amount);
-        this.freshItems = mergePoint;
-        setTimeout(() => { this.freshItems = 0; }, NEW_ELEMENTS_ADDICTIVE_TIME);
-        if (this.table.currentRow !== 0) {
-          this.table.currentRow += mergePoint;
+        // последний не старый соответствует последнему в подгрузке
+        if (appearences[dataHead[firstOld - 1].id].new !== results.length - 1) {
+          console.error('противоречивая точка слияния', appearences, firstOld, results.length, appearences[dataHead[firstOld - 1].id].new);
+          return;
         }
-        this.amount = count;
-        this.data.replace(results.slice(0, mergePoint).concat(this.data.slice(firstLoadedElementIndex)).slice(0, count));
-        this.checkValidationResults(results);
+        if (process.env.NODE_ENV !== 'production') {
+          // если новые элементы встречаются в последней трети подгрузки то нужно запрашивать больше либо чаще
+          for (const { old, new: newIndex } of Object.values(appearences)) {
+            if (old === null) {
+              console.assert(newIndex * 3 / 2 <= results.length);
+            }
+          }
+          /*
+          // Дальше нужно проверить сортировку. Для этого должно порядок элемента должен меняться только за счет ногово
+          const changes = Object.values(appearences).sort(({ new: lId }, { new: rId }) => Math.sign(lId - rId));
+          let d = 0;
+          for (const { new: newId, old: oldId } of changes) {
+            if (oldId === null) {
+              d += 1;
+            } else if (oldId + d !== newId) {
+              console.error('Given data consistency error', changes, oldId, d, newId);
+              this.failstate = true;
+              return;
+            }
+          }
+          */
+        }
+        // Заменяем старую голову на новую
+        this.data.replace(results.concat(this.data.slice(firstOld)));
+        console.assert(count === this.data.length, `Несоответствие числа записей, ошибка реализации ${count} - ${this.data.length} = ${count - this.data.length}`);
+        console.log(`join ${firstOld}`, count, this.data.length);
       });
-    });
+    }).finally(() => { this.keepNewElementsAttention(); });
     if (!this.validateAddition) {
       return;
     }
@@ -139,7 +204,7 @@ class AsyncCahceManager {
   checkValidationResults(results) {
     results.forEach((datum, id) => {
       const find = () => {
-        for (let i = 0; i < this.data.length; i += 1) {
+        for (let i = 0; i < Math.min(this.data.length, 1000); i += 1) {
           if (typeof this.data[i] !== 'undefined' && this.data[i].id === datum.id) {
             return i;
           }
@@ -154,14 +219,17 @@ class AsyncCahceManager {
   }
 
   @action makeVisibleDataValidateAddition() {
-    const visibleRows = this.data.slice(this.table.currentRow, this.table.currentRow + MAX_VISIBLE_ROWS_AMOUNT);
+    const currentRow = this.table.sort.direction === 'ascend'
+      ? Math.max(0, this.data.length - this.table.currentRow - MAX_VISIBLE_ROWS_AMOUNT)
+      : this.table.currentRow;
+    const visibleRows = this.data.slice(currentRow, currentRow + MAX_VISIBLE_ROWS_AMOUNT);
     if (visibleRows.findIndex((itm) => typeof itm === 'undefined') < 0) {
       return;
     }
     if (this.validateAddition !== null) {
       return;
     }
-    const offset = this.table.currentRow - UP_ROWS_STOCK;
+    const offset = currentRow - UP_ROWS_STOCK;
     if (offset <= 0) {
       return;
     }
@@ -181,7 +249,7 @@ class AsyncCahceManager {
   }
 
   destruct() {
-    clearInterval(this.validationInterval);
+    clearTimeout(this.validationTimeout);
   }
 }
 

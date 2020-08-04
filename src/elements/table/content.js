@@ -41,6 +41,12 @@ class Content extends React.Component {
       hoverRow,
       freshItems,
     } = table;
+    const rowFunc = (row) => {
+      if (table.sort.direction === 'ascend') {
+        return table.dataModel.data.length - row - 1;
+      }
+      return row;
+    };
     return (
       <Grid
         onScroll={this.onScroll}
@@ -54,7 +60,7 @@ class Content extends React.Component {
         rowHeight={() => ROW_HEIGHT}
         width={width}
       >
-        {Cell(data, columns, hoverRow, this.setHover, freshItems)}
+        {Cell(data, columns, hoverRow, this.setHover, freshItems, rowFunc)}
       </Grid>
     );
   }

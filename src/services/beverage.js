@@ -22,16 +22,30 @@ const getBeverage = (limit, offset = 0) => new Promise((resolve, reject) => {
       previous: 'string',
     }, {
       results: (beverages) => {
+        if (beverages.length > 1) {
+          for (let i = 1; i < beverages.length; i += 1) {
+            const [a, b] = beverages.slice(i - 1, i + 1).map(({ device_date: d }) => new Date(d));
+            if (a < b) {
+              console.error('провален тест сортировки a < b', a, b);
+              return false;
+            }
+            if (+a === +b) {
+              if (beverages[i - 1].id <= beverages[i].id) {
+                console.error(`провален тест вторичной сортировки a.id < b.id: ${beverages[i - 1].id} < ${beverages[i].id}`);
+                return false;
+              }
+            }
+          }
+        }
         for (const beverage of beverages) {
           if (!checkData(beverage, beverageMustBe)) {
+            console.error('провален тест для объекта', beverage, beverages);
             return false;
           }
         }
         return true;
       },
     });
-    //console.log('loaded', response.count, `\n${response.results.map(({ cid, id }) => [id, cid].join(' ')).join('\n')}`);
-    //console.trace();
     resolve(response);
   });
 });
