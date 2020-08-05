@@ -1,10 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { VariableSizeGrid as Grid } from 'react-window';
+import { VariableSizeList as List } from 'react-window';
 
-import styles from './style.module.scss';
-import Cell from './cell';
-import { reaction } from 'mobx';
+import Cell from './row';
 
 const ROW_HEIGHT = 54;
 const DEFAULT_PRESCROLL_HEIGHT = 2150;
@@ -12,12 +10,12 @@ const DEFAULT_PRESCROLL_HEIGHT = 2150;
 @inject('table')
 @observer
 class Content extends React.Component {
-  gridRef;
+  listRef;
 
   constructor(props) {
     super(props);
 
-    this.gridRef = React.createRef();
+    this.listRef = React.createRef();
   }
 
   setHover = (row) => {
@@ -25,43 +23,49 @@ class Content extends React.Component {
     table.hoverRow = row;
   };
 
-  onScroll = ({ scrollTop }) => {
+  onScroll = ({ scrollOffset }) => {
     const { table } = this.props;
-    table.currentRow = Math.ceil(scrollTop / ROW_HEIGHT);
+    table.currentRow = Math.ceil(scrollOffset / ROW_HEIGHT);
   };
+
+  rowFunc = (row) => {
+    const { table } = this.props;
+    if (table.sort.direction === 'ascend') {
+      return table.dataModel.data.length - row - 1;
+    }
+    return row;
+  };
+
+  componentDidUpdate() {
+    if (this.listRef.current) {
+      this.listRef.current.resetAfterIndex(0);
+    }
+  }
 
   render() {
     const { table, width, columnWidth } = this.props;
-    if (this.gridRef.current) {
-      this.gridRef.current.resetAfterColumnIndex(0);
-    }
     const {
       data,
       columns,
       hoverRow,
       freshItems,
     } = table;
-    const rowFunc = (row) => {
-      if (table.sort.direction === 'ascend') {
-        return table.dataModel.data.length - row - 1;
-      }
-      return row;
-    };
     return (
-      <Grid
+      <List
         onScroll={this.onScroll}
-        ref={this.gridRef}
-        className={styles['virtual-grid']}
+        ref={this.listRef}
         columnCount={table.columns.length}
-        columnWidth={(index) => columnWidth[index]}
         height={DEFAULT_PRESCROLL_HEIGHT}
-        rowCount={data.length}
-        estimatedRowHeight={ROW_HEIGHT}
-        rowHeight={() => ROW_HEIGHT}
+        itemCount={data.length}
+        estimatedItemSize={ROW_HEIGHT}
+        itemSize={() => ROW_HEIGHT}
         width={width}
+        data={data}
       >
-        {Cell(data, columns, hoverRow, this.setHover, freshItems, rowFunc)}
-      </Grid>
+        {
+          Cell(data, columns, hoverRow, this.setHover, freshItems, this.rowFunc, columnWidth)
+        }
+      </List>
     );
   }
 }

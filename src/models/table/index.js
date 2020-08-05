@@ -137,7 +137,7 @@ class Table {
 
   destruct() {
     if (this.isAsync) {
-      this.data.destruct();
+      this.dataModel.destruct();
     }
   }
 }

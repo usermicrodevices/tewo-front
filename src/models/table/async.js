@@ -103,89 +103,107 @@ class AsyncCahceManager {
     });
   }
 
-  @action validateCache() {
-    const headCheck = this.partialLoader(constants.preloadLimit);
-    headCheck.then(({ count, results }) => {
-      transaction(() => {
-        // В некоторых ситуациях при подгрузке после скрола в начало могут добавляться элементы
-        const firstLoadedElementIndex = this.data.findIndex((itm) => typeof itm !== 'undefined');
-        // Срезаем у данных голову до лимита загрузки, чтобы все старые элементы из подгруженных сейчас были точно найдены
-        const dataHead = this.data.slice(firstLoadedElementIndex, constants.preloadLimit);
-        // Создаём таблицу соответствий старых элементов новым
-        const appearences = (() => {
-          const result = results.reduce((prev, { id, device_date: newTime }, index) => (
-            {
-              [id]: {
-                new: index,
-                old: null,
-                newTime,
-                oldTime: null,
-              },
-              ...prev,
-            }
-          ), {});
-          dataHead.forEach(({ id, device_date: date }, index) => {
-            if (id in result) {
-              result[id].old = index;
-              result[id].oldTime = date;
-            }
-          });
-          return result;
-        })();
-        // Находим первый элемент, который не подгружен с сервера
-        const firstOld = dataHead.findIndex(({ id }) => !(id in appearences));
-        // Ничего не подгружено. Все новые элементы найдены среди старых
-        if (firstOld < 0) {
-          // Можно ввообще проверить массивы на тождественность но ограничимся чем попроще
-          console.assert(firstLoadedElementIndex === 0, 'implementation consistency error');
-          return;
+  @action takeData = ({ count, results }) => {
+    transaction(() => {
+      // В некоторых ситуациях при подгрузке после скрола в начало могут добавляться элементы
+      const firstLoadedElementIndex = this.data.findIndex((itm) => typeof itm !== 'undefined');
+      // Срезаем у данных голову до лимита загрузки, чтобы все старые элементы из подгруженных сейчас были точно найдены
+      const dataHead = this.data.slice(firstLoadedElementIndex, constants.preloadLimit);
+      // Создаём таблицу соответствий старых элементов новым
+      const appearences = (() => {
+        const result = results.reduce((prev, { id, device_date: newTime }, index) => (
+          {
+            [id]: {
+              new: index,
+              old: null,
+              newTime,
+              oldTime: null,
+            },
+            ...prev,
+          }
+        ), {});
+        dataHead.forEach(({ id, device_date: date }, index) => {
+          if (id in result) {
+            result[id].old = index;
+            result[id].oldTime = date;
+          }
+        });
+        return result;
+      })();
+      // Находим первый элемент, который не подгружен с сервера
+      const firstOld = dataHead.findIndex(({ id }) => !(id in appearences));
+      // Ничего не подгружено. Все новые элементы найдены среди старых
+      if (firstOld < 0) {
+        // Можно ввообще проверить массивы на тождественность но ограничимся чем попроще
+        console.assert(firstLoadedElementIndex === 0, 'implementation consistency error');
+        return;
+      }
+      // Запоминаем индексы новых элементов
+      for (const { old, new: newIndex } of Object.values(appearences)) {
+        if (old === null) {
+          this.newElements.set(newIndex, newIndex);
         }
-        // Запоминаем индексы новых элементов
+      }
+      // Ставим таймер на исключение элементов из новых
+      setTimeout(() => { this.newElements.clear(); }, NEW_ELEMENTS_ADDICTIVE_TIME);
+      // Это значит, что все элементы новые. Так быть не должно. значит в данных точно есть разрыв
+      if (firstOld === 0) {
+        console.error('validation algorythm parameners fail', appearences, dataHead, results);
+        return;
+      }
+      // последний не старый соответствует последнему в подгрузке
+      if (appearences[dataHead[firstOld - 1].id].new !== results.length - 1) {
+        console.error('противоречивая точка слияния', appearences, firstOld, results.length, appearences[dataHead[firstOld - 1].id].new);
+        return;
+      }
+      if (process.env.NODE_ENV !== 'production') {
+        // если новые элементы встречаются в последней трети подгрузки то нужно запрашивать больше либо чаще
         for (const { old, new: newIndex } of Object.values(appearences)) {
           if (old === null) {
-            this.newElements.set(newIndex, newIndex);
+            console.assert(newIndex * 3 / 2 <= results.length);
           }
         }
-        // Ставим таймер на исключение элементов из новых
-        setTimeout(() => { this.newElements.clear(); }, NEW_ELEMENTS_ADDICTIVE_TIME);
-        // Это значит, что все элементы новые. Так быть не должно. значит в данных точно есть разрыв
-        if (firstOld === 0) {
-          console.error('validation algorythm parameners fail', appearences, dataHead, results);
-          return;
+        // Дальше нужно проверить сортировку. Для этого должно порядок элемента должен меняться только за счет ногово
+        const changes = Object.values(appearences).sort(({ new: lId }, { new: rId }) => Math.sign(lId - rId));
+        let d = 0;
+        for (const { new: newId, old: oldId } of changes) {
+          if (oldId === null) {
+            d += 1;
+          } else if (oldId + d !== newId) {
+            console.error('Given data consistency error', changes, oldId, d, newId);
+            this.failstate = true;
+            return;
+          }
         }
-        // последний не старый соответствует последнему в подгрузке
-        if (appearences[dataHead[firstOld - 1].id].new !== results.length - 1) {
-          console.error('противоречивая точка слияния', appearences, firstOld, results.length, appearences[dataHead[firstOld - 1].id].new);
-          return;
-        }
-        if (process.env.NODE_ENV !== 'production') {
-          // если новые элементы встречаются в последней трети подгрузки то нужно запрашивать больше либо чаще
-          for (const { old, new: newIndex } of Object.values(appearences)) {
-            if (old === null) {
-              console.assert(newIndex * 3 / 2 <= results.length);
+      }
+      const oldAmount = this.data.length;
+      const newAmount = Object.values(appearences).reduce((prev, { old }) => prev + (old === null), 0);
+      // Заменяем старую голову на новую
+      this.data.replace(results.concat(this.data.slice(firstOld)));
+      if (process.env.NODE_ENV !== 'production') {
+        // бывает, что после всех операций появляется лишний элемент, но не понятно каким образом и не накапливается (исправляется с приходом новых данных)
+        if (count !== this.data.length) {
+          console.error(`Несоответствие числа записей, ошибка реализации ${count} - ${this.data.length} = ${count - this.data.length}`);
+          // ищем в таком случае повторения
+          for (let i = 0; i < constants.preloadLimit * 3; i += 1) {
+            if (typeof this.data[i] !== 'undefined') {
+              for (let j = -10; j < 10; j += 1) {
+                if (i + j >= 0 && typeof this.data[i + j] !== 'undefined' && j !== 0) {
+                  console.assert(this.data[i + j].id !== this.data[i].id, `duplication ${i} ${this.data[i + j].id}`);
+                }
+              }
             }
           }
-          /*
-          // Дальше нужно проверить сортировку. Для этого должно порядок элемента должен меняться только за счет ногово
-          const changes = Object.values(appearences).sort(({ new: lId }, { new: rId }) => Math.sign(lId - rId));
-          let d = 0;
-          for (const { new: newId, old: oldId } of changes) {
-            if (oldId === null) {
-              d += 1;
-            } else if (oldId + d !== newId) {
-              console.error('Given data consistency error', changes, oldId, d, newId);
-              this.failstate = true;
-              return;
-            }
-          }
-          */
+          // Можно ещё поискать забытые но это просто невообразимый вариант (элемент лишний а устройство алгоритма напрямую настроено на незабывание)
         }
-        // Заменяем старую голову на новую
-        this.data.replace(results.concat(this.data.slice(firstOld)));
-        console.assert(count === this.data.length, `Несоответствие числа записей, ошибка реализации ${count} - ${this.data.length} = ${count - this.data.length}`);
-        console.log(`join ${firstOld}`, count, this.data.length);
-      });
-    }).finally(() => { this.keepNewElementsAttention(); });
+      }
+      console.log(`join ${firstOld} ${appearences[dataHead[firstOld - 1].id].new} ${oldAmount} + ${newAmount} = ${oldAmount + newAmount}`, count, this.data.length);
+    });
+  };
+
+  @action validateCache() {
+    const headCheck = this.partialLoader(constants.preloadLimit);
+    headCheck.then(this.takeData).finally(() => { this.keepNewElementsAttention(); });
     if (!this.validateAddition) {
       return;
     }

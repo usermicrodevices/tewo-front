@@ -8,6 +8,7 @@ import Icon from 'elements/icon';
 import Table from 'elements/table';
 import Title from 'components/title';
 import { companiesSubmenu } from 'routes';
+import Chart from 'elements/chart';
 
 @inject('session')
 @observer
@@ -22,6 +23,9 @@ class Companies extends React.Component {
             <Link to="companies/add" style={{ fontSize: 22 }}><Icon name="plus-circle-outline" /></Link>
           </Space>
         </Title>
+        <Card>
+          <Chart />
+        </Card>
         <Card>
           <Provider table={session.companiesModel}>
             <Table />
