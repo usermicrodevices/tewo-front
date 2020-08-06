@@ -39,6 +39,11 @@ class TableComponent extends React.Component {
     table.filter = action.target.value;
   }
 
+  onReorder = (columns) => {
+    const { table } = this.props;
+    table.reorderColumns(columns);
+  }
+
   render() {
     const {
       table: {
@@ -54,7 +59,7 @@ class TableComponent extends React.Component {
       <div className={style.whole}>
         <div className={style.buttons}>
           <Input prefix={<Icon name="search-outline" />} value={filter} onChange={this.onFilterChange} />
-          <Dropdown overlay={<ColumnsPicker onChange={this.onColumnsPicked} visibleColumns={visibleColumns} />} placement="bottomRight">
+          <Dropdown overlay={<ColumnsPicker onReorder={this.onReorder} onChange={this.onColumnsPicked} visibleColumns={visibleColumns} />} placement="bottomRight">
             <Button>Колонки</Button>
           </Dropdown>
         </div>

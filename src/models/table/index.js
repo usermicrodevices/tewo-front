@@ -6,9 +6,10 @@ import { table as constants } from 'config';
 import AsyncModel from './async';
 import StaticModel from './static';
 
-const columnDatumToAntdColumn = ([key, value]) => ({
+const columnDatumToAntdColumn = ([key, value], id) => ({
   key,
   dataIndex: key,
+  id,
   ...value,
 });
 
@@ -92,6 +93,13 @@ class Table {
 
   @computed get columns() {
     return this.visibleColumns.map((key) => columnDatumToAntdColumn([key, this.columnsMap[key]]));
+  }
+
+  @action reorderColumns(columnsOrder) {
+    const order = columnsOrder.reduce((prev, { key }, index) => ({ [key]: index, ...prev }), {});
+    const comparator = (a, b) => Math.sign(order[a] - order[b]);
+    this.allColumns = columnsOrder;
+    this.visibleColumns.replace(this.visibleColumns.slice().sort(comparator));
   }
 
   @computed get filterKey() {

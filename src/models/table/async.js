@@ -77,32 +77,6 @@ class AsyncCahceManager {
     this.data.replace(itms.concat(new Array(amount - itms.length)));
   }
 
-  debugGivenData(results) {
-    const old = this.data.slice(0, constants.preloadLimit);
-    console.log('старые данные:');
-    for (const itm of old) {
-      console.log(itm.id, itm.cid, +new Date(itm.created_date));
-    }
-    console.log('новые данные:');
-    results.forEach((itm, pos) => {
-      const oldId = (() => {
-        for (let i = 0; i < old.length; i += 1) {
-          if (old[i].id === itm.id) {
-            return i;
-          }
-        }
-        return -1;
-      })();
-      let description;
-      if (oldId === -1) {
-        description = 'Новый';
-      } else {
-        description = `старая позиция ${oldId} смещение ${pos - oldId}`;
-      }
-      console.log(itm.id, itm.cid, +new Date(itm.created_date), description);
-    });
-  }
-
   @action takeData = ({ count, results }) => {
     transaction(() => {
       // В некоторых ситуациях при подгрузке после скрола в начало могут добавляться элементы
@@ -177,7 +151,6 @@ class AsyncCahceManager {
         }
       }
       const oldAmount = this.data.length;
-      const newAmount = Object.values(appearences).reduce((prev, { old }) => prev + (old === null), 0);
       // Заменяем старую голову на новую
       this.data.replace(results.concat(this.data.slice(firstOld)));
       if (process.env.NODE_ENV !== 'production') {
@@ -194,10 +167,14 @@ class AsyncCahceManager {
               }
             }
           }
-          // Можно ещё поискать забытые но это просто невообразимый вариант (элемент лишний а устройство алгоритма напрямую настроено на незабывание)
+          const newAmount = Object.values(appearences).reduce((prev, { old }) => prev + (old === null), 0);
+          console.error(
+            `join ${firstOld} ${appearences[dataHead[firstOld - 1].id].new} ${oldAmount} + ${newAmount} = ${oldAmount + newAmount}`,
+            count,
+            this.data.length,
+          );
         }
       }
-      console.log(`join ${firstOld} ${appearences[dataHead[firstOld - 1].id].new} ${oldAmount} + ${newAmount} = ${oldAmount + newAmount}`, count, this.data.length);
     });
   };
 

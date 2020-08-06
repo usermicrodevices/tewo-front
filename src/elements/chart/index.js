@@ -5,11 +5,11 @@ import { withSize } from 'react-sizeme';
 const ChartWidget = ({ size }) => {
   const dataLength = 2000;
   const series = [
-    /*{
+    /* {
       name: 'Количество очисток',
       type: 'column',
       data: new Array(18).fill(null).map((_, id) => Math.floor(Math.random() * id + 5)),
-    },*/
+    }, */
     {
       name: 'Продажи',
       type: 'line',

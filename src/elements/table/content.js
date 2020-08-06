@@ -18,6 +18,12 @@ class Content extends React.Component {
     this.listRef = React.createRef();
   }
 
+  componentDidUpdate() {
+    if (this.listRef.current) {
+      this.listRef.current.resetAfterIndex(0);
+    }
+  }
+
   setHover = (row) => {
     const { table } = this.props;
     table.hoverRow = row;
@@ -35,12 +41,6 @@ class Content extends React.Component {
     }
     return row;
   };
-
-  componentDidUpdate() {
-    if (this.listRef.current) {
-      this.listRef.current.resetAfterIndex(0);
-    }
-  }
 
   render() {
     const { table, width, columnWidth } = this.props;
