@@ -5,29 +5,24 @@ import { withSize } from 'react-sizeme';
 const ChartWidget = ({ size }) => {
   const dataLength = 2000;
   const series = [
-    /* {
-      name: 'Количество очисток',
-      type: 'column',
-      data: new Array(18).fill(null).map((_, id) => Math.floor(Math.random() * id + 5)),
-    }, */
     {
-      name: 'Продажи',
+      name: 'Продажи за прошлый период',
       type: 'line',
       data: new Array(dataLength).fill(null)
         .map((_, id) => Math.floor((Math.cos(id / 42) + Math.random()) * 10 * (dataLength - id + 10) + (dataLength / 3 + 40) * 25)),
     },
     {
-      name: 'Наливы',
+      name: 'Наливы за прошлый период',
       type: 'line',
       data: new Array(dataLength).fill(null).map((_, id) => Math.floor(Math.random() * 10 * id + (id + 40) * 25)),
     },
     {
-      name: 'Продажи',
+      name: 'Продажи за текущий период',
       type: 'line',
       data: new Array(dataLength).fill(null).map((_, id) => Math.floor(Math.random() * 10 * (dataLength) + (-id + dataLength * 2) * 25)),
     },
     {
-      name: 'Наливы',
+      name: 'Наливы за текущий период',
       type: 'line',
       data: new Array(dataLength).fill(null)
         .map((_, id) => Math.floor(Math.random() * 10 * Math.sin(id / 100) * (dataLength - id / 2) + (-id + dataLength / 2 * 3) * 25)),
@@ -40,6 +35,11 @@ const ChartWidget = ({ size }) => {
       type: 'line',
       stacked: false,
       id: 'chart2',
+    },
+    title: {
+      text: 'Динамика продаж',
+      align: 'left',
+      offsetX: 110,
     },
     dataLabels: {
       enabled: false,
@@ -60,7 +60,7 @@ const ChartWidget = ({ size }) => {
     },
     yaxis: [
       {
-        seriesName: 'Наливы',
+        seriesName: 'Продажи за прошлый период',
         axisTicks: {
           show: true,
         },
@@ -68,8 +68,41 @@ const ChartWidget = ({ size }) => {
           show: true,
         },
         title: {
-          text: 'Динамика наливов / продаж',
+          text: 'Динамика продаж',
         },
+      },
+      {
+        seriesName: 'Наливы за прошлый период',
+        opposite: true,
+        axisTicks: {
+          show: true,
+        },
+        axisBorder: {
+          show: true,
+          color: 'black',
+        },
+        labels: {
+          style: {
+            color: 'black',
+          },
+        },
+        title: {
+          text: 'Наливов в день',
+          style: {
+            color: 'black',
+          },
+        },
+        tooltip: {
+          enabled: true,
+        },
+      },
+      {
+        show: false,
+        seriesName: 'Продажи за прошлый период',
+      },
+      {
+        show: false,
+        seriesName: 'Наливы за прошлый период',
       },
     ],
     tooltip: {
@@ -116,27 +149,31 @@ const ChartWidget = ({ size }) => {
         enabled: false,
       },
     },
+    legend: {
+      show: false,
+    },
+    markers: {
+      size: 0,
+    },
     yaxis: {
       tickAmount: 2,
     },
   };
   return (
-    <h1>
-      <div className="mixed-chart">
-        <Chart
-          series={series}
-          width={size.width}
-          height={550}
-          options={data}
-        />
-        <Chart
-          series={series}
-          width={size.width}
-          height={130}
-          options={data2}
-        />
-      </div>
-    </h1>
+    <div className="mixed-chart">
+      <Chart
+        series={series}
+        width={size.width}
+        height={550}
+        options={data}
+      />
+      <Chart
+        series={series}
+        width={size.width}
+        height={130}
+        options={data2}
+      />
+    </div>
   );
 };
 
