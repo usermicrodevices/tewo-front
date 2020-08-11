@@ -68,7 +68,7 @@ class AsyncCahceManager {
     this.validationTimeout = setTimeout(() => { this.validateCache(); }, INVALIDATION_INTERVAL);
   }
 
-  forceValidation() {
+  forceValidate() {
     this.destruct();
     this.validateCache();
   }
@@ -232,7 +232,7 @@ class AsyncCahceManager {
       const addition = this.partialLoader(constants.preloadLimit, offset);
       return { addition, offset };
     };
-    this.forceValidation();
+    this.forceValidate();
   }
 
   @action resolveDataRange({ results }, offset) {

@@ -5,13 +5,7 @@ import { table as constants } from 'config';
 
 import AsyncModel from './async';
 import StaticModel from './static';
-
-const columnDatumToAntdColumn = ([key, value], id) => ({
-  key,
-  dataIndex: key,
-  id,
-  ...value,
-});
+import Column from './column';
 
 class Table {
   @observable filter = '';
@@ -39,8 +33,19 @@ class Table {
         this.dataModel = err;
       });
 
-    this.columnsMap = columnsMap;
-    this.allColumns = Object.entries(columnsMap).map(columnDatumToAntdColumn);
+    this.allColumns = Object.entries(columnsMap).map(([key, value]) => new Column(key, value));
+    this.columnsMap = {};
+    this.allColumns.forEach((v) => {
+      this.columnsMap[v.key] = v;
+    });
+    console.assert(
+      this.allColumns.filter(({ isAsyncorder }) => isAsyncorder).length === 1,
+      `Таблица ${this.toString()} не получила корректного асинхронного ключа сортировки`,
+    );
+    console.assert(
+      this.allColumns.filter(({ isDefaultSort }) => isDefaultSort).length === 1,
+      `Таблица ${this.toString()} не получила ключа сортировки по умолчанию`,
+    );
   }
 
   @action removeColumn(columnKey) {
@@ -51,32 +56,48 @@ class Table {
   @computed get visibleColumns() {
     return localStorage.getItem(this.visibleColumnKey)
     || this.allColumns
-      .filter(({ bydefault }) => bydefault)
+      .filter(({ isVisbleByDefault }) => isVisbleByDefault)
       .map(({ key }) => key);
   }
 
   @computed get sort() {
-    const defaultColumn = this.allColumns.filter(({ sortDefault }) => sortDefault)[0];
-    return localStorage.getItem(this.sortKey)
-      || {
-        column: defaultColumn.key,
-        direction: defaultColumn.sortDirections !== 'ascend' ? 'descend' : 'ascend',
+    const sort = localStorage.getItem(this.sortKey);
+    if (sort) {
+      if (this.isAsync) {
+        return {
+          ...sort,
+          column: this.allColumns.find(({ isAsyncorder }) => isAsyncorder).key,
+        };
+      }
+      return sort;
+    }
+    if (this.isAsync) {
+      return {
+        column: this.allColumns.find(({ isAsyncorder }) => isAsyncorder).key,
+        direction: 'descend',
       };
+    }
+    const defaultColumn = this.allColumns.find(({ isDefaultSort }) => isDefaultSort);
+    return {
+      column: defaultColumn.key,
+      direction: defaultColumn.sortDirections !== 'ascend' ? 'descend' : 'ascend',
+    };
   }
 
-  @action setSort(key) {
+  @action setSort(column) {
     const currentSort = this.sort;
-    if (key === currentSort.column && this.columnsMap[key].sortDirections === 'both') {
-      localStorage.setItem(this.sortKey, {
-        column: key,
-        direction: currentSort.direction === 'ascend' ? 'descend' : 'ascend',
-      });
-    } else {
-      localStorage.setItem(this.sortKey, {
-        column: key,
-        direction: this.columnsMap[key].sortDirections !== 'ascend' ? 'descend' : 'ascend',
-      });
-    }
+    localStorage.setItem(this.sortKey, (() => {
+      if (this.isAsync || (column === currentSort.column && this.columnsMap[column].sortDirections === 'both')) {
+        return {
+          column,
+          direction: currentSort.direction === 'ascend' ? 'descend' : 'ascend',
+        };
+      }
+      return {
+        column,
+        direction: this.columnsMap[column].sortDirections !== 'ascend' ? 'descend' : 'ascend',
+      };
+    })());
   }
 
   set visibleColumns(data) {
@@ -92,14 +113,12 @@ class Table {
   }
 
   @computed get columns() {
-    return this.visibleColumns.map((key) => columnDatumToAntdColumn([key, this.columnsMap[key]]));
-  }
-
-  @action reorderColumns(columnsOrder) {
-    const order = columnsOrder.reduce((prev, { key }, index) => ({ [key]: index, ...prev }), {});
-    const comparator = (a, b) => Math.sign(order[a] - order[b]);
-    this.allColumns = columnsOrder;
-    this.visibleColumns.replace(this.visibleColumns.slice().sort(comparator));
+    const keys = new Set(this.visibleColumns);
+    const columns = this.allColumns.filter(({ key }) => keys.has(key));
+    if (this.isAsync) {
+      return columns.map((column) => column.asyncOrder());
+    }
+    return columns;
   }
 
   @computed get filterKey() {
@@ -141,6 +160,12 @@ class Table {
       return false;
     }
     return typeof this.dataModel.partialLoader !== 'undefined';
+  }
+
+  forceValidate() {
+    if (this.isAsync) {
+      this.dataModel.forceValidate();
+    }
   }
 
   destruct() {

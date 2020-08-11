@@ -5,29 +5,89 @@ import TimeAgo from 'elements/timeago';
 
 const COLUMNS = {
   id: {
-    bydefault: true,
+    isVisbleByDefault: true,
     title: 'ID',
     width: 70,
-  },
-  device_date: {
-    bydefault: true,
-    title: 'Момент налива',
-    grow: 1,
-    sortDirections: 'both',
-    sortDefault: true,
-    transform: (date) => date && TimeAgo({ date }),
+    isAsyncorder: true,
   },
   cid: {
-    bydefault: true,
+    isVisbleByDefault: false,
     title: 'Код',
     align: 'right',
     width: 70,
   },
+  device_date: {
+    isVisbleByDefault: true,
+    title: 'Момент налива',
+    grow: 1,
+    isDefaultSort: true,
+    transform: (date) => date && TimeAgo({ date }),
+    filter: {
+      type: 'dateRange',
+      title: 'Момент налива',
+    },
+    sortDirections: 'both',
+  },
+  created_date: {
+    isVisbleByDefault: false,
+    title: 'Время получения данных на сервер',
+    grow: 1,
+    transform: (date) => date && TimeAgo({ date }),
+    sortDirections: 'both',
+  },
   device: {
-    bydefault: true,
+    isVisbleByDefault: true,
     title: 'Устройство',
     align: 'right',
     width: 100,
+    filter: {
+      type: 'selector',
+      title: 'Напиток',
+      selector: [1, 2, 3, 4, 5],
+      resolver: {
+        1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e',
+      },
+    },
+    sortDirections: 'both',
+  },
+  drink: {
+    isVisbleByDefault: true,
+    title: 'Напиток',
+    grow: 1,
+    filter: {
+      type: 'selector',
+      title: 'Напиток',
+      selector: [1, 2, 3, 4, 5],
+      resolver: {
+        1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e',
+      },
+    },
+    sortDirections: 'both',
+  },
+  operation: {
+    isVisbleByDefault: true,
+    title: 'Операция',
+    grow: 1,
+    filter: {
+      type: 'selector',
+      title: 'Напиток',
+      selector: [1, 2, 3, 4, 5],
+      resolver: {
+        1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e',
+      },
+    },
+    sortDirections: 'both',
+  },
+  sale_sum: {
+    isVisbleByDefault: true,
+    title: 'Стоимость',
+    align: 'right',
+    width: 100,
+    filter: {
+      type: 'costRange',
+      title: 'Стоимость',
+    },
+    sortDirections: 'both',
   },
 };
 

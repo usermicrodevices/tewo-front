@@ -1,0 +1,7 @@
+.space {
+  display: flex;
+  align-items: center;
+  >* {
+    margin: 0px 2px;
+  }
+}

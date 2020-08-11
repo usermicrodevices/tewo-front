@@ -29,8 +29,7 @@ const getLocations = () => Promise.all([
     });
   }
 
-  const intoMap = (prev, cur) => ({ [cur.id]: cur, ...prev });
-  const [countries, regions, cities] = locations.map((itm) => itm.reduce(intoMap, {}));
+  const [countries, regions, cities] = locations.map((itm) => new Map(itm));
   return { countries, regions, cities };
 });
 

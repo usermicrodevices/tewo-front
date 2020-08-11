@@ -4,43 +4,44 @@ import getCompanies from 'services/companies';
 
 const COLUMNS_LIST = {
   id: {
-    bydefault: true,
+    isVisbleByDefault: true,
     title: 'ID',
     width: 70,
-    sortDefault: true,
+    isDefaultSort: true,
     sortDirections: 'descend',
+    isAsyncorder: true,
   },
   name: {
-    bydefault: true,
+    isVisbleByDefault: true,
     title: 'Название',
     grow: 4,
     sortDirections: 'both',
   },
   location: {
-    bydefault: true,
+    isVisbleByDefault: true,
     title: 'Город',
     grow: 2,
     sortDirections: 'both',
   },
   objectsCount: {
-    bydefault: true,
+    isVisbleByDefault: true,
     title: 'Кол-во объектов',
     align: 'right',
     width: 120,
     sortDirections: 'both',
   },
   actions: {
-    bydefault: false,
+    isVisbleByDefault: false,
     title: 'Действия',
     grow: 2,
   },
   inn: {
-    bydefault: false,
+    isVisbleByDefault: false,
     title: 'ИНН',
     grow: 2,
   },
   account: {
-    bydefault: false,
+    isVisbleByDefault: false,
     title: 'Реквизиты',
     grow: 2,
   },

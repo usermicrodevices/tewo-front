@@ -4,7 +4,9 @@ import {
   Input,
   Dropdown,
   Button,
+  Space,
 } from 'antd';
+import { FilterOutlined } from '@ant-design/icons';
 import { withSize } from 'react-sizeme';
 
 import Icon from 'elements/icon';
@@ -14,6 +16,7 @@ import Content from './content';
 import ColumnsPicker from './columnsPicker';
 import style from './style.module.scss';
 import Header from './header';
+import Filters from './filters';
 
 const calculateColumnWidth = (tableWidth, columns) => {
   const destributedWidth = tableWidth - columns.reduce((cur, { width }) => cur + (width || 0), 0) - 25;
@@ -24,9 +27,19 @@ const calculateColumnWidth = (tableWidth, columns) => {
 @inject('table')
 @observer
 class TableComponent extends React.Component {
+  state = {
+    isFiltersOpen: false,
+  };
+
   componentDidMount() {
     const { table } = this.props;
     table.filter = '';
+    table.forceValidate();
+  }
+
+  componentWillUnmount() {
+    const { table } = this.props;
+    table.destruct();
   }
 
   onColumnsPicked = (pickedColumns) => {
@@ -44,6 +57,11 @@ class TableComponent extends React.Component {
     table.reorderColumns(columns);
   }
 
+  toggleFilters = () => {
+    const { isFiltersOpen } = this.state;
+    this.setState({ isFiltersOpen: !isFiltersOpen });
+  }
+
   render() {
     const {
       table: {
@@ -54,15 +72,24 @@ class TableComponent extends React.Component {
       },
       size,
     } = this.props;
-    const columnWidth = calculateColumnWidth(size.width, columns);
+    const columnWidth = calculateColumnWidth(size.width, columns.map(({ width }) => width));
+    const { isFiltersOpen } = this.state;
     return (
       <div className={style.whole}>
         <div className={style.buttons}>
           <Input prefix={<Icon name="search-outline" />} value={filter} onChange={this.onFilterChange} />
-          <Dropdown overlay={<ColumnsPicker onReorder={this.onReorder} onChange={this.onColumnsPicked} visibleColumns={visibleColumns} />} placement="bottomRight">
-            <Button>Колонки</Button>
-          </Dropdown>
+          <Space>
+            <Dropdown overlay={<ColumnsPicker onReorder={this.onReorder} onChange={this.onColumnsPicked} visibleColumns={visibleColumns} />} placement="bottomRight">
+              <Button>Колонки</Button>
+            </Dropdown>
+            <Button
+              type={isFiltersOpen ? 'primary' : 'default'}
+              icon={<FilterOutlined />}
+              onClick={this.toggleFilters}
+            />
+          </Space>
         </div>
+        { isFiltersOpen && <Filters /> }
         <Header columnWidth={columnWidth} />
         { data
           ? <Content width={size.width} columnWidth={columnWidth} />
