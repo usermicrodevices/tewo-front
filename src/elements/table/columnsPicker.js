@@ -8,7 +8,7 @@ const ColumnsPicker = ({ table, onChange, visibleColumns }) => (
       <Space direction="vertical">
         {
           table && table.allColumns.map(({ title, key }) => (
-            <Checkbox value={key}>{title}</Checkbox>
+            <Checkbox key={key} value={key}>{title}</Checkbox>
           ))
         }
       </Space>

@@ -18,10 +18,14 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
           name: 'string',
           company: 'number',
           created_date: 'date',
-          map_point: 'location',
         };
         const mayBe = {
+          emails: 'array',
+          person: 'string',
+          phone: 'string',
           address: 'string',
+          city: 'number',
+          map_point: 'location',
         };
         checkData(data, stouldBe, mayBe);
 

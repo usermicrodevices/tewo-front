@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button, Checkbox, Input } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
@@ -11,11 +11,16 @@ import style from './style.module.scss';
 
 const Filter = (
   {
-    type, title, selector, resolver,
+    type: typeVal,
+    title,
+    selector,
+    resolver,
+    onChange,
+    value,
   },
 ) => {
-  const [value, onChange] = useState(0);
-  switch (type.toLowerCase()) {
+  const type = typeVal.toLowerCase();
+  switch (type) {
     case 'daterange':
       return <DataRangePicker title={title} onChange={onChange} value={value} />;
     case 'costrange':
@@ -31,23 +36,34 @@ const Filter = (
       return null;
   }
 };
-const Filters = ({ table }) => (
+
+const Filters = ({ table, filters }) => (
   <div className={style['filters-block']}>
-    <Button type="text" icon={<ReloadOutlined />} onClick={() => console.log('clear')}>Сбросить</Button>
+    <Button type="text" icon={<ReloadOutlined />} onClick={() => { filters.clear(); }}>Сбросить</Button>
     <div className={style.filters}>
       {
-        table.allColumns.filter(({ filter }) => filter).map(({ key, filter }) => (
-          <Filter
-            key={key}
-            title={filter.title}
-            selector={filter.selector}
-            type={filter.type}
-            resolver={filter.resolver}
-          />
-        ))
+        table.allColumns.filter(({ filter }) => filter).map((column) => {
+          const { key, filter } = column;
+          const {
+            title, selector, type, resolver,
+          } = filter;
+          const onChange = (value) => { filters.set(column, value); };
+          const value = filters.get(column);
+          return (
+            <Filter
+              key={key}
+              title={title}
+              selector={selector}
+              type={type}
+              resolver={resolver}
+              onChange={onChange}
+              value={value}
+            />
+          );
+        })
       }
     </div>
   </div>
 );
 
-export default inject('table')(observer(Filters));
+export default inject(({ filters, table }) => ({ filters, table }))(observer(Filters));

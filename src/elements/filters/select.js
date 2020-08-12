@@ -11,10 +11,11 @@ const Selector = ({
     placeholder={title}
     onChange={onChange}
     mode="multiple"
+    value={value}
   >
     {
       selector.map((key) => (
-        <Option key={key} value={key} disabled={resolver[key]}>
+        <Option key={key} value={key} disabled={!resolver[key]}>
           {resolver[key] || key}
         </Option>
       ))

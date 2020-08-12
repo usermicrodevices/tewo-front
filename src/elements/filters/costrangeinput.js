@@ -4,13 +4,12 @@ import { InputNumber } from 'antd';
 import style from './style.module.scss';
 
 const CosrTangePicker = ({ title, value, onChange }) => {
-  const { min, max } = value;
-
+  const [min, max] = Array.isArray(value) ? value : [null, null];
   return (
     <div className={style.space}>
       <p>{ `${title}:` }</p>
-      <InputNumber placeholder="От" value={min} onChange={onChange} />
-      <InputNumber placeholder="До" value={max} onChange={onChange} />
+      <InputNumber placeholder="0" value={min} onChange={(val) => onChange([val, max])} />
+      <InputNumber placeholder="∞" value={max} onChange={(val) => onChange([min, val])} />
     </div>
   );
 };

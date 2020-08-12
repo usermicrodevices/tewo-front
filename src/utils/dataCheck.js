@@ -65,7 +65,7 @@ function typecheck(datum, key, type) {
     if (Array.isArray(datum)) {
       return true;
     }
-    console.error(`Для поля ${key} ожидается тип array, полученные данные не являются массивом`, datum);
+    console.error(`Для поля ${key} ожидается тип array, полученные данные не являются массивом`, datum, typeof datum);
     return false;
   }
   if (type === 'location') {

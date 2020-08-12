@@ -32,6 +32,7 @@ const DatergangePicker = ({ title, value, onChange }) => {
           [`${moment().subtract(1, 'year').format('YYYY')} год`]: [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
         }}
         onChange={onChange}
+        value={value}
       />
     </div>
   );
