@@ -17,6 +17,10 @@ class User {
 
   permissions;
 
+  companies;
+
+  salePoints;
+
   get name() {
     const name = `${this.firstName} ${this.lastName}`;
     if (name.length > 1) {

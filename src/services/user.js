@@ -16,7 +16,7 @@ function login(data) {
 function me() {
   return new Promise((resolve, reject) => {
     get('user').then((data) => {
-      const stouldBe = {
+      const shouldBe = {
         id: 'number',
         date_joined: 'date',
         domain: 'string',
@@ -32,8 +32,10 @@ function me() {
         role: 'any',
         username: 'string',
         user_permissions: 'array',
+        sale_points: 'array',
+        companies: 'array',
       };
-      if (!checkData(data, stouldBe, {}, {
+      if (!checkData(data, shouldBe, {}, {
         username: (name) => name.length > 0,
       })) {
         reject(new Error('type error'));
@@ -51,11 +53,13 @@ function me() {
         is_staff: 'isStaff',
         is_superuser: 'isSuperuser',
         user_permissions: 'permissions',
+        sale_points: 'salePoints',
+        companies: 'companies',
       })) {
-        if (jsonName in stouldBe) {
+        if (jsonName in shouldBe) {
           user[objectName] = data[jsonName];
         } else {
-          console.error(`Попытка извлечь непроверенные данные ${jsonName}`, stouldBe);
+          console.error(`Попытка извлечь непроверенные данные ${jsonName}`, shouldBe);
           reject(new Error('developing consistency error'));
         }
       }
