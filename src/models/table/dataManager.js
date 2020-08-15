@@ -1,80 +1,47 @@
 import {
-  observable, action, transaction, reaction,
+  observable, action, transaction, computed,
 } from 'mobx';
 import { table as constants } from 'config';
 
-// Как часто перезапрашивать данные с начала таблицы
-const INVALIDATION_INTERVAL = 3000;
-// Сколько подождать после изменения currentRow, чтобы начать дозагрузку
-const NEW_CHANGES_WAIT_DELAY = 300;
-// Сколько строк максимум может быть видно
-const MAX_VISIBLE_ROWS_AMOUNT = 100;
-// Сколько строк закружарть выше видимой области
-const UP_ROWS_STOCK = Math.floor((constants.preloadLimit - MAX_VISIBLE_ROWS_AMOUNT) / 2);
+/**
+ * Основная функция менеджера: запрос и обработка данных, появившихся
+ * в таблице с момента предыдущей загрузки. Не зависимо о того, используется-ли
+ * динамическая модель или статическая, в таблице могут появится новые данные,
+ * Требуется-ли проверка на появление новых данных или нет - компетенция страницы,
+ * менеджер просто предоставляет возможность подгружать эти данные. Как часто
+ * и нужно-ли вообще - решает страница.
+ * В результате обновления новые элементы появятся в data а в newElements упадут
+ * порядковые номера строк, подгруженных  в результате обновления.
+ */
+
 // Сколько времени элемент помечен как новый
 const NEW_ELEMENTS_ADDICTIVE_TIME = 1000;
 
-/** Модель асинхронной подгрузки данных
- * Модель решает две основных проблемы:
- * 1. Подгрузку данных, добавленных в базу во время существования модели
- * 2. Загрузка данных при скроле из произвольного места базы
- * Проблема в том, что в базе неперывно добавляются и удаляются элементы.
- * Из-за этого очень сложно подгрузить данные в глубине массива не нарушив
- * консистентность кеша: между запросом валидации начала данных и запросом
- * данных из глубины таблицы будут добавлены данные и консистентность кеша
- * может быть нарушена. Этот эффект не полностью устранён но минимизирован
- * за счет того, что запросы в кглубину таблицы выполняются однавременно с
- * валидацией заголовка.
- */
-class AsyncCahceManager {
-  @observable data = observable.array([]);
+class DataManager {
+  data = observable.array([]);
 
-  @observable amount;
-
-  newElements = observable.map();
-
-  isLoaded = true;
+  newElements = observable.set();
 
   partialLoader;
 
-  table;
+  isAsync = null;
 
-  validationTimeout;
-
-  validateAddition = null;
-
-  constructor(partialLoader, amount, results, table) {
+  constructor(partialLoader) {
     this.partialLoader = partialLoader;
-    this.table = table;
 
-    reaction(() => table.currentRow, (currentRow) => {
-      setTimeout(() => {
-        if (table.currentRow === currentRow) {
-          this.makeVisibleDataValidateAddition();
-        }
-      }, NEW_CHANGES_WAIT_DELAY);
+    this.partialLoader(constants.preloadLimit).then(({ count: amount, results }) => {
+      this.data.replace(results.join(new Array(amount - results.length)));
+      this.isAsync = amount === results.length || constants.smallDataLimit > amount;
+      if (this.isAsync && amount !== results.length) {
+        this.partialLoader().then(({ results: wholeData }) => {
+          this.data = wholeData;
+        });
+      }
     });
-
-    reaction(() => table.sort, () => {
-      this.makeVisibleDataValidateAddition();
-    });
-
-    this.setDataHead(results, amount);
-
-    this.keepNewElementsAttention();
   }
 
-  keepNewElementsAttention() {
-    this.validationTimeout = setTimeout(() => { this.validateCache(); }, INVALIDATION_INTERVAL);
-  }
-
-  forceValidate() {
-    this.destruct();
-    this.validateCache();
-  }
-
-  @action setDataHead(itms, amount) {
-    this.data.replace(itms.concat(new Array(amount - itms.length)));
+  @computed get isLoaded() {
+    return this.isAsync !== null;
   }
 
   @action takeData = ({ count, results }) => {
@@ -115,7 +82,7 @@ class AsyncCahceManager {
       // Запоминаем индексы новых элементов
       for (const { old, new: newIndex } of Object.values(appearences)) {
         if (old === null) {
-          this.newElements.set(newIndex, newIndex);
+          this.newElements.set(newIndex);
         }
       }
       // Ставим таймер на исключение элементов из новых
@@ -178,7 +145,7 @@ class AsyncCahceManager {
     });
   };
 
-  @action validateCache() {
+  @action validate() {
     const headCheck = this.partialLoader(constants.preloadLimit);
     headCheck.then(this.takeData).finally(() => { this.keepNewElementsAttention(); });
     if (!this.validateAddition) {
@@ -196,43 +163,20 @@ class AsyncCahceManager {
     });
   }
 
-  checkValidationResults(results) {
-    results.forEach((datum, id) => {
-      const find = () => {
-        for (let i = 0; i < Math.min(this.data.length, 1000); i += 1) {
-          if (typeof this.data[i] !== 'undefined' && this.data[i].id === datum.id) {
-            return i;
-          }
-        }
-        return -1;
-      };
-      console.assert(
-        this.data[id].id === datum.id,
-        `Полученные даные совпадают по номеру но не по идентификатору ${id}: ${this.data[id].id} ${datum.id} (${find()} ${id})`,
-      );
-    });
+  isEverythingLoadedFromRange(begin, end) {
+    const suggestedRows = this.data.slice(begin, end);
+    return suggestedRows.findIndex((itm) => typeof itm === 'undefined') < 0;
   }
 
-  @action makeVisibleDataValidateAddition() {
-    const currentRow = this.table.sort.direction === 'ascend'
-      ? Math.max(0, this.data.length - this.table.currentRow - MAX_VISIBLE_ROWS_AMOUNT)
-      : this.table.currentRow;
-    const visibleRows = this.data.slice(currentRow, currentRow + MAX_VISIBLE_ROWS_AMOUNT);
-    if (visibleRows.findIndex((itm) => typeof itm === 'undefined') < 0) {
-      return;
-    }
-    if (this.validateAddition !== null) {
-      return;
-    }
-    const offset = currentRow - UP_ROWS_STOCK;
-    if (offset <= 0) {
+  @action validateWithAddition(offset) {
+    if (!this.isAsync) {
       return;
     }
     this.validateAddition = () => {
       const addition = this.partialLoader(constants.preloadLimit, offset);
       return { addition, offset };
     };
-    this.forceValidate();
+    this.validate();
   }
 
   @action resolveDataRange({ results }, offset) {
@@ -243,9 +187,9 @@ class AsyncCahceManager {
     });
   }
 
-  destruct() {
-    clearTimeout(this.validationTimeout);
+  @computed get amount() {
+    return this.data.length;
   }
 }
 
-export default AsyncCahceManager;
+export default DataManager;

@@ -1,4 +1,5 @@
 import checkData from 'utils/dataCheck';
+import { FILTER_TYPES } from './filters';
 
 class Column {
   key;
@@ -63,7 +64,7 @@ class Column {
         },
         {
           type: (t) => {
-            if (['checkbox', 'selector', 'text', 'daterange', 'costrange'].findIndex((v) => v === t.toLowerCase()) < 0) {
+            if (!(t.toLowerCase() in FILTER_TYPES)) {
               console.error(`Для колонки ${data.title} задан некорректный тип фильтра ${t}`);
               return false;
             }
@@ -116,6 +117,7 @@ class Column {
     this.isAsyncorder = data.isAsyncorder || false;
     this.transform = data.transform || ((v) => v);
     this.filter = data.filter || null;
+    this.filter.type = this.filter.type.toLowerCase();
     this.isDefaultSort = data.isDefaultSort || false;
   }
 

@@ -1,109 +1,146 @@
 import { action, observable, computed } from 'mobx';
 import moment from 'moment';
 
+const rangeComparator = (lhs, rhs) => {
+  const [lBegin, lEnd] = lhs;
+  const [rBegin, rEnd] = rhs;
+  if (rBegin < lBegin || rEnd > lEnd) {
+    return null;
+  }
+  return rhs;
+};
+
+const selectorsComparator = (lhs, rhs) => {
+  const result = new Set(lhs);
+  for (const itm of rhs) {
+    if (!result.delete(itm)) {
+      return null;
+    }
+  }
+  return [...result.values()];
+};
+
+const FILTER_TYPES = {
+  checkbox: {
+    operators: ['exact'],
+    convertor: (v) => [v],
+    parser: (v) => v,
+    initialValue: false,
+    complement: (lhs, rhs) => (lhs === rhs ? rhs : null),
+  },
+  selector: {
+    operators: ['in'],
+    convertor: (v) => [v.join(',')],
+    parser: (v) => v.split(','),
+    initialValue: [],
+    complement: selectorsComparator,
+  },
+  text: {
+    operators: ['icontains'],
+    convertor: (v) => [v],
+    parser: (v) => v,
+    initialValue: '',
+    complement: (lhs, rhs) => (rhs.includes(lhs) ? rhs : null),
+  },
+  daterange: {
+    operators: ['gte', 'lte'],
+    convertor: (v) => v.format(),
+    parser: (v, id, old) => { const r = [...old]; r[id] = moment(v); return r; },
+    initialValue: [null, null],
+    complement: rangeComparator,
+  },
+  costrange: {
+    operators: ['gte', 'lte'],
+    convertor: (v) => v,
+    parser: (v, id, old) => { const r = [...old]; r[id] = v; return r; },
+    initialValue: [null, null],
+    complement: rangeComparator,
+  },
+};
+
 class Filters {
   @observable data = {};
 
-  constructor(args, columns) {
-    console.log(args);
+  columns;
 
+  less(rhs) {
+    if (this.columnts !== rhs.column) {
+      return false;
+    }
+    return false;
+  }
+
+  constructor(search, columns) {
+    this.columns = columns;
+    this.search = search;
+  }
+
+  // Если полученный фильтр строже то возвращает разницу (не строгую) иначе возвращает null
+  // не строгую в том смысле, что из rhs может быть вычтено не всё, что в this
+  complement(rhs) {
+    console.assert(rhs.columns === this.columns);
+    const result = new Filters(this.columns);
+    for (const [key, value] of Object.entries(this.data)) {
+      const rhsValue = rhs.data[key];
+      if (typeof rhsValue === 'undefined') {
+        return null;
+      }
+      const filterType = this.filterType(key);
+      const comp = FILTER_TYPES[filterType].complement(value, rhsValue);
+      if (comp === null) {
+        return null;
+      }
+      result.data[key] = comp;
+    }
+    return result;
+  }
+
+  @action set search(args) {
+    this.data = {};
     for (const arg of args.split('&')) {
       const [elem, value] = arg.split('=');
       const [key, operator] = elem.split('__');
-      if (operator === 'icontains') {
-        this.data[key] = value;
+      const filterType = this.filterType(key);
+      const { operators, initialValue, parser } = FILTER_TYPES[filterType];
+
+      if (!(key in this.data)) {
+        this.data[key] = initialValue;
       }
-      if (operator === 'exact') {
-        if (value === 'True') {
-          this.data[key] = true;
-        } else if (value === 'False') {
-          this.data[key] = false;
-        } else {
-          this.data[key] = parseFloat(value);
-        }
+
+      const id = operators.findIndex((op) => op === operator);
+      if (id < 0) {
+        console.error(`unknown operator type ${operator}. Known operators list: ${operators.join(', ')}`);
       }
-      if (operator === 'in') {
-        this.data[key] = {
-          value: value.slice(1, -1).split(','),
-        };
-      }
-      if (operator === 'lte' || operator === 'gte' || operator === 'lt' || operator === 'gt') {
-        if (!Array.isArray(this.data[key])) {
-          this.data[key] = new Array(2);
-        }
-      }
-      if (operator === 'lte') {
-        this.data[key][1] = moment(value);
-      }
-      if (operator === 'gte') {
-        this.data[key][0] = moment(value);
-      }
-      if (operator === 'lt') {
-        this.data[key][1] = parseFloat(value);
-      }
-      if (operator === 'gt') {
-        this.data[key][0] = parseFloat(value);
-      }
+      this.data[key] = parser(value, id, this.data[key]);
     }
   }
 
+  // Это ключевой момент в выборе формата фильтра: фильтры хранятся в том виде, в котором их отдают антовские объекты.
   @action set(column, value) {
-    const type = column.filter.type.toLowerCase();
-    if (type === 'selector') {
-      this.data[column.key] = { value };
-    } else {
-      this.data[column.key] = value;
-    }
+    this.data[column.key] = value;
   }
 
   @action clear() {
     this.data = {};
   }
 
+  filterType(columnKey) {
+    return this.columns.find((({ key }) => key === columnKey)).filter.type;
+  }
+
   @computed get search() {
     return Object.entries(this.data).map(([key, value]) => {
-      if (typeof value === 'number') {
-        return `${key}__exact=${value}`;
-      }
-      if (Array.isArray(value)) {
-        console.assert(value.length === 2);
-        const [min, max] = value;
-        console.log(min, max);
-        if (moment.isMoment(min)) {
-          console.assert(moment.isMoment(max));
-          return `${key}__lte=${max.format()}&${key}__gte=${min.format()}`;
-        }
-        const result = [];
-        if (min !== '' && min !== null) {
-          result.push(`${key}__gt=${min}`);
-        }
-        if (max !== '' && max !== null) {
-          result.push(`${key}__lt=${max}`);
-        }
-        return result.join('&');
-      }
-      if (typeof value === 'boolean') {
-        return `${key}__exact=${value ? 'True' : 'False'}`;
-      }
-      if (typeof value === 'string') {
-        return `${key}__icontains=${value}`;
-      }
-      if (typeof value === 'object') {
-        const itms = value.value;
-        console.assert(Array.isArray(itms));
-        return `${key}__in=[${itms.join(',')}]`;
-      }
-      console.error(`unknown filter value type ${typeof value} for key ${key}`, value);
-      return key;
+      const type = this.filterType(key);
+      const { operators, convertor } = FILTER_TYPES[type];
+      const adaptedValue = convertor(value);
+      console.assert(adaptedValue.length === operators.length);
+      return adaptedValue.map((valueDatum, i) => `${key}__${operators[i]}=${valueDatum}`).join('&');
     }).join('&');
   }
 
   get(column) {
-    const type = column.filter.type.toLowerCase();
+    const { type } = column.filter;
     if (column.key in this.data) {
-      if (type === 'selector') {
-        return this.data[column.key].value;
-      }
       return this.data[column.key];
     }
     if (type === 'selector') {
@@ -113,4 +150,4 @@ class Filters {
   }
 }
 
-export default Filters;
+export { FILTER_TYPES, Filters as default };

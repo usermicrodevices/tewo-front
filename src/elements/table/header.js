@@ -14,7 +14,7 @@ const Header = ({ table, columnWidth }) => {
   const { sort, columns } = table;
 
   const onChangeSort = (key) => () => {
-    table.setSort(key);
+    table.changeSort(key);
   };
   return (
     <>

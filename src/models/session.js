@@ -25,12 +25,6 @@ class Session {
     }
     return null;
   }
-
-  destruct() {
-    this.companiesModel.destruct();
-    this.pointsModel.destruct();
-    this.beverageModel.destruct();
-  }
 }
 
 export default Session;

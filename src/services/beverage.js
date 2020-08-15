@@ -41,7 +41,7 @@ const getBeverage = (limit, offset = 0) => new Promise((resolve, reject) => {
       },
     });
     resolve(response);
-  });
+  }).catch(reject);
 });
 
 export default getBeverage;
