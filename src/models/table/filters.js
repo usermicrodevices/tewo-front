@@ -27,6 +27,7 @@ const FILTER_TYPES = {
     parser: (v) => v,
     initialValue: false,
     complement: (lhs, rhs) => (lhs === rhs ? rhs : null),
+    apply: (value, isChecked) => value === isChecked,
   },
   selector: {
     operators: ['in'],
@@ -34,6 +35,7 @@ const FILTER_TYPES = {
     parser: (v) => v.split(','),
     initialValue: [],
     complement: selectorsComparator,
+    apply: (value, selected) => selected.findIndex((i) => i === value) >= 0,
   },
   text: {
     operators: ['icontains'],
@@ -41,13 +43,15 @@ const FILTER_TYPES = {
     parser: (v) => v,
     initialValue: '',
     complement: (lhs, rhs) => (rhs.includes(lhs) ? rhs : null),
+    apply: (value, substr) => value.indexOf(substr) >= 0,
   },
   daterange: {
     operators: ['gte', 'lte'],
-    convertor: (v) => v.format(),
+    convertor: (v) => v,
     parser: (v, id, old) => { const r = [...old]; r[id] = moment(v); return r; },
     initialValue: [null, null],
     complement: rangeComparator,
+    apply: (value, [l, r]) => value >= l && value <= r,
   },
   costrange: {
     operators: ['gte', 'lte'],
@@ -55,6 +59,7 @@ const FILTER_TYPES = {
     parser: (v, id, old) => { const r = [...old]; r[id] = v; return r; },
     initialValue: [null, null],
     complement: rangeComparator,
+    apply: (value, [l, r]) => value >= l && value <= r,
   },
 };
 
@@ -70,9 +75,8 @@ class Filters {
     return false;
   }
 
-  constructor(search, columns) {
+  constructor(columns) {
     this.columns = columns;
-    this.search = search;
   }
 
   // Если полученный фильтр строже то возвращает разницу (не строгую) иначе возвращает null
@@ -95,8 +99,11 @@ class Filters {
     return result;
   }
 
-  @action set search(args) {
+  set search(args) {
     this.data = {};
+    if (!args.includes('=')) {
+      return;
+    }
     for (const arg of args.split('&')) {
       const [elem, value] = arg.split('=');
       const [key, operator] = elem.split('__');
@@ -124,8 +131,26 @@ class Filters {
     this.data = {};
   }
 
+  @computed get predicate() {
+    return (data) => {
+      for (const [key, value] of Object.entries(data)) {
+        if (key in this.data) {
+          const filterTyoe = this.filterType(key);
+          if (!FILTER_TYPES[filterTyoe].apply(value, this.data[key])) {
+            return false;
+          }
+        }
+      }
+      return true;
+    };
+  }
+
   filterType(columnKey) {
-    return this.columns.find((({ key }) => key === columnKey)).filter.type;
+    const column = this.columns.find((({ key }) => key === columnKey));
+    if (typeof column === 'undefined') {
+      console.error(`can't find folumn with key ${columnKey}`);
+    }
+    return column.filter.type;
   }
 
   @computed get search() {

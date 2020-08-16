@@ -66,4 +66,4 @@ const Filters = ({ table, filters }) => (
   </div>
 );
 
-export default inject(({ filters, table }) => ({ filters, table }))(observer(Filters));
+export default inject(({ filter, table }) => ({ filters: filter, table }))(observer(Filters));

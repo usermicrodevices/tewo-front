@@ -117,7 +117,9 @@ class Column {
     this.isAsyncorder = data.isAsyncorder || false;
     this.transform = data.transform || ((v) => v);
     this.filter = data.filter || null;
-    this.filter.type = this.filter.type.toLowerCase();
+    if (this.filter) {
+      this.filter.type = this.filter.type.toLowerCase();
+    }
     this.isDefaultSort = data.isDefaultSort || false;
   }
 

@@ -6,6 +6,11 @@ import style from './style.module.scss';
 
 const { RangePicker } = DatePicker;
 
+const capitalize = (s) => {
+  if (typeof s !== 'string') return '';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
 const DatergangePicker = ({ title, value, onChange }) => {
   const quartalStart = moment().startOf('year').add(Math.floor(moment().month() / 3) * 3, 'month');
   const halfAYearStart = moment().startOf('year').add(Math.floor(moment().month() / 6) * 6, 'month');
@@ -20,9 +25,9 @@ const DatergangePicker = ({ title, value, onChange }) => {
           'Прошедшая неделя': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
           'Прошедшие 7 дней': [moment().subtract(7, 'day').startOf('day'), moment()],
           'Прошедшие 30 дней': [moment().subtract(30, 'day').startOf('day'), moment()],
-          [moment().format('MMMM')]: [moment().startOf('month'), moment().endOf('month')],
-          [moment().subtract(1, 'month').format('MMMM')]: [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-          [moment().subtract(2, 'month').format('MMMM')]: [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
+          [capitalize(moment().format('MMMM'))]: [moment().startOf('month'), moment().endOf('month')],
+          [capitalize(moment().subtract(1, 'month').format('MMMM'))]: [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+          [capitalize(moment().subtract(2, 'month').format('MMMM'))]: [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
           'Текущий квартал': [quartalStart, quartalStart.clone().add(3, 'month').subtract(1, 'second')],
           'Прошедший квартал': [quartalStart.clone().subtract(3, 'month'), quartalStart.clone().subtract(1, 'second')],
           'Текущее полугодие': [halfAYearStart, halfAYearStart.clone().add(6, 'month').subtract(1, 'second')],

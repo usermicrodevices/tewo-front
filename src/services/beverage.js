@@ -1,9 +1,9 @@
 import { get } from 'utils/request';
 import checkData from 'utils/dataCheck';
 
-const getBeverage = (limit, offset = 0) => new Promise((resolve, reject) => {
+const getBeverage = (limit, offset = 0, filter = '') => new Promise((resolve, reject) => {
   console.assert(limit >= 0 && offset >= 0, `Неверные параметры запроса наливов "${limit}" "${offset}"`);
-  get(`/data/beverages/?limit=${limit}&offset=${offset || 0}`).then((response) => {
+  get(`/data/beverages/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
     const beverageMustBe = {
       cid: 'string',
       created_date: 'date',

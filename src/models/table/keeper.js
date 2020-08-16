@@ -1,5 +1,5 @@
 import {
-  reaction, computed,
+  reaction, computed, action,
 } from 'mobx';
 
 import Filter from './filters';
@@ -33,7 +33,7 @@ class Keeper {
     this.manager = new DataManager(this.partialLoader);
 
     reaction(() => this.filter.search, (search) => {
-      this.setTimeout(() => {
+      setTimeout(() => {
         if (this.filter.search !== search) {
           if (this.manager.isAsync || this.filter.less(new Filter(search, this.filter.columns))) {
             this.manager = new DataManager(this.partialLoader);
@@ -44,14 +44,27 @@ class Keeper {
   }
 
   @computed get data() {
-    if (this.isAsync) {
+    console.log(this.manager.isAsync, this.manager.data.length);
+    if (this.manager.isAsync) {
       return this.manager.data;
     }
-    return this.data.filter(this.filter.predicate).sort(this.sort);
+    return this.manager.data.filter(this.filter.predicate).sort(this.sort);
   }
 
   get partialLoader() {
     return (limit, offset) => this.loader(limit, offset, this.filter.search);
+  }
+
+  isEverythingLoadedFromRange(limit, offset) {
+    return this.manager.isEverythingLoadedFromRange(limit, offset);
+  }
+
+  @action validate() {
+    return this.manager.validate();
+  }
+
+  @action load(offset) {
+    this.manager.validateWithAddition(offset);
   }
 }
 

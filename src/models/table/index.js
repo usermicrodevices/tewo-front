@@ -7,6 +7,7 @@ import { table as constants } from 'config';
 
 import Keeper from './keeper';
 import Column from './column';
+import Filters from './filters';
 
 /**
  * Модель таблицы объединяет две абстракции: данные и колонки.
@@ -40,7 +41,9 @@ class Table {
   // Верхняя строчка скролла
   @observable currentRow;
 
-  constructor(columnsMap, loader, filter) {
+  filter;
+
+  constructor(columnsMap, loader) {
     this.allColumns = Object.entries(columnsMap).map(([key, value]) => new Column(key, value));
     console.assert(
       this.allColumns.filter(({ isAsyncorder }) => isAsyncorder).length === 1,
@@ -50,11 +53,12 @@ class Table {
       this.allColumns.filter(({ isDefaultSort }) => isDefaultSort).length === 1,
       `Таблица ${this.toString()} не получила ключа сортировки по умолчанию`,
     );
-    this.dataModel = new Keeper(filter, loader);
+    this.filter = new Filters(this.allColumns);
+    this.dataModel = new Keeper(this.filter, loader);
 
-    reaction(() => this.currentRow, (currentRow) => {
+    reaction(() => this.currentRow, (scrollEventMomentRow) => {
       setTimeout(() => {
-        if (this.currentRow === currentRow) {
+        if (this.currentRow === scrollEventMomentRow) {
           this.performVisibleDataValidation();
         }
       }, NEW_CHANGES_WAIT_DELAY);
@@ -169,6 +173,10 @@ class Table {
 
   @action updateFilters(search) {
     this.dataModel.search = search;
+  }
+
+  @action validate() {
+    return this.dataModel.validate();
   }
 }
 

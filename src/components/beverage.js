@@ -24,7 +24,7 @@ const Beverage = ({ session }) => (
       </Space>
     </Title>
     <Card>
-      <Provider table={session.beverageModel}>
+      <Provider table={session.beverages} filter={session.beverages.filter}>
         <Table />
       </Provider>
     </Card>

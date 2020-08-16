@@ -93,7 +93,7 @@ const COLUMNS = {
 
 class Beverages extends Table {
   constructor() {
-    super(getBeverages, COLUMNS);
+    super(COLUMNS, getBeverages);
   }
 
   toString() {

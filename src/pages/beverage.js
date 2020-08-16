@@ -1,33 +1,43 @@
 import React from 'react';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { withRouter, Redirect } from 'react-router-dom';
 
 import BeverageComponent from 'components/beverage';
 
 @withRouter
 @inject('session')
+@observer
 class Beverage extends React.Component {
+  updateTimeout = null;
+
   constructor(props) {
     super(props);
 
     const { session, location } = props;
-    session.beverages.updateFilters(location.search.slice(1));
-    session.beverages.startContinuousValidation();
+    session.beverages.filter.search = location.search.slice(1);
+  }
+
+  componentDidMount() {
+    const { session } = this.props;
+    const update = () => {
+      session.beverages.validate().then(() => {
+        this.updateTimeout = setTimeout(update, 3000);
+      });
+    };
+    update();
   }
 
   componentWillUnmount() {
-    const { session } = this.props;
-    session.beverages.stopContinuousValidation();
+    clearTimeout(this.updateTimeout);
   }
 
   render() {
-    const { session } = this.state;
-    const { filters } = session.beverages;
-    const { location } = this.props;
-    const isNeedToRedirect = location.search.slice(1) !== filters.search;
+    const { location, session } = this.props;
+    const { filter } = session.beverages;
+    const isNeedToRedirect = location.search.slice(1) !== filter.search;
     return (
       <>
-        { isNeedToRedirect && <Redirect to={`${location.pathname}?${filters.search}`} /> }
+        { isNeedToRedirect && <Redirect to={`${location.pathname}?${filter.search}`} /> }
         <BeverageComponent />
       </>
     );

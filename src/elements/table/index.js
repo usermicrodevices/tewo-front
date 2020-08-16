@@ -31,17 +31,6 @@ class TableComponent extends React.Component {
     isFiltersOpen: false,
   };
 
-  componentDidMount() {
-    const { table } = this.props;
-    table.filter = '';
-    table.forceValidate();
-  }
-
-  componentWillUnmount() {
-    const { table } = this.props;
-    table.destruct();
-  }
-
   onColumnsPicked = (pickedColumns) => {
     const { table } = this.props;
     table.visibleColumns = pickedColumns;

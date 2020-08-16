@@ -12,7 +12,7 @@ class Session {
 
   @observable locationsCache = getLocations().then((towns) => { this.townsCache = towns; return towns; });
 
-  @observable beverageModel = new Beverages();
+  beverages = new Beverages();
 
   getCompanyById(serchedId) {
     if (!this.companiesModel.isLoaded) {

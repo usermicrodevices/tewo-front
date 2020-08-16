@@ -30,9 +30,9 @@ class DataManager {
     this.partialLoader = partialLoader;
 
     this.partialLoader(constants.preloadLimit).then(({ count: amount, results }) => {
-      this.data.replace(results.join(new Array(amount - results.length)));
-      this.isAsync = amount === results.length || constants.smallDataLimit > amount;
-      if (this.isAsync && amount !== results.length) {
+      this.data.replace(results.concat(new Array(amount - results.length)));
+      this.isAsync = amount !== results.length && constants.smallDataLimit < amount;
+      if (!this.isAsync && amount !== results.length) {
         this.partialLoader().then(({ results: wholeData }) => {
           this.data = wholeData;
         });
@@ -82,7 +82,7 @@ class DataManager {
       // Запоминаем индексы новых элементов
       for (const { old, new: newIndex } of Object.values(appearences)) {
         if (old === null) {
-          this.newElements.set(newIndex);
+          this.newElements.add(newIndex);
         }
       }
       // Ставим таймер на исключение элементов из новых
@@ -146,10 +146,9 @@ class DataManager {
   };
 
   @action validate() {
-    const headCheck = this.partialLoader(constants.preloadLimit);
-    headCheck.then(this.takeData).finally(() => { this.keepNewElementsAttention(); });
+    const headCheck = this.partialLoader(constants.preloadLimit).then(this.takeData);
     if (!this.validateAddition) {
-      return;
+      return headCheck;
     }
     const { addition: additionRequest, offset } = this.validateAddition();
     this.validateAddition = null;
@@ -158,7 +157,7 @@ class DataManager {
         this.resolveDataRange(addition, offset);
       });
     });
-    Promise.all([headCheck, additionRequest]).then(([{ count: headAmount }, { count: additionAmount }]) => {
+    return Promise.all([headCheck, additionRequest]).then(([{ count: headAmount }, { count: additionAmount }]) => {
       console.assert(headAmount === additionAmount, `Добавление элемента во время запроса данных ${headAmount} ${additionAmount}`);
     });
   }
