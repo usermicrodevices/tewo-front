@@ -2,7 +2,7 @@ import {
   reaction, computed, action,
 } from 'mobx';
 
-import Filter from './filters';
+import Filter from 'models/filters';
 import DataManager from './dataManager';
 
 // Как быстро реагировать на изменения фильтра
@@ -44,7 +44,6 @@ class Keeper {
   }
 
   @computed get data() {
-    console.log(this.manager.isAsync, this.manager.data.length);
     if (this.manager.isAsync) {
       return this.manager.data;
     }
@@ -61,6 +60,10 @@ class Keeper {
 
   @action validate() {
     return this.manager.validate();
+  }
+
+  @computed get isAsync() {
+    return this.manager.isAsync;
   }
 
   @action load(offset) {

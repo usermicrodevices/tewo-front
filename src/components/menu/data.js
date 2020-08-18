@@ -6,6 +6,19 @@ import {
   companies,
   salePoints,
   beverage,
+  devices,
+  drink,
+  ingredients,
+  costs,
+  events,
+  cost,
+  ingredientsRate,
+  sales,
+  cancelationsRate,
+  cleansRate,
+  overdueLog,
+  eventsLog,
+  cleansLog,
 } from 'routes';
 
 class MenuItem {
@@ -21,7 +34,6 @@ class MenuItem {
     this.act = act;
   }
 }
-
 const items = [
   new MenuItem(
     <Icon name="pie-chart-outline" size="16" />,
@@ -39,21 +51,23 @@ const items = [
     [
       {
         text: 'Себестоимость / выручка',
+        act: cost,
       },
       {
         text: 'Расходы ингридиентов',
+        act: ingredientsRate,
       },
       {
-        text: 'Динамика продаж',
-      },
-      {
-        text: 'Структура продаж',
+        text: 'Аналитика продаж',
+        act: sales,
       },
       {
         text: 'Отмена напитков',
+        act: cancelationsRate,
       },
       {
         text: 'Расходы чистящих средств',
+        act: cleansRate,
       },
     ],
   ),
@@ -63,9 +77,11 @@ const items = [
     [
       {
         text: 'Просроченные задачи',
+        act: overdueLog,
       },
       {
         text: 'Журнал событий',
+        act: eventsLog,
       },
       {
         text: 'Журнал наливов',
@@ -73,6 +89,7 @@ const items = [
       },
       {
         text: 'Журнал очисток',
+        act: cleansLog,
       },
       {
         text: 'Статистика напряжения',
@@ -90,6 +107,26 @@ const items = [
       {
         text: 'Объекты',
         act: salePoints,
+      },
+      {
+        text: 'Оборудование',
+        act: devices,
+      },
+      {
+        text: 'Напитки',
+        act: drink,
+      },
+      {
+        text: 'Ингридиенты',
+        act: ingredients,
+      },
+      {
+        text: 'Группы цен',
+        act: costs,
+      },
+      {
+        text: 'События',
+        act: events,
       },
     ],
   ),

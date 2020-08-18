@@ -24,7 +24,7 @@ const calculateColumnWidth = (tableWidth, columns) => {
   return columns.map(({ grow, width }) => width || grow / sum * destributedWidth);
 };
 
-@inject('table')
+@inject(({ table, filter }) => ({ table, filter }))
 @observer
 class TableComponent extends React.Component {
   state = {
@@ -36,9 +36,9 @@ class TableComponent extends React.Component {
     table.visibleColumns = pickedColumns;
   }
 
-  onFilterChange = (action) => {
-    const { table } = this.props;
-    table.filter = action.target.value;
+  onSearchChange = (action) => {
+    const { filter } = this.props;
+    filter.searchText = action.target.value;
   }
 
   onReorder = (columns) => {
@@ -57,8 +57,8 @@ class TableComponent extends React.Component {
         data,
         visibleColumns,
         columns,
-        filter,
       },
+      filter: { searchText },
       size,
     } = this.props;
     const columnWidth = calculateColumnWidth(size.width, columns.map(({ width }) => width));
@@ -66,7 +66,7 @@ class TableComponent extends React.Component {
     return (
       <div className={style.whole}>
         <div className={style.buttons}>
-          <Input prefix={<Icon name="search-outline" />} value={filter} onChange={this.onFilterChange} />
+          <Input prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} />
           <Space>
             <Dropdown overlay={<ColumnsPicker onReorder={this.onReorder} onChange={this.onColumnsPicked} visibleColumns={visibleColumns} />} placement="bottomRight">
               <Button>Колонки</Button>

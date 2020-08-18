@@ -24,19 +24,21 @@ class DataManager {
 
   partialLoader;
 
-  isAsync = null;
+  @observable isAsync = null;
 
   constructor(partialLoader) {
     this.partialLoader = partialLoader;
 
     this.partialLoader(constants.preloadLimit).then(({ count: amount, results }) => {
-      this.data.replace(results.concat(new Array(amount - results.length)));
-      this.isAsync = amount !== results.length && constants.smallDataLimit < amount;
-      if (!this.isAsync && amount !== results.length) {
-        this.partialLoader().then(({ results: wholeData }) => {
-          this.data = wholeData;
-        });
-      }
+      transaction(() => {
+        this.data.replace(results.concat(new Array(amount - results.length)));
+        this.isAsync = amount !== results.length && constants.smallDataLimit < amount;
+        if (!this.isAsync && amount !== results.length) {
+          this.partialLoader().then(({ results: wholeData }) => {
+            this.data = wholeData;
+          });
+        }
+      });
     });
   }
 
@@ -44,7 +46,8 @@ class DataManager {
     return this.isAsync !== null;
   }
 
-  @action takeData = ({ count, results }) => {
+  @action takeData = (data) => {
+    const { count, results } = data;
     transaction(() => {
       // В некоторых ситуациях при подгрузке после скрола в начало могут добавляться элементы
       const firstLoadedElementIndex = this.data.findIndex((itm) => typeof itm !== 'undefined');
@@ -143,6 +146,7 @@ class DataManager {
         }
       }
     });
+    return data;
   };
 
   @action validate() {

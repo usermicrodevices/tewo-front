@@ -2,8 +2,9 @@
 import Table from 'models/table';
 import getBeverages from 'services/beverage';
 import TimeAgo from 'elements/timeago';
+import Filters from './filters';
 
-const COLUMNS = {
+const declareColumns = (session) => ({
   id: {
     isVisbleByDefault: true,
     title: 'ID',
@@ -22,10 +23,6 @@ const COLUMNS = {
     grow: 1,
     isDefaultSort: true,
     transform: (date) => date && TimeAgo({ date }),
-    filter: {
-      type: 'dateRange',
-      title: 'Момент налива',
-    },
     sortDirections: 'both',
   },
   created_date: {
@@ -40,42 +37,18 @@ const COLUMNS = {
     title: 'Устройство',
     align: 'right',
     width: 100,
-    filter: {
-      type: 'selector',
-      title: 'Напиток',
-      selector: [1, 2, 3, 4, 5],
-      resolver: {
-        1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e',
-      },
-    },
     sortDirections: 'both',
   },
   drink: {
     isVisbleByDefault: true,
     title: 'Напиток',
     grow: 1,
-    filter: {
-      type: 'selector',
-      title: 'Напиток',
-      selector: [1, 2, 3, 4, 5],
-      resolver: {
-        1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e',
-      },
-    },
     sortDirections: 'both',
   },
   operation: {
     isVisbleByDefault: true,
     title: 'Операция',
     grow: 1,
-    filter: {
-      type: 'selector',
-      title: 'Напиток',
-      selector: [1, 2, 3, 4, 5],
-      resolver: {
-        1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e',
-      },
-    },
     sortDirections: 'both',
   },
   sale_sum: {
@@ -83,17 +56,48 @@ const COLUMNS = {
     title: 'Стоимость',
     align: 'right',
     width: 100,
-    filter: {
-      type: 'costRange',
-      title: 'Стоимость',
-    },
     sortDirections: 'both',
   },
-};
+});
+
+const declareFilters = (session) => ({
+  sale_sum: {
+    type: 'costrange',
+    title: 'Стоимость',
+    apply: (general, data) => general(data.sale_sum),
+  },
+  drink: {
+    type: 'selector',
+    title: 'Напиток',
+    apply: (general, data) => general(data.drink),
+    selector: () => [
+      [1, 'a'], [2, 'b'],
+    ],
+  },
+  operation: {
+    type: 'selector',
+    title: 'Операция',
+    apply: (general, data) => general(data.operation),
+    selector: () => [
+      [1, 'a'], [2, 'b'],
+    ],
+  },
+  device_date: {
+    type: 'daterange',
+    title: 'Момент налива',
+    apply: (general, data) => general(data.device_date),
+  },
+});
 
 class Beverages extends Table {
-  constructor() {
-    super(COLUMNS, getBeverages);
+  filter;
+
+  chart = null;
+
+  constructor(session) {
+    const filter = new Filters(declareFilters(session));
+    super(declareColumns(session), getBeverages, filter);
+    this.filter = filter;
   }
 
   toString() {

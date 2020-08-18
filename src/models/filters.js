@@ -28,6 +28,8 @@ const FILTER_TYPES = {
     initialValue: false,
     complement: (lhs, rhs) => (lhs === rhs ? rhs : null),
     apply: (value, isChecked) => value === isChecked,
+    order: 5,
+    isNullValue: (value, filter) => value === filter.passiveValue,
   },
   selector: {
     operators: ['in'],
@@ -36,6 +38,8 @@ const FILTER_TYPES = {
     initialValue: [],
     complement: selectorsComparator,
     apply: (value, selected) => selected.findIndex((i) => i === value) >= 0,
+    order: 3,
+    isNullValue: (value) => !Array.isArray(value) || value.length === 0,
   },
   text: {
     operators: ['icontains'],
@@ -44,14 +48,18 @@ const FILTER_TYPES = {
     initialValue: '',
     complement: (lhs, rhs) => (rhs.includes(lhs) ? rhs : null),
     apply: (value, substr) => value.indexOf(substr) >= 0,
+    order: 1,
+    isNullValue: (value) => typeof value !== 'string' || value === '',
   },
   daterange: {
     operators: ['gte', 'lte'],
-    convertor: (v) => v,
+    convertor: (v) => v.map((d) => d.format()),
     parser: (v, id, old) => { const r = [...old]; r[id] = moment(v); return r; },
     initialValue: [null, null],
     complement: rangeComparator,
     apply: (value, [l, r]) => value >= l && value <= r,
+    order: 2,
+    isNullValue: (value) => !Array.isArray(value) || (value[0] === null && value[1] === null),
   },
   costrange: {
     operators: ['gte', 'lte'],
@@ -60,13 +68,17 @@ const FILTER_TYPES = {
     initialValue: [null, null],
     complement: rangeComparator,
     apply: (value, [l, r]) => value >= l && value <= r,
+    order: 4,
+    isNullValue: (value) => !Array.isArray(value) || (value[0] === null && value[1] === null),
   },
 };
 
 class Filters {
   @observable data = {};
 
-  columns;
+  filters;
+
+  @observable searchText = '';
 
   less(rhs) {
     if (this.columnts !== rhs.column) {
@@ -75,15 +87,15 @@ class Filters {
     return false;
   }
 
-  constructor(columns) {
-    this.columns = columns;
+  constructor(filters) {
+    this.filters = filters;
   }
 
   // Если полученный фильтр строже то возвращает разницу (не строгую) иначе возвращает null
   // не строгую в том смысле, что из rhs может быть вычтено не всё, что в this
   complement(rhs) {
-    console.assert(rhs.columns === this.columns);
-    const result = new Filters(this.columns);
+    console.assert(rhs.filters === this.filters);
+    const result = new Filters(this.filters);
     for (const [key, value] of Object.entries(this.data)) {
       const rhsValue = rhs.data[key];
       if (typeof rhsValue === 'undefined') {
@@ -123,8 +135,14 @@ class Filters {
   }
 
   // Это ключевой момент в выборе формата фильтра: фильтры хранятся в том виде, в котором их отдают антовские объекты.
-  @action set(column, value) {
-    this.data[column.key] = value;
+  @action set(key, value) {
+    const filter = this.filters[key];
+    const { isNullValue } = FILTER_TYPES[filter.type];
+    if (isNullValue(value, filter)) {
+      delete this.data[key];
+    } else {
+      this.data[key] = value;
+    }
   }
 
   @action clear() {
@@ -145,12 +163,12 @@ class Filters {
     };
   }
 
-  filterType(columnKey) {
-    const column = this.columns.find((({ key }) => key === columnKey));
-    if (typeof column === 'undefined') {
-      console.error(`can't find folumn with key ${columnKey}`);
+  filterType(filterKey) {
+    const filter = this.filters[filterKey];
+    if (typeof filter === 'undefined') {
+      console.error(`can't find folumn with key ${filterKey}`);
     }
-    return column.filter.type;
+    return filter.type;
   }
 
   @computed get search() {
@@ -159,19 +177,26 @@ class Filters {
       const { operators, convertor } = FILTER_TYPES[type];
       const adaptedValue = convertor(value);
       console.assert(adaptedValue.length === operators.length);
-      return adaptedValue.map((valueDatum, i) => `${key}__${operators[i]}=${valueDatum}`).join('&');
+      return adaptedValue.filter((v) => v !== null && v !== '').map((valueDatum, i) => `${key}__${operators[i]}=${valueDatum}`).join('&');
     }).join('&');
   }
 
-  get(column) {
-    const { type } = column.filter;
-    if (column.key in this.data) {
-      return this.data[column.key];
+  get(key) {
+    const { type } = this.filters[key];
+    if (key in this.data) {
+      return this.data[key];
     }
     if (type === 'selector') {
       return [];
     }
     return null;
+  }
+
+  @computed get elements() {
+    return Object.entries(this.filters).map(([key, value]) => ({ ...value, key })).sort(
+      (a, b) => Math.sign(FILTER_TYPES[a.type].order - FILTER_TYPES[b.type].order)
+        || a.key.localeCompare(b.key),
+    );
   }
 }
 

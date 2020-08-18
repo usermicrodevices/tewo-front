@@ -14,9 +14,9 @@ const Selector = ({
     value={value}
   >
     {
-      selector.map((key) => (
-        <Option key={key} value={key} disabled={!resolver[key]}>
-          {resolver[key] || key}
+      selector.map(([key, text]) => (
+        <Option key={key} value={key}>
+          {text}
         </Option>
       ))
     }

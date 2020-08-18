@@ -1,5 +1,5 @@
 import checkData from 'utils/dataCheck';
-import { FILTER_TYPES } from './filters';
+import { FILTER_TYPES } from 'models/filters';
 
 class Column {
   key;

@@ -14,7 +14,6 @@ const Filter = (
     type: typeVal,
     title,
     selector,
-    resolver,
     onChange,
     value,
   },
@@ -28,7 +27,7 @@ const Filter = (
     case 'text':
       return <Input placeholder={title} onChange={onChange} value={value} />;
     case 'selector':
-      return <Select title={title} value={value} onChange={onChange} selector={selector} resolver={resolver} />;
+      return <Select title={title} value={value} onChange={onChange} selector={selector} />;
     case 'checkbox':
       return <Checkbox checked={value} onChange={onChange}>{title}</Checkbox>;
     default:
@@ -37,25 +36,22 @@ const Filter = (
   }
 };
 
-const Filters = ({ table, filters }) => (
+const Filters = ({ filter }) => (
   <div className={style['filters-block']}>
-    <Button type="text" icon={<ReloadOutlined />} onClick={() => { filters.clear(); }}>Сбросить</Button>
+    <Button type="text" icon={<ReloadOutlined />} onClick={() => { filter.clear(); }}>Сбросить</Button>
     <div className={style.filters}>
       {
-        table.allColumns.filter(({ filter }) => filter).map((column) => {
-          const { key, filter } = column;
-          const {
-            title, selector, type, resolver,
-          } = filter;
-          const onChange = (value) => { filters.set(column, value); };
-          const value = filters.get(column);
+        filter.elements.map(({
+          title, selector, type, key,
+        }) => {
+          const onChange = (value) => { filter.set(key, value); };
+          const value = filter.get(key);
           return (
             <Filter
               key={key}
               title={title}
-              selector={selector}
+              selector={selector ? selector() : []}
               type={type}
-              resolver={resolver}
               onChange={onChange}
               value={value}
             />
@@ -66,4 +62,4 @@ const Filters = ({ table, filters }) => (
   </div>
 );
 
-export default inject(({ filter, table }) => ({ filters: filter, table }))(observer(Filters));
+export default inject('filter')(observer(Filters));
