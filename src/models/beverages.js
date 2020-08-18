@@ -90,14 +90,10 @@ const declareFilters = (session) => ({
 });
 
 class Beverages extends Table {
-  filter;
-
   chart = null;
 
   constructor(session) {
-    const filter = new Filters(declareFilters(session));
-    super(declareColumns(session), getBeverages, filter);
-    this.filter = filter;
+    super(declareColumns(session), getBeverages, new Filters(declareFilters(session)));
   }
 
   toString() {

@@ -20,7 +20,7 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
           created_date: 'date',
         };
         const mayBe = {
-          emails: 'array',
+          emails: 'string',
           person: 'string',
           phone: 'string',
           address: 'string',
@@ -29,15 +29,19 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
         };
         checkData(data, stouldBe, mayBe);
 
-        const point = new SalePoint();
+        const point = new SalePoint(session);
 
         for (const [jsonName, objectName] of Object.entries({
           id: 'id',
           name: 'name',
+          company: 'companyId',
           address: 'address',
           created_date: 'createdDate',
           map_point: 'mapPoint',
-          company: 'companyId',
+          city: 'cityId',
+          person: 'person',
+          phone: 'phone',
+          emails: 'email',
         })) {
           if (jsonName in stouldBe) {
             point[objectName] = data[jsonName];
@@ -56,7 +60,6 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
             console.error(`Попытка извлечь непроверенные данные ${jsonName}`, stouldBe);
           }
         }
-        point.session = session;
         return point;
       }),
     });

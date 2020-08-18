@@ -5,7 +5,7 @@ import Loader from 'elements/loader';
 import classNames from 'classnames';
 import styles from './style.module.scss';
 
-const Cell = (data, columns, hover, setHover, freshItems, rowFunc, columnWidth) => observer(({ index: rowIndex, style }) => {
+const Cell = (data, columns, hover, freshItems, rowFunc, columnWidth) => observer(({ index: rowIndex, style }) => {
   const rowData = data[rowFunc(rowIndex)];
   if (typeof rowData === 'undefined') {
     return <div style={style}><Loader /></div>;
@@ -13,12 +13,7 @@ const Cell = (data, columns, hover, setHover, freshItems, rowFunc, columnWidth) 
   return (
     <div
       style={style}
-      onMouseEnter={() => setHover(rowIndex)}
-      onMouseLeave={() => setHover(-1)}
-      className={classNames(
-        styles.row,
-        { [styles.hover]: hover === rowIndex },
-      )}
+      className={styles.row}
     >
       {
         columns.map(({ align, key, transform }, columnIndex) => {
@@ -28,6 +23,9 @@ const Cell = (data, columns, hover, setHover, freshItems, rowFunc, columnWidth) 
           }
           if (typeof datum === 'undefined') {
             datum = <Loader />;
+          }
+          if (datum === null) {
+            datum = '—';
           }
           const cellStyle = { textAlign: align || 'left', width: columnWidth[columnIndex] };
           return (

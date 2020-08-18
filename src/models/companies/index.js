@@ -1,13 +1,14 @@
 /* eslint class-methods-use-this: "off" */
+
 import Table from 'models/table';
 import getCompanies from 'services/companies';
+import Filters from 'models/filters';
 
 const COLUMNS_LIST = {
   id: {
     isVisbleByDefault: true,
     title: 'ID',
     width: 70,
-    isDefaultSort: true,
     sortDirections: 'descend',
     isAsyncorder: true,
   },
@@ -16,40 +17,29 @@ const COLUMNS_LIST = {
     title: 'Название',
     grow: 4,
     sortDirections: 'both',
+    isDefaultSort: true,
   },
-  location: {
+  created: {
     isVisbleByDefault: true,
-    title: 'Город',
+    title: 'Регистрация в системе',
     grow: 2,
+    transform: (date) => date.format('D MMMM yyyy'),
     sortDirections: 'both',
   },
-  objectsCount: {
+  pointsAmount: {
     isVisbleByDefault: true,
     title: 'Кол-во объектов',
     align: 'right',
     width: 120,
     sortDirections: 'both',
   },
-  actions: {
-    isVisbleByDefault: false,
-    title: 'Действия',
-    grow: 2,
-  },
-  inn: {
-    isVisbleByDefault: false,
-    title: 'ИНН',
-    grow: 2,
-  },
-  account: {
-    isVisbleByDefault: false,
-    title: 'Реквизиты',
-    grow: 2,
-  },
 };
 
 class Companies extends Table {
+  chart = null;
+
   constructor(session) {
-    super(getCompanies, COLUMNS_LIST);
+    super(COLUMNS_LIST, getCompanies(session), new Filters());
   }
 
   toString() {

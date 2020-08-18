@@ -44,10 +44,10 @@ class Keeper {
   }
 
   @computed get data() {
-    if (this.manager.isAsync) {
+    if (this.isAsync) {
       return this.manager.data;
     }
-    return this.manager.data.filter(this.filter.predicate).sort(this.sort);
+    return this.manager.data.filter(this.filter.predicate);
   }
 
   get partialLoader() {
@@ -68,6 +68,10 @@ class Keeper {
 
   @action load(offset) {
     this.manager.validateWithAddition(offset);
+  }
+
+  @computed get isLoaded() {
+    return this.manager.isLoaded;
   }
 }
 

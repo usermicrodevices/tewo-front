@@ -58,11 +58,12 @@ class TableComponent extends React.Component {
         visibleColumns,
         columns,
       },
-      filter: { searchText },
+      filter: { searchText, filters },
       size,
     } = this.props;
     const columnWidth = calculateColumnWidth(size.width, columns.map(({ width }) => width));
     const { isFiltersOpen } = this.state;
+    const isHaveFilters = Object.keys(filters).length !== 0;
     return (
       <div className={style.whole}>
         <div className={style.buttons}>
@@ -71,11 +72,13 @@ class TableComponent extends React.Component {
             <Dropdown overlay={<ColumnsPicker onReorder={this.onReorder} onChange={this.onColumnsPicked} visibleColumns={visibleColumns} />} placement="bottomRight">
               <Button>Колонки</Button>
             </Dropdown>
-            <Button
-              type={isFiltersOpen ? 'primary' : 'default'}
-              icon={<FilterOutlined />}
-              onClick={this.toggleFilters}
-            />
+            { isHaveFilters && (
+              <Button
+                type={isFiltersOpen ? 'primary' : 'default'}
+                icon={<FilterOutlined />}
+                onClick={this.toggleFilters}
+              />
+            )}
           </Space>
         </div>
         { isFiltersOpen && <Filters /> }

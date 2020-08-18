@@ -1,32 +1,34 @@
+import moment from 'moment';
+
+import { get } from 'utils/request';
 import Company from 'models/companies/company';
+import checkData from 'utils/dataCheck';
 
-function generateRandomCompany(_, id) {
-  const c = new Company();
+const getCompanies = (session) => () => new Promise((resolve, reject) => {
+  get('/refs/companies/').then((companies) => {
+    if (!Array.isArray(companies)) {
+      console.error(`/refs/companies ожидаеся в ответ массив, получен ${typeof companies}`, companies);
+    }
 
-  c.id = id;
+    resolve({
+      count: companies.length,
+      results: companies.map((data) => {
+        const shouldBe = {
+          created_date: 'date',
+          id: 'number',
+          name: 'string',
+        };
+        checkData(data, shouldBe);
 
-  const names = ['Вектор', 'Vector', 'Тензор', 'Функтур', 'Кофемашины в аренду', 'Природно-оздоровительный комплекс "Кофейная жаровня в петрозаводске"'];
-  c.name = names[Math.floor(Math.random() * names.length)];
+        const company = new Company(session);
+        company.id = data.id;
+        company.name = data.name;
+        company.created = moment(data.created_date);
 
-  const locations = ['Moscow', 'Москва', 'Вена', 'Верона', 'Воронеж', 'Воркута', 'Венеция'];
-  c.location = locations[Math.floor(Math.random() * locations.length)];
-
-  c.objectsCount = Math.floor(Math.random() * 1e3);
-
-  c.actions = null;
-
-  c.inn = null;
-
-  c.account = null;
-
-  return c;
-}
-
-function getCompanies() {
-  return new Promise((resolve, reject) => {
-    const randomCompanies = new Array(10000).fill(null).map(generateRandomCompany);
-    setTimeout(() => { resolve({ count: randomCompanies.length, results: randomCompanies }); }, 1500);
-  });
-}
+        return company;
+      }),
+    });
+  }).catch(reject);
+});
 
 export default getCompanies;

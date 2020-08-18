@@ -88,7 +88,7 @@ class Filters {
   }
 
   constructor(filters) {
-    this.filters = filters;
+    this.filters = filters || {};
   }
 
   // Если полученный фильтр строже то возвращает разницу (не строгую) иначе возвращает null
@@ -151,6 +151,11 @@ class Filters {
 
   @computed get predicate() {
     return (data) => {
+      if ('name' in data) {
+        if (data.name.toLowerCase().indexOf(this.searchText.toLowerCase()) < 0) {
+          return false;
+        }
+      }
       for (const [key, value] of Object.entries(data)) {
         if (key in this.data) {
           const filterTyoe = this.filterType(key);
@@ -177,7 +182,10 @@ class Filters {
       const { operators, convertor } = FILTER_TYPES[type];
       const adaptedValue = convertor(value);
       console.assert(adaptedValue.length === operators.length);
-      return adaptedValue.filter((v) => v !== null && v !== '').map((valueDatum, i) => `${key}__${operators[i]}=${valueDatum}`).join('&');
+      return adaptedValue
+        .filter((v) => v !== null && v !== '')
+        .map((valueDatum, i) => `${key}__${operators[i]}=${valueDatum}`)
+        .join('&');
     }).join('&');
   }
 

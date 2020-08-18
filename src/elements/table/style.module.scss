@@ -24,10 +24,10 @@
       border-bottom: 1px solid #e8e8e8;
       transition: background-color 1s linear;
     }
-  }
 
-  .hover {
-    background-color: #fafafa;
+    &:hover {
+      background-color: #fafafa;
+    }
   }
 
   .highlightnew {

@@ -24,11 +24,6 @@ class Content extends React.Component {
     }
   }
 
-  setHover = (row) => {
-    const { table } = this.props;
-    table.hoverRow = row;
-  };
-
   onScroll = ({ scrollOffset }) => {
     const { table } = this.props;
     table.currentRow = Math.ceil(scrollOffset / ROW_HEIGHT);
@@ -63,7 +58,7 @@ class Content extends React.Component {
         data={data}
       >
         {
-          Cell(data, columns, hoverRow, this.setHover, freshItems, this.rowFunc, columnWidth)
+          Cell(data, columns, hoverRow, freshItems, this.rowFunc, columnWidth)
         }
       </List>
     );

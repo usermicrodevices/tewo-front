@@ -35,7 +35,7 @@ class Companies extends React.Component {
           <BothSideAxisChart />
         </Card>
         <Card>
-          <Provider table={session.companiesModel}>
+          <Provider table={session.companiesModel} filter={session.companiesModel.filter}>
             <Table />
           </Provider>
         </Card>

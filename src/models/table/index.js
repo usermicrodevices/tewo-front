@@ -2,6 +2,7 @@
 import {
   computed, observable, action, reaction,
 } from 'mobx';
+import moment from 'moment';
 import localStorage from 'mobx-localstorage';
 import { table as constants } from 'config';
 
@@ -34,9 +35,6 @@ class Table {
 
   @observable allColumns;
 
-  // Куда наведена мышь
-  @observable hoverRow;
-
   // Верхняя строчка скролла
   @observable currentRow;
 
@@ -62,6 +60,10 @@ class Table {
     });
 
     reaction(() => this.sort, this.performVisibleDataValidation);
+  }
+
+  get filter() {
+    return this.dataModel.filter;
   }
 
   @action performVisibleDataValidation = () => {
@@ -112,6 +114,27 @@ class Table {
     };
   }
 
+  @computed get sortPredicate() {
+    const { sort: { column } } = this;
+    return (datumA, datumB) => {
+      const valA = datumA[column];
+      const valB = datumB[column];
+      if (typeof valA === 'string') {
+        const result = valB.localeCompare(valA);
+        if (result !== 0) {
+          return result * 1;
+        }
+      }
+      if (valA > valB) {
+        return 1;
+      }
+      if (valB > valA) {
+        return -1;
+      }
+      return Math.sign(datumA.id - datumB.id);
+    };
+  }
+
   // реализует логику клика по колонке сортировки.
   @action changeSort(columnKey) {
     const currentSort = this.sort;
@@ -150,7 +173,14 @@ class Table {
   }
 
   @computed get data() {
-    return this.dataModel.data;
+    if (this.isAsync) {
+      return this.dataModel.data;
+    }
+    return this.dataModel.data.sort(this.sortPredicate);
+  }
+
+  @computed get rawData() {
+    return this.dataModel.manager.data;
   }
 
   @computed get isLoaded() {
