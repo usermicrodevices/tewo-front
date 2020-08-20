@@ -3,6 +3,7 @@
 import Table from 'models/table';
 import getCompanies from 'services/companies';
 import Filters from 'models/filters';
+import { observable, transaction } from 'mobx';
 
 const COLUMNS_LIST = {
   id: {
@@ -37,6 +38,16 @@ const COLUMNS_LIST = {
 
 class Companies extends Table {
   chart = null;
+
+  actions = {
+    isVisible: true,
+    isEditable: () => true,
+    onEdit: (datum) => {
+      this.elementForEdit = datum;
+    },
+  };
+
+  @observable elementForEdit = undefined;
 
   constructor(session) {
     super(COLUMNS_LIST, getCompanies(session), new Filters());

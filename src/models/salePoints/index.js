@@ -73,6 +73,11 @@ const COLUMNS = {
 };
 
 class SalePoints extends Table {
+  actions = {
+    isVisible: true,
+    isEditable: () => true,
+  };
+
   constructor(session) {
     super(COLUMNS, getSalePoints(session), new Filters({}));
   }

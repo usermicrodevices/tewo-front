@@ -1,0 +1,18 @@
+.viewer {
+    :global {
+        .ant-table-cell {
+            height: 65px;
+        }
+    }
+}
+
+.footer {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 20px;
+}

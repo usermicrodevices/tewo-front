@@ -26,14 +26,6 @@ class Companies extends React.Component {
             <Link to="companies/add" style={{ fontSize: 22 }}><Icon name="plus-circle-outline" /></Link>
           </Space>
         </Title>
-        <Card><SingleLineChart /></Card>
-        <Card><HorizontalBarChart /></Card>
-        <Card>
-          <Chart />
-        </Card>
-        <Card>
-          <BothSideAxisChart />
-        </Card>
         <Card>
           <Provider table={session.companiesModel} filter={session.companiesModel.filter}>
             <Table />

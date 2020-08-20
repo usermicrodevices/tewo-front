@@ -202,6 +202,10 @@ class Table {
   @action validate() {
     return this.dataModel.validate();
   }
+
+  @computed get newElements() {
+    return this.dataModel.newElements;
+  }
 }
 
 export default Table;

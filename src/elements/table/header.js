@@ -5,13 +5,18 @@ import { Table } from 'antd';
 
 import Sorter from './sorter';
 import styles from './style.module.scss';
+import { SCROLL_PANE_WIDTH } from './row';
 
 const Header = ({ table, columnWidth }) => {
-  const style = (id) => ({
-    width: columnWidth[id] + (id === columnWidth.length - 1) * 24,
-    maxWidth: columnWidth[id] + (id === columnWidth.length - 1) * 24,
-  });
-  const { sort, columns } = table;
+  const { sort, columns, actions } = table;
+  const lastColumnAddition = SCROLL_PANE_WIDTH * (!actions || !actions.isVisible);
+  const style = (id) => {
+    const width = columnWidth[id] + lastColumnAddition * (id === columnWidth.length - 1);
+    return {
+      width,
+      maxWidth: width,
+    };
+  };
 
   const onChangeSort = (key) => () => {
     table.changeSort(key);
@@ -41,6 +46,17 @@ const Header = ({ table, columnWidth }) => {
                 </th>
               ))
             }
+            { actions.isVisible && (
+              <th
+                style={{
+                  width: 100,
+                  maxWidth: 100,
+                }}
+                className="ant-table-cell"
+              >
+                <div><span>Действия</span></div>
+              </th>
+            )}
           </tr>
         </thead>
       </table>

@@ -42,8 +42,8 @@ class Content extends React.Component {
     const {
       data,
       columns,
-      hoverRow,
-      freshItems,
+      newElements,
+      actions,
     } = table;
     return (
       <List
@@ -58,7 +58,7 @@ class Content extends React.Component {
         data={data}
       >
         {
-          Cell(data, columns, hoverRow, freshItems, this.rowFunc, columnWidth)
+          Cell(data, columns, newElements, this.rowFunc, columnWidth, actions)
         }
       </List>
     );

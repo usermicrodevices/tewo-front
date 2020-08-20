@@ -1,19 +1,30 @@
 import React from 'react';
 import { observer } from 'mobx-react';
+import { Button } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 
 import Loader from 'elements/loader';
 import classNames from 'classnames';
 import styles from './style.module.scss';
 
-const Cell = (data, columns, hover, freshItems, rowFunc, columnWidth) => observer(({ index: rowIndex, style }) => {
-  const rowData = data[rowFunc(rowIndex)];
+const ACTIONS_COLUMN_WIDT = 100;
+const SCROLL_PANE_WIDTH = 25;
+
+const Cell = (data, columns, freshItems, rowFunc, columnWidth, actions) => observer(({ index: rowIndex, style }) => {
+  const index = rowFunc(rowIndex);
+  const rowData = data[index];
   if (typeof rowData === 'undefined') {
     return <div style={style}><Loader /></div>;
   }
   return (
     <div
       style={style}
-      className={styles.row}
+      className={classNames(
+        styles.row,
+        {
+          [styles.highlightnew]: freshItems.has(rowIndex),
+        },
+      )}
     >
       {
         columns.map(({ align, key, transform }, columnIndex) => {
@@ -32,20 +43,25 @@ const Cell = (data, columns, hover, freshItems, rowFunc, columnWidth) => observe
             <div
               key={key}
               style={cellStyle}
-              className={classNames(
-                styles['virtual-table-cell'],
-                {
-                  [styles.highlightnew]: freshItems > rowIndex && hover !== rowIndex,
-                },
-              )}
+              className={styles['virtual-table-cell']}
             >
               { datum }
             </div>
           );
         })
       }
+      { actions.isVisible && (
+        <div
+          style={{ width: ACTIONS_COLUMN_WIDT - SCROLL_PANE_WIDTH }}
+          className={styles['virtual-table-cell']}
+        >
+          { actions.isEditable(rowData, index) && (
+            <Button type="link" onClick={() => { actions.onEdit(rowData); }} icon={<EditOutlined />} />
+          )}
+        </div>
+      )}
     </div>
   );
 });
 
-export default Cell;
+export { Cell as default, ACTIONS_COLUMN_WIDT, SCROLL_PANE_WIDTH };

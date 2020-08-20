@@ -73,6 +73,10 @@ class Keeper {
   @computed get isLoaded() {
     return this.manager.isLoaded;
   }
+
+  @computed get newElements() {
+    return this.manager.newElements;
+  }
 }
 
 export default Keeper;
