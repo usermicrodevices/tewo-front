@@ -6,6 +6,14 @@ class Company extends Datum {
 
   @observable name;
 
+  @observable city;
+
+  @observable emails;
+
+  @observable phone;
+
+  @observable contactPeople;
+
   created;
 
   session;
@@ -46,6 +54,21 @@ class Company extends Datum {
         value: this.name,
       },
       {
+        dataIndex: 'emails',
+        title: 'E-mail',
+        value: this.emails,
+      },
+      {
+        dataIndex: 'phone',
+        title: 'Телефон',
+        value: this.phone,
+      },
+      {
+        dataIndex: 'contactPeople',
+        title: 'Контактное лицо',
+        value: this.contactPeople,
+      },
+      {
         dataIndex: 'created',
         title: 'Дата внесения в базу',
         value: this.created.format('D MMMM yyyy года'),
@@ -53,18 +76,20 @@ class Company extends Datum {
     ];
   }
 
-  links = [
-    {
-      icon: 'people-outline',
-      text: 'Пользователи',
-      link: `/users?company=${this.id}`,
-    },
-    {
-      icon: 'briefcase-outline',
-      text: 'Объекты',
-      link: `/sale_points?company=${this.id}`,
-    },
-  ];
+  @computed get links() {
+    return [
+      {
+        icon: 'people-outline',
+        text: 'Пользователи',
+        link: `/users?company=${this.id}`,
+      },
+      {
+        icon: 'briefcase-outline',
+        text: 'Объекты',
+        link: `/sale_points?companyId__exact=${this.id}`,
+      },
+    ];
+  }
 }
 
 export default Company;

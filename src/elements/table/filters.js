@@ -16,20 +16,23 @@ const Filter = (
     selector,
     onChange,
     value,
+    disabled,
   },
 ) => {
   const type = typeVal.toLowerCase();
   switch (type) {
     case 'daterange':
-      return <DataRangePicker title={title} onChange={onChange} value={value} />;
+      return <DataRangePicker disabled={disabled} title={title} onChange={onChange} value={value} />;
     case 'costrange':
-      return <CostRangeInput title={title} onChange={onChange} value={value} />;
+      return <CostRangeInput disabled={disabled} title={title} onChange={onChange} value={value} />;
     case 'text':
-      return <Input placeholder={title} onChange={onChange} value={value} />;
-    case 'selector':
-      return <Select title={title} value={value} onChange={onChange} selector={selector} />;
+      return <Input disabled={disabled} placeholder={title} onChange={onChange} value={value} />;
+    case 'selector': case 'singleselector': {
+      const isSingle = type === 'singleselector';
+      return <Select disabled={disabled} title={title} value={value} onChange={onChange} selector={selector} isSingle={isSingle} />;
+    }
     case 'checkbox':
-      return <Checkbox checked={value} onChange={onChange}>{title}</Checkbox>;
+      return <Checkbox disabled={disabled} checked={value} onChange={onChange}>{title}</Checkbox>;
     default:
       console.error(`unknown filter type ${type}`);
       return null;
@@ -42,7 +45,7 @@ const Filters = ({ filter }) => (
     <div className={style.filters}>
       {
         filter.elements.map(({
-          title, selector, type, key,
+          title, selector, type, key, disabled,
         }) => {
           const onChange = (value) => { filter.set(key, value); };
           const value = filter.get(key);
@@ -54,6 +57,7 @@ const Filters = ({ filter }) => (
               type={type}
               onChange={onChange}
               value={value}
+              disabled={!!disabled}
             />
           );
         })

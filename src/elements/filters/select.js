@@ -3,15 +3,22 @@ import { Select } from 'antd';
 
 const { Option } = Select;
 
+const filterComparator = (inputValue, { children }) => children.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
+
 const Selector = ({
-  title, value, onChange, selector, resolver,
+  title, value, onChange, selector, resolver, isSingle, disabled,
 }) => (
   <Select
     style={{ minWidth: 150 }}
     placeholder={title}
     onChange={onChange}
-    mode="multiple"
+    mode={isSingle ? undefined : 'multiple'}
     value={value}
+    allowClear
+    loading={selector.length === 0}
+    showSearch
+    filterOption={filterComparator}
+    disabled={disabled}
   >
     {
       selector.map(([key, text]) => (

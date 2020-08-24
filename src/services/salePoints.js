@@ -4,7 +4,8 @@ import SalePoint from 'models/salePoints/salePoint';
 import checkData from 'utils/dataCheck';
 
 const getSalePoints = (session) => () => new Promise((resolve, reject) => {
-  get('/refs/sale_points/').then((salePoints) => {
+  const location = '/refs/sale_points/';
+  get(location).then((salePoints) => {
     if (!Array.isArray(salePoints)) {
       console.error(`/refs/sale_points ожидаеся в ответ массив, получен ${typeof salePoints}`, salePoints);
       reject(salePoints);
@@ -28,7 +29,9 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
           city: 'number',
           map_point: 'location',
         };
-        checkData(data, stouldBe, mayBe);
+        if (!checkData(data, stouldBe, mayBe)) {
+          console.error(`обнаружены ошибки при обработке эндпоинта ${location}`);
+        }
 
         const point = new SalePoint(session);
 

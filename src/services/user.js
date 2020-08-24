@@ -15,7 +15,8 @@ function login(data) {
 
 function me() {
   return new Promise((resolve, reject) => {
-    get('user').then((data) => {
+    const location = 'user';
+    get(location).then((data) => {
       const shouldBe = {
         id: 'number',
         date_joined: 'date',
@@ -35,10 +36,10 @@ function me() {
         sale_points: 'array',
         companies: 'array',
       };
-      if (!checkData(data, shouldBe, {}, {
+      if (!checkData(data, shouldBe, { contract_finished: 'date' }, {
         username: (name) => name.length > 0,
       })) {
-        reject(new Error('type error'));
+        console.error(`обнаружены ошибки при обработке эндпоинта ${location}`);
       }
 
       const user = new User();

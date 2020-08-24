@@ -5,7 +5,8 @@ import Company from 'models/companies/company';
 import checkData from 'utils/dataCheck';
 
 const getCompanies = (session) => () => new Promise((resolve, reject) => {
-  get('/refs/companies/').then((companies) => {
+  const location = '/refs/companies/';
+  get(location).then((companies) => {
     if (!Array.isArray(companies)) {
       console.error(`/refs/companies ожидаеся в ответ массив, получен ${typeof companies}`, companies);
     }
@@ -18,11 +19,27 @@ const getCompanies = (session) => () => new Promise((resolve, reject) => {
           id: 'number',
           name: 'string',
         };
-        checkData(data, shouldBe);
+
+        const mayBe = {
+          city: 'number',
+          secret: 'string',
+          emails: 'string',
+          phone: 'string',
+          contact_people: 'string',
+        };
+
+        if (!checkData(data, shouldBe, mayBe)) {
+          console.error(`обнаружены ошибки при обработке эндпоинта ${location}`);
+        }
 
         const company = new Company(session);
         company.id = data.id;
         company.name = data.name;
+        company.city = data.city;
+        company.secret = data.secret;
+        company.emails = data.emails;
+        company.phone = data.phone;
+        company.contactPeople = data.contact_people;
         company.created = moment(data.created_date);
 
         return company;

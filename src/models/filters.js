@@ -1,4 +1,6 @@
-import { action, observable, computed } from 'mobx';
+import {
+  action, observable, computed, transaction,
+} from 'mobx';
 import moment from 'moment';
 
 const rangeComparator = (lhs, rhs) => {
@@ -40,6 +42,16 @@ const FILTER_TYPES = {
     apply: (value, selected) => selected.findIndex((i) => i === value) >= 0,
     order: 3,
     isNullValue: (value) => !Array.isArray(value) || value.length === 0,
+  },
+  singleselector: {
+    operators: ['exact'],
+    convertor: (v) => [v],
+    parser: parseInt,
+    initialValue: null,
+    complement: (lhs, rhs) => (lhs === rhs ? rhs : null),
+    apply: (value, selected) => selected === value,
+    order: 3,
+    isNullValue: (value) => value === null || (typeof value === 'undefined'),
   },
   text: {
     operators: ['icontains'],
@@ -112,26 +124,28 @@ class Filters {
   }
 
   set search(args) {
-    this.data = {};
-    if (!args.includes('=')) {
-      return;
-    }
-    for (const arg of args.split('&')) {
-      const [elem, value] = arg.split('=');
-      const [key, operator] = elem.split('__');
-      const filterType = this.filterType(key);
-      const { operators, initialValue, parser } = FILTER_TYPES[filterType];
-
-      if (!(key in this.data)) {
-        this.data[key] = initialValue;
+    transaction(() => {
+      this.data = {};
+      if (!args.includes('=')) {
+        return;
       }
+      for (const arg of args.split('&')) {
+        const [elem, value] = arg.split('=');
+        const [key, operator] = elem.split('__');
+        const filterType = this.filterType(key);
+        const { operators, initialValue, parser } = FILTER_TYPES[filterType];
 
-      const id = operators.findIndex((op) => op === operator);
-      if (id < 0) {
-        console.error(`unknown operator type ${operator}. Known operators list: ${operators.join(', ')}`);
+        if (!(key in this.data)) {
+          this.data[key] = initialValue;
+        }
+
+        const id = operators.findIndex((op) => op === operator);
+        if (id < 0) {
+          console.error(`unknown operator type ${operator}. Known operators list: ${operators.join(', ')}`);
+        }
+        this.data[key] = parser(value, id, this.data[key]);
       }
-      this.data[key] = parser(value, id, this.data[key]);
-    }
+    });
   }
 
   // Это ключевой момент в выборе формата фильтра: фильтры хранятся в том виде, в котором их отдают антовские объекты.

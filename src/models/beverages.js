@@ -1,4 +1,5 @@
 /* eslint class-methods-use-this: "off" */
+import { observable } from 'mobx';
 import Table from 'models/table';
 import getBeverages from 'services/beverage';
 import TimeAgo from 'elements/timeago';
@@ -92,8 +93,13 @@ const declareFilters = (session) => ({
 class Beverages extends Table {
   chart = null;
 
+  @observable filters;
+
   constructor(session) {
-    super(declareColumns(session), getBeverages, new Filters(declareFilters(session)));
+    const filters = new Filters(declareFilters(session));
+    super(declareColumns(session), getBeverages, filters);
+
+    this.filters = filters;
   }
 
   toString() {

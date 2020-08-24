@@ -105,7 +105,7 @@ class SalePoint extends Datum {
       },
       cityId: {
         type: 'selector',
-        selector: this.session.cities.map(([uid, { name }]) => [uid, name]),
+        selector: this.session.locations.citiesSelector,
       },
     };
   }
@@ -114,22 +114,48 @@ class SalePoint extends Datum {
     if (this.cityId === null) {
       return null;
     }
-    if (this.session.locationsCache instanceof Promise) {
-      return undefined;
+    const { locations } = this.session;
+    return locations.getCity(this.cityId);
+  }
+
+  @computed get cityName() {
+    if (this.cityId === null) {
+      return null;
     }
-    return this.session.locationsCache.cities.get(this.cityId).name;
+    const city = this.session.locations.getCity(this.cityId);
+    if (city === null || (typeof city === 'undefined')) {
+      return city;
+    }
+    return city.name;
   }
 
   @computed get region() {
     if (this.cityId === null) {
       return null;
     }
-    if (this.session.locationsCache instanceof Promise) {
+    const { locations } = this.session;
+
+    const city = locations.getCity(this.cityId);
+    if (typeof city === 'undefined') {
       return undefined;
     }
-    const { cities, regions } = this.session.locationsCache;
-    const { region } = cities.get(this.cityId);
-    return regions.get(region).name;
+    return locations.getRegion(city.region);
+  }
+
+  @computed get regionName() {
+    const { region } = this;
+    if (region === null || (typeof region === 'undefined')) {
+      return region;
+    }
+    return region.name;
+  }
+
+  @computed get regionId() {
+    const { region } = this;
+    if (region === null || (typeof region === 'undefined')) {
+      return region;
+    }
+    return region.id;
   }
 
   @computed get company() {
