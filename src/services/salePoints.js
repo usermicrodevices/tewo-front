@@ -12,7 +12,7 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
     }
 
     resolve({
-      count: 1, // salePoints.length,
+      count: salePoints.length,
       results: salePoints.map((data) => {
         const stouldBe = {
           id: 'number',
@@ -47,7 +47,7 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
           point[objectName] = jsonName === 'created_date' ? moment(data[jsonName]) : data[jsonName];
         }
         return point;
-      }).slice(0, 1),
+      }),
     });
   }).catch(reject);
 });

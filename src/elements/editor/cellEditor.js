@@ -64,16 +64,16 @@ const CellEditor = ({ editor: { type, selector }, name }) => {
             const val = getFieldValue(name);
             const overlay = () => (
               <MapLocationPicker
-                location={val}
+                location={val || '55.7532, 37.6225'}
                 setValue={(pos) => setFieldsValue({ [name]: pos })}
               />
             );
-            // Так и не понял почему, но пока не добавишь Form.Item в submit значение не попадает
+            // Так и не понял почему, но пока не добавишь Form.Item в submit значение не попадает в submit
             return (
               <>
                 <Form.Item noStyle name={name}><Input style={{ display: 'none' }} /></Form.Item>
                 <Dropdown overlay={overlay} placement="bottomRight">
-                  <p>{val}</p>
+                  <p>{val || '—'}</p>
                 </Dropdown>
               </>
             );

@@ -10,7 +10,6 @@ class Datum {
   isSomeChanged(data) {
     for (const [key, value] of Object.entries(data)) {
       if (this[key] !== value) {
-        console.log('fail', key, this[key], value);
         return true;
       }
     }

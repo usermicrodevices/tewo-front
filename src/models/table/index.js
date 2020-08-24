@@ -2,13 +2,11 @@
 import {
   computed, observable, action, reaction,
 } from 'mobx';
-import moment from 'moment';
 import localStorage from 'mobx-localstorage';
 import { table as constants } from 'config';
 
 import Keeper from './keeper';
 import Column from './column';
-import { observer } from 'mobx-react-lite';
 
 /**
  * Модель таблицы объединяет две абстракции: данные и колонки.

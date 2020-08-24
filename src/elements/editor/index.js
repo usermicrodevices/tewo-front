@@ -32,11 +32,11 @@ const Editor = ({ data, isModal, onCancel }) => {
     if (isEdditing) {
       return (
         <Space>
-          <Button disabled={data.isUpdating} onClick={() => { setIsEdduting(false); }}>Отмена</Button>
+          <Button disabled={isUpdating} onClick={() => { setIsEdduting(false); }}>Отмена</Button>
           <Button
             disabled={isHaveErrors}
             loading={isUpdating}
-            htmlType="submit"
+            onClick={() => form.submit()}
             type="primary"
           >
             Сохранить
@@ -127,7 +127,7 @@ const Editor = ({ data, isModal, onCancel }) => {
         <Modal
           title={<Title />}
           visible
-          confirmLoading={data.isUpdating}
+          confirmLoading={isUpdating}
           footer={<Footer />}
           onCancel={onCancel}
           width={800}
