@@ -3,7 +3,7 @@
 import Table from 'models/table';
 import getCompanies from 'services/companies';
 import Filters from 'models/filters';
-import { observable, transaction } from 'mobx';
+import { observable, computed } from 'mobx';
 
 const COLUMNS_LIST = {
   id: {
@@ -51,6 +51,13 @@ class Companies extends Table {
 
   constructor(session) {
     super(COLUMNS_LIST, getCompanies(session), new Filters());
+  }
+
+  @computed get selector() {
+    if (!this.isLoaded) {
+      return [];
+    }
+    return this.rawData.map(({ id, name }) => [id, name]);
   }
 
   toString() {

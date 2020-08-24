@@ -8,10 +8,6 @@ import Icon from 'elements/icon';
 import Table from 'elements/table';
 import Title from 'components/title';
 import { companiesSubmenu } from 'routes';
-import Chart from 'elements/chart';
-import BothSideAxisChart from 'elements/chart/bothSidesAxis';
-import HorizontalBarChart from 'elements/chart/horizontalBarchart';
-import SingleLineChart from 'elements/chart/singleLine';
 
 @inject('session')
 @observer

@@ -1,45 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Table, Button, Modal, Space,
+  Table, Button, Modal, Space, Form,
 } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react';
 
 import Icon from 'elements/icon';
+import Loader from 'elements/loader';
 import CellEditor from './cellEditor';
 
 import style from './style.module.scss';
 
 const Editor = ({ data, isModal, onCancel }) => {
   const [isEdditing, setIsEdduting] = useState(false);
-  const [prey, initData] = useState(null);
-
-  useEffect(() => {
-    if (prey === null) {
-      initData(data.clone());
-    }
-  });
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [form] = Form.useForm();
 
   if (typeof data === 'undefined') {
     return null;
   }
 
-  if (prey === null) {
-    return null;
-  }
-
-  const onSave = () => {
-    console.log('clicked');
-    data.update(prey).finally(() => { setIsEdduting(false); });
+  const onSave = (changes) => {
+    data.update(changes).finally(() => { setIsEdduting(false); setIsUpdating(false); });
+    setIsUpdating(true);
   };
+
+  const isHaveErrors = form.getFieldsError().filter(({ errors }) => errors.length).length !== 0;
 
   const Footer = () => {
     if (isEdditing) {
       return (
         <Space>
           <Button disabled={data.isUpdating} onClick={() => { setIsEdduting(false); }}>Отмена</Button>
-          <Button loading={data.isUpdating} onClick={onSave} type="primary">Сохранить</Button>
+          <Button
+            disabled={isHaveErrors}
+            loading={isUpdating}
+            htmlType="submit"
+            type="primary"
+          >
+            Сохранить
+          </Button>
         </Space>
       );
     }
@@ -50,6 +51,15 @@ const Editor = ({ data, isModal, onCancel }) => {
     );
   };
 
+  const { values, editable } = data;
+  const tableDataSource = values.map((datum) => ({ key: datum.dataIndex, ...datum }));
+  const formDataInitialValues = {};
+  for (const { dataIndex } of values) {
+    if (dataIndex in editable) {
+      formDataInitialValues[dataIndex] = data[dataIndex];
+    }
+  }
+
   const table = (
     <Table
       className={style.viewer}
@@ -57,59 +67,83 @@ const Editor = ({ data, isModal, onCancel }) => {
         {
           title: 'Информация',
           dataIndex: 'title',
+          key: 'title',
         },
         {
+          key: 'value',
           title: '',
           dataIndex: 'value',
-          render: (value, { dataIndex }) => {
+          render: (value, second) => {
+            const { dataIndex } = second;
             if (isEdditing && dataIndex in data.editable) {
               return (
                 <CellEditor
-                  onChange={({ target: { value: val } }) => { console.log(prey[dataIndex], val, prey.table[1]); prey[dataIndex] = val; }}
-                  value={value}
+                  name={dataIndex}
                   editor={data.editable[dataIndex]}
                 />
               );
+            }
+            if (value === null) {
+              return '—';
+            }
+            if (typeof value === 'undefined') {
+              return <Loader />;
             }
             return value;
           },
         },
       ]}
-      dataSource={prey.table}
+      dataSource={tableDataSource}
       pagination={false}
     />
   );
 
   const Title = data.links ? () => (
     <div className={style.title}>
-      <div className="ant-modal-title">{prey.name}</div>
+      <div className="ant-modal-title">{data.name}</div>
       <Space>
         { data.links.map(({ text, icon, link }) => (
-          <Link key={link} to={link}><Button onClick={onCancel} icon={<Icon name={icon} />}>{text}</Button></Link>
+          <Link key={link} to={link}>
+            <Button onClick={onCancel} icon={<Icon name={icon} />}>{text}</Button>
+          </Link>
         ))}
       </Space>
     </div>
-  ) : () => prey.name;
+  ) : () => <div className="ant-modal-title">{data.name}</div>;
+
+  const EditorForm = ({ children }) => (
+    <Form
+      form={form}
+      onFinish={onSave}
+      initialValues={formDataInitialValues}
+    >
+      { children }
+    </Form>
+  );
 
   if (isModal) {
     return (
-      <Modal
-        title={<Title />}
-        visible
-        confirmLoading={data.isUpdating}
-        footer={<Footer />}
-        onCancel={onCancel}
-        width={800}
-      >
-        {table}
-      </Modal>
+      <EditorForm>
+        <Modal
+          title={<Title />}
+          visible
+          confirmLoading={data.isUpdating}
+          footer={<Footer />}
+          onCancel={onCancel}
+          width={800}
+        >
+          {table}
+        </Modal>
+      </EditorForm>
     );
   }
   return (
-    <div>
-      <Title />
-      {table}
-      <Footer />
+    <div className={style.space}>
+      <EditorForm>
+        <Title />
+        {table}
+        <Footer />
+      </EditorForm>
     </div>
   );
 };

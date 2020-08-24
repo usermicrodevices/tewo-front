@@ -1,4 +1,5 @@
 import { get } from 'utils/request';
+import moment from 'moment';
 import SalePoint from 'models/salePoints/salePoint';
 import checkData from 'utils/dataCheck';
 
@@ -11,7 +12,7 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
     }
 
     resolve({
-      count: salePoints.length,
+      count: 1, // salePoints.length,
       results: salePoints.map((data) => {
         const stouldBe = {
           id: 'number',
@@ -43,25 +44,10 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
           phone: 'phone',
           emails: 'email',
         })) {
-          if (jsonName in stouldBe) {
-            point[objectName] = data[jsonName];
-          } else if (jsonName in mayBe) {
-            if (jsonName in data) {
-              point[objectName] = data[jsonName];
-            } else {
-              point[objectName] = null;
-            }
-          } else {
-            if (jsonName in data) {
-              point[objectName] = data[jsonName];
-            } else {
-              console.error('не обнаружены ожидаемые данные в объекте, UB далее при использовании SalePpoints');
-            }
-            console.error(`Попытка извлечь непроверенные данные ${jsonName}`, stouldBe);
-          }
+          point[objectName] = jsonName === 'created_date' ? moment(data[jsonName]) : data[jsonName];
         }
         return point;
-      }),
+      }).slice(0, 1),
     });
   }).catch(reject);
 });

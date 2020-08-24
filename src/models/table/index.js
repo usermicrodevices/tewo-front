@@ -8,6 +8,7 @@ import { table as constants } from 'config';
 
 import Keeper from './keeper';
 import Column from './column';
+import { observer } from 'mobx-react-lite';
 
 /**
  * Модель таблицы объединяет две абстракции: данные и колонки.
@@ -37,6 +38,8 @@ class Table {
 
   // Верхняя строчка скролла
   @observable currentRow;
+
+  actions = {};
 
   constructor(columnsMap, loader, filter) {
     console.assert(this.toString() !== '[object Object]', 'Не реализован метод toString для наследника Table');

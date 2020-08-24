@@ -2,6 +2,7 @@
 import Table from 'models/table';
 import getSalePoints from 'services/salePoints';
 import Filters from 'models/filters';
+import { observable } from 'mobx';
 
 const COLUMNS = {
   id: {
@@ -76,7 +77,12 @@ class SalePoints extends Table {
   actions = {
     isVisible: true,
     isEditable: () => true,
+    onEdit: (datum) => {
+      this.elementForEdit = datum;
+    },
   };
+
+  @observable elementForEdit;
 
   constructor(session) {
     super(COLUMNS, getSalePoints(session), new Filters({}));

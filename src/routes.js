@@ -18,10 +18,13 @@ class Rout {
 
   isExact;
 
-  constructor(path, component, isExact) {
+  isWithId;
+
+  constructor(path, component, isExact, isWithId) {
     this.path = path;
     this.component = component;
     this.isExact = typeof isExact === 'undefined' ? false : isExact;
+    this.isWithId = !!isWithId;
   }
 }
 
@@ -35,8 +38,8 @@ const account = new Rout('/account', Account);
 const notifications = new Rout('/notofications', Notifications);
 const usersList = new Rout('/userlist', UsersList);
 const map = new Rout('/map', MapPage);
-const companies = new Rout('/companies', Companies);
-const salePoints = new Rout('/sale_points', SalePoints);
+const companies = new Rout('/companies', Companies, false, true);
+const salePoints = new Rout('/sale_points', SalePoints, false, true);
 const beverage = new Rout('/beverage', Beverage);
 const devices = new Rout('/equipment', Devices);
 const drink = new Rout('/drink', Cleans);

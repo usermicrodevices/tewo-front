@@ -1,6 +1,7 @@
-import { computed, observable, transaction } from 'mobx';
+import { computed, observable } from 'mobx';
+import Datum from 'models/datum';
 
-class Company {
+class Company extends Datum {
   id;
 
   @observable name;
@@ -8,8 +9,6 @@ class Company {
   created;
 
   session;
-
-  @observable isUpdating = false;
 
   @computed get pointsAmount() {
     if (!this.session.pointsModel.isLoaded) {
@@ -21,6 +20,10 @@ class Company {
   get key() { return this.id; }
 
   constructor(session) {
+    super(() => new Promise((resolve) => {
+      setTimeout(resolve, 2000);
+    }));
+
     this.session = session;
   }
 
@@ -30,7 +33,7 @@ class Company {
     },
   }
 
-  @computed get table() {
+  @computed get values() {
     return [
       {
         dataIndex: 'id',
@@ -62,32 +65,6 @@ class Company {
       link: `/sale_points?company=${this.id}`,
     },
   ];
-
-  update(update) {
-    let promise;
-    this.isUpdating = true;
-    if (this.name === update.name) {
-      promise = Promise.resolve();
-    } else {
-      promise = new Promise((resolve) => {
-        setTimeout(resolve, 2000);
-      });
-    }
-    return promise.then(() => {
-      transaction(() => {
-        this.name = update.name;
-        this.isUpdating = false;
-      });
-    });
-  }
-
-  clone() {
-    const result = new Company(this.session);
-    result.id = this.id;
-    result.name = this.name;
-    result.created = this.created;
-    return result;
-  }
 }
 
 export default Company;

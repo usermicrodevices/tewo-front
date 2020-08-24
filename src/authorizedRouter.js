@@ -16,8 +16,13 @@ class AuthorizedRouter extends React.Component {
         <Provider session={this.session}>
           <Switch>
             {
+              routes.filter(({ isWithId }) => isWithId).map(({ path, component: Component }) => (
+                <Route path={`${path}/:id`} key={`${path}_id`}><Component /></Route>
+              ))
+            }
+            {
               routes.map(({ path, component: Component, exact }) => (
-                <Route path={path} key={path} exact={exact}><Component /></Route>
+                <Route key={path} path={path} exact={exact}><Component /></Route>
               ))
             }
             <Route>
