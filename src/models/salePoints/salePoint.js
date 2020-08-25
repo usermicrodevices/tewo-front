@@ -22,6 +22,14 @@ class SalePoint extends Datum {
 
   @observable cityId;
 
+  isOutOfWaterQuality;
+
+  isHaveDisabledEquipment;
+
+  isNeedOverhaul;
+
+  isHaveOutdatedEvents;
+
   session;
 
   @computed get values() {
@@ -75,6 +83,26 @@ class SalePoint extends Datum {
         dataIndex: 'person',
         title: 'Ответственный',
         value: this.person,
+      },
+      {
+        dataIndex: 'isHaveOutdatedEvents',
+        title: 'С просроченными событиями',
+        value: this.isHaveOutdatedEvents,
+      },
+      {
+        dataIndex: 'isNeedOverhaul',
+        title: 'Требуется тех. обслуживание',
+        value: this.isNeedOverhaul,
+      },
+      {
+        dataIndex: 'isHaveDisabledEquipment',
+        title: 'С выключенным оборудованием',
+        value: this.isHaveDisabledEquipment,
+      },
+      {
+        dataIndex: 'isOutOfWaterQuality',
+        title: 'На оборудовании превышена жесткость воды',
+        value: this.isOutOfWaterQuality,
       },
     ];
   }

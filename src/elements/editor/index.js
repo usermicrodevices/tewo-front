@@ -89,6 +89,9 @@ const Editor = ({ data, isModal, onCancel }) => {
             if (typeof value === 'undefined') {
               return <Loader />;
             }
+            if (typeof value === 'boolean') {
+              return value ? 'Да' : 'Нет';
+            }
             return value;
           },
         },

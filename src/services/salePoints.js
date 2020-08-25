@@ -20,6 +20,10 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
           name: 'string',
           company: 'number',
           created_date: 'date',
+          has_overloc_ppm: 'boolean',
+          has_off_devices: 'boolean',
+          need_tech_service: 'boolean',
+          overdue_tasks: 'boolean',
         };
         const mayBe = {
           emails: 'string',
@@ -46,6 +50,10 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
           person: 'person',
           phone: 'phone',
           emails: 'email',
+          has_overloc_ppm: 'isOutOfWaterQuality',
+          has_off_devices: 'isHaveDisabledEquipment',
+          need_tech_service: 'isNeedOverhaul',
+          overdue_tasks: 'isHaveOutdatedEvents',
         })) {
           point[objectName] = jsonName === 'created_date' ? moment(data[jsonName]) : data[jsonName];
         }

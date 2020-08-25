@@ -32,7 +32,7 @@ const Filter = (
       return <Select disabled={disabled} title={title} value={value} onChange={onChange} selector={selector} isSingle={isSingle} />;
     }
     case 'checkbox':
-      return <Checkbox disabled={disabled} checked={value} onChange={onChange}>{title}</Checkbox>;
+      return <Checkbox disabled={disabled} checked={value} onChange={({ target: { checked } }) => onChange(checked)}>{title}</Checkbox>;
     default:
       console.error(`unknown filter type ${type}`);
       return null;

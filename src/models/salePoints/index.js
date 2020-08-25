@@ -106,30 +106,26 @@ const declareFilters = (session) => ({
   isHaveOutdatedEvents: {
     type: 'checkbox',
     title: 'С просроченными событиями',
-    apply: (general, data) => true,
+    apply: (general, data) => data.isHaveOutdatedEvents,
     passiveValue: false,
-    disabled: true,
   },
-  isNeedOutdatedOverhaul: {
+  isNeedOverhaul: {
     type: 'checkbox',
     title: 'Требуется тех. обслуживание',
-    apply: (general, data) => true,
+    apply: (general, data) => data.isNeedOverhaul,
     passiveValue: false,
-    disabled: true,
   },
   isHaveDisabledEquipment: {
     type: 'checkbox',
     title: 'С выключенным оборудованием',
-    apply: (general, data) => true,
+    apply: (general, data) => data.isHaveDisabledEquipment,
     passiveValue: false,
-    disabled: true,
   },
   isOutOfWaterQuality: {
     type: 'checkbox',
     title: 'На оборудовании превышена жесткость воды',
-    apply: (general, data) => true,
+    apply: (general, data) => data.isOutOfWaterQuality,
     passiveValue: false,
-    disabled: true,
   },
 });
 
@@ -145,6 +141,8 @@ class SalePoints extends Table {
   chart = null;
 
   @observable filters;
+
+  @observable elementForEdit;
 
   constructor(session) {
     const filters = new Filters(declareFilters(session));
