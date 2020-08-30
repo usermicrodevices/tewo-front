@@ -14,15 +14,17 @@ class Company extends Datum {
 
   @observable contactPeople;
 
+  @observable group;
+
   created;
 
   session;
 
   @computed get pointsAmount() {
-    if (!this.session.pointsModel.isLoaded) {
+    if (!this.session.points.isLoaded) {
       return undefined;
     }
-    return this.session.pointsModel.rawData.filter(({ companyId }) => companyId === this.id).length;
+    return this.session.points.rawData.filter(({ companyId }) => companyId === this.id).length;
   }
 
   get key() { return this.id; }

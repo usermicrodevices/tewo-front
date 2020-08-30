@@ -40,17 +40,19 @@ class Table {
   actions = {};
 
   constructor(columnsMap, loader, filter) {
+    console.assert(typeof loader === 'function', `не получен лоадер для таблицы ${this.toString()}`);
+    console.assert(typeof filter !== 'undefined', `Не передан фильтер для таблицы ${this.toString()}`);
     console.assert(this.toString() !== '[object Object]', 'Не реализован метод toString для наследника Table');
     this.allColumns = Object.entries(columnsMap).map(([key, value]) => new Column(key, value));
     console.assert(
-      this.allColumns.filter(({ isAsyncorder }) => isAsyncorder).length === 1,
+      this.allColumns.filter(({ isAsyncorder }) => isAsyncorder).length === 1 || this.isImpossibleToBeAsync,
       `Таблица ${this.toString()} не получила корректного асинхронного ключа сортировки`,
     );
     console.assert(
       this.allColumns.filter(({ isDefaultSort }) => isDefaultSort).length === 1,
       `Таблица ${this.toString()} не получила ключа сортировки по умолчанию`,
     );
-    this.dataModel = new Keeper(filter, loader);
+    this.dataModel = new Keeper(filter, loader, this.isImpossibleToBeAsync);
 
     reaction(() => this.currentRow, (scrollEventMomentRow) => {
       setTimeout(() => {

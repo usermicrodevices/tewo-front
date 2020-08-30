@@ -1,5 +1,5 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
+import { inject, observer, Provider } from 'mobx-react';
 import { withRouter, Redirect } from 'react-router-dom';
 
 import Editor from 'elements/editor';
@@ -44,7 +44,8 @@ class GenericTablePage extends React.Component {
       storageName,
       isNotEditable,
     } = this.props;
-    const { filter, rawData } = session[storageName];
+    const storage = session[storageName];
+    const { filter, rawData } = storage;
     if (typeof id !== 'undefined' && !isNotEditable) {
       const idNum = parseInt(id, 10);
       const elementForEdit = rawData.find(({ id: itmId }) => idNum === itmId);
@@ -61,7 +62,9 @@ class GenericTablePage extends React.Component {
     return (
       <>
         { isNeedToRedirect && <Redirect to={`${location.pathname}?${filter.search}`} /> }
-        { children }
+        <Provider table={storage} filter={filter}>
+          { children }
+        </Provider>
       </>
     );
   }

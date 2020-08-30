@@ -26,15 +26,17 @@ const RootRouter = inject('auth')(observer(({ auth }) => {
           routes.map(({ path, component: Component, exact }) => (
             <Route key={path} path={path} exact={exact}>
               { authorizedRedirect }
-              <UnauthorizedPage>
-                <Component />
-              </UnauthorizedPage>
+              { !auth.isAuthorized && (
+                <UnauthorizedPage>
+                  <Component />
+                </UnauthorizedPage>
+              )}
             </Route>
           ))
         }
         <Route>
           { unauthorizedRedirect }
-          <AuthorizedRouter />
+          { auth.isAuthorized && <AuthorizedRouter /> }
         </Route>
       </Switch>
     </Router>

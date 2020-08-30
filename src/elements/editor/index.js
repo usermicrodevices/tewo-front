@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Table, Button, Modal, Space, Form,
+  Button, Modal, Space, Form,
 } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react';
-
 import Icon from 'elements/icon';
-import Loader from 'elements/loader';
-import CellEditor from './cellEditor';
+
+import EditroTable from './editorTable';
+import EditorFooter from './editorFooter';
 
 import style from './style.module.scss';
 
@@ -28,29 +27,6 @@ const Editor = ({ data, isModal, onCancel }) => {
 
   const isHaveErrors = form.getFieldsError().filter(({ errors }) => errors.length).length !== 0;
 
-  const Footer = () => {
-    if (isEdditing) {
-      return (
-        <Space>
-          <Button disabled={isUpdating} onClick={() => { setIsEdduting(false); }}>Отмена</Button>
-          <Button
-            disabled={isHaveErrors}
-            loading={isUpdating}
-            onClick={() => form.submit()}
-            type="primary"
-          >
-            Сохранить
-          </Button>
-        </Space>
-      );
-    }
-    return (
-      <div className={style.footer}>
-        <Button type="text" icon={<EditOutlined />} onClick={() => { setIsEdduting(true); }}>Редактировать</Button>
-      </div>
-    );
-  };
-
   const { values, editable } = data;
   const tableDataSource = values.map((datum) => ({ key: datum.dataIndex, ...datum }));
   const formDataInitialValues = {};
@@ -59,47 +35,6 @@ const Editor = ({ data, isModal, onCancel }) => {
       formDataInitialValues[dataIndex] = data[dataIndex];
     }
   }
-
-  const table = (
-    <Table
-      className={style.viewer}
-      columns={[
-        {
-          title: 'Информация',
-          dataIndex: 'title',
-          key: 'title',
-        },
-        {
-          key: 'value',
-          title: '',
-          dataIndex: 'value',
-          render: (value, second) => {
-            const { dataIndex } = second;
-            if (isEdditing && dataIndex in data.editable) {
-              return (
-                <CellEditor
-                  name={dataIndex}
-                  editor={data.editable[dataIndex]}
-                />
-              );
-            }
-            if (value === null) {
-              return '—';
-            }
-            if (typeof value === 'undefined') {
-              return <Loader />;
-            }
-            if (typeof value === 'boolean') {
-              return value ? 'Да' : 'Нет';
-            }
-            return value;
-          },
-        },
-      ]}
-      dataSource={tableDataSource}
-      pagination={false}
-    />
-  );
 
   const Title = data.links ? () => (
     <div className={style.title}>
@@ -126,26 +61,26 @@ const Editor = ({ data, isModal, onCancel }) => {
 
   if (isModal) {
     return (
-      <EditorForm>
-        <Modal
-          title={<Title />}
-          visible
-          confirmLoading={isUpdating}
-          footer={<Footer />}
-          onCancel={onCancel}
-          width={800}
-        >
-          {table}
-        </Modal>
-      </EditorForm>
+      <Modal
+        title={<Title />}
+        visible
+        confirmLoading={isUpdating}
+        footer={<EditorFooter isEdditing={isEdditing} isHaveErrors={isHaveErrors} isUpdating={isUpdating} form={form} setIsEdduting={setIsEdduting} />}
+        onCancel={onCancel}
+        width={800}
+      >
+        <EditorForm>
+          <EditroTable data={data} tableDataSource={tableDataSource} isEdditing={isEdditing} />
+        </EditorForm>
+      </Modal>
     );
   }
   return (
     <div className={style.space}>
       <EditorForm>
         <Title />
-        {table}
-        <Footer />
+        <EditroTable data={data} tableDataSource={tableDataSource} isEdditing={isEdditing} />
+        <EditorFooter isEdditing={isEdditing} isHaveErrors={isHaveErrors} isUpdating={isUpdating} form={form} setIsEdduting={setIsEdduting} />
       </EditorForm>
     </div>
   );

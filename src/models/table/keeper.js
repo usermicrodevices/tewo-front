@@ -1,5 +1,5 @@
 import {
-  reaction, computed, action,
+  reaction, computed, action, observable, transaction,
 } from 'mobx';
 
 import Filter from 'models/filters';
@@ -25,19 +25,34 @@ class Keeper {
 
   filter;
 
-  manager;
+  @observable additionFilter = null;
 
-  constructor(filter, loader) {
+  @observable manager;
+
+  constructor(filter, loader, isImpossibleToBeAsync) {
     this.loader = loader;
     this.filter = filter;
+    console.log(filter);
     this.manager = new DataManager(this.partialLoader);
 
-    reaction(() => this.filter.search, (search) => {
+    reaction(() => this.filter.search, () => {
+      if (isImpossibleToBeAsync) {
+        return;
+      }
+      console.log('cahnges detected, set timeout');
+      const { search } = this.filter;
       setTimeout(() => {
-        if (this.filter.search !== search) {
-          if (this.manager.isAsync || this.filter.less(new Filter(search, this.filter.columns))) {
-            this.manager = new DataManager(this.partialLoader);
-          }
+        if (this.filter.search === search) {
+          transaction(() => {
+            console.log('changes accepted, additional tests', this.isAsync);
+            this.additionFilter = this.filter.complement(new Filter(search, this.filter.columns));
+            console.log(`${!!this.additionFilter} difference`);
+            // если фильтр стал свободнее то перезагружаем данные для проверки размера новоый выборки
+            if (this.additionFilter === null) {
+              console.log('data manager reinstanciations');
+              this.manager = new DataManager(this.partialLoader);
+            }
+          });
         }
       }, FILTER_CHANGES_REACTION_DELAY);
     });
@@ -51,7 +66,8 @@ class Keeper {
   }
 
   get partialLoader() {
-    return (limit, offset) => this.loader(limit, offset, this.filter.search);
+    const { search } = this.filter;
+    return (limit, offset) => this.loader(limit, offset, search);
   }
 
   isEverythingLoadedFromRange(limit, offset) {

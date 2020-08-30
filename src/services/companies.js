@@ -25,6 +25,7 @@ const getCompanies = (session) => () => new Promise((resolve, reject) => {
           secret: 'string',
           emails: 'string',
           phone: 'string',
+          group: 'number',
           contact_people: 'string',
         };
 
@@ -39,6 +40,7 @@ const getCompanies = (session) => () => new Promise((resolve, reject) => {
         company.secret = data.secret;
         company.emails = data.emails;
         company.phone = data.phone;
+        company.group = data.group;
         company.contactPeople = data.contact_people;
         company.created = moment(data.created_date);
 

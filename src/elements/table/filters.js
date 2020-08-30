@@ -26,7 +26,7 @@ const Filter = (
     case 'costrange':
       return <CostRangeInput disabled={disabled} title={title} onChange={onChange} value={value} />;
     case 'text':
-      return <Input disabled={disabled} placeholder={title} onChange={onChange} value={value} />;
+      return <Input disabled={disabled} placeholder={title} onChange={({ target }) => onChange(target.value)} value={value} />;
     case 'selector': case 'singleselector': {
       const isSingle = type === 'singleselector';
       return <Select disabled={disabled} title={title} value={value} onChange={onChange} selector={selector} isSingle={isSingle} />;

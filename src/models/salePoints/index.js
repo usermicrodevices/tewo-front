@@ -1,5 +1,5 @@
 /* eslint class-methods-use-this: "off" */
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 
 import Table from 'models/table';
 import getSalePoints from 'services/salePoints';
@@ -20,7 +20,7 @@ const COLUMNS = {
     grow: 3,
     sortDirections: 'both',
   },
-  company: {
+  companyName: {
     isVisbleByDefault: true,
     title: 'Компания',
     grow: 2,
@@ -80,7 +80,7 @@ const declareFilters = (session) => ({
     type: 'singleselector',
     title: 'Компания',
     apply: (general, data) => general(data.sale_sum),
-    selector: () => session.companiesModel.selector,
+    selector: () => session.companies.selector,
   },
   tag: {
     type: 'selector',
@@ -140,18 +140,25 @@ class SalePoints extends Table {
 
   chart = null;
 
-  @observable filters;
-
   @observable elementForEdit;
+
+  get isImpossibleToBeAsync() { return true; }
 
   constructor(session) {
     const filters = new Filters(declareFilters(session));
     super(COLUMNS, getSalePoints(session), filters);
-    this.filters = filters;
   }
 
   toString() {
     return 'SalePoints';
+  }
+
+  get(pointId) {
+    return this.rawData.find(({ id }) => id === pointId);
+  }
+
+  @computed get selector() {
+    return this.rawData.map(({ id, name }) => [id, name]);
   }
 }
 

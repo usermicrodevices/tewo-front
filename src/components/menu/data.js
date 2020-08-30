@@ -10,7 +10,7 @@ import {
   drink,
   ingredients,
   costs,
-  events,
+  eventTypes,
   cost,
   ingredientsRate,
   sales,
@@ -51,23 +51,18 @@ const items = [
     [
       {
         text: 'Себестоимость / выручка',
-        act: cost,
       },
       {
         text: 'Расходы ингридиентов',
-        act: ingredientsRate,
       },
       {
         text: 'Аналитика продаж',
-        act: sales,
       },
       {
         text: 'Отмена напитков',
-        act: cancelationsRate,
       },
       {
         text: 'Расходы чистящих средств',
-        act: cleansRate,
       },
     ],
   ),
@@ -77,7 +72,6 @@ const items = [
     [
       {
         text: 'Просроченные задачи',
-        act: overdueLog,
       },
       {
         text: 'Журнал событий',
@@ -89,7 +83,6 @@ const items = [
       },
       {
         text: 'Журнал очисток',
-        act: cleansLog,
       },
       {
         text: 'Статистика напряжения',
@@ -122,11 +115,10 @@ const items = [
       },
       {
         text: 'Группы цен',
-        act: costs,
       },
       {
         text: 'События',
-        act: events,
+        act: eventTypes,
       },
     ],
   ),

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import Phone from 'elements/phone';
 
-import { supportEmail, supportPhone } from 'config';
 import style from './style.module.scss';
 
-const Recover = () => (
+const Recover = ({ auth }) => (
   <div className={style.recover}>
     <div className={style.head}>
       <Link to="/signin"><ArrowLeftOutlined className={style.goback} /></Link>
@@ -14,13 +14,13 @@ const Recover = () => (
     </div>
     <p>
       Для восстановления пароля или по вопросам входа в систему обратитесь в службу технической поддержки по почте:&ensp;
-      <a href={`mailto:${supportEmail}`}>{supportEmail}</a>
+      <a href={`mailto:${auth.contacts.email}`}>{auth.contacts.email}</a>
       <br />
       <br />
       или по телефону&ensp;
-      <Phone>{supportPhone}</Phone>
+      <Phone>{auth.contacts.email}</Phone>
     </p>
   </div>
 );
 
-export default Recover;
+export default inject('auth')(observer(Recover));

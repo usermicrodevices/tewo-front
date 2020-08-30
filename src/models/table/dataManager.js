@@ -90,9 +90,14 @@ class DataManager {
       }
       // Ставим таймер на исключение элементов из новых
       setTimeout(() => { this.newElements.clear(); }, NEW_ELEMENTS_ADDICTIVE_TIME);
-      // Это значит, что все элементы новые. Так быть не должно. значит в данных точно есть разрыв
       if (firstOld === 0) {
-        console.error('validation algorythm parameners fail', appearences, dataHead, results);
+        console.log('rare update branch');
+        // Это значит, что все элементы новые. Значит, что данные обновили после большой паузы.
+        console.assert(
+          this.amount + results.length < count,
+          `Противоречивое состояние данных: firstOld === 0 && ${this.amount} + ${results.length} < ${count}`,
+        );
+        this.data.replace(results.concat(new Array(count - this.data.length - results.length).concat(this.data.slice())));
         return;
       }
       // последний не старый соответствует последнему в подгрузке
@@ -129,9 +134,9 @@ class DataManager {
           console.error(`Несоответствие числа записей, ошибка реализации ${count} - ${this.data.length} = ${count - this.data.length}`);
           // ищем в таком случае повторения
           for (let i = 0; i < constants.preloadLimit * 3; i += 1) {
-            if (typeof this.data[i] !== 'undefined') {
+            if (i < this.data.length && typeof this.data[i] !== 'undefined') {
               for (let j = -10; j < 10; j += 1) {
-                if (i + j >= 0 && typeof this.data[i + j] !== 'undefined' && j !== 0) {
+                if (i + j >= 0 && i + j < this.data.length && typeof this.data[i + j] !== 'undefined' && j !== 0) {
                   console.assert(this.data[i + j].id !== this.data[i].id, `duplication ${i} ${this.data[i + j].id}`);
                 }
               }

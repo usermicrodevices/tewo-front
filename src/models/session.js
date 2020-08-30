@@ -1,18 +1,34 @@
-import { observable, computed } from 'mobx';
-
 import Beverages from './beverages';
 import Companies from './companies';
 import Points from './salePoints';
 import Locations from './locations';
+import Events from './events';
+import EventTypes from './events/types';
+import Devices from './devices';
+import Operations from './operations';
+import Drinks from './drinks';
+import Ingredients from './ingredients';
 
 class Session {
-  @observable companiesModel = new Companies(this);
+  operations = new Operations();
 
-  @observable pointsModel = new Points(this);
+  locations = new Locations();
 
-  @observable locations = new Locations(this);
+  beverages = new Beverages(this);
 
-  beverages = new Beverages();
+  events = new Events(this);
+
+  eventTypes = new EventTypes();
+
+  companies = new Companies(this);
+
+  points = new Points(this);
+
+  devices = new Devices(this);
+
+  drinks = new Drinks(this);
+
+  ingredients = new Ingredients(this);
 }
 
 export default Session;

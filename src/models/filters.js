@@ -59,7 +59,7 @@ const FILTER_TYPES = {
     parser: (v) => v,
     initialValue: '',
     complement: (lhs, rhs) => (rhs.includes(lhs) ? rhs : null),
-    apply: (value, substr) => value.indexOf(substr) >= 0,
+    apply: (value, substr) => value.toLowerCase().indexOf(substr.toLowerCase()) >= 0,
     order: 1,
     isNullValue: (value) => typeof value !== 'string' || value === '',
   },
@@ -92,13 +92,6 @@ class Filters {
 
   @observable searchText = '';
 
-  less(rhs) {
-    if (this.columnts !== rhs.column) {
-      return false;
-    }
-    return false;
-  }
-
   constructor(filters) {
     this.filters = filters || {};
   }
@@ -106,6 +99,7 @@ class Filters {
   // Если полученный фильтр строже то возвращает разницу (не строгую) иначе возвращает null
   // не строгую в том смысле, что из rhs может быть вычтено не всё, что в this
   complement(rhs) {
+    console.log(rhs.filters, this.filters);
     console.assert(rhs.filters === this.filters);
     const result = new Filters(this.filters);
     for (const [key, value] of Object.entries(this.data)) {
@@ -170,10 +164,10 @@ class Filters {
           return false;
         }
       }
-      for (const [key, value] of Object.entries(data)) {
+      for (const key of Object.keys(data)) {
         if (key in this.data) {
-          const filterTyoe = this.filterType(key);
-          if (!FILTER_TYPES[filterTyoe].apply(value, this.data[key])) {
+          const filter = this.filters[key];
+          if (!filter.apply((d) => FILTER_TYPES[filter.type].apply(d, this.data[key]), data)) {
             return false;
           }
         }
@@ -185,7 +179,7 @@ class Filters {
   filterType(filterKey) {
     const filter = this.filters[filterKey];
     if (typeof filter === 'undefined') {
-      console.error(`can't find folumn with key ${filterKey}`);
+      console.error(`can't find filter with key ${filterKey}`);
     }
     return filter.type;
   }

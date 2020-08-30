@@ -2,12 +2,15 @@ import { observable, computed, action } from 'mobx';
 import localStorage from 'mobx-localstorage';
 import { BEARER_KEY } from 'utils/request';
 
-import { login, me } from 'services/user';
+import { login, me, contacts } from 'services/auth';
 
 class Auth {
   @observable user = undefined;
 
+  @observable contacts = { email: '', phone: '' };
+
   constructor() {
+    contacts().then((data) => { this.contacts = data; });
     if (localStorage.getItem(BEARER_KEY) === null) {
       this.logout();
     } else {

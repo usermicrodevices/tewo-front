@@ -11,7 +11,7 @@ const SaleModel = ({ session }) => (
       Объекты
     </Title>
     <Card>
-      <Provider table={session.pointsModel} filter={session.pointsModel.filter}>
+      <Provider table={session.points} filter={session.points.filter}>
         <Table />
       </Provider>
     </Card>

@@ -1,30 +1,10 @@
 import React from 'react';
 import {
-  Input, Form, Select, Dropdown,
+  Input, Form, Select, InputNumber,
 } from 'antd';
-import { Map as YandexMap, Placemark } from 'react-yandex-maps';
+import LocationPicker from './locationpicker';
 
-const MapLocationPicker = ({ location, setValue }) => {
-  const center = location.split(',').map(parseFloat);
-  const round = (v) => Math.round(v * 1e5) / 1e5;
-  return (
-    <div>
-      <YandexMap
-        defaultState={{ center, zoom: 12 }}
-        instanceRef={(inst) => {
-          if (inst === null) {
-            return;
-          }
-          inst.events.add(['boundschange'], (e) => {
-            setValue(e.originalEvent.newCenter.map(round).join(', '));
-          });
-        }}
-      >
-        <Placemark geometry={center} />
-      </YandexMap>
-    </div>
-  );
-};
+import ColorPicker from './colorpicker';
 
 const CellEditor = ({ editor: { type, selector }, name }) => {
   switch (type) {
@@ -39,6 +19,25 @@ const CellEditor = ({ editor: { type, selector }, name }) => {
       return (
         <Form.Item name={name} rules={[{ type: 'email' }]}>
           <Input />
+        </Form.Item>
+      );
+    }
+    case 'color': {
+      return (
+        <Form.Item
+          noStyle
+          shouldUpdate={(prevValues, currentValues) => prevValues[name] !== currentValues[name]}
+        >
+          {({ getFieldValue, setFieldsValue }) => (
+            <ColorPicker name={name} getFieldValue={getFieldValue} setFieldsValue={setFieldsValue} />
+          )}
+        </Form.Item>
+      );
+    }
+    case 'number': {
+      return (
+        <Form.Item name={name}>
+          <InputNumber />
         </Form.Item>
       );
     }
@@ -60,24 +59,9 @@ const CellEditor = ({ editor: { type, selector }, name }) => {
           noStyle
           shouldUpdate={(prevValues, currentValues) => prevValues[name] !== currentValues[name]}
         >
-          {({ getFieldValue, setFieldsValue }) => {
-            const val = getFieldValue(name);
-            const overlay = () => (
-              <MapLocationPicker
-                location={val || '55.7532, 37.6225'}
-                setValue={(pos) => setFieldsValue({ [name]: pos })}
-              />
-            );
-            // Так и не понял почему, но пока не добавишь Form.Item в submit значение не попадает в submit
-            return (
-              <>
-                <Form.Item noStyle name={name}><Input style={{ display: 'none' }} /></Form.Item>
-                <Dropdown overlay={overlay} placement="bottomRight">
-                  <p>{val || '—'}</p>
-                </Dropdown>
-              </>
-            );
-          }}
+          {({ getFieldValue, setFieldsValue }) => (
+            <LocationPicker getFieldValue={getFieldValue} setFieldsValue={setFieldsValue} name={name} />
+          )}
         </Form.Item>
       );
     }

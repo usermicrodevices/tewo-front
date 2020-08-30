@@ -1,4 +1,5 @@
-/* eslint valid-typeof: "off" */
+/* eslint valid-typeof: "off", max-len: "off" */
+import { isColor } from './color';
 
 function checkData(data, shouldBe, mayBe, tests) {
   const keysSet = Object.keys(data).reduce((set, datum) => ({ [datum]: datum, ...set }), {});
@@ -68,6 +69,18 @@ function typecheck(datum, key, type) {
     console.error(`Для поля ${key} ожидается тип array, полученные данные не являются массивом`, datum, typeof datum);
     return false;
   }
+  if (type === 'color') {
+    if (typeof datum !== 'string') {
+      console.error(`Для поля ${key} ожидается тип color, представленный в виде строки, получен ${typeof datum}`, datum);
+      return false;
+    }
+    if (!isColor(datum)) {
+      console.error(`Для поля ${key} ожидается тип color, переданная строка не
+      являющаяся цветом в формате #[a-fA-F0-9]{6}, другие форматы цвета не поддерживаются`, datum);
+      return false;
+    }
+    return true;
+  }
   if (type === 'location') {
     if (typeof datum === 'string') {
       const location = datum.split(',').map(parseFloat);
@@ -87,4 +100,9 @@ function typecheck(datum, key, type) {
   return true;
 }
 
-export default checkData;
+function checkEmail(email) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+
+export { checkData as default, checkEmail };

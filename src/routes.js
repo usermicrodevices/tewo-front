@@ -10,6 +10,10 @@ import SalePoints from 'pages/reference/salePoints';
 import Beverage from 'pages/tech/beverage';
 import Cleans from 'pages/tech/cleans';
 import Devices from 'pages/reference/devices';
+import EventTypes from 'pages/reference/eventTypes';
+import Events from 'pages/tech/events';
+import Drinks from 'pages/reference/drink';
+import Ingredients from 'pages/reference/ingredients';
 
 class Rout {
   path;
@@ -42,12 +46,12 @@ const companies = new Rout('/companies', Companies, false, true);
 const salePoints = new Rout('/sale_points', SalePoints, false, true);
 const beverage = new Rout('/beverage', Beverage);
 const devices = new Rout('/equipment', Devices);
-const drink = new Rout('/drink', Cleans);
-const ingredients = new Rout('/ingredients', Cleans);
-const costs = new Rout('/costs', Cleans);
-const events = new Rout('/events', Cleans);
+const drink = new Rout('/drink', Drinks);
+const ingredients = new Rout('/ingredients', Ingredients);
+const costs = new Rout('/costs');
+const eventTypes = new Rout('/events', EventTypes, false, true);
 const overdueLog = new Rout('/overdue_log', Cleans);
-const eventsLog = new Rout('/events_log', Cleans);
+const eventsLog = new Rout('/events_log', Events, false, true);
 const cleansLog = new Rout('/cleans_log', Cleans);
 const cost = new Rout('/cost', Cleans);
 const ingredientsRate = new Rout('/ingredients_rate', Cleans);
@@ -74,7 +78,7 @@ const authorizedRoutes = [
   drink,
   ingredients,
   costs,
-  events,
+  eventTypes,
   salePoints,
   beverage,
   dashboard,
@@ -112,7 +116,7 @@ export {
   drink,
   ingredients,
   costs,
-  events,
+  eventTypes,
   salePoints,
   defaultAuthorizedRout,
   defaultUnauthorizedRout,

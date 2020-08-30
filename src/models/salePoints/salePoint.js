@@ -117,7 +117,7 @@ class SalePoint extends Datum {
       },
       companyId: {
         type: 'selector',
-        selector: this.session.companiesModel.selector,
+        selector: this.session.companies.selector,
       },
       mapPoint: {
         type: 'location',
@@ -187,10 +187,19 @@ class SalePoint extends Datum {
   }
 
   @computed get company() {
-    if (!this.session.companiesModel.isLoaded) {
-      return undefined;
+    const { companyId } = this;
+    if (typeof companyId !== 'number') {
+      return companyId;
     }
-    return (this.session.companiesModel.rawData.find(({ id }) => id === this.companyId) || { name: undefined }).name;
+    return this.session.companies.get(companyId);
+  }
+
+  @computed get companyName() {
+    const { company } = this;
+    if (!company) {
+      return company;
+    }
+    return company.name;
   }
 
   constructor(session) {

@@ -5,7 +5,6 @@ import {
   Dropdown,
   Button,
   Space,
-  Modal,
 } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 import { withSize } from 'react-sizeme';

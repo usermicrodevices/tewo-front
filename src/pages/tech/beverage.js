@@ -3,9 +3,11 @@ import React from 'react';
 import GenericTablePage from 'pages/genericTablePage';
 import BeverageComponent from 'components/beverage';
 
+import { beveragesAndEventsUpdateFrequency } from 'config';
+
 const Beverage = () => (
   <GenericTablePage
-    refreshInterval={3000}
+    refreshInterval={beveragesAndEventsUpdateFrequency}
     storageName="beverages"
     isNotEditable
   >

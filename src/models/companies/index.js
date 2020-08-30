@@ -39,6 +39,8 @@ const COLUMNS_LIST = {
 class Companies extends Table {
   chart = null;
 
+  get isImpossibleToBeAsync() { return true; }
+
   actions = {
     isVisible: true,
     isEditable: () => true,
@@ -50,7 +52,7 @@ class Companies extends Table {
   @observable elementForEdit = undefined;
 
   constructor(session) {
-    super(COLUMNS_LIST, getCompanies(session), new Filters());
+    super(COLUMNS_LIST, getCompanies(session), new Filters({}));
   }
 
   @computed get selector() {
@@ -62,6 +64,10 @@ class Companies extends Table {
 
   toString() {
     return 'Companies';
+  }
+
+  get(companyId) {
+    return this.rawData.find(({ id }) => companyId === id);
   }
 }
 

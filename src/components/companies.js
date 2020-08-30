@@ -23,7 +23,7 @@ class Companies extends React.Component {
           </Space>
         </Title>
         <Card>
-          <Provider table={session.companiesModel} filter={session.companiesModel.filter}>
+          <Provider table={session.companies} filter={session.companies.filter}>
             <Table />
           </Provider>
         </Card>
