@@ -53,4 +53,18 @@ const getDevices = (session) => () => get('/refs/devices/').then((result) => {
   };
 });
 
-export default getDevices;
+function getDeviceModels(map) {
+  return get('/refs/device_models').then((data) => {
+    if (Array.isArray(data)) {
+      for (const datum of data) {
+        if (!checkData(datum, { id: 'number', name: 'string' })) {
+          console.error('Неожиданные данные для моделей устройств /refs/device_models', datum);
+        }
+        map.set(datum.id, datum.name);
+      }
+    }
+    return map;
+  });
+}
+
+export { getDevices, getDeviceModels };

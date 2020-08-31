@@ -18,6 +18,7 @@ const getDrinks = (session) => () => get('/refs/drinks/').then((result) => {
           plu: 'number',
           name: 'string',
           company: 'number',
+          cooking_time: 'number',
         },
       )) {
         console.error('Неожиданный ответ по адресу /refs/drinks/', deviceData);

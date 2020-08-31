@@ -1,15 +1,14 @@
 /* eslint class-methods-use-this: "off" */
-import { observable } from 'mobx';
 import Table from 'models/table';
 import Filters from 'models/filters';
-import getBeverages from 'services/beverage';
+import { getBeverages } from 'services/beverage';
 import TimeAgo from 'elements/timeago';
 
 const declareColumns = (session) => ({
   id: {
     isVisbleByDefault: true,
     title: 'ID',
-    width: 70,
+    width: 100,
     isAsyncorder: true,
   },
   cid: {
@@ -37,20 +36,38 @@ const declareColumns = (session) => ({
     isVisbleByDefault: true,
     title: 'Устройство',
     align: 'right',
-    width: 100,
+    grow: 1,
     sortDirections: 'both',
+    transform: (device) => {
+      if (typeof device !== 'number') {
+        return device;
+      }
+      return (session.devices.get(device) || { name: undefined }).name;
+    },
   },
   drink: {
     isVisbleByDefault: true,
     title: 'Напиток',
     grow: 1,
     sortDirections: 'both',
+    transform: (drink) => {
+      if (typeof drink !== 'number') {
+        return drink;
+      }
+      return (session.drinks.get(drink) || { name: undefined }).name;
+    },
   },
   operation: {
     isVisbleByDefault: true,
     title: 'Операция',
     grow: 1,
     sortDirections: 'both',
+    transform: (op) => {
+      if (typeof op !== 'number') {
+        return op;
+      }
+      return session.beverageOperations.get(op);
+    },
   },
   sale_sum: {
     isVisbleByDefault: true,

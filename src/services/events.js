@@ -27,15 +27,6 @@ const getEvents = (session) => (limit, offset = 0, filter = '') => {
       previous: 'string',
     }, {
       results: (events) => {
-        if (events.length > 1) {
-          for (let i = 1; i < events.length; i += 1) {
-            const [a, b] = events.slice(i - 1, i + 1).map(({ open_date: openDate }) => openDate);
-            if (a <= b) {
-              console.error(`провален тест сортировки событий ${i} a <= b: ${a} < ${b}`);
-              return false;
-            }
-          }
-        }
         for (const event of events) {
           if (!checkData(event, mustBe)) {
             console.error('провален тест для события', event);

@@ -49,6 +49,13 @@ class Device {
     return salePoint.company;
   }
 
+  @computed get deviceModelName() {
+    if (typeof this.deviceModelId !== 'number') {
+      return this.deviceModelId;
+    }
+    return this.session.deviceModels.get(this.deviceModelId);
+  }
+
   @computed get companyId() {
     const { salePoint } = this;
     if (!salePoint) {

@@ -32,7 +32,6 @@ class Keeper {
   constructor(filter, loader, isImpossibleToBeAsync) {
     this.loader = loader;
     this.filter = filter;
-    console.log(filter);
     this.manager = new DataManager(this.partialLoader);
 
     reaction(() => this.filter.search, () => {

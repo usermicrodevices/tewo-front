@@ -8,11 +8,17 @@ import Devices from './devices';
 import Operations from './operations';
 import Drinks from './drinks';
 import Ingredients from './ingredients';
+import DeviceModels from './devices/models';
+import BeverageOperations from './beverages/operations';
 
 class Session {
   operations = new Operations();
 
   locations = new Locations();
+
+  deviceModels = new DeviceModels();
+
+  beverageOperations = new BeverageOperations();
 
   beverages = new Beverages(this);
 
