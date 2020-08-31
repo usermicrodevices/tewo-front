@@ -20,6 +20,7 @@ const getDevices = (session) => () => get('/refs/devices/').then((result) => {
           setup_date: 'date',
           name: 'string',
           sale_point: 'number',
+          tz: 'string',
         }, {
           serial: 'string',
           device_model: 'number',
@@ -39,6 +40,7 @@ const getDevices = (session) => () => get('/refs/devices/').then((result) => {
         serial: 'serial',
         device_model: 'deviceModelId',
         price_group: 'priceGroupId',
+        tz: 'timeZone',
       };
 
       for (const [jsonName, modelName] of Object.entries(renamer)) {

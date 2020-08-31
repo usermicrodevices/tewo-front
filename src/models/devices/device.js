@@ -19,6 +19,8 @@ class Device {
 
   priceGroupId;
 
+  timeZone;
+
   session;
 
   constructor(session) {
