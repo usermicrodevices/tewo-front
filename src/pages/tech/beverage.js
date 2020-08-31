@@ -1,7 +1,9 @@
 import React from 'react';
 
 import GenericTablePage from 'pages/genericTablePage';
-import BeverageComponent from 'components/beverage';
+import Card from 'elements/card';
+import Table from 'elements/table';
+import Title from 'components/title';
 
 import { beveragesAndEventsUpdateFrequency } from 'config';
 
@@ -11,7 +13,12 @@ const Beverage = () => (
     storageName="beverages"
     isNotEditable
   >
-    <BeverageComponent />
+    <Title>
+      Наливы
+    </Title>
+    <Card>
+      <Table />
+    </Card>
   </GenericTablePage>
 );
 

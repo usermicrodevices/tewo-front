@@ -115,6 +115,7 @@ const items = [
       },
       {
         text: 'Группы цен',
+        act: costs,
       },
       {
         text: 'События',

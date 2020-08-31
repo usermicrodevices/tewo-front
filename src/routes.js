@@ -14,6 +14,7 @@ import EventTypes from 'pages/reference/eventTypes';
 import Events from 'pages/tech/events';
 import Drinks from 'pages/reference/drink';
 import Ingredients from 'pages/reference/ingredients';
+import Costs from 'pages/reference/costs';
 
 class Rout {
   path;
@@ -48,7 +49,7 @@ const beverage = new Rout('/beverage', Beverage);
 const devices = new Rout('/equipment', Devices);
 const drink = new Rout('/drink', Drinks);
 const ingredients = new Rout('/ingredients', Ingredients, false, true);
-const costs = new Rout('/costs');
+const costs = new Rout('/costs', Costs, false, true);
 const eventTypes = new Rout('/events', EventTypes, false, true);
 const overdueLog = new Rout('/overdue_log', Cleans);
 const eventsLog = new Rout('/events_log', Events, false, true);

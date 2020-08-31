@@ -10,6 +10,8 @@ import Drinks from './drinks';
 import Ingredients from './ingredients';
 import DeviceModels from './devices/models';
 import BeverageOperations from './beverages/operations';
+import Costs from './costs';
+import CostGroups from './costs/groups';
 
 class Session {
   operations = new Operations();
@@ -19,6 +21,10 @@ class Session {
   deviceModels = new DeviceModels();
 
   beverageOperations = new BeverageOperations();
+
+  costGroups = new CostGroups();
+
+  costs = new Costs(this);
 
   beverages = new Beverages(this);
 
