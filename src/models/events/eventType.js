@@ -16,6 +16,8 @@ class EventType extends Datum {
 
   @observable description;
 
+  isOverdued;
+
   get key() { return this.id; }
 
   constructor(session) {

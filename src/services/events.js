@@ -13,11 +13,14 @@ const getEvents = (session) => (limit, offset = 0, filter = '') => {
       id: 'number',
       cid: 'string',
       open_date: 'date',
-      close_date: 'date',
       created_date: 'date',
       device: 'number',
       duration: 'number',
       event_reference: 'number',
+      overdued: 'boolean',
+    };
+    const mayBe = {
+      close_date: 'date',
     };
     checkData(response, {
       count: 'number',
@@ -28,7 +31,7 @@ const getEvents = (session) => (limit, offset = 0, filter = '') => {
     }, {
       results: (events) => {
         for (const event of events) {
-          if (!checkData(event, mustBe)) {
+          if (!checkData(event, mustBe, mayBe)) {
             console.error('провален тест для события', event);
             return false;
           }
@@ -45,6 +48,7 @@ const getEvents = (session) => (limit, offset = 0, filter = '') => {
       device: 'deviceId',
       duration: 'duration',
       event_reference: 'eventId',
+      overdued: 'isOverdued',
     };
     return {
       count: response.count,
@@ -69,7 +73,11 @@ const getEventTypes = () => get('/refs/event_references/').then((results) => {
   }
   return {
     count: results.length,
-    results: results.map((eventType) => {
+    results: results.map((rawEventType) => {
+      const eventType = {
+        ...rawEventType,
+        color: rawEventType.color || '#FFFFFF',
+      };
       if (!checkData(
         eventType,
         {
