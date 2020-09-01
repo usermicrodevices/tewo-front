@@ -47,7 +47,7 @@ const FILTER_TYPES = {
   selector: {
     operators: ['in'],
     convertor: (v) => [v.join(',')],
-    parser: (v) => v.split(','),
+    parser: (v) => v.split(',').map((id) => parseInt(id, 10)),
     initialValue: [],
     complement: selectorsComparator,
     apply: (value, selected) => selected.findIndex((i) => i === value) >= 0,
@@ -104,13 +104,18 @@ class Filters {
         for (const key of Object.keys(this.data)) {
           const filter = this.filters[key];
           if (filter.type === 'selector') {
-            const selector = new Map(filter.selector(this));
-            if (selector.size <= 1) {
-              delete this.data[key];
-            } else {
-              const checked = this.data[key].slice().filter((id) => selector.has(id));
-              if (this.data[key].length !== checked.length) {
-                this.data[key] = checked;
+            const items = filter.selector(this);
+            if (Array.isArray(items)) {
+              const selector = new Map(items);
+              if (selector.size <= 1) {
+                delete this.data[key];
+              } else {
+                const checked = this.data[key].slice().filter((id) => selector.has(id));
+                if (checked.length === 0) {
+                  delete this.data[key];
+                } else if (this.data[key].length !== checked.length) {
+                  this.data[key] = checked;
+                }
               }
             }
           }

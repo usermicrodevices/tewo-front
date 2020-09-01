@@ -41,6 +41,9 @@ class Costs extends Table {
   }
 
   @computed get selector() {
+    if (!this.isLoaded) {
+      return undefined;
+    }
     return this.rawData.map(({ id, name }) => [id, name]);
   }
 

@@ -1,5 +1,5 @@
 /* eslint class-methods-use-this: "off" */
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 
 import plural from 'utils/plural';
 import Table from 'models/table';
@@ -58,7 +58,10 @@ class EventTypes extends Table {
     return 'EventTypes';
   }
 
-  get selector() {
+  @computed get selector() {
+    if (!this.isLoaded) {
+      return undefined;
+    }
     return this.rawData.map(({ id, name }) => [id, name]);
   }
 

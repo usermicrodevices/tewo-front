@@ -6,6 +6,7 @@ import Loader from 'elements/loader';
 
 import Cell from './row';
 import NoData from './noData';
+import style from './style.module.scss';
 
 const ROW_HEIGHT = 54;
 const DEFAULT_PRESCROLL_HEIGHT = 2150;
@@ -44,13 +45,13 @@ class Content extends React.Component {
     const { table, width, columnWidth } = this.props;
     const {
       data,
-      rawData,
       columns,
       newElements,
       actions,
+      isLoaded,
     } = table;
-    if (rawData.length === 0) {
-      return <Loader size="large" />;
+    if (!isLoaded) {
+      return <Loader className={style.loader} size="large" />;
     }
     if (data.length === 0) {
       return <NoData />;

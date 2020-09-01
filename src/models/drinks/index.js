@@ -1,5 +1,5 @@
 /* eslint class-methods-use-this: "off" */
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
@@ -83,7 +83,10 @@ class Drinks extends Table {
     return 'Drinks';
   }
 
-  get selector() {
+  @computed get selector() {
+    if (!this.isLoaded) {
+      return undefined;
+    }
     return this.rawData.map(({ id, name }) => [id, name]);
   }
 

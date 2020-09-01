@@ -57,7 +57,7 @@ class Companies extends Table {
 
   @computed get selector() {
     if (!this.isLoaded) {
-      return [];
+      return undefined;
     }
     return this.rawData.map(({ id, name }) => [id, name]);
   }

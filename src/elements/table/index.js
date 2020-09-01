@@ -81,6 +81,7 @@ class TableComponent extends React.Component {
         { elementForEdit && <Editor data={elementForEdit} isModal onCancel={this.onCancelEdditing} /> }
         <div className={style.buttons}>
           <Input prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} />
+          { process.env.NODE_ENV !== 'production' && <p>{`Доступно ${data.length} записей`}</p> }
           <Space>
             <Dropdown overlay={<ColumnsPicker onReorder={this.onReorder} onChange={this.onColumnsPicked} visibleColumns={visibleColumns} />} placement="bottomRight">
               <Button>Колонки</Button>
@@ -96,9 +97,7 @@ class TableComponent extends React.Component {
         </div>
         { isFiltersOpen && <Filters /> }
         <Header columnWidth={columnWidth} />
-        { data
-          ? <Content width={size.width} columnWidth={columnWidth} />
-          : <Loader className={style.loader} size={100} /> }
+        <Content width={size.width} columnWidth={columnWidth} />
       </div>
     );
   }
