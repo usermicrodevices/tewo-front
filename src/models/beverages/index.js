@@ -17,59 +17,41 @@ const declareColumns = (session) => ({
     align: 'right',
     width: 70,
   },
-  device_date: {
+  deviceDate: {
     isVisbleByDefault: true,
     title: 'Момент налива',
     grow: 1,
     isDefaultSort: true,
-    transform: (date) => date && TimeAgo({ date }),
+    transform: (date) => (+date && TimeAgo({ date })) || null,
     sortDirections: 'both',
   },
-  created_date: {
+  createdDate: {
     isVisbleByDefault: false,
     title: 'Время получения данных на сервер',
     grow: 1,
-    transform: (date) => date && TimeAgo({ date }),
+    transform: (date) => (+date && TimeAgo({ date })) || null,
     sortDirections: 'both',
   },
-  device: {
+  deviceName: {
     isVisbleByDefault: true,
     title: 'Устройство',
     align: 'right',
     grow: 1,
     sortDirections: 'both',
-    transform: (device) => {
-      if (typeof device !== 'number') {
-        return device;
-      }
-      return (session.devices.get(device) || { name: undefined }).name;
-    },
   },
-  drink: {
+  drinkName: {
     isVisbleByDefault: true,
     title: 'Напиток',
     grow: 1,
     sortDirections: 'both',
-    transform: (drink) => {
-      if (typeof drink !== 'number') {
-        return drink;
-      }
-      return (session.drinks.get(drink) || { name: undefined }).name;
-    },
   },
-  operation: {
+  operationName: {
     isVisbleByDefault: true,
     title: 'Операция',
     grow: 1,
     sortDirections: 'both',
-    transform: (op) => {
-      if (typeof op !== 'number') {
-        return op;
-      }
-      return session.beverageOperations.get(op);
-    },
   },
-  sale_sum: {
+  saleSum: {
     isVisbleByDefault: true,
     title: 'Стоимость',
     align: 'right',
@@ -79,31 +61,47 @@ const declareColumns = (session) => ({
 });
 
 const declareFilters = (session) => ({
-  sale_sum: {
-    type: 'costrange',
-    title: 'Стоимость',
-    apply: (general, data) => general(data.sale_sum),
+  device_date: {
+    type: 'daterange',
+    title: 'Момент налива',
+    apply: (general, data) => general(data.device_date),
+  },
+  company: {
+    type: 'selector',
+    title: 'Компания',
+    apply: (general, data) => general(data.companyId),
+    selector: () => session.companies.selector,
+  },
+  sale_point: {
+    type: 'selector',
+    title: 'Объект',
+    apply: (general, data) => general(data.salePointId),
+    selector: () => session.points.selector,
+  },
+  device: {
+    type: 'selector',
+    title: 'Оборудование',
+    apply: (general, data) => general(data.drink),
+    selector: (filter) => session.devices.selector.filter(([id]) => filter.data),
   },
   drink: {
     type: 'selector',
     title: 'Напиток',
     apply: (general, data) => general(data.drink),
-    selector: () => [
-      [1, 'a'], [2, 'b'],
-    ],
+    selector: (filter) => session.drinks.selector.filter(([id]) => (!filter.data.device) || filter.data.device.findIndex((deviceId) => deviceId === id) >= 0),
+    disabled: (filter) => !filter.data.device,
   },
   operation: {
     type: 'selector',
-    title: 'Операция',
-    apply: (general, data) => general(data.operation),
-    selector: () => [
-      [1, 'a'], [2, 'b'],
-    ],
+    title: 'Тип оплаты',
+    apply: (general, data) => general(data.sale_sum),
+    disabled: true,
   },
-  device_date: {
-    type: 'daterange',
-    title: 'Момент налива',
-    apply: (general, data) => general(data.device_date),
+  canceled: {
+    type: 'checkbox',
+    title: 'Отмемённые',
+    apply: (_, data) => data.canceled,
+    passiveValue: false,
   },
 });
 
@@ -111,8 +109,7 @@ class Beverages extends Table {
   chart = null;
 
   constructor(session) {
-    const filters = new Filters(declareFilters(session));
-    super(declareColumns(session), getBeverages, filters);
+    super(declareColumns(session), getBeverages(session), new Filters(declareFilters(session)));
   }
 
   toString() {

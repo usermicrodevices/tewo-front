@@ -62,6 +62,10 @@ class Table {
       }, NEW_CHANGES_WAIT_DELAY);
     });
 
+    reaction(() => this.sort.direction, () => {
+      this.performVisibleDataValidation();
+    });
+
     reaction(() => this.sort, this.performVisibleDataValidation);
   }
 
@@ -71,7 +75,7 @@ class Table {
 
   @action performVisibleDataValidation = () => {
     const currentRow = this.sort.direction === 'ascend'
-      ? Math.max(0, this.dataModel.amount - this.currentRow - MAX_VISIBLE_ROWS_AMOUNT)
+      ? Math.max(0, this.dataModel.data.length - this.currentRow - MAX_VISIBLE_ROWS_AMOUNT)
       : this.currentRow;
     if (this.dataModel.isEverythingLoadedFromRange(currentRow, currentRow + MAX_VISIBLE_ROWS_AMOUNT)) {
       return;

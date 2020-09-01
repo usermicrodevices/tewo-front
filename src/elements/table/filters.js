@@ -29,6 +29,9 @@ const Filter = (
       return <Input disabled={disabled} placeholder={title} onChange={({ target }) => onChange(target.value)} value={value} />;
     case 'selector': case 'singleselector': {
       const isSingle = type === 'singleselector';
+      if (selector.length <= 1) {
+        return null;
+      }
       return <Select disabled={disabled} title={title} value={value} onChange={onChange} selector={selector} isSingle={isSingle} />;
     }
     case 'checkbox':
@@ -49,15 +52,16 @@ const Filters = ({ filter }) => (
         }) => {
           const onChange = (value) => { filter.set(key, value); };
           const value = filter.get(key);
+          const isDisabled = typeof disabled === 'function' ? disabled(filter) : disabled;
           return (
             <Filter
               key={key}
               title={title}
-              selector={selector ? selector() : []}
+              selector={selector ? selector(filter) : []}
               type={type}
               onChange={onChange}
               value={value}
-              disabled={!!disabled}
+              disabled={isDisabled}
             />
           );
         })

@@ -1,19 +1,24 @@
+import moment from 'moment';
+
 import { get } from 'utils/request';
 import checkData from 'utils/dataCheck';
+import Beverage from 'models/beverages/beverage';
 
-const getBeverages = (limit, offset = 0, filter = '') => new Promise((resolve, reject) => {
+const getBeverages = (session) => (limit, offset = 0, filter = '') => new Promise((resolve, reject) => {
   console.assert(limit >= 0 && offset >= 0, `Неверные параметры запроса наливов "${limit}" "${offset}"`);
   get(`/data/beverages/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
     const beverageMustBe = {
+      id: 'number',
       cid: 'string',
       created_date: 'date',
-      device: 'number',
       device_date: 'date',
+      device: 'number',
       drink: 'number',
-      id: 'number',
-      operation: 'number',
       sale_sum: 'number',
       canceled: 'boolean',
+    };
+    const mayBe = {
+      operation: 'number',
     };
     checkData(response, {
       count: 'number',
@@ -24,7 +29,7 @@ const getBeverages = (limit, offset = 0, filter = '') => new Promise((resolve, r
     }, {
       results: (beverages) => {
         for (const beverage of beverages) {
-          if (!checkData(beverage, beverageMustBe)) {
+          if (!checkData(beverage, beverageMustBe, mayBe)) {
             console.error('провален тест для объекта', beverage, beverages);
             return false;
           }
@@ -32,7 +37,23 @@ const getBeverages = (limit, offset = 0, filter = '') => new Promise((resolve, r
         return true;
       },
     });
-    resolve(response);
+
+    resolve({
+      count: response.count,
+      results: response.results.map((datum) => {
+        const beverage = new Beverage(session);
+        beverage.id = datum.id;
+        beverage.cid = datum.cid;
+        beverage.createdDate = moment(datum.created_date);
+        beverage.deviceDate = moment(datum.device_date);
+        beverage.deviceId = datum.device;
+        beverage.drinkId = datum.drink;
+        beverage.operationId = datum.operation;
+        beverage.saleSum = datum.sale_sum;
+        beverage.canceled = datum.canceled;
+        return beverage;
+      }),
+    });
   }).catch(reject);
 });
 

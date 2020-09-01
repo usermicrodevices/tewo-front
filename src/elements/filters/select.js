@@ -6,7 +6,7 @@ const { Option } = Select;
 const filterComparator = (inputValue, { children }) => children.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
 
 const Selector = ({
-  title, value, onChange, selector, resolver, isSingle, disabled,
+  title, value, onChange, selector, isSingle, disabled,
 }) => (
   <Select
     style={{ minWidth: 150 }}
