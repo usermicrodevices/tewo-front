@@ -1,3 +1,4 @@
+import { computed } from 'mobx';
 import { getBeverageOperations } from 'services/beverage';
 
 class BeverageOprations extends Map {
@@ -5,6 +6,10 @@ class BeverageOprations extends Map {
     super();
 
     getBeverageOperations(this);
+  }
+
+  @computed get selector() {
+    return [...this.entries()];
   }
 }
 

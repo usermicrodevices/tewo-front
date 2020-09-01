@@ -25,33 +25,36 @@ class Keeper {
 
   filter;
 
-  @observable additionFilter = null;
+  consideredFilter = null;
 
   @observable manager;
 
   constructor(filter, loader, isImpossibleToBeAsync) {
     this.loader = loader;
     this.filter = filter;
+    this.consideredFilter = filter.clone();
     this.manager = new DataManager(this.partialLoader);
 
     reaction(() => this.filter.search, () => {
       if (isImpossibleToBeAsync) {
         return;
       }
-      console.log('cahnges detected, set timeout');
-      const { search } = this.filter;
+      return; // debaging broke
+      if (!this.isAsync) {
+        const addition = this.filter.greater(this.consideredFilter);
+        if (addition !== null) {
+          // Если данных мало и фильтр был ужесточен то ничего
+          // грузить не надо, можно отфильтровать имеющиеся данные
+          return;
+        }
+      }
+      const takenFilter = this.filter.search;
       setTimeout(() => {
-        if (this.filter.search === search) {
-          transaction(() => {
-            console.log('changes accepted, additional tests', this.isAsync);
-            this.additionFilter = this.filter.complement(new Filter(search, this.filter.columns));
-            console.log(`${!!this.additionFilter} difference`);
-            // если фильтр стал свободнее то перезагружаем данные для проверки размера новоый выборки
-            if (this.additionFilter === null) {
-              console.log('data manager reinstanciations');
-              this.manager = new DataManager(this.partialLoader);
-            }
-          });
+        // если фильтр какое-то время не менялся
+        if (this.filter.search === takenFilter) {
+          // то обновляем менеджер
+          this.consideredFilter = filter.clone();
+          this.manager = new DataManager(this.partialLoader);
         }
       }, FILTER_CHANGES_REACTION_DELAY);
     });

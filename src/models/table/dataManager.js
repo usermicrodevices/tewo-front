@@ -112,7 +112,7 @@ class DataManager {
             console.assert(newIndex * 3 / 2 <= results.length);
           }
         }
-        // Дальше нужно проверить сортировку. Для этого должно порядок элемента должен меняться только за счет ногово
+        // Дальше нужно проверить сортировку. Для этого должно место элемента должно меняться только за счет ногово
         const changes = Object.values(appearences).sort(({ new: lId }, { new: rId }) => Math.sign(lId - rId));
         let d = 0;
         for (const { new: newId, old: oldId } of changes) {
@@ -120,8 +120,6 @@ class DataManager {
             d += 1;
           } else if (oldId + d !== newId) {
             console.error('Given data consistency error', changes, oldId, d, newId);
-            this.failstate = true;
-            return;
           }
         }
       }

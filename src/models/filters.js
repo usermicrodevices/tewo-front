@@ -1,7 +1,8 @@
 import {
-  action, observable, computed, transaction,
+  action, observable, computed, transaction, autorun, toJS,
 } from 'mobx';
 import moment from 'moment';
+import { FilterFilled } from '@ant-design/icons';
 
 const rangeComparator = (lhs, rhs) => {
   const [lBegin, lEnd] = lhs;
@@ -94,12 +95,31 @@ class Filters {
 
   constructor(filters) {
     this.filters = filters || {};
+
+    autorun(() => {
+      transaction(() => {
+        // проверка, изменяющая зависимые селекторы, если они потеряли смысл
+        for (const key of Object.keys(this.data)) {
+          const filter = this.filters[key];
+          if (filter.type === 'selector') {
+            const selector = new Map(filter.selector(this));
+            if (selector.size <= 1) {
+              delete this.data[key];
+            } else {
+              const checked = this.data[key].slice().filter((id) => selector.has(id));
+              if (this.data[key].length !== checked.length) {
+                this.data[key] = checked;
+              }
+            }
+          }
+        }
+      });
+    });
   }
 
   // Если полученный фильтр строже то возвращает разницу (не строгую) иначе возвращает null
   // не строгую в том смысле, что из rhs может быть вычтено не всё, что в this
   complement(rhs) {
-    console.log(rhs.filters, this.filters);
     console.assert(rhs.filters === this.filters);
     const result = new Filters(this.filters);
     for (const [key, value] of Object.entries(this.data)) {
@@ -179,7 +199,7 @@ class Filters {
   filterType(filterKey) {
     const filter = this.filters[filterKey];
     if (typeof filter === 'undefined') {
-      console.error(`can't find filter with key ${filterKey}`);
+      console.error(`can't find filter with key ${filterKey}`, this.data);
     }
     return filter.type;
   }
@@ -213,6 +233,13 @@ class Filters {
       (a, b) => Math.sign(FILTER_TYPES[a.type].order - FILTER_TYPES[b.type].order)
         || a.key.localeCompare(b.key),
     );
+  }
+
+  clone() {
+    const result = new Filters(this.filters);
+    result.searchText = this.filters.searchText;
+    result.data = JSON.parse(JSON.stringify(toJS(this.data)));
+    return result;
   }
 }
 
