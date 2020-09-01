@@ -2,7 +2,6 @@ import {
   action, observable, computed, transaction, autorun, toJS,
 } from 'mobx';
 import moment from 'moment';
-import { FilterFilled } from '@ant-design/icons';
 
 const rangeComparator = (lhs, rhs) => {
   const [lBegin, lEnd] = lhs;
@@ -21,6 +20,17 @@ const selectorsComparator = (lhs, rhs) => {
     }
   }
   return [...result.values()];
+};
+
+const DATE_RANGE_TYPE = {
+  operators: ['gte', 'lte'],
+  convertor: (v) => v.map((d) => d.format()),
+  parser: (v, id, old) => { const r = [...old]; r[id] = moment(v); return r; },
+  initialValue: [null, null],
+  complement: rangeComparator,
+  apply: (value, [l, r]) => value >= l && value <= r,
+  order: 2,
+  isNullValue: (value) => !Array.isArray(value) || (value[0] === null && value[1] === null),
 };
 
 const FILTER_TYPES = {
@@ -64,16 +74,8 @@ const FILTER_TYPES = {
     order: 1,
     isNullValue: (value) => typeof value !== 'string' || value === '',
   },
-  daterange: {
-    operators: ['gte', 'lte'],
-    convertor: (v) => v.map((d) => d.format()),
-    parser: (v, id, old) => { const r = [...old]; r[id] = moment(v); return r; },
-    initialValue: [null, null],
-    complement: rangeComparator,
-    apply: (value, [l, r]) => value >= l && value <= r,
-    order: 2,
-    isNullValue: (value) => !Array.isArray(value) || (value[0] === null && value[1] === null),
-  },
+  daterange: DATE_RANGE_TYPE,
+  datetimerange: DATE_RANGE_TYPE,
   costrange: {
     operators: ['gte', 'lte'],
     convertor: (v) => v,
@@ -119,22 +121,20 @@ class Filters {
 
   // Если полученный фильтр строже то возвращает разницу (не строгую) иначе возвращает null
   // не строгую в том смысле, что из rhs может быть вычтено не всё, что в this
-  complement(rhs) {
+  isGreater(rhs) {
     console.assert(rhs.filters === this.filters);
-    const result = new Filters(this.filters);
     for (const [key, value] of Object.entries(this.data)) {
       const rhsValue = rhs.data[key];
       if (typeof rhsValue === 'undefined') {
-        return null;
+        return false;
       }
       const filterType = this.filterType(key);
       const comp = FILTER_TYPES[filterType].complement(value, rhsValue);
       if (comp === null) {
-        return null;
+        return false;
       }
-      result.data[key] = comp;
     }
-    return result;
+    return true;
   }
 
   set search(args) {

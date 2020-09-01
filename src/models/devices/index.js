@@ -137,6 +137,13 @@ class Devices extends Table {
     return this.rawData.map(({ id, name }) => [id, name]);
   }
 
+  salePointsSelector(points) {
+    const pointsSet = new Set(points);
+    return this.rawData
+      .filter(({ salePointId }) => pointsSet.has(salePointId))
+      .map(({ id, name }) => [id, name]);
+  }
+
   get(deviceId) {
     return this.rawData.find(({ id }) => id === deviceId);
   }

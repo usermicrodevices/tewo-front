@@ -62,6 +62,12 @@ class EventTypes extends Table {
     return this.rawData.map(({ id, name }) => [id, name]);
   }
 
+  get prioritySelector() {
+    return this.rawData
+      .filter(({ priority }) => priority !== null)
+      .map(({ id, priority }) => [id, priority]);
+  }
+
   get(typeId) {
     return this.rawData.find(({ id }) => id === typeId);
   }

@@ -11,13 +11,16 @@ const capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
-const DatergangePicker = ({ title, value, onChange }) => {
+const DatergangePicker = ({
+  title, value, onChange, showTime,
+}) => {
   const quartalStart = moment().startOf('year').add(Math.floor(moment().month() / 3) * 3, 'month');
   const halfAYearStart = moment().startOf('year').add(Math.floor(moment().month() / 6) * 6, 'month');
   return (
     <div className={style.space}>
       <p>{ `${title}:` }</p>
       <RangePicker
+        showTime={showTime}
         ranges={{
           Сегодня: [moment().startOf('day'), moment().endOf('day')],
           Вчера: [moment().subtract(1, 'day').startOf('day'), moment().subtract(1, 'day').endOf('day')],

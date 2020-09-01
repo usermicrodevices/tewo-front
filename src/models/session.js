@@ -22,6 +22,8 @@ class Session {
 
   beverageOperations = new BeverageOperations();
 
+  eventTypes = new EventTypes();
+
   costGroups = new CostGroups();
 
   costs = new Costs(this);
@@ -29,8 +31,6 @@ class Session {
   beverages = new Beverages(this);
 
   events = new Events(this);
-
-  eventTypes = new EventTypes();
 
   companies = new Companies(this);
 

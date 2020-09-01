@@ -21,8 +21,10 @@ const Filter = (
 ) => {
   const type = typeVal.toLowerCase();
   switch (type) {
-    case 'daterange':
-      return <DataRangePicker disabled={disabled} title={title} onChange={onChange} value={value} />;
+    case 'daterange': case 'datetimerange': {
+      const showTime = type === 'datetimerange';
+      return <DataRangePicker showTime={showTime} disabled={disabled} title={title} onChange={onChange} value={value} />;
+    }
     case 'costrange':
       return <CostRangeInput disabled={disabled} title={title} onChange={onChange} value={value} />;
     case 'text':

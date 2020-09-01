@@ -82,16 +82,13 @@ const declareFilters = (session) => ({
     type: 'selector',
     title: 'Оборудование',
     apply: (general, data) => general(data.drink),
-    selector: (filter) => session.devices.selector.filter(([id]) => filter.data),
+    selector: (filter) => session.devices.salePointsSelector(filter.data.sale_point),
   },
   drink: {
     type: 'selector',
     title: 'Напиток',
     apply: (general, data) => general(data.drink),
-    selector: (filter) => session.drinks.selector.filter(
-      ([id]) => (!filter.data.device)
-        || filter.data.device.findIndex((deviceId) => deviceId === id) >= 0,
-    ),
+    selector: () => session.drinks.selector,
     disabled: (filter) => !filter.data.device,
   },
   operation: {

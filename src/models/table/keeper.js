@@ -1,8 +1,7 @@
 import {
-  reaction, computed, action, observable, transaction,
+  reaction, computed, action, observable,
 } from 'mobx';
 
-import Filter from 'models/filters';
 import DataManager from './dataManager';
 
 // Как быстро реагировать на изменения фильтра
@@ -39,10 +38,9 @@ class Keeper {
       if (isImpossibleToBeAsync) {
         return;
       }
-      return; // debaging broke
       if (!this.isAsync) {
-        const addition = this.filter.greater(this.consideredFilter);
-        if (addition !== null) {
+        const isGreater = this.filter.isGreater(this.consideredFilter);
+        if (isGreater) {
           // Если данных мало и фильтр был ужесточен то ничего
           // грузить не надо, можно отфильтровать имеющиеся данные
           return;

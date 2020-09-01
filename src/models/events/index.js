@@ -62,29 +62,29 @@ const declareColumns = () => ({
 
 const declareFilters = (session) => ({
   start_date: {
-    type: 'daterange',
+    type: 'datetimerange',
     title: 'Дата время',
     apply: (general, data) => general(data.startDate),
   },
-  device_id: {
+  device: {
     type: 'selector',
     title: 'Оборудование',
     apply: (general, data) => general(data.device_id),
-    selector: () => session.devices.selector,
+    selector: (filter) => session.devices.salePointsSelector(filter.data.sale_point),
   },
-  sale_point_id: {
+  sale_point: {
     type: 'selector',
     title: 'Объект',
     apply: (general, data) => general(data.sale_point_id),
     selector: () => session.points.selector,
   },
-  priority: {
+  event_reference: {
     type: 'selector',
     title: 'Приоритет',
     apply: (general, data) => general(data.priority),
-    selector: () => session.eventTypes.selector,
+    selector: () => session.eventTypes.prioritySelector,
   },
-  company_id: {
+  company: {
     type: 'selector',
     title: 'Компания',
     apply: (general, data) => general(data.company_id),
