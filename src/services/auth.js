@@ -1,6 +1,7 @@
 import { post, get } from 'utils/request';
 import checkData, { checkEmail } from 'utils/dataCheck';
 import User from 'models/user';
+import { message } from 'antd';
 
 function login(data) {
   return new Promise((resolve, reject) => {
@@ -51,9 +52,9 @@ function contacts() {
   });
 }
 
-function me() {
+function me(deep) {
   const location = 'user';
-  return get(location).then((data) => {
+  return new Promise((resolve, reject) => get(location).then((data) => {
     const shouldBe = {
       id: 'number',
       date_joined: 'date',
@@ -103,7 +104,15 @@ function me() {
       }
     }
     return user;
-  });
+  }).then(resolve).catch((err) => {
+    if (err.response.status >= 500 && deep < 10) {
+      const newDeep = deep ? 1 : deep + 1;
+      message(`Произошла ошибка при подготовке ответа сервером. Повторяем попытку (${newDeep} из 10)`);
+      me(newDeep).then(resolve).catch(reject);
+    } else {
+      reject(err);
+    }
+  }));
 }
 
 export { login, me, contacts };

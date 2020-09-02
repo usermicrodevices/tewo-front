@@ -41,7 +41,7 @@ const COLUMNS = {
 };
 
 const declareFilters = (session) => ({
-  company: {
+  companyId: {
     type: 'selector',
     title: 'Компания',
     apply: (general, data) => general(data.companyId),

@@ -24,13 +24,37 @@ const selectorsComparator = (lhs, rhs) => {
 
 const DATE_RANGE_TYPE = {
   operators: ['gte', 'lte'],
-  convertor: (v) => v.map((d) => d.format()),
-  parser: (v, id, old) => { const r = [...old]; r[id] = moment(v); return r; },
+  convertor: (v) => v.map((d) => d.format().replace('+', '%2B')),
+  parser: (v, id, old) => { const r = [...old]; r[id] = moment(v.replace('%2B', '+')); return r; },
   initialValue: [null, null],
   complement: rangeComparator,
-  apply: (value, [l, r]) => value >= l && value <= r,
+  apply: (value, [l, r]) => {
+    if (!moment.isMoment(value)) {
+      return false;
+    }
+    if (moment.isMoment(l)) {
+      if (value < l) {
+        return false;
+      }
+    }
+    if (moment.isMoment(r)) {
+      if (value > r) {
+        return false;
+      }
+    }
+    return true;
+  },
   order: 2,
-  isNullValue: (value) => !Array.isArray(value) || (value[0] === null && value[1] === null),
+  isNullValue: (value) => {
+    if (Array.isArray(value) || value.length !== 2) {
+      return true;
+    }
+    const [min, max] = value;
+    if (moment.isMoment(min) && moment.isMoment(max)) {
+      return max - min <= 0;
+    }
+    return !((moment.isMoment(min) && max === null) || (moment.isMoment(max) && min === null));
+  },
 };
 
 const FILTER_TYPES = {
@@ -150,19 +174,35 @@ class Filters {
       }
       for (const arg of args.split('&')) {
         const [elem, value] = arg.split('=');
-        const [key, operator] = elem.split('__');
-        const filterType = this.filterType(key);
-        const { operators, initialValue, parser } = FILTER_TYPES[filterType];
+        const [key, operator] = (() => {
+          const m = elem.split('__');
+          return [m.slice(0, -1).join('__'), m.slice(-1)[0]];
+        })();
+        if (key in this.filters) {
+          const filterType = this.filterType(key);
+          const { operators, initialValue, parser } = FILTER_TYPES[filterType];
 
-        if (!(key in this.data)) {
-          this.data[key] = initialValue;
-        }
+          if (!(key in this.data)) {
+            this.data[key] = initialValue;
+          }
 
-        const id = operators.findIndex((op) => op === operator);
-        if (id < 0) {
-          console.error(`unknown operator type ${operator}. Known operators list: ${operators.join(', ')}`);
+          const id = operators.findIndex((op) => op === operator);
+          if (id < 0) {
+            console.error(`unknown operator type ${operator}. Known operators list: ${operators.join(', ')}`);
+          } else {
+            const filterValue = parser(value, id, this.data[key]);
+            this.data[key] = filterValue;
+          }
+        } else {
+          console.error(`unknown filter key ${key}. Known keys: ${Object.keys(this.filters).join(', ')}`);
         }
-        this.data[key] = parser(value, id, this.data[key]);
+      }
+      for (const [key, value] of Object.entries(this.data)) {
+        const filter = this.filters[key];
+        const { isNullValue } = FILTER_TYPES[filter.type];
+        if (isNullValue(value, filter)) {
+          delete this.data[key];
+        }
       }
     });
   }

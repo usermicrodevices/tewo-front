@@ -19,7 +19,7 @@ const COLUMNS = {
     grow: 3,
     sortDirections: 'both',
   },
-  companyName: {
+  cost: {
     isVisbleByDefault: true,
     title: 'Цена за единицу',
     grow: 3,
@@ -37,7 +37,7 @@ const COLUMNS = {
     grow: 2,
     sortDirections: 'both',
   },
-  consept: {
+  companyName: {
     isVisbleByDefault: true,
     title: 'Компания',
     grow: 2,

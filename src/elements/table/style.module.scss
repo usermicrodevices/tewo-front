@@ -18,6 +18,10 @@
   .row {
     display: flex;
 
+    &:hover {
+      background-color: #fafafa;
+    }
+
     .virtual-table-cell {
       box-sizing: border-box;
       padding: 16px;

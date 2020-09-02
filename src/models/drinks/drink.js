@@ -11,6 +11,8 @@ class Drink extends Datum {
 
   companyId;
 
+  isHaveFormula = false;
+
   session;
 
   constructor(session) {

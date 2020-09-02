@@ -23,6 +23,7 @@ const Cell = styled.div`
   border-radius: 14px;
   display: inline-block;
   padding: 2px 14px;
+  margin-top: -2px;
   &:hover {
     background-color: ${(props) => props.hoverColor};
   }

@@ -15,9 +15,12 @@ const getEvents = (session) => () => get('/refs/ingredients/').then((result) => 
         deviceData,
         {
           id: 'number',
-          plu: 'number',
           name: 'string',
           company: 'number',
+        },
+        {
+          plu: 'number',
+          dimension: 'string',
         },
       )) {
         console.error('Неожиданный ответ по адресу /refs/ingredients/', deviceData);
