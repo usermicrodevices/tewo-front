@@ -20,7 +20,7 @@ class Event {
 
   eventId;
 
-  get rowBackgroundColor() {
+  get eventColor() {
     const { event } = this;
     if (event) {
       return event.color;

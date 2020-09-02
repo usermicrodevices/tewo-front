@@ -46,10 +46,6 @@ class EventType extends Datum {
     },
   }
 
-  get rowBackgroundColor() {
-    return this.color;
-  }
-
   @computed get values() {
     return [
       {

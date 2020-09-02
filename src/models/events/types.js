@@ -5,6 +5,7 @@ import plural from 'utils/plural';
 import Table from 'models/table';
 import Filters from 'models/filters';
 import { getEventTypes } from 'services/events';
+import colorizedCell from 'elements/table/colorizedCell';
 
 const declareColumns = () => ({
   id: {
@@ -19,6 +20,7 @@ const declareColumns = () => ({
     title: 'Название',
     grow: 3,
     sortDirections: 'both',
+    transform: (_, data) => colorizedCell({ children: data.name, color: data.color }),
   },
   reactionTime: {
     isVisbleByDefault: true,

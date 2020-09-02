@@ -3,6 +3,7 @@ import Table from 'models/table';
 import Filters from 'models/filters';
 import { getEvents } from 'services/events';
 import TimeAgo from 'elements/timeago';
+import colorizedCell from 'elements/table/colorizedCell';
 
 const declareColumns = () => ({
   id: {
@@ -24,6 +25,7 @@ const declareColumns = () => ({
     title: 'Тип события',
     grow: 1,
     sortDirections: 'both',
+    transform: (_, data) => colorizedCell({ children: data.eventName, color: data.eventColor }),
   },
   eventPriority: {
     isVisbleByDefault: true,
