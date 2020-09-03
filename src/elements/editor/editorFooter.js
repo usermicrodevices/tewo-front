@@ -5,8 +5,11 @@ import { Button, Space } from 'antd';
 import style from './style.module.scss';
 
 const Footer = ({
-  isEdditing, isHaveErrors, isUpdating, form, setIsEdduting,
+  isEdditing, isHaveErrors, isUpdating, form, setIsEdduting, isEditable,
 }) => {
+  if (!isEditable) {
+    return null;
+  }
   if (isEdditing) {
     return (
       <Space>

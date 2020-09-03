@@ -10,7 +10,6 @@ import { FilterOutlined } from '@ant-design/icons';
 import { withSize } from 'react-sizeme';
 
 import Icon from 'elements/icon';
-import Loader from 'elements/loader';
 import Editor from 'elements/editor';
 import { ACTIONS_COLUMN_WIDT, SCROLL_PANE_WIDTH } from './row';
 import Content from './content';

@@ -107,6 +107,17 @@ class SalePoint extends Datum {
     ];
   }
 
+  get location() {
+    if (typeof this.mapPoint !== 'string') {
+      return null;
+    }
+    const location = this.mapPoint.split(',').map((v) => parseFloat(v));
+    if (location.length !== 2 || isNaN(location[0]) || isNaN(location[1])) {
+      return null;
+    }
+    return location;
+  }
+
   @computed get editable() {
     return {
       name: {

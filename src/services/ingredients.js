@@ -19,7 +19,6 @@ const getEvents = (session) => () => get('/refs/ingredients/').then((result) => 
           company: 'number',
         },
         {
-          plu: 'number',
           dimension: 'string',
         },
       )) {
@@ -28,8 +27,8 @@ const getEvents = (session) => () => get('/refs/ingredients/').then((result) => 
       const device = new Ingredient(session);
       const renamer = {
         id: 'id',
-        plu: 'plu',
         name: 'name',
+        dimension: 'dimension',
         company: 'companyId',
       };
 

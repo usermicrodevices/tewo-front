@@ -30,9 +30,12 @@ const Editor = ({ data, isModal, onCancel }) => {
   const { values, editable } = data;
   const tableDataSource = values.map((datum) => ({ key: datum.dataIndex, ...datum }));
   const formDataInitialValues = {};
-  for (const { dataIndex } of values) {
-    if (dataIndex in editable) {
-      formDataInitialValues[dataIndex] = data[dataIndex];
+
+  if (!editable) {
+    for (const { dataIndex } of values) {
+      if (dataIndex in editable) {
+        formDataInitialValues[dataIndex] = data[dataIndex];
+      }
     }
   }
 
@@ -48,6 +51,18 @@ const Editor = ({ data, isModal, onCancel }) => {
       </Space>
     </div>
   ) : () => <div className="ant-modal-title">{data.name}</div>;
+
+  const footer = (
+    <EditorFooter
+      isEditable={!!editable}
+      isEdditing={isEdditing}
+      isHaveErrors={isHaveErrors}
+      isUpdating={isUpdating}
+      form={form}
+      setIsEdduting={setIsEdduting}
+    />
+  );
+  const table = <EditroTable data={data} tableDataSource={tableDataSource} isEdditing={isEdditing} />;
 
   const EditorForm = ({ children }) => (
     <Form
@@ -65,12 +80,12 @@ const Editor = ({ data, isModal, onCancel }) => {
         title={<Title />}
         visible
         confirmLoading={isUpdating}
-        footer={<EditorFooter isEdditing={isEdditing} isHaveErrors={isHaveErrors} isUpdating={isUpdating} form={form} setIsEdduting={setIsEdduting} />}
+        footer={footer}
         onCancel={onCancel}
         width={800}
       >
         <EditorForm>
-          <EditroTable data={data} tableDataSource={tableDataSource} isEdditing={isEdditing} />
+          {table}
         </EditorForm>
       </Modal>
     );
@@ -79,8 +94,8 @@ const Editor = ({ data, isModal, onCancel }) => {
     <div className={style.space}>
       <EditorForm>
         <Title />
-        <EditroTable data={data} tableDataSource={tableDataSource} isEdditing={isEdditing} />
-        <EditorFooter isEdditing={isEdditing} isHaveErrors={isHaveErrors} isUpdating={isUpdating} form={form} setIsEdduting={setIsEdduting} />
+        {table}
+        {footer}
       </EditorForm>
     </div>
   );
