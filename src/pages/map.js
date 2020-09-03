@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card as AntdCard } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { withSize } from 'react-sizeme';
 import { Map as YandexMap, Placemark } from 'react-yandex-maps';
@@ -7,14 +8,15 @@ import Loader from 'elements/loader';
 import Card from 'elements/card';
 
 const Map = withSize()(inject('session')(observer(({ session, size }) => {
-  console.log('rerender');
   const { points } = session;
-  const companies = points.rawData.filter(({ location }) => location !== null).map(({ location, id }) => ({ location, id }));
-  if (!companies.length) {
-    return <Loader />;
+  const locations = points.rawData.filter(({ mapPoint }) => mapPoint !== null).map(({ location, id }) => ({ location, id }));
+  if (!locations.length) {
+    return (
+      <Loader />
+    );
   }
-  const rect = [companies[0].location.slice(), companies[0].location.slice()];
-  for (const { location } of companies) {
+  const rect = [locations[0].location.slice(), locations[0].location.slice()];
+  for (const { location } of locations) {
     rect[0][0] = Math.min(location[0], rect[0][0]);
     rect[1][0] = Math.max(location[0], rect[1][0]);
     rect[0][1] = Math.min(location[1], rect[0][1]);
@@ -26,18 +28,19 @@ const Map = withSize()(inject('session')(observer(({ session, size }) => {
   return (
     <YandexMap
       width={size.width}
-      height="100%"
+      height="calc(100% - 50px)"
       defaultState={{ center, zoom }}
     >
       {
-        companies.map(({ location, id }) => <Placemark key={id} geometry={location} />)
+        locations.map(({ location, id }) => <Placemark key={id} geometry={location} />)
       }
     </YandexMap>
   );
 })));
 
 const MapWraped = () => (
-  <Card title="Карта объектов">
+  <Card>
+    <div style={{ fontWeight: 600, fontSize: 20, marginBottom: 24 }}>Карта объектов</div>
     <Map />
   </Card>
 );
