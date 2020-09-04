@@ -50,7 +50,13 @@
   table {
     table-layout: fixed;
     th {
+      cursor: pointer;
+
+      &:hover {
+        background-color: #f0f0f0;
+      }
       &>div {
+        user-select: none;
         display: flex;
         justify-content: flex-start;
         align-items: center;

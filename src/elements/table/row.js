@@ -6,11 +6,12 @@ import Loader from 'elements/loader';
 import Cup from 'elements/cup';
 import classNames from 'classnames';
 import styles from './style.module.scss';
+import Cell from './cell';
 
 const ACTIONS_COLUMN_WIDT = 100;
 const SCROLL_PANE_WIDTH = 25;
 
-const Cell = (data, columns, freshItems, rowFunc, columnWidth, actions) => observer(({ index: rowIndex, style }) => {
+const Row = (data, columns, freshItems, rowFunc, columnWidth, actions) => observer(({ index: rowIndex, style }) => {
   const index = rowFunc(rowIndex);
   const rowData = data[index];
   if (typeof rowData === 'undefined') {
@@ -32,21 +33,16 @@ const Cell = (data, columns, freshItems, rowFunc, columnWidth, actions) => obser
           if (transform) {
             datum = transform(datum, rowData);
           }
-          if (typeof datum === 'undefined') {
-            datum = <Loader />;
-          }
-          if (datum === null) {
-            datum = '—';
-          }
           const cellStyle = { textAlign: align || 'left', width: columnWidth[columnIndex] };
           return (
-            <div
+            <Cell
               key={key}
               style={cellStyle}
+              width={columnWidth[columnIndex]}
               className={styles['virtual-table-cell']}
             >
               { datum }
-            </div>
+            </Cell>
           );
         })
       }
@@ -67,4 +63,4 @@ const Cell = (data, columns, freshItems, rowFunc, columnWidth, actions) => obser
   );
 });
 
-export { Cell as default, ACTIONS_COLUMN_WIDT, SCROLL_PANE_WIDTH };
+export { Row as default, ACTIONS_COLUMN_WIDT, SCROLL_PANE_WIDTH };
