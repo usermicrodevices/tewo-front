@@ -43,7 +43,9 @@ class Table {
     console.assert(typeof loader === 'function', `не получен лоадер для таблицы ${this.toString()}`);
     console.assert(typeof filter !== 'undefined', `Не передан фильтер для таблицы ${this.toString()}`);
     console.assert(this.toString() !== '[object Object]', 'Не реализован метод toString для наследника Table');
-    this.allColumns = Object.entries(columnsMap).map(([key, value]) => new Column(key, value));
+    this.allColumns = Object.entries(columnsMap)
+      .map(([key, value]) => new Column(key, value))
+      .sort(this.columnsSortPredicate(this.allColumns));
     console.assert(
       this.allColumns.filter(({ isAsyncorder }) => isAsyncorder).length === 1 || this.isImpossibleToBeAsync,
       `Таблица ${this.toString()} не получила корректного асинхронного ключа сортировки`,
@@ -82,6 +84,33 @@ class Table {
     }
     const offset = currentRow - UP_ROWS_STOCK;
     this.dataModel.load(offset);
+  }
+
+  get columnsOrder() {
+    return localStorage.get(this.columnsOrderKey);
+  }
+
+  set columnsOrder(order) {
+    localStorage.set(this.columnsOrderKey, order);
+    this.allColumns.replace(this.allColumns.slice().sort(this.columnsSortPredicate()));
+  }
+
+  columnsSortPredicate(defaultSort) {
+    let order = this.columnsOrder;
+    if (!Array.isArray(order)) {
+      order = defaultSort.map(({ key }) => key);
+      this.columnsOrder = order;
+    }
+    const ids = {};
+    order.forEach((key, id) => { ids[key] = id; });
+    return ({ key: keyA }, { key: keyB }) => Math.sign(ids[keyA] - ids[keyB]);
+  }
+
+  @action swapColumns(id) {
+    const order = this.columnsOrder;
+    console.assert(Array.isArray(order), 'columns order implementation error');
+    order.splice(id, 2, order[id + 1], order[id]);
+    this.columnsOrder = order;
   }
 
   // visibleColumns - ключи колонок, которые видны в данный момент
@@ -127,16 +156,22 @@ class Table {
       const valA = datumA[column];
       const valB = datumB[column];
       if (typeof valA === 'string') {
+        if (typeof valB !== 'string') {
+          return -1;
+        }
         const result = valB.localeCompare(valA);
         if (result !== 0) {
-          return result * 1;
+          return -result;
         }
       }
-      if (valA > valB) {
+      if (typeof valB === 'string') {
         return 1;
       }
-      if (valB > valA) {
+      if (valA > valB) {
         return -1;
+      }
+      if (valB > valA) {
+        return 1;
       }
       return Math.sign(datumA.id - datumB.id);
     };
@@ -159,6 +194,10 @@ class Table {
         direction: column.sortDirections !== 'ascend' ? 'descend' : 'ascend',
       };
     })());
+  }
+
+  @computed get columnsOrderKey() {
+    return `${this.toString()}_table_order_columns_settings`;
   }
 
   @computed get visibleColumnKey() {

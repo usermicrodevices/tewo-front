@@ -10,7 +10,7 @@ const COLUMNS = {
     isVisbleByDefault: true,
     title: 'ID',
     width: 70,
-    sortDirections: 'descend',
+    sortDirections: 'both',
     isAsyncorder: true,
   },
   name: {

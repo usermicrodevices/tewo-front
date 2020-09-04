@@ -1,6 +1,7 @@
 @import 'src/themes/constants';
 
 .menu {
+  margin-top: $generic-margin;
   border-top-right-radius: $border-radius-base;
   padding-top: 37px;
   overflow-y: auto;

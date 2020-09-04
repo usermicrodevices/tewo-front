@@ -22,7 +22,7 @@ const Cell = (data, columns, freshItems, rowFunc, columnWidth, actions) => obser
       className={classNames(
         styles.row,
         {
-          [styles.highlightnew]: freshItems.has(rowIndex),
+          [styles.highlightnew]: freshItems.has(index),
         },
       )}
     >

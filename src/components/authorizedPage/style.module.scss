@@ -5,7 +5,7 @@
     width: 100vw;
     height: 100vh;
     grid-template-columns: $menu-width auto;
-    grid-template-rows: ($header-height + $generic-margin) auto;
+    grid-template-rows: $header-height auto;
 
     .header {
         grid-column-start: 1;
@@ -14,9 +14,9 @@
 
     content {
         transition: all $transition-duration;
-        overflow-x: hidden;
+        overflow-x: auto;
         overflow-y: auto;
-        padding: 0 $generic-margin;
+        padding: $generic-margin $generic-margin 0 $generic-margin;
         display: flex;
         flex-direction: column;
     };
@@ -24,5 +24,4 @@
 
 .smallMenu.main {
     grid-template-columns: $small-menu-withd auto;
-    grid-template-rows: ($header-height + $generic-margin) auto;
 }
