@@ -66,32 +66,32 @@ const declareFilters = (session) => ({
     title: 'Момент налива',
     apply: (general, data) => general(data.device_date),
   },
-  company: {
+  company__id: {
     type: 'selector',
     title: 'Компания',
     apply: (general, data) => general(data.companyId),
     selector: () => session.companies.selector,
   },
-  sale_point: {
+  sale_point__id: {
     type: 'selector',
     title: 'Объект',
     apply: (general, data) => general(data.salePointId),
     selector: () => session.points.selector,
   },
-  device: {
+  device__id: {
     type: 'selector',
     title: 'Оборудование',
     apply: (general, data) => general(data.drink),
     selector: (filter) => session.devices.salePointsSelector(filter.data.sale_point),
   },
-  drink: {
+  drink__id: {
     type: 'selector',
     title: 'Напиток',
     apply: (general, data) => general(data.drink),
     selector: () => session.drinks.selector,
     disabled: (filter) => !filter.data.device,
   },
-  operation: {
+  operation__id: {
     type: 'selector',
     title: 'Тип оплаты',
     apply: (general, data) => general(data.sale_sum),

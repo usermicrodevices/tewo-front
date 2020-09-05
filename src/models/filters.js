@@ -46,7 +46,7 @@ const DATE_RANGE_TYPE = {
   },
   order: 2,
   isNullValue: (value) => {
-    if (Array.isArray(value) || value.length !== 2) {
+    if (!Array.isArray(value) || value.length !== 2) {
       return true;
     }
     const [min, max] = value;
