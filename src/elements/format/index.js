@@ -64,6 +64,12 @@ const Format = ({
   if (children === null) {
     return '—';
   }
+  if (React.isValidElement(children)) {
+    return children;
+  }
+  if (typeof children === 'boolean') {
+    return children ? 'Да' : 'Нет';
+  }
   let txt;
   if (typeof children === 'string') {
     if (isColor(children)) {
@@ -76,8 +82,6 @@ const Format = ({
     txt = children;
   } else if (typeof children === 'number') {
     txt = FORMAT.format(children);
-  } else if (typeof children === 'boolean') {
-    return children ? 'Да' : 'Нет';
   } else {
     console.error('unknown cell data', children);
     txt = `${children}`;

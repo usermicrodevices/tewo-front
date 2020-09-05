@@ -20,7 +20,7 @@ const declareColumns = () => ({
     title: 'Название',
     grow: 3,
     sortDirections: 'both',
-    transform: (_, data) => colorizedCell({ children: data.name, color: data.color }),
+    transform: (_, data, width) => colorizedCell({ children: data.name, color: data.color, width }),
   },
   reactionTime: {
     isVisbleByDefault: true,

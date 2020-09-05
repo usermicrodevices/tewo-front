@@ -29,14 +29,15 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions) => observ
     >
       {
         columns.map(({ align, key, transform }, columnIndex) => {
+          const width = columnWidth[columnIndex];
           let datum = rowData[key];
           if (transform) {
-            datum = transform(datum, rowData);
+            datum = transform(datum, rowData, width);
           }
-          const cellStyle = { textAlign: align || 'left', width: columnWidth[columnIndex] };
+          const cellStyle = { textAlign: align || 'left', width };
           return (
             <div key={key} style={cellStyle} className={styles['virtual-table-cell']}>
-              <Format width={columnWidth[columnIndex]}>{datum}</Format>
+              <Format width={width}>{datum}</Format>
             </div>
           );
         })
@@ -44,7 +45,7 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions) => observ
       { actions.isVisible && (
         <div
           style={{ width: ACTIONS_COLUMN_WIDT - SCROLL_PANE_WIDTH }}
-          className={classNames(styles['virtual-table-cell'], styles.lastcolumn)}
+          className={classNames(styles['virtual-table-cell'], styles.lastcolumn, styles.actions)}
         >
           { actions.isFormulaEditable && actions.isFormulaEditable(rowData, index) && (
             <Button type="link" onClick={() => { actions.onFillFormula(rowData); }} icon={<Cup isFilled={actions.isHaveFormula(rowData, index)} />} />

@@ -17,8 +17,14 @@
 
   .row {
     display: flex;
+    .actions>* {
+      opacity: 0;
+    }
 
     &:hover {
+      .actions>* {
+        opacity: 1;
+      }
       background-color: #fafafa;
     }
 

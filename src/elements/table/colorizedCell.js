@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Format from 'elements/format';
 
 import { parseColor } from 'utils/color';
 
@@ -29,11 +30,11 @@ const Cell = styled.div`
   }
 `;
 
-const ColorizedCell = ({ children, color: bgColor }) => {
+const ColorizedCell = ({ children, color: bgColor, width }) => {
   const color = textColorSelector(bgColor);
   const hoverBG = colorMultiplex(bgColor, 0.9, !!color) || '#fafafa';
   return (
-    <Cell color={bgColor || '#fafafa'} textColor={color} hoverColor={hoverBG}>{children}</Cell>
+    <Cell color={bgColor || '#fafafa'} textColor={color} hoverColor={hoverBG}><Format width={width}>{children}</Format></Cell>
   );
 };
 
