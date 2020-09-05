@@ -7,13 +7,27 @@ import Cup from 'elements/cup';
 import classNames from 'classnames';
 import Format from 'elements/format';
 import styles from './style.module.scss';
+import NoData from './noData';
 
 const ACTIONS_COLUMN_WIDT = 100;
 const SCROLL_PANE_WIDTH = 25;
+const MAX_ROWS_AMOUNT = 620000;
 
 const Row = (data, columns, freshItems, rowFunc, columnWidth, actions) => observer(({ index: rowIndex, style }) => {
   const index = rowFunc(rowIndex);
   const rowData = data[index];
+  if (rowIndex === MAX_ROWS_AMOUNT - 1) {
+    return (
+      <div style={style} className={styles.row}>
+        <NoData>
+          <div className={styles.nodatatext}>
+            <div className={styles.strong}>Достигнуто максимальное число строк</div>
+            <div>Измените найстройки фильтации или сортировки</div>
+          </div>
+        </NoData>
+      </div>
+    );
+  }
   if (typeof rowData === 'undefined') {
     return <div style={style}><Loader /></div>;
   }
@@ -59,4 +73,6 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions) => observ
   );
 });
 
-export { Row as default, ACTIONS_COLUMN_WIDT, SCROLL_PANE_WIDTH };
+export {
+  Row as default, ACTIONS_COLUMN_WIDT, SCROLL_PANE_WIDTH, MAX_ROWS_AMOUNT,
+};

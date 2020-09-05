@@ -4,7 +4,7 @@ import { VariableSizeList as List } from 'react-window';
 
 import Loader from 'elements/loader';
 
-import Cell from './row';
+import Cell, { MAX_ROWS_AMOUNT } from './row';
 import NoData from './noData';
 import style from './style.module.scss';
 
@@ -54,7 +54,14 @@ class Content extends React.Component {
       return <Loader className={style.loader} size="large" />;
     }
     if (data.length === 0) {
-      return <NoData />;
+      return (
+        <NoData>
+          <div className={style.nodatatext}>
+            <div className={style.strong}>По результатам поиска совпадений не найдено</div>
+            <div>Повторите поиск или измените фильтры</div>
+          </div>
+        </NoData>
+      );
     }
     return (
       <List
@@ -62,9 +69,9 @@ class Content extends React.Component {
         ref={this.listRef}
         columnCount={table.columns.length}
         height={DEFAULT_PRESCROLL_HEIGHT}
-        itemCount={data.length}
+        itemCount={Math.min(MAX_ROWS_AMOUNT, data.length)}
         estimatedItemSize={ROW_HEIGHT}
-        itemSize={() => ROW_HEIGHT}
+        itemSize={(row) => (row === MAX_ROWS_AMOUNT - 1 ? 400 : ROW_HEIGHT)}
         width={width}
         data={data}
       >

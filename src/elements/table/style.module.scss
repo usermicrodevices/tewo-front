@@ -15,6 +15,34 @@
     }
   }
 
+  .nodata {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 150px;
+    width: 100%;
+
+    > svg {
+      margin-bottom: 30px;
+      transform: scale(1.3);
+    }
+  }
+
+  .nodatatext {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    .strong {
+      font-size: 16px;
+      color: #262626;
+    }
+    color: #8C8C8C;
+    font-size: 14px;
+    line-height: 24px;
+  }
+
   .row {
     display: flex;
     .actions>* {
