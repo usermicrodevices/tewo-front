@@ -1,5 +1,4 @@
 import React from 'react';
-import { Card as AntdCard } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { withSize } from 'react-sizeme';
 import { Map as YandexMap, Placemark } from 'react-yandex-maps';

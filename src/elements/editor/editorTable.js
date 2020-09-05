@@ -1,19 +1,11 @@
 import React from 'react';
-import Loader from 'elements/loader';
 import { Table } from 'antd';
 
-import { isColor } from 'utils/color';
+import Format from 'elements/format';
 
 import CellEditor from './cellEditor';
 
 import style from './style.module.scss';
-
-const Color = ({ children }) => (
-  <>
-    <div className={style.color} style={{ backgroundColor: children }} />
-    {children}
-  </>
-);
 
 const EditorTable = ({ isEdditing, tableDataSource, data }) => (
   <Table
@@ -38,19 +30,7 @@ const EditorTable = ({ isEdditing, tableDataSource, data }) => (
               />
             );
           }
-          if (value === null) {
-            return '—';
-          }
-          if (typeof value === 'undefined') {
-            return <Loader />;
-          }
-          if (typeof value === 'boolean') {
-            return value ? 'Да' : 'Нет';
-          }
-          if (isColor(value)) {
-            return <Color>{value}</Color>;
-          }
-          return value;
+          return <Format>{value}</Format>;
         },
       },
     ]}

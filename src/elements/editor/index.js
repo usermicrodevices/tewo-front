@@ -31,7 +31,7 @@ const Editor = ({ data, isModal, onCancel }) => {
   const tableDataSource = values.map((datum) => ({ key: datum.dataIndex, ...datum }));
   const formDataInitialValues = {};
 
-  if (!editable) {
+  if (editable) {
     for (const { dataIndex } of values) {
       if (dataIndex in editable) {
         formDataInitialValues[dataIndex] = data[dataIndex];

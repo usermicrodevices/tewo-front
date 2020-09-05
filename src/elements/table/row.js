@@ -5,8 +5,8 @@ import { EditOutlined } from '@ant-design/icons';
 import Loader from 'elements/loader';
 import Cup from 'elements/cup';
 import classNames from 'classnames';
+import Format from 'elements/format';
 import styles from './style.module.scss';
-import Cell from './cell';
 
 const ACTIONS_COLUMN_WIDT = 100;
 const SCROLL_PANE_WIDTH = 25;
@@ -35,14 +35,9 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions) => observ
           }
           const cellStyle = { textAlign: align || 'left', width: columnWidth[columnIndex] };
           return (
-            <Cell
-              key={key}
-              style={cellStyle}
-              width={columnWidth[columnIndex]}
-              className={styles['virtual-table-cell']}
-            >
-              { datum }
-            </Cell>
+            <div key={key} style={cellStyle} className={styles['virtual-table-cell']}>
+              <Format width={columnWidth[columnIndex]}>{datum}</Format>
+            </div>
           );
         })
       }

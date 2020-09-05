@@ -1,4 +1,4 @@
-import { observable, computed, transaction } from 'mobx';
+import { observable, computed } from 'mobx';
 import Datum from 'models/datum';
 
 class SalePoint extends Datum {
@@ -57,7 +57,7 @@ class SalePoint extends Datum {
       {
         dataIndex: 'cityId',
         title: 'Город',
-        value: this.city,
+        value: this.cityName,
       },
       {
         dataIndex: 'address',
@@ -72,7 +72,7 @@ class SalePoint extends Datum {
       {
         dataIndex: 'companyId',
         title: 'Компания',
-        value: this.company,
+        value: this.companyName,
       },
       {
         dataIndex: 'createdDate',
@@ -158,10 +158,7 @@ class SalePoint extends Datum {
   }
 
   @computed get cityName() {
-    if (this.cityId === null) {
-      return null;
-    }
-    const city = this.session.locations.getCity(this.cityId);
+    const { city } = this;
     if (city === null || (typeof city === 'undefined')) {
       return city;
     }

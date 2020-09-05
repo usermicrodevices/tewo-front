@@ -45,7 +45,7 @@ class Table {
     console.assert(this.toString() !== '[object Object]', 'Не реализован метод toString для наследника Table');
     this.allColumns = Object.entries(columnsMap)
       .map(([key, value]) => new Column(key, value))
-      .sort(this.columnsSortPredicate(this.allColumns));
+      .sort(this.columnsSortPredicate(columnsMap));
     console.assert(
       this.allColumns.filter(({ isAsyncorder }) => isAsyncorder).length === 1 || this.isImpossibleToBeAsync,
       `Таблица ${this.toString()} не получила корректного асинхронного ключа сортировки`,
@@ -98,8 +98,8 @@ class Table {
   columnsSortPredicate(defaultSort) {
     let order = this.columnsOrder;
     if (!Array.isArray(order)) {
-      order = defaultSort.map(({ key }) => key);
-      this.columnsOrder = order;
+      order = Object.keys(defaultSort);
+      localStorage.set(this.columnsOrderKey, order);
     }
     const ids = {};
     order.forEach((key, id) => { ids[key] = id; });

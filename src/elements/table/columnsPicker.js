@@ -6,10 +6,6 @@ import {
 
 import Icon from 'elements/icon';
 
-function swap(arr, i) {
-  arr.splice(i, 2, arr[i + 1], arr[i]);
-}
-
 const ColumnsPicker = ({ table, onChange, visibleColumns }) => (
   <Card>
     <Checkbox.Group onChange={onChange} value={visibleColumns}>
