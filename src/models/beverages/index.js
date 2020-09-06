@@ -8,7 +8,7 @@ const declareColumns = (session) => ({
   id: {
     isVisbleByDefault: true,
     title: 'ID',
-    width: 100,
+    width: 110,
     isAsyncorder: true,
   },
   cid: {

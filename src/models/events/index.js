@@ -9,7 +9,7 @@ const declareColumns = () => ({
   id: {
     isVisbleByDefault: true,
     title: 'ID',
-    width: 70,
+    width: 100,
     isAsyncorder: true,
     isDefaultSort: true,
     sortDirections: 'descend',
