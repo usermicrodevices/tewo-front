@@ -1,14 +1,10 @@
 import React from 'react';
-import {
-  Tooltip, Dropdown, Button, Space,
-} from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
-import { Map as YandexMap, Placemark } from 'react-yandex-maps';
+import { Tooltip } from 'antd';
 
 import Loader from 'elements/loader';
 import { isColor } from 'utils/color';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import { Location, tryParseLocation } from './location';
 import style from './style.module.scss';
 
 const FORMAT = new Intl.NumberFormat('ru-RU');
@@ -18,41 +14,6 @@ const Color = ({ children }) => (
     <div className={style.color} style={{ backgroundColor: children }} />
     {children}
   </>
-);
-
-const LOCATION_SEPARATOR = ', ';
-
-const tryParseLocation = (txt) => {
-  const coordinates = txt.split(LOCATION_SEPARATOR).map(parseFloat);
-  if (coordinates.length !== 2) {
-    return null;
-  }
-  // тут аккуратно. Написано с учетом nan в качестве значения
-  if (Math.abs(coordinates[0]) <= 90 && Math.abs(coordinates[1]) <= 180) {
-    return coordinates;
-  }
-  return null;
-};
-
-const Location = ({ location }) => (
-  <Dropdown
-    overlay={() => (
-      <div>
-        <YandexMap
-          defaultState={{ center: location, zoom: 12 }}
-        >
-          <Placemark geometry={location} />
-        </YandexMap>
-      </div>
-    )}
-  >
-    <Space>
-      <span>{location.map((v) => Math.round(v * 100) / 100).join(LOCATION_SEPARATOR)}</span>
-      <CopyToClipboard text={location.join(LOCATION_SEPARATOR)}>
-        <Button type="text" icon={<CopyOutlined />} />
-      </CopyToClipboard>
-    </Space>
-  </Dropdown>
 );
 
 const Format = ({

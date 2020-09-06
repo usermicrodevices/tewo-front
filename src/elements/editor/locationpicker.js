@@ -32,7 +32,7 @@ const LocationPicker = ({ getFieldValue, setFieldsValue, name }) => {
       setValue={(pos) => setFieldsValue({ [name]: pos })}
     />
   );
-  // Так и не понял почему, но пока не добавишь Form.Item в submit значение не попадает в submit
+  // Так и не понял почему, но пока не добавишь Form.Item значение не попадает в submit
   return (
     <>
       <Form.Item noStyle name={name}><Input style={{ display: 'none' }} /></Form.Item>
