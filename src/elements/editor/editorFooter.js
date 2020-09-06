@@ -5,7 +5,7 @@ import { Button, Space } from 'antd';
 import style from './style.module.scss';
 
 const Footer = ({
-  isEdditing, isHaveErrors, isUpdating, form, setIsEdduting, isEditable,
+  isEdditing, isHaveErrors, isUpdating, form, setIsEdditing, isEditable,
 }) => {
   if (!isEditable) {
     return null;
@@ -13,7 +13,7 @@ const Footer = ({
   if (isEdditing) {
     return (
       <Space>
-        <Button disabled={isUpdating} onClick={() => { setIsEdduting(false); }}>Отмена</Button>
+        <Button disabled={isUpdating} onClick={() => { setIsEdditing(false); }}>Отмена</Button>
         <Button
           disabled={isHaveErrors}
           loading={isUpdating}
@@ -27,7 +27,7 @@ const Footer = ({
   }
   return (
     <div className={style.footer}>
-      <Button type="text" icon={<EditOutlined />} onClick={() => { setIsEdduting(true); }}>Редактировать</Button>
+      <Button type="text" icon={<EditOutlined />} onClick={() => { setIsEdditing(true); }}>Редактировать</Button>
     </div>
   );
 };

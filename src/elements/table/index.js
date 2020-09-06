@@ -69,7 +69,7 @@ class TableComponent extends React.Component {
         actions,
         elementForEdit,
       },
-      filter: { searchText, filters },
+      filter: { searchText, filters, isShowSearch },
       size,
     } = this.props;
     const columnWidth = calculateColumnWidth(size.width, columns.map(({ width }) => width), actions);
@@ -79,7 +79,7 @@ class TableComponent extends React.Component {
       <div className={style.whole}>
         { elementForEdit && <Editor data={elementForEdit} isModal onCancel={this.onCancelEdditing} /> }
         <div className={style.buttons}>
-          <Input prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} />
+          { isShowSearch && <Input prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} /> }
           { process.env.NODE_ENV !== 'production' && <p>{`Доступно ${data.length} записей`}</p> }
           <Space>
             <Dropdown overlay={<ColumnsPicker onReorder={this.onReorder} onChange={this.onColumnsPicked} visibleColumns={visibleColumns} />} placement="bottomRight">

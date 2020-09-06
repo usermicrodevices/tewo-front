@@ -62,21 +62,23 @@ class Drinks extends Table {
 
   get isImpossibleToBeAsync() { return true; }
 
-  actions = {
-    isVisible: true,
-    isEditable: () => true,
-    isFormulaEditable: () => true,
-    isHaveFormula: ({ isHaveFormula }) => isHaveFormula,
-    onEdit: (datum) => {
-      this.elementForEdit = datum;
-    },
-    onFillFormula: (datum) => {
-      this.elementForEdit = new FormulaEditor(datum);
-    },
-  };
+  actions;
 
   constructor(session) {
     super(COLUMNS, getDrinks(session), new Filters(declareFilters(session)));
+
+    this.actions = {
+      isVisible: true,
+      isEditable: () => true,
+      isFormulaEditable: () => true,
+      isHaveFormula: ({ isHaveFormula }) => isHaveFormula,
+      onEdit: (datum) => {
+        this.elementForEdit = datum;
+      },
+      onFillFormula: (datum) => {
+        this.elementForEdit = new FormulaEditor(datum, session);
+      },
+    };
   }
 
   toString() {

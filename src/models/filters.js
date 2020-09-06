@@ -117,6 +117,8 @@ class Filters {
 
   filters;
 
+  isShowSearch = true;
+
   @observable searchText = '';
 
   constructor(filters) {

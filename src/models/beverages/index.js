@@ -111,6 +111,7 @@ class Beverages extends Table {
 
   constructor(session) {
     super(declareColumns(session), getBeverages(session), new Filters(declareFilters(session)));
+    this.filter.isShowSearch = false;
   }
 
   toString() {

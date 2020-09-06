@@ -28,3 +28,18 @@
 .space>* {
     margin-bottom: 8px;
 }
+
+.noformula {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    .strong {
+        font-size: 16px;
+        color: #262626;
+    }
+    color: #8C8C8C;
+    font-size: 14px;
+    line-height: 24px;
+}

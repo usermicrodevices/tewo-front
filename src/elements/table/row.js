@@ -65,7 +65,7 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions) => observ
             <Button type="link" onClick={() => { actions.onFillFormula(rowData); }} icon={<Cup isFilled={actions.isHaveFormula(rowData, index)} />} />
           )}
           { actions.isEditable(rowData, index) && (
-            <Button type="link" onClick={() => { actions.onEdit(rowData); }} icon={<EditOutlined />} />
+            <Button type="link" onClick={() => { actions.onEdit(rowData); }} icon={<EditOutlined style={{ transform: 'scale(1.37)' }} />} />
           )}
         </div>
       )}

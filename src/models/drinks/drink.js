@@ -1,4 +1,4 @@
-import { computed } from 'mobx';
+import { computed, observable } from 'mobx';
 
 import Datum from 'models/datum';
 
@@ -11,7 +11,7 @@ class Drink extends Datum {
 
   companyId;
 
-  isHaveFormula = false;
+  @observable formula = [];
 
   session;
 
@@ -19,6 +19,10 @@ class Drink extends Datum {
     super(() => Promise.resolve());
 
     this.session = session;
+  }
+
+  @computed get isHaveFormula() {
+    return this.formula.length > 0;
   }
 
   @computed get company() {

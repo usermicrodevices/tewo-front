@@ -5,30 +5,32 @@ import {
 } from 'antd';
 import { observer } from 'mobx-react';
 import Icon from 'elements/icon';
+import FormulaEditor from 'models/drinks/formulaEditor';
 
-import EditroTable from './editorTable';
+import EditorTable from './editorTable';
 import EditorFooter from './editorFooter';
+import FormulaEditroTable from './formulaEditorTable';
 
 import style from './style.module.scss';
 
 const Editor = ({ data, isModal, onCancel }) => {
-  const [isEdditing, setIsEdduting] = useState(false);
+  const [isEdditing, setIsEdditing] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [form] = Form.useForm();
+  const isFormulaMode = data instanceof FormulaEditor;
 
   if (typeof data === 'undefined') {
     return null;
   }
 
   const onSave = (changes) => {
-    data.update(changes).finally(() => { setIsEdduting(false); setIsUpdating(false); });
+    data.update(changes).finally(() => { setIsEdditing(false); setIsUpdating(false); });
     setIsUpdating(true);
   };
 
   const isHaveErrors = form.getFieldsError().filter(({ errors }) => errors.length).length !== 0;
 
   const { values, editable } = data;
-  const tableDataSource = values.map((datum) => ({ key: datum.dataIndex, ...datum }));
   const formDataInitialValues = {};
 
   if (editable) {
@@ -59,10 +61,13 @@ const Editor = ({ data, isModal, onCancel }) => {
       isHaveErrors={isHaveErrors}
       isUpdating={isUpdating}
       form={form}
-      setIsEdduting={setIsEdduting}
+      setIsEdditing={(v) => { setIsEdditing(v); if (isFormulaMode) { data.cancel(); } }}
     />
   );
-  const table = <EditroTable data={data} tableDataSource={tableDataSource} isEdditing={isEdditing} />;
+
+  const table = isFormulaMode
+    ? <FormulaEditroTable data={data} isEdditing={isEdditing} />
+    : <EditorTable data={data} isEdditing={isEdditing} />;
 
   const EditorForm = ({ children }) => (
     <Form

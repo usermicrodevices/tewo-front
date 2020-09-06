@@ -100,6 +100,7 @@ class Events extends Table {
   constructor(session) {
     const filters = new Filters(declareFilters(session));
     super(declareColumns(), getEvents(session), filters);
+    this.filter.isShowSearch = false;
   }
 
   toString() {
