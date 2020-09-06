@@ -23,9 +23,9 @@ const declareColumns = () => ({
   eventName: {
     isVisbleByDefault: true,
     title: 'Тип события',
-    grow: 1,
+    grow: 2,
     sortDirections: 'both',
-    transform: (_, data) => colorizedCell({ children: data.eventName, color: data.eventColor }),
+    transform: (_, data, width) => colorizedCell({ children: data.eventName, color: data.eventColor, width }),
   },
   eventPriority: {
     isVisbleByDefault: true,
