@@ -41,7 +41,7 @@ const getRecipes = () => get(RECIPES_LOCATION).then((data) => {
 });
 
 const applyRecipe = (drink, recipe) => new Promise((resolve, reject) => {
-  Promise.all(recipe.filter(({ recipeNoteId }) => recipeNoteId !== null).map(({ id }) => del(`/refs/recipes/${id}/`))).then(() => {
+  Promise.all(recipe.filter(({ recipeNoteId }) => recipeNoteId !== null).map(({ recipeNoteId }) => del(`/refs/recipes/${recipeNoteId}/`))).then(() => {
     Promise.all(recipe.map(({ id: ingredient, amount }) => post('/refs/recipes/', { ingredient, amount, drink: drink.id }))).then((response) => {
       if (!Array.isArray(response)) {
         console.error('Неожиданный ответ на обновление ингридиентов', response);
