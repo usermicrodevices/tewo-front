@@ -1,34 +1,35 @@
 import { observable, computed } from 'mobx';
 import Datum from 'models/datum';
+import { min } from 'moment';
 
 class SalePoint extends Datum {
-  id;
+  id = null;
 
-  @observable name;
+  @observable name = null;
 
-  @observable address;
+  @observable address = null;
 
-  @observable companyId;
+  @observable companyId = null;
 
-  createdDate;
+  createdDate = null;
 
-  @observable mapPoint;
+  @observable mapPoint = null;
 
-  @observable person;
+  @observable person = null;
 
-  @observable phone;
+  @observable phone = null;
 
-  @observable email;
+  @observable email = null;
 
-  @observable cityId;
+  @observable cityId = null;
 
-  isOutOfWaterQuality;
+  isOutOfWaterQuality = null;
 
-  isHaveDisabledEquipment;
+  isHaveDisabledEquipment = null;
 
-  isNeedOverhaul;
+  isNeedOverhaul = null;
 
-  isHaveOutdatedEvents;
+  isHaveOutdatedEvents = null;
 
   session;
 
@@ -77,7 +78,7 @@ class SalePoint extends Datum {
       {
         dataIndex: 'createdDate',
         title: 'Время внесения в базу',
-        value: this.createdDate.format('D MMMM yyyy года'),
+        value: this.createdDate ? this.createdDate.format('D MMMM yyyy года') : null,
       },
       {
         dataIndex: 'person',

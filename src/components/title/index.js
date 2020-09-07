@@ -1,6 +1,10 @@
 import React from 'react';
+import { inject, observer } from 'mobx-react';
 import { useLocation, Link } from 'react-router-dom';
-import { PageHeader, Menu } from 'antd';
+import {
+  PageHeader, Menu, Space, Button,
+} from 'antd';
+import Icon from 'elements/icon';
 
 import style from './style.module.scss';
 
@@ -9,6 +13,7 @@ const Title = ({
   tabs,
   buttons,
   breadcrumb,
+  table,
 }) => {
   const { pathname: currentPath } = useLocation();
   const findCurrentTab = () => {
@@ -23,6 +28,7 @@ const Title = ({
     return [];
   };
   const currentTab = findCurrentTab();
+
   return (
     <PageHeader
       title={children}
@@ -43,4 +49,4 @@ const Title = ({
   );
 };
 
-export default Title;
+export default inject('table')(observer(Title));

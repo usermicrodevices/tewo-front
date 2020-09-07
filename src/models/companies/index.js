@@ -1,9 +1,11 @@
 /* eslint class-methods-use-this: "off" */
+import { observable, computed, action } from 'mobx';
 
 import Table from 'models/table';
 import getCompanies from 'services/companies';
 import Filters from 'models/filters';
-import { observable, computed } from 'mobx';
+
+import Company from './company';
 
 const COLUMNS_LIST = {
   id: {
@@ -39,6 +41,10 @@ const COLUMNS_LIST = {
 class Companies extends Table {
   chart = null;
 
+  title = {
+    name: 'Список объектов',
+  };
+
   get isImpossibleToBeAsync() { return true; }
 
   actions = {
@@ -51,8 +57,12 @@ class Companies extends Table {
 
   @observable elementForEdit = undefined;
 
+  session;
+
   constructor(session) {
     super(COLUMNS_LIST, getCompanies(session), new Filters({}));
+
+    this.session = session;
   }
 
   @computed get selector() {

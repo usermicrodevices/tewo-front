@@ -10,7 +10,7 @@ import { FilterOutlined } from '@ant-design/icons';
 import { withSize } from 'react-sizeme';
 
 import Icon from 'elements/icon';
-import Editor from 'elements/editor';
+
 import { ACTIONS_COLUMN_WIDT, SCROLL_PANE_WIDTH } from './row';
 import Content from './content';
 import ColumnsPicker from './columnsPicker';
@@ -55,11 +55,6 @@ class TableComponent extends React.Component {
     this.setState({ isFiltersOpen: !isFiltersOpen });
   }
 
-  onCancelEdditing = () => {
-    const { table } = this.props;
-    table.elementForEdit = null;
-  }
-
   render() {
     const {
       table: {
@@ -67,7 +62,6 @@ class TableComponent extends React.Component {
         visibleColumns,
         columns,
         actions,
-        elementForEdit,
       },
       filter: { searchText, filters, isShowSearch },
       size,
@@ -77,7 +71,6 @@ class TableComponent extends React.Component {
     const isHaveFilters = Object.keys(filters).length !== 0;
     return (
       <div className={style.whole}>
-        { elementForEdit && <Editor data={elementForEdit} isModal onCancel={this.onCancelEdditing} /> }
         <div className={style.buttons}>
           { isShowSearch && <Input prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} /> }
           { process.env.NODE_ENV !== 'production' && <p>{`Доступно ${data.length} записей`}</p> }

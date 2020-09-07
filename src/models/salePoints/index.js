@@ -1,9 +1,11 @@
 /* eslint class-methods-use-this: "off" */
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 
 import Table from 'models/table';
 import getSalePoints from 'services/salePoints';
 import Filters from 'models/filters';
+
+import Point from './salePoint';
 
 const COLUMNS = {
   id: {
@@ -144,9 +146,12 @@ class SalePoints extends Table {
 
   get isImpossibleToBeAsync() { return true; }
 
+  session;
+
   constructor(session) {
     const filters = new Filters(declareFilters(session));
     super(COLUMNS, getSalePoints(session), filters);
+    this.session = session;
   }
 
   toString() {
@@ -162,6 +167,10 @@ class SalePoints extends Table {
       return undefined;
     }
     return this.rawData.map(({ id, name }) => [id, name]);
+  }
+
+  @action create() {
+    this.elementForEdit = new Point(this.session);
   }
 }
 

@@ -259,7 +259,7 @@ class Filters {
       console.assert(adaptedValue.length === operators.length);
       return adaptedValue
         .filter((v) => v !== null && v !== '')
-        .map((valueDatum, i) => `${key}__${operators[i]}=${valueDatum}`)
+        .map((valueDatum, i) => `${key}__${operators[i]}=${typeof valueDatum === 'boolean' ? +valueDatum : valueDatum}`)
         .join('&');
     }).join('&');
   }

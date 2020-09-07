@@ -66,7 +66,7 @@ const declareFilters = (session) => ({
     title: 'Момент налива',
     apply: (general, data) => general(data.device_date),
   },
-  company__id: {
+  device__sale_point__company__id: {
     type: 'selector',
     title: 'Компания',
     apply: (general, data) => general(data.companyId),

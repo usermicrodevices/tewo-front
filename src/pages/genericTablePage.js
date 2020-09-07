@@ -35,6 +35,11 @@ class GenericTablePage extends React.Component {
     clearTimeout(this.updateTimeout);
   }
 
+  onCancelEdditing = () => {
+    const { storageName, session } = this.props;
+    session[storageName].elementForEdit = null;
+  }
+
   render() {
     const {
       location,
@@ -59,10 +64,12 @@ class GenericTablePage extends React.Component {
       return <Redirect to={`${path}/${company.id}`} />;
     }
     const isNeedToRedirect = location.search.slice(1) !== filter.search;
+    const { elementForEdit } = storage;
     return (
       <>
         { isNeedToRedirect && <Redirect to={`${location.pathname}?${filter.search}`} /> }
         <Provider table={storage} filter={filter}>
+          { elementForEdit && <Editor data={elementForEdit} isModal onCancel={this.onCancelEdditing} /> }
           { children }
         </Provider>
       </>
