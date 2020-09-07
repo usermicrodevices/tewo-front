@@ -16,7 +16,7 @@ function convert(datum) {
     return null;
   }
   const {
-    drink, ingredient, amount, id,
+    ingredient, amount, id,
   } = datum;
   return { id: ingredient, amount, recipeNoteId: id };
 }
@@ -46,7 +46,7 @@ const applyRecipe = (drink, recipe) => new Promise((resolve, reject) => {
       if (!Array.isArray(response)) {
         console.error('Неожиданный ответ на обновление ингридиентов', response);
       }
-      return response.map((datum) => convert(datum)).filter((v) => v !== null);
+      resolve(response.map((datum) => convert(datum)).filter((v) => v !== null));
     }).catch(reject);
   }).catch(reject);
 });

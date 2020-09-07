@@ -52,7 +52,7 @@ class RecipeEditor {
   @action remove(id) {
     this.recipe.splice(id, 1);
     if (this.recipe.length === 0) {
-      this.cancel();
+      this.recipe = [{ id: null, amount: null, recipeNoteId: null }];
     }
   }
 
