@@ -25,13 +25,16 @@ class RecipeEditor {
   }
 
   @computed get ingredients() {
-    const { selector } = this.session.ingredients;
     return this.recipe.ingredients.map(({ id, amount }) => ({
       id,
       amount,
-      selector,
       ingredient: id ? this.session.ingredients.get(id) : id,
     }));
+  }
+
+  @computed get ingredientsSelector() {
+    const usedIngredients = new Set((this.recipe.ingredients || []).map(({ id }) => id));
+    return this.session.ingredients.selector.filter(([id]) => !usedIngredients.has(id));
   }
 
   @action setIngredient(itm, val) {
@@ -48,6 +51,9 @@ class RecipeEditor {
 
   @action remove(id) {
     this.recipe.ingredients.splice(id, 1);
+    if (this.recipe.ingredients.length === 0) {
+      this.cancel();
+    }
   }
 
   @computed get isEmpty() {

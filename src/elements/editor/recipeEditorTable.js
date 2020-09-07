@@ -14,6 +14,17 @@ import style from './style.module.scss';
 const { Option } = Select;
 
 const RecipeEditroTable = ({ data, isEdditing }) => {
+  if (!isEdditing && data.isEmpty) {
+    return (
+      <div className={style.norecipe}>
+        <NoData>
+          <div className={style.strong}>Рецептура не заполнена</div>
+          <div>Начните редактирование</div>
+        </NoData>
+      </div>
+    );
+  }
+
   const ds = data.ingredients.map(({
     id: ingredientId, amount, ingredient, selector,
   }, index) => ({
@@ -25,11 +36,19 @@ const RecipeEditroTable = ({ data, isEdditing }) => {
     measure: ingredient ? ingredient.dimension : ingredient,
   }));
 
+  const { ingredientsSelector } = data;
+
   const fotmater = (value) => <Format>{value}</Format>;
 
   const selectorRenderer = (_, rowData, id) => (
-    <Select style={{ width: 300 }} min={0} onChange={(ingredientId) => { data.setIngredient(id, ingredientId); }} value={rowData.ingredientId}>
-      { rowData.selector.map(([value, label]) => <Option key={value} value={value}>{label}</Option>)}
+    <Select
+      style={{ width: 300 }}
+      min={0}
+      onChange={(ingredientId) => { data.setIngredient(id, ingredientId); }}
+      value={rowData.name}
+      disabled={ingredientsSelector.length === 0}
+    >
+      { ingredientsSelector.map(([value, label]) => <Option key={value} value={value}>{label}</Option>)}
     </Select>
   );
 
@@ -71,17 +90,6 @@ const RecipeEditroTable = ({ data, isEdditing }) => {
     },
   ];
 
-  if (!isEdditing && data.isEmpty) {
-    return (
-      <div className={style.norecipe}>
-        <NoData>
-          <div className={style.strong}>Рецептура не заполнена</div>
-          <div>Начните редактирование</div>
-        </NoData>
-      </div>
-    );
-  }
-
   return (
     <>
       { ds.length > 0 && (
@@ -92,7 +100,11 @@ const RecipeEditroTable = ({ data, isEdditing }) => {
           pagination={false}
         />
       )}
-      { isEdditing && <Button icon={<PlusOutlined />} onClick={() => { data.add(); }}>Добавить ингридиент</Button> }
+      { isEdditing && (
+        <Button disabled={ingredientsSelector.length === 0} icon={<PlusOutlined />} onClick={() => { data.add(); }}>
+          {ingredientsSelector.length > 0 ? 'Добавить ингридиент' : 'В рецепте использованы все ингридиенты'}
+        </Button>
+      )}
     </>
   );
 };
