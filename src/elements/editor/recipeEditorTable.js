@@ -13,8 +13,8 @@ import style from './style.module.scss';
 
 const { Option } = Select;
 
-const FormulaEditroTable = ({ data, isEdditing }) => {
-  const ds = data.elems.map(({
+const RecipeEditroTable = ({ data, isEdditing }) => {
+  const ds = data.ingredients.map(({
     id: ingredientId, amount, ingredient, selector,
   }, index) => ({
     id: index + 1,
@@ -38,7 +38,7 @@ const FormulaEditroTable = ({ data, isEdditing }) => {
   );
 
   const remover = (_, __, id) => {
-    if (isEdditing) {
+    if (isEdditing && !data.isEmpty) {
       return <Button type="text" icon={<Icon name="trash-2-outline" />} onClick={() => { data.remove(id); }} />;
     }
     return null;
@@ -71,9 +71,9 @@ const FormulaEditroTable = ({ data, isEdditing }) => {
     },
   ];
 
-  if (!isEdditing && ds.length === 0) {
+  if (!isEdditing && data.isEmpty) {
     return (
-      <div className={style.noformula}>
+      <div className={style.norecipe}>
         <NoData>
           <div className={style.strong}>Рецептура не заполнена</div>
           <div>Начните редактирование</div>
@@ -97,4 +97,4 @@ const FormulaEditroTable = ({ data, isEdditing }) => {
   );
 };
 
-export default observer(FormulaEditroTable);
+export default observer(RecipeEditroTable);

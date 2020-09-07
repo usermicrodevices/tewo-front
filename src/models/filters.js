@@ -231,8 +231,8 @@ class Filters {
           return false;
         }
       }
-      for (const key of Object.keys(data)) {
-        if (key in this.data) {
+      for (const key of Object.keys(this.data)) {
+        if (key in data) {
           const filter = this.filters[key];
           if (!filter.apply((d) => FILTER_TYPES[filter.type].apply(d, this.data[key]), data)) {
             return false;

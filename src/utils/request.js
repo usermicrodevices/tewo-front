@@ -20,4 +20,10 @@ const get = (endpoint) => request().get(endpoint).then(({ data }) => data);
 
 const post = (endpoint, data) => request().post(endpoint, data).then(({ data: result }) => result);
 
-export { get, post, BEARER_KEY };
+const patch = (endpoint, data) => request().patch(endpoint, data).then(({ data: result }) => result);
+
+const del = (endpoint) => request().delete(endpoint).then(({ data: result }) => result);
+
+export {
+  get, post, patch, del, BEARER_KEY,
+};

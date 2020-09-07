@@ -61,8 +61,8 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions) => observ
           style={{ width: ACTIONS_COLUMN_WIDT - SCROLL_PANE_WIDTH }}
           className={classNames(styles['virtual-table-cell'], styles.lastcolumn, styles.actions)}
         >
-          { actions.isFormulaEditable && actions.isFormulaEditable(rowData, index) && (
-            <Button type="link" onClick={() => { actions.onFillFormula(rowData); }} icon={<Cup isFilled={actions.isHaveFormula(rowData, index)} />} />
+          { actions.isRecipeEditable && actions.isRecipeEditable(rowData, index) && (
+            <Button type="link" onClick={() => { actions.onFillRecipe(rowData); }} icon={<Cup isFilled={actions.isHaveRecipe(rowData, index)} />} />
           )}
           { actions.isEditable(rowData, index) && (
             <Button type="link" onClick={() => { actions.onEdit(rowData); }} icon={<EditOutlined style={{ transform: 'scale(1.37)' }} />} />

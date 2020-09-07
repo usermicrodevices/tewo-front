@@ -5,11 +5,11 @@ import {
 } from 'antd';
 import { observer } from 'mobx-react';
 import Icon from 'elements/icon';
-import FormulaEditor from 'models/drinks/formulaEditor';
+import RecipeEditor from 'models/drinks/recipeEditor';
 
 import EditorTable from './editorTable';
 import EditorFooter from './editorFooter';
-import FormulaEditroTable from './formulaEditorTable';
+import RecipeEditroTable from './recipeEditorTable';
 
 import style from './style.module.scss';
 
@@ -17,7 +17,7 @@ const Editor = ({ data, isModal, onCancel }) => {
   const [isEdditing, setIsEdditing] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [form] = Form.useForm();
-  const isFormulaMode = data instanceof FormulaEditor;
+  const isRecipeMode = data instanceof RecipeEditor;
 
   if (typeof data === 'undefined') {
     return null;
@@ -61,12 +61,12 @@ const Editor = ({ data, isModal, onCancel }) => {
       isHaveErrors={isHaveErrors}
       isUpdating={isUpdating}
       form={form}
-      setIsEdditing={(v) => { setIsEdditing(v); if (isFormulaMode) { data.cancel(); } }}
+      setIsEdditing={(v) => { setIsEdditing(v); if (isRecipeMode) { data.cancel(); } }}
     />
   );
 
-  const table = isFormulaMode
-    ? <FormulaEditroTable data={data} isEdditing={isEdditing} />
+  const table = isRecipeMode
+    ? <RecipeEditroTable data={data} isEdditing={isEdditing} />
     : <EditorTable data={data} isEdditing={isEdditing} />;
 
   const EditorForm = ({ children }) => (

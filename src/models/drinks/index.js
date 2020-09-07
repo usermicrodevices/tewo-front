@@ -4,7 +4,7 @@ import { observable, computed } from 'mobx';
 import Table from 'models/table';
 import Filters from 'models/filters';
 import getDrinks from 'services/drinks';
-import FormulaEditor from './formulaEditor';
+import RecipeEditor from './recipeEditor';
 
 const COLUMNS = {
   id: {
@@ -47,10 +47,10 @@ const declareFilters = (session) => ({
     apply: (general, data) => general(data.companyId),
     selector: () => session.companies.selector,
   },
-  isHaveFormula: {
+  isHaveRecipe: {
     type: 'checkbox',
     title: 'Заполнена ли рецептура',
-    apply: (_, data) => data.isHaveFormula,
+    apply: (_, data) => data.isHaveRecipe,
     passiveValue: false,
   },
 });
@@ -70,13 +70,13 @@ class Drinks extends Table {
     this.actions = {
       isVisible: true,
       isEditable: () => true,
-      isFormulaEditable: () => true,
-      isHaveFormula: ({ isHaveFormula }) => isHaveFormula,
+      isRecipeEditable: () => true,
+      isHaveRecipe: ({ isHaveRecipe }) => isHaveRecipe,
       onEdit: (datum) => {
         this.elementForEdit = datum;
       },
-      onFillFormula: (datum) => {
-        this.elementForEdit = new FormulaEditor(datum, session);
+      onFillRecipe: (datum) => {
+        this.elementForEdit = new RecipeEditor(datum, session);
       },
     };
   }
