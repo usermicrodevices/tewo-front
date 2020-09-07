@@ -1,62 +1,54 @@
-import { post, get, patch } from 'utils/request';
+import { post, get, del } from 'utils/request';
 import checkData from 'utils/dataCheck';
 
 const RECIPES_LOCATION = 'refs/recipes';
+
+const MUST_BE = {
+  id: 'number',
+  drink: 'number',
+  amount: 'number',
+  ingredient: 'number',
+};
+
+function convert(datum) {
+  if (!checkData(datum, MUST_BE)) {
+    console.error(`ошиюка при проверке данных ${RECIPES_LOCATION}, данные проигнорированы`, datum);
+    return null;
+  }
+  const {
+    drink, ingredient, amount, id,
+  } = datum;
+  return { id: ingredient, amount, recipeNoteId: id };
+}
 
 const getRecipes = () => get(RECIPES_LOCATION).then((data) => {
   if (!Array.isArray(data)) {
     console.error(` ожидается массив, получен ${typeof data}`, data);
     return [];
   }
-  const mustBe = {
-    id: 'number',
-    drink: 'number',
-    company: 'number',
-    ingredients: 'array',
-  };
-  return data.map((datum, index) => {
-    if (!checkData(datum, mustBe)) {
-      console.error(`ошиюка при проверке данных ${RECIPES_LOCATION} #${index}, данные проигнорированы`, datum);
-      return null;
+  const result = new Map();
+  for (const datum of data) {
+    const converted = convert(datum);
+    if (converted !== null) {
+      const { drink } = datum;
+      if (!result.has(drink)) {
+        result.set(drink, []);
+      }
+      result.get(drink).push(converted);
     }
-    const { drink, id, ingredients } = datum;
-    return [
-      drink,
-      {
-        id,
-        ingredients: ingredients.map((v) => {
-          if (typeof v === 'number') {
-            return { id: v, amount: null };
-          }
-          if (typeof v === 'object') {
-            if (!checkData(v, { id: 'number', amount: 'number' })) {
-              console.error(`${RECIPES_LOCATION} ошибка при проверке данных ${RECIPES_LOCATION} #${index}/ingredients: неожиданная структура объекта`, v);
-            }
-          } else {
-            console.error(`${RECIPES_LOCATION} ошибка при проверке данных ${RECIPES_LOCATION} #${index}/ingredients: неизвестный тип данных ${typeof v}`, v);
-          }
-          return v;
-        }),
-      },
-    ];
-  });
-}).then((d) => {
-  const result = new Map(d.filter((v) => v !== null));
-  if (result.size !== d.length) {
-    console.error(`${RECIPES_LOCATION} обнаружено более одного рецепта для напитка (${result.size} !== ${d.length})`);
   }
   return result;
 });
 
-const applyRecipe = (drink, recipe) => {
-  if (recipe.id === null) {
-    return addRecipe(drink, recipe.ingridients);
-  }
-  return updateRecipe(recipe);
-};
-
-const addRecipe = (drink, ingridients) => post(RECIPES_LOCATION, { drink: drink.id, ingridients }).finally(console.log);
-
-const updateRecipe = ({ id, ingredients }) => patch(`${RECIPES_LOCATION}/${id}/`, { ingredients }).finally(console.log);
+const applyRecipe = (drink, recipe) => new Promise((resolve, reject) => {
+  Promise.all(recipe.filter(({ recipeNoteId }) => recipeNoteId !== null).map(({ id }) => del(`/refs/recipes/${id}/`))).then(() => {
+    Promise.all(recipe.map(({ id: ingredient, amount }) => post('/refs/recipes/', { ingredient, amount, drink: drink.id }))).then((response) => {
+      if (!Array.isArray(response)) {
+        console.error('Неожиданный ответ на обновление ингридиентов', response);
+      }
+      return response.map((datum) => convert(datum)).filter((v) => v !== null);
+    }).catch(reject);
+  }).catch(reject);
+});
 
 export { getRecipes, applyRecipe };

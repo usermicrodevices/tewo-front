@@ -25,7 +25,7 @@ class RecipeEditor {
   }
 
   @computed get ingredients() {
-    return this.recipe.ingredients.map(({ id, amount }) => ({
+    return this.recipe.map(({ id, amount }) => ({
       id,
       amount,
       ingredient: id ? this.session.ingredients.get(id) : id,
@@ -33,45 +33,46 @@ class RecipeEditor {
   }
 
   @computed get ingredientsSelector() {
-    const usedIngredients = new Set((this.recipe.ingredients || []).map(({ id }) => id));
+    const usedIngredients = new Set((this.recipe).map(({ id }) => id));
     return this.session.ingredients.selector.filter(([id]) => !usedIngredients.has(id));
   }
 
   @action setIngredient(itm, val) {
-    this.recipe.ingredients[itm].id = val;
+    this.recipe[itm].id = val;
   }
 
   @action setAmount(itm, val) {
-    this.recipe.ingredients[itm].amount = val;
+    this.recipe[itm].amount = val;
   }
 
   @action add() {
-    this.recipe.ingredients.push({ id: null, amount: null });
+    this.recipe.push({ id: null, amount: null, recipeNoteId: null });
   }
 
   @action remove(id) {
-    this.recipe.ingredients.splice(id, 1);
-    if (this.recipe.ingredients.length === 0) {
+    this.recipe.splice(id, 1);
+    if (this.recipe.length === 0) {
       this.cancel();
     }
   }
 
   @computed get isEmpty() {
-    return this.recipe.ingredients.filter(({ id, amount }) => id !== null || amount !== null).length === 0;
+    return this.recipe.filter(({ id, amount }) => id !== null || amount !== null).length === 0;
   }
 
   @action cancel() {
-    this.recipe = this.drink.isHaveRecipe ? JSON.parse(JSON.stringify(this.drink.recipe)) : { id: null, ingredients: [{ id: null, amount: null }] };
+    this.recipe = this.drink.isHaveRecipe ? JSON.parse(JSON.stringify(this.drink.recipe)) : [{ id: null, amount: null, recipeNoteId: null }];
   }
 
   update() {
-    const ingredients = this.recipe.ingredients.filter(({ id, amount }) => id !== null && amount !== null);
-    if (JSON.stringify(this.drink.recipe.ingredients) === JSON.stringify(ingredients)) {
+    const recipe = this.recipe.filter(({ id, amount }) => id !== null && amount !== null);
+    if (JSON.stringify(this.drink.recipe) === JSON.stringify(recipe)) {
       this.cancel();
       return Promise.resolve();
     }
-    return applyRecipe(this.drink, { id: this.recipe.id, ingredients }).then(() => {
-      this.drink.recipe = { id: this.recipe.id, ingredients };
+    return applyRecipe(this.drink, recipe).then((response) => {
+      console.log(response);
+      this.drink.recipe = recipe;
     });
   }
 }

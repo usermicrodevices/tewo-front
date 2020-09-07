@@ -11,7 +11,7 @@ class Drink extends Datum {
 
   companyId;
 
-  @observable recipe = { id: null, ingredients: [] };
+  @observable recipe = [];
 
   session;
 
@@ -22,7 +22,7 @@ class Drink extends Datum {
   }
 
   @computed get isHaveRecipe() {
-    return this.recipe.id !== null;
+    return this.recipe.length > 0;
   }
 
   @computed get company() {
