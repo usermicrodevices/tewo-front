@@ -20,6 +20,6 @@ const Cup = ({ isFilled }) => (
   </span>
 );
 
-const cup = (onClick, isHaveRecipe) => <Button type="link" onClick={onClick} icon={<Cup isFilled={isHaveRecipe} />} />;
+const cup = (onClick, isHaveRecipe) => <Button type="link" style={{ marginTop: -6 }} onClick={onClick} icon={<Cup isFilled={isHaveRecipe} />} />;
 
 export default cup;
