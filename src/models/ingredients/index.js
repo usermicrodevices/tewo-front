@@ -7,38 +7,38 @@ import getIngridients from 'services/ingredients';
 
 const COLUMNS = {
   id: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'ID',
     width: 70,
     sortDirections: 'descend',
   },
   name: {
     isDefaultSort: true,
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Название',
     grow: 3,
     sortDirections: 'both',
   },
   cost: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Цена за единицу',
     grow: 3,
     sortDirections: 'both',
   },
   plu: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Валюта',
     grow: 2,
     sortDirections: 'both',
   },
   consept: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Единица измерения',
     grow: 2,
     sortDirections: 'both',
   },
   companyName: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Компания',
     grow: 2,
     sortDirections: 'both',

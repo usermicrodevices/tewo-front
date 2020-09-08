@@ -71,8 +71,7 @@ class RecipeEditor {
       return Promise.resolve();
     }
     return applyRecipe(this.drink, recipe).then((response) => {
-      console.log(response);
-      this.drink.recipe = recipe;
+      this.drink.recipe = response;
     });
   }
 }

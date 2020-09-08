@@ -54,7 +54,7 @@ const Header = ({ table, columnWidth }) => {
                 }}
                 className="ant-table-cell"
               >
-                <div><span>Действия</span></div>
+                <div />
               </th>
             )}
           </tr>

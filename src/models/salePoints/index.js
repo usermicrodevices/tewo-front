@@ -9,7 +9,7 @@ import Point from './salePoint';
 
 const COLUMNS = {
   id: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'ID',
     width: 70,
     sortDirections: 'both',
@@ -17,61 +17,61 @@ const COLUMNS = {
   },
   name: {
     isDefaultSort: true,
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Название',
     grow: 3,
     sortDirections: 'both',
   },
   companyName: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Компания',
     grow: 2,
     sortDirections: 'both',
   },
   tags: {
-    isVisbleByDefault: false,
+    isVisibleByDefault: false,
     title: 'Теги',
     grow: 2,
   },
   regionName: {
-    isVisbleByDefault: false,
+    isVisibleByDefault: false,
     title: 'Регоин',
     grow: 2,
   },
   cityName: {
-    isVisbleByDefault: false,
+    isVisibleByDefault: false,
     title: 'Город',
     grow: 2,
     sortDirections: 'both',
   },
   address: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Адрес',
     grow: 4,
     sortDirections: 'descend',
   },
   person: {
-    isVisbleByDefault: false,
+    isVisibleByDefault: false,
     title: 'Ответственный',
     grow: 2,
   },
   phone: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Телефон',
     grow: 2,
   },
   email: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Email',
     grow: 2,
   },
   overdueTasks: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Количество просроченных задач',
     grow: 2,
   },
   downTime: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Суммарный простой',
     grow: 2,
   },

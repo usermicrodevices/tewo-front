@@ -9,28 +9,28 @@ import colorizedCell from 'elements/table/colorizedCell';
 
 const declareColumns = () => ({
   id: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'ID',
     width: 70,
     sortDirections: 'descend',
   },
   name: {
     isDefaultSort: true,
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Название',
     grow: 3,
     sortDirections: 'both',
     transform: (_, data, width) => colorizedCell({ children: data.name, color: data.color, width }),
   },
   reactionTime: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Время реакции руководителя',
     grow: 3,
     sortDirections: 'both',
     transform: (value) => (typeof value === 'number' ? `${value} ${plural(value, ['минуту', 'минут', 'минуты'])}` : value),
   },
   priority: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Приоритет',
     grow: 2,
     sortDirections: 'both',

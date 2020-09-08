@@ -1,5 +1,6 @@
 /* eslint max-len: "off" */
 import React from 'react';
+import { Button } from 'antd';
 
 const Cup = ({ isFilled }) => (
   <span role="img" aria-label="edit" className="anticon anticon-edit">
@@ -19,4 +20,6 @@ const Cup = ({ isFilled }) => (
   </span>
 );
 
-export default Cup;
+const cup = (onClick, isHaveRecipe) => <Button type="link" onClick={onClick} icon={<Cup isFilled={isHaveRecipe} />} />;
+
+export default cup;

@@ -6,20 +6,20 @@ import { computed } from 'mobx';
 
 const COLUMNS = {
   name: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Название группы',
     grow: 3,
     sortDirections: 'descend',
   },
   deviceNames: {
     isDefaultSort: true,
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Кофемашины',
     grow: 3,
     sortDirections: 'both',
   },
   companyName: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Компания',
     grow: 3,
     sortDirections: 'both',

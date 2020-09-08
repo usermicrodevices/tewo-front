@@ -9,28 +9,28 @@ import Company from './company';
 
 const COLUMNS_LIST = {
   id: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'ID',
     width: 70,
     sortDirections: 'descend',
     isAsyncorder: true,
   },
   name: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Название',
     grow: 4,
     sortDirections: 'both',
     isDefaultSort: true,
   },
   created: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Регистрация в системе',
     grow: 2,
     transform: (date) => date.format('D MMMM yyyy'),
     sortDirections: 'both',
   },
   pointsAmount: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Кол-во объектов',
     align: 'right',
     width: 120,

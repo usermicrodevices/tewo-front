@@ -4,7 +4,7 @@ import { FILTER_TYPES } from 'models/filters';
 class Column {
   key;
 
-  isVisbleByDefault;
+  isVisibleByDefault;
 
   title;
 
@@ -30,7 +30,7 @@ class Column {
       width: 'number',
       grow: 'number',
       align: 'string',
-      isVisbleByDefault: 'boolean',
+      isVisibleByDefault: 'boolean',
       sortDirections: 'string',
       isAsyncorder: 'boolean',
       transform: 'function',
@@ -112,7 +112,7 @@ class Column {
 
     this.key = key;
     this.title = data.title;
-    this.isVisbleByDefault = data.isVisbleByDefault || false;
+    this.isVisibleByDefault = data.isVisibleByDefault || false;
     this.sortDirections = data.sortDirections || null;
     this.isAsyncorder = data.isAsyncorder || false;
     this.transform = data.transform || ((v) => v);

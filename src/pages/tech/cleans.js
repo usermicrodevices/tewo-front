@@ -12,13 +12,13 @@ import TableModel from 'models/table';
 
 const COLUMNS = {
   id: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'ID',
     width: 70,
     isAsyncorder: true,
   },
   device_date: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Момент налива',
     grow: 1,
     isDefaultSort: true,

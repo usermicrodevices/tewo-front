@@ -6,19 +6,19 @@ import TimeAgo from 'elements/timeago';
 
 const declareColumns = (session) => ({
   id: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'ID',
     width: 110,
     isAsyncorder: true,
   },
   cid: {
-    isVisbleByDefault: false,
+    isVisibleByDefault: false,
     title: 'Код',
     align: 'right',
     width: 70,
   },
   deviceDate: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Момент налива',
     grow: 1,
     isDefaultSort: true,
@@ -26,33 +26,33 @@ const declareColumns = (session) => ({
     sortDirections: 'both',
   },
   createdDate: {
-    isVisbleByDefault: false,
+    isVisibleByDefault: false,
     title: 'Время получения данных на сервер',
     grow: 1,
     transform: (date) => (+date && TimeAgo({ date })) || null,
     sortDirections: 'both',
   },
   deviceName: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Устройство',
     align: 'right',
     grow: 1,
     sortDirections: 'both',
   },
   drinkName: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Напиток',
     grow: 1,
     sortDirections: 'both',
   },
   operationName: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Операция',
     grow: 1,
     sortDirections: 'both',
   },
   saleSum: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Стоимость',
     align: 'right',
     width: 100,

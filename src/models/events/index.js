@@ -7,7 +7,7 @@ import colorizedCell from 'elements/table/colorizedCell';
 
 const declareColumns = () => ({
   id: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'ID',
     width: 100,
     isAsyncorder: true,
@@ -15,46 +15,46 @@ const declareColumns = () => ({
     sortDirections: 'descend',
   },
   cid: {
-    isVisbleByDefault: false,
+    isVisibleByDefault: false,
     title: 'Код',
     align: 'right',
     width: 70,
   },
   eventName: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Тип события',
     grow: 2,
     sortDirections: 'both',
     transform: (_, data, width) => colorizedCell({ children: data.eventName, color: data.eventColor, width }),
   },
   eventPriority: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Приоритет события',
     grow: 1,
     sortDirections: 'both',
   },
   companyName: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Компания',
     grow: 1,
     sortDirections: 'both',
   },
   duration: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Длительность',
     grow: 2,
     transform: (_, data) => data.durationText,
     sortDirections: 'both',
   },
   createdDate: {
-    isVisbleByDefault: false,
+    isVisibleByDefault: false,
     title: 'Время начала',
     grow: 1,
     transform: (date) => date && TimeAgo({ date }),
     sortDirections: 'both',
   },
   closeDate: {
-    isVisbleByDefault: false,
+    isVisibleByDefault: false,
     title: 'Время завершения',
     grow: 1,
     transform: (date) => date && TimeAgo({ date }),

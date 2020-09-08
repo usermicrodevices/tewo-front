@@ -1,44 +1,52 @@
 /* eslint class-methods-use-this: "off" */
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
 import getDrinks from 'services/drinks';
+import cup from 'elements/cup';
+
 import RecipeEditor from './recipeEditor';
 
-const COLUMNS = {
+const declareColumns = (onEditRecipe) => ({
   id: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'ID',
     width: 70,
     sortDirections: 'descend',
   },
   name: {
     isDefaultSort: true,
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Название',
     grow: 3,
     sortDirections: 'both',
   },
   companyName: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Компания',
     grow: 3,
     sortDirections: 'both',
   },
   plu: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Код PLU',
     grow: 2,
     sortDirections: 'both',
   },
   consept: {
-    isVisbleByDefault: true,
+    isVisibleByDefault: true,
     title: 'Концепция',
     grow: 2,
     sortDirections: 'both',
   },
-};
+  recipe: {
+    isVisibleByDefault: true,
+    title: 'Рецепт',
+    width: 70,
+    transform: (_, datum) => cup(() => { onEditRecipe(datum); }, datum.isHaveRecipe),
+  },
+});
 
 const declareFilters = (session) => ({
   companyId: {
@@ -64,21 +72,19 @@ class Drinks extends Table {
 
   actions;
 
-  constructor(session) {
-    super(COLUMNS, getDrinks(session), new Filters(declareFilters(session)));
+  session;
 
-    this.actions = {
-      isVisible: true,
-      isEditable: () => true,
-      isRecipeEditable: () => true,
-      isHaveRecipe: ({ isHaveRecipe }) => isHaveRecipe,
-      onEdit: (datum) => {
-        this.elementForEdit = datum;
-      },
-      onFillRecipe: (datum) => {
-        this.elementForEdit = new RecipeEditor(datum, session);
-      },
-    };
+  actions = {
+    isVisible: true,
+    isEditable: () => true,
+  };
+
+  constructor(session) {
+    super(declareColumns((drink) => {
+      this.elementForEdit = new RecipeEditor(drink, this.session);
+    }), getDrinks(session), new Filters(declareFilters(session)));
+
+    this.session = session;
   }
 
   toString() {
@@ -90,6 +96,10 @@ class Drinks extends Table {
       return undefined;
     }
     return this.rawData.map(({ id, name }) => [id, name]);
+  }
+
+  @action editRecipe(drink) {
+
   }
 
   get(typeId) {

@@ -117,7 +117,7 @@ class Table {
   @computed get visibleColumns() {
     return localStorage.getItem(this.visibleColumnKey)
     || this.allColumns
-      .filter(({ isVisbleByDefault }) => isVisbleByDefault)
+      .filter(({ isVisibleByDefault }) => isVisibleByDefault)
       .map(({ key }) => key);
   }
 

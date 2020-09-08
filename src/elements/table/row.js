@@ -3,7 +3,6 @@ import { observer } from 'mobx-react';
 import { Button } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import Loader from 'elements/loader';
-import Cup from 'elements/cup';
 import classNames from 'classnames';
 import Format from 'elements/format';
 import styles from './style.module.scss';
@@ -61,12 +60,7 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions) => observ
           style={{ width: ACTIONS_COLUMN_WIDT - SCROLL_PANE_WIDTH }}
           className={classNames(styles['virtual-table-cell'], styles.lastcolumn, styles.actions)}
         >
-          { actions.isRecipeEditable && actions.isRecipeEditable(rowData, index) && (
-            <Button type="link" onClick={() => { actions.onFillRecipe(rowData); }} icon={<Cup isFilled={actions.isHaveRecipe(rowData, index)} />} />
-          )}
-          { actions.isEditable(rowData, index) && (
-            <Button type="link" onClick={() => { actions.onEdit(rowData); }} icon={<EditOutlined style={{ transform: 'scale(1.37)' }} />} />
-          )}
+          <Button type="link" onClick={() => { actions.onEdit(rowData); }} icon={<EditOutlined style={{ transform: 'scale(1.37)' }} />} />
         </div>
       )}
     </div>
