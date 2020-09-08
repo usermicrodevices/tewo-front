@@ -1,6 +1,6 @@
 import React from 'react';
 
-import GenericTablePage from 'pages/genericTablePage';
+import GenericPage from 'pages/genericPage';
 import Card from 'elements/card';
 import Table from 'elements/table';
 import Title from 'components/title';
@@ -8,7 +8,7 @@ import Title from 'components/title';
 import { beveragesAndEventsUpdateFrequency } from 'config';
 
 const Beverage = () => (
-  <GenericTablePage
+  <GenericPage
     refreshInterval={beveragesAndEventsUpdateFrequency}
     storageName="beverages"
     isNotEditable
@@ -19,7 +19,7 @@ const Beverage = () => (
     <Card>
       <Table />
     </Card>
-  </GenericTablePage>
+  </GenericPage>
 );
 
 export default Beverage;

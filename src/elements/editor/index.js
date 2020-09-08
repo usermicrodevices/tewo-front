@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import {
   Button, Modal, Space, Form,
 } from 'antd';
@@ -13,8 +13,14 @@ import RecipeEditroTable from './recipeEditorTable';
 
 import style from './style.module.scss';
 
-const Editor = ({ data, isModal, onCancel }) => {
-  const [isEdditing, setIsEdditing] = useState(false);
+const Editor = ({
+  data,
+  isModal,
+  onCancel,
+  match: { params: { action }, url },
+  history,
+}) => {
+  const [isEdditing, setIsEdditing] = useState(action === 'edit');
   const [isUpdating, setIsUpdating] = useState(false);
   const [form] = Form.useForm();
   const isRecipeMode = data instanceof RecipeEditor;
@@ -23,8 +29,16 @@ const Editor = ({ data, isModal, onCancel }) => {
     return null;
   }
 
+  if (!isEdditing && action === 'edit') {
+    setIsEdditing(true);
+  }
+
   const onSave = (changes) => {
-    data.update(changes).finally(() => { setIsEdditing(false); setIsUpdating(false); });
+    data.update(changes).finally(() => {
+      setIsEdditing(false);
+      setIsUpdating(false);
+      if (action === 'edit') { history.push(url.replace('edit', 'view')); }
+    });
     setIsUpdating(true);
   };
 
@@ -61,7 +75,11 @@ const Editor = ({ data, isModal, onCancel }) => {
       isHaveErrors={isHaveErrors}
       isUpdating={isUpdating}
       form={form}
-      setIsEdditing={(v) => { setIsEdditing(v); if (isRecipeMode) { data.cancel(); } }}
+      setIsEdditing={(v) => {
+        setIsEdditing(v);
+        if (isRecipeMode) { data.cancel(); }
+        if (typeof action === 'string') { history.push(url.replace(!v ? 'edit' : 'view', v ? 'edit' : 'view')); }
+      }}
     />
   );
 
@@ -106,4 +124,4 @@ const Editor = ({ data, isModal, onCancel }) => {
   );
 };
 
-export default observer(Editor);
+export default withRouter(observer(Editor));

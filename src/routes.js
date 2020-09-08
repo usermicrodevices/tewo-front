@@ -23,13 +23,10 @@ class Rout {
 
   isExact;
 
-  isWithId;
-
-  constructor(path, component, isExact, isWithId) {
+  constructor(path, component, isExact) {
     this.path = path;
     this.component = component;
     this.isExact = typeof isExact === 'undefined' ? false : isExact;
-    this.isWithId = !!isWithId;
   }
 }
 
@@ -43,16 +40,16 @@ const account = new Rout('/account', Account);
 const notifications = new Rout('/notofications', Notifications);
 const usersList = new Rout('/userlist', UsersList);
 const map = new Rout('/map', MapPage);
-const companies = new Rout('/companies', Companies, false, true);
-const salePoints = new Rout('/sale_points', SalePoints, false, true);
+const companies = new Rout('/companies', Companies);
+const salePoints = new Rout('/sale_points', SalePoints);
 const beverage = new Rout('/beverage', Beverage);
 const devices = new Rout('/equipment', Devices);
 const drink = new Rout('/drink', Drinks);
-const ingredients = new Rout('/ingredients', Ingredients, false, true);
-const costs = new Rout('/costs', Costs, false, true);
-const eventTypes = new Rout('/events', EventTypes, false, true);
+const ingredients = new Rout('/ingredients', Ingredients);
+const costs = new Rout('/costs', Costs);
+const eventTypes = new Rout('/events', EventTypes);
 const overdueLog = new Rout('/overdue_log', Cleans);
-const eventsLog = new Rout('/events_log', Events, false, true);
+const eventsLog = new Rout('/events_log', Events);
 const cleansLog = new Rout('/cleans_log', Cleans);
 const cost = new Rout('/cost', Cleans);
 const ingredientsRate = new Rout('/ingredients_rate', Cleans);

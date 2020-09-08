@@ -5,10 +5,10 @@ import Card from 'elements/card';
 import Table from 'elements/table';
 import Title from 'components/title';
 
-import GenericTablePage from 'pages/genericTablePage';
+import GenericPage from 'pages/genericPage';
 
 const Devices = () => (
-  <GenericTablePage storageName="devices">
+  <GenericPage storageName="devices">
     <Title>
       <Space>
         Настройка событий
@@ -17,7 +17,7 @@ const Devices = () => (
     <Card>
       <Table />
     </Card>
-  </GenericTablePage>
+  </GenericPage>
 );
 
 export default Devices;

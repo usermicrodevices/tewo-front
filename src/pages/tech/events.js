@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Space } from 'antd';
 
-import GenericTablePage from 'pages/genericTablePage';
+import GenericPage from 'pages/genericPage';
 import Card from 'elements/card';
 import Table from 'elements/table';
 import Title from 'components/title';
@@ -10,7 +10,7 @@ import Title from 'components/title';
 import { beveragesAndEventsUpdateFrequency } from 'config';
 
 const Events = () => (
-  <GenericTablePage
+  <GenericPage
     refreshInterval={beveragesAndEventsUpdateFrequency}
     storageName="events"
     isNotEditable
@@ -23,7 +23,7 @@ const Events = () => (
     <Card>
       <Table />
     </Card>
-  </GenericTablePage>
+  </GenericPage>
 );
 
 export default Events;

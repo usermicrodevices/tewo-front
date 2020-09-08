@@ -81,7 +81,7 @@ const declareFilters = (session) => ({
   companyId: {
     type: 'singleselector',
     title: 'Компания',
-    apply: (general, data) => general(data.sale_sum),
+    apply: (general, data) => general(data.companyId),
     selector: () => session.companies.selector,
   },
   tag: {

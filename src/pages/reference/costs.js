@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Space } from 'antd';
 
-import GenericTablePage from 'pages/genericTablePage';
+import GenericPage from 'pages/genericPage';
 import Card from 'elements/card';
 import Table from 'elements/table';
 import Title from 'components/title';
@@ -10,7 +10,7 @@ import Icon from 'elements/icon';
 import { companiesSubmenu } from 'routes';
 
 const Companies = () => (
-  <GenericTablePage storageName="costs">
+  <GenericPage storageName="costs">
     <Title tabs={companiesSubmenu}>
       <Space>
         Группы цен
@@ -20,7 +20,7 @@ const Companies = () => (
     <Card>
       <Table />
     </Card>
-  </GenericTablePage>
+  </GenericPage>
 );
 
 export default Companies;

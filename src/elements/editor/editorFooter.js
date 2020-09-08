@@ -5,7 +5,12 @@ import { Button, Space } from 'antd';
 import style from './style.module.scss';
 
 const Footer = ({
-  isEdditing, isHaveErrors, isUpdating, form, setIsEdditing, isEditable,
+  isEdditing,
+  isHaveErrors,
+  isUpdating,
+  form,
+  setIsEdditing,
+  isEditable,
 }) => {
   if (!isEditable) {
     return null;
@@ -17,7 +22,7 @@ const Footer = ({
         <Button
           disabled={isHaveErrors}
           loading={isUpdating}
-          onClick={() => form.submit()}
+          onClick={() => { form.submit(); }}
           type="primary"
         >
           Сохранить

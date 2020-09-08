@@ -13,7 +13,6 @@ import Icon from 'elements/icon';
 
 import { ACTIONS_COLUMN_WIDT, SCROLL_PANE_WIDTH } from './row';
 import Content from './content';
-import ColumnsPicker from './columnsPicker';
 import style from './style.module.scss';
 import Header from './header';
 import Filters from './filters';
@@ -29,63 +28,30 @@ const calculateColumnWidth = (tableWidth, columns, actions) => {
 @inject(({ table, filter }) => ({ table, filter }))
 @observer
 class TableComponent extends React.Component {
-  state = {
-    isFiltersOpen: false,
-  };
-
   actions = {};
-
-  onColumnsPicked = (pickedColumns) => {
-    const { table } = this.props;
-    table.visibleColumns = pickedColumns;
-  }
 
   onSearchChange = (action) => {
     const { filter } = this.props;
     filter.searchText = action.target.value;
   }
 
-  onReorder = (columns) => {
-    const { table } = this.props;
-    table.reorderColumns(columns);
-  }
-
-  toggleFilters = () => {
-    const { isFiltersOpen } = this.state;
-    this.setState({ isFiltersOpen: !isFiltersOpen });
-  }
-
   render() {
     const {
       table: {
         data,
-        visibleColumns,
         columns,
         actions,
       },
-      filter: { searchText, filters, isShowSearch },
+      filter: { searchText, isShowSearch },
       size,
+      isFiltersOpen,
     } = this.props;
     const columnWidth = calculateColumnWidth(size.width, columns.map(({ width }) => width), actions);
-    const { isFiltersOpen } = this.state;
-    const isHaveFilters = Object.keys(filters).length !== 0;
     return (
       <div className={style.whole}>
         <div className={style.buttons}>
           { isShowSearch && <Input prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} /> }
           { process.env.NODE_ENV !== 'production' && <p>{`Доступно ${data.length} записей`}</p> }
-          <Space>
-            <Dropdown overlay={<ColumnsPicker onReorder={this.onReorder} onChange={this.onColumnsPicked} visibleColumns={visibleColumns} />} placement="bottomRight">
-              <Button>Колонки</Button>
-            </Dropdown>
-            { isHaveFilters && (
-              <Button
-                type={isFiltersOpen ? 'primary' : 'default'}
-                icon={<FilterOutlined />}
-                onClick={this.toggleFilters}
-              />
-            )}
-          </Space>
         </div>
         { isFiltersOpen && <Filters /> }
         <Header columnWidth={columnWidth} />
