@@ -1,6 +1,11 @@
 import React from 'react';
-import { Form, Dropdown, Input } from 'antd';
+import {
+  Form, Dropdown, Input, Space,
+} from 'antd';
 import { Map as YandexMap, Placemark } from 'react-yandex-maps';
+import Icon from 'elements/icon';
+
+import style from './style.module.scss';
 
 const MapLocationPicker = ({ location, setValue }) => {
   const center = location.split(',').map(parseFloat);
@@ -34,12 +39,15 @@ const LocationPicker = ({ getFieldValue, setFieldsValue, name }) => {
   );
   // Так и не понял почему, но пока не добавишь Form.Item значение не попадает в submit
   return (
-    <>
-      <Form.Item noStyle name={name}><Input style={{ display: 'none' }} /></Form.Item>
+    <div className={style.location}>
+      <Form.Item noStyle name={name}><Input /></Form.Item>
       <Dropdown overlay={overlay} placement="bottomRight">
-        <p>{val || '—'}</p>
+        <Space>
+          <Icon name="pin-outline" />
+          <span>Выбрать на карте</span>
+        </Space>
       </Dropdown>
-    </>
+    </div>
   );
 };
 

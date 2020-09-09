@@ -31,6 +31,10 @@ class SalePoint extends Datum {
 
   isHaveOutdatedEvents = null;
 
+  @observable isClosed = false;
+
+  @observable tags = [];
+
   session;
 
   @computed get values() {
@@ -42,18 +46,23 @@ class SalePoint extends Datum {
       },
       {
         dataIndex: 'name',
-        title: 'Название',
+        title: 'Название объекта',
         value: this.name,
       },
       {
-        dataIndex: 'phone',
-        title: 'Телефон',
-        value: this.phone,
+        dataIndex: 'isClosed',
+        title: 'Объект закрыт',
+        value: this.isClosed,
       },
       {
-        dataIndex: 'email',
-        title: 'Email',
-        value: this.email,
+        dataIndex: 'companyId',
+        title: 'Компания',
+        value: this.companyName,
+      },
+      {
+        dataIndex: 'regionName',
+        title: 'Регион',
+        value: this.regionName,
       },
       {
         dataIndex: 'cityId',
@@ -71,14 +80,9 @@ class SalePoint extends Datum {
         value: this.mapPoint,
       },
       {
-        dataIndex: 'companyId',
-        title: 'Компания',
-        value: this.companyName,
-      },
-      {
-        dataIndex: 'createdDate',
-        title: 'Время внесения в базу',
-        value: this.createdDate ? this.createdDate.format('D MMMM yyyy года') : null,
+        dataIndex: 'phone',
+        title: 'Телефон',
+        value: this.phone,
       },
       {
         dataIndex: 'person',
@@ -86,24 +90,14 @@ class SalePoint extends Datum {
         value: this.person,
       },
       {
-        dataIndex: 'isHaveOutdatedEvents',
-        title: 'С просроченными событиями',
-        value: this.isHaveOutdatedEvents,
+        dataIndex: 'email',
+        title: 'Email',
+        value: this.email,
       },
       {
-        dataIndex: 'isNeedOverhaul',
-        title: 'Требуется тех. обслуживание',
-        value: this.isNeedOverhaul,
-      },
-      {
-        dataIndex: 'isHaveDisabledEquipment',
-        title: 'С выключенным оборудованием',
-        value: this.isHaveDisabledEquipment,
-      },
-      {
-        dataIndex: 'isOutOfWaterQuality',
-        title: 'На оборудовании превышена жесткость воды',
-        value: this.isOutOfWaterQuality,
+        dataIndex: 'tags',
+        title: 'Теги',
+        value: this.tags.join(', '),
       },
     ];
   }
@@ -123,6 +117,9 @@ class SalePoint extends Datum {
     return {
       name: {
         type: 'text',
+      },
+      isClosed: {
+        type: 'checkbox',
       },
       address: {
         type: 'text',
@@ -146,6 +143,11 @@ class SalePoint extends Datum {
       cityId: {
         type: 'selector',
         selector: this.session.locations.citiesSelector,
+      },
+      tags: {
+        type: 'selector',
+        isMultiple: true,
+        selector: [],
       },
     };
   }

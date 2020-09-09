@@ -20,7 +20,13 @@ const Editor = ({
   match: { params: { action }, url },
   history,
 }) => {
-  const [isEdditing, setIsEdditing] = useState(action === 'edit');
+  const [isEdditing, setRawIsEdditing] = useState(action === 'edit' || data.id === null);
+  const setIsEdditing = (v) => {
+    setRawIsEdditing(v);
+    if (isRecipeMode && !v) { data.cancel(); }
+    if (!isModal) { history.push(url.replace(!v ? 'edit' : 'view', v ? 'edit' : 'view')); }
+    if (data.id === null) { onCancel(); }
+  };
   const [isUpdating, setIsUpdating] = useState(false);
   const [form] = Form.useForm();
   const isRecipeMode = data instanceof RecipeEditor;
@@ -37,7 +43,6 @@ const Editor = ({
     data.update(changes).finally(() => {
       setIsEdditing(false);
       setIsUpdating(false);
-      if (action === 'edit') { history.push(url.replace('edit', 'view')); }
     });
     setIsUpdating(true);
   };
@@ -75,11 +80,8 @@ const Editor = ({
       isHaveErrors={isHaveErrors}
       isUpdating={isUpdating}
       form={form}
-      setIsEdditing={(v) => {
-        setIsEdditing(v);
-        if (isRecipeMode) { data.cancel(); }
-        if (typeof action === 'string') { history.push(url.replace(!v ? 'edit' : 'view', v ? 'edit' : 'view')); }
-      }}
+      setIsEdditing={setIsEdditing}
+      isModal={isModal}
     />
   );
 

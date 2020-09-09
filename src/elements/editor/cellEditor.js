@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  Input, Form, Select, InputNumber,
+  Input, Form, Select, InputNumber, Checkbox,
 } from 'antd';
 import LocationPicker from './locationpicker';
 
 import ColorPicker from './colorpicker';
 
-const CellEditor = ({ editor: { type, selector }, name }) => {
+const CellEditor = ({ editor: { type, selector, isMultiple }, name }) => {
   switch (type) {
     case 'text': {
       return (
@@ -66,11 +66,16 @@ const CellEditor = ({ editor: { type, selector }, name }) => {
       );
     }
     case 'selector': {
+      const filterComparator = (inputValue, { children }) => children.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
       return (
-        <Form.Item name={name}>
+        <Form.Item name={name} shouldUpdate>
           <Select
+            showSearch
+            filterOption={filterComparator}
             placeholder="Значение не задано"
             style={{ width: '100%' }}
+            allowClear={isMultiple}
+            mode={isMultiple ? 'multiple' : undefined}
           >
             {
               selector.map(([key, text]) => (
@@ -80,6 +85,13 @@ const CellEditor = ({ editor: { type, selector }, name }) => {
               ))
             }
           </Select>
+        </Form.Item>
+      );
+    }
+    case 'checkbox': {
+      return (
+        <Form.Item name={name} valuePropName="checked">
+          <Checkbox />
         </Form.Item>
       );
     }

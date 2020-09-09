@@ -14,9 +14,17 @@
     }
 }
 
-.footer {
+.start-edditing-button {
     display: flex;
     justify-content: flex-start;
+}
+
+.modal-bottom {
+    margin-bottom: 8px;
+}
+
+.bottom {
+    margin-bottom: 24px;
 }
 
 .title {
@@ -42,4 +50,18 @@
     color: #8C8C8C;
     font-size: 14px;
     line-height: 24px;
+}
+
+.location {
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+
+    :global .ant-input {
+        width: 200px;
+    }
+
+    span {
+        white-space: nowrap;
+    }
 }

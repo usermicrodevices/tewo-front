@@ -118,6 +118,9 @@ const GenericPage = ({
                 if (!elementForEdit) {
                   return <Redirect to={path} />;
                 }
+                if (typeof Overview === 'undefined') {
+                  return <Redirect to={`${path}/${id}/view`} />;
+                }
                 return (
                   <>
                     <ElementHeader title={elementForEdit.name} onEdit={() => { history.push(`${path}/${id}/edit`); }} />

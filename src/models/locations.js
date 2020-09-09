@@ -22,6 +22,17 @@ class Locations {
     return this.data.cities.get(id) || null;
   }
 
+  getRegionByCity(id) {
+    if (this.isLoading) {
+      return undefined;
+    }
+    const city = this.getCity(id);
+    if (city === null) {
+      return null;
+    }
+    return this.getRegion(city.region);
+  }
+
   getRegion(id) {
     if (this.isLoading) {
       return undefined;

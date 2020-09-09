@@ -1,5 +1,6 @@
 import React from 'react';
-import { Table } from 'antd';
+import { inject } from 'mobx-react';
+import { Table, Form } from 'antd';
 
 import Format from 'elements/format';
 
@@ -7,7 +8,9 @@ import CellEditor from './cellEditor';
 
 import style from './style.module.scss';
 
-const EditorTable = ({ isEdditing, data }) => {
+const EditorTable = ({
+  isEdditing, data, session,
+}) => {
   const tableDataSource = data.values.map((datum) => ({ key: datum.dataIndex, ...datum }));
   return (
     <Table
@@ -20,15 +23,29 @@ const EditorTable = ({ isEdditing, data }) => {
         {
           title: '',
           dataIndex: 'value',
-          render: (value, second) => {
-            const { dataIndex } = second;
-            if (isEdditing && dataIndex in data.editable) {
-              return (
-                <CellEditor
-                  name={dataIndex}
-                  editor={data.editable[dataIndex]}
-                />
-              );
+          render: (value, column) => {
+            const { dataIndex } = column;
+            if (isEdditing) {
+              if (dataIndex in data.editable) {
+                return (
+                  <CellEditor
+                    name={dataIndex}
+                    editor={data.editable[dataIndex]}
+                  />
+                );
+              }
+              if (dataIndex === 'regionName') {
+                return (
+                  <Form.Item shouldUpdate={({ cityId: oldCityId }, { cityId }) => oldCityId !== cityId}>
+                    {
+                      ({ getFieldValue }) => {
+                        const region = session.locations.getRegionByCity(getFieldValue('cityId'));
+                        return <Format>{region ? region.name : region}</Format>;
+                      }
+                    }
+                  </Form.Item>
+                );
+              }
             }
             return <Format>{value}</Format>;
           },
@@ -40,4 +57,4 @@ const EditorTable = ({ isEdditing, data }) => {
   );
 };
 
-export default EditorTable;
+export default inject('session')(EditorTable);
