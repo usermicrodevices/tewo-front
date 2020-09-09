@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import {
   Button, Modal, Space, Form,
@@ -21,6 +21,11 @@ const Editor = ({
   history,
 }) => {
   const [isEdditing, setRawIsEdditing] = useState(action === 'edit' || data.id === null);
+  useEffect(() => {
+    if (!isEdditing && action === 'edit') {
+      setIsEdditing(true);
+    }
+  });
   const setIsEdditing = (v) => {
     if (isRecipeMode && !v) { data.cancel(); }
     if (!isModal) { history.push(url.replace(!v ? 'edit' : 'view', v ? 'edit' : 'view')); }
@@ -33,10 +38,6 @@ const Editor = ({
 
   if (typeof data === 'undefined') {
     return null;
-  }
-
-  if (!isEdditing && action === 'edit') {
-    setIsEdditing(true);
   }
 
   const onSave = (changes) => {

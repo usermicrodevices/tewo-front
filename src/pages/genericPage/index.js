@@ -75,6 +75,16 @@ const GenericPage = ({
     </div>
   );
 
+  const menuItemKeyFromAction = (a) => {
+    if (typeof a === 'undefined' || a === '') {
+      return '/overview';
+    }
+    if (a === 'edit' || a === 'view') {
+      return 'edit';
+    }
+    return a;
+  };
+
   const ElementHeader = ({
     title, isEdditing, id, action,
   }) => (
@@ -93,12 +103,12 @@ const GenericPage = ({
         <OverviewActions />
       </div>
       <div className={styles.submenu}>
-        <Menu selectedKeys={`${path}/${id}/${typeof action === 'undefined' ? '/default' : action}`} mode="horizontal">
+        <Menu selectedKeys={menuItemKeyFromAction(action)} mode="horizontal">
           { Array.isArray(overviewSubmenu)
             && overviewSubmenu.map(({
               icon, text, path: subPath, explains,
             }) => (
-              <Menu.Item key={subPath === '' ? '/default' : subPath} icon={icon} theme="none">
+              <Menu.Item key={menuItemKeyFromAction(subPath)} icon={icon} theme="none">
                 <Link to={`${path}/${id}/${subPath}`}>
                   {
                     typeof explains === 'string'
