@@ -8,6 +8,7 @@ import {
 } from 'antd';
 import { FilterOutlined, EditOutlined } from '@ant-design/icons';
 
+import Filters from 'elements/filters';
 import Icon from 'elements/icon';
 import Editor from 'elements/editor';
 import Card from 'elements/card';
@@ -55,17 +56,19 @@ const GenericPage = ({
           </Space>
         </h1>
         <Space>
-          <Dropdown overlay={<ColumnsPicker onReorder={onReorder} onChange={onColumnsPicked} visibleColumns={visibleColumns} />} placement="bottomRight">
+          <Dropdown overlay={<ColumnsPicker onReorder={onReorder} onChange={onColumnsPicked} visibleColumns={visibleColumns} />} placement="bottomLeft">
             <Button icon={<Icon name="more-vertical-outline" />}>Колонки</Button>
           </Dropdown>
           { isHaveFilters && (
-            <Button
-              type={isFiltersOpen ? 'primary' : 'default'}
-              icon={<FilterOutlined />}
-              onClick={() => setFiltersOpen(!isFiltersOpen)}
-            >
-              Фильтрация
-            </Button>
+            <Dropdown overlay={<Filters />} placement="bottomLeft">
+              <Button
+                type={filter.search !== '' ? 'primary' : 'default'}
+                icon={<FilterOutlined />}
+                onClick={() => setFiltersOpen(!isFiltersOpen)}
+              >
+                Фильтрация
+              </Button>
+            </Dropdown>
           )}
         </Space>
       </div>
@@ -178,7 +181,7 @@ const GenericPage = ({
           { isNeedToRedirect && <Redirect to={`${path}?${filter.search}`} /> }
           <Provider table={storage}>
             <TableHeader />
-            <GenericTablePage refreshInterval={refreshInterval} isFiltersOpen={isFiltersOpen} />
+            <GenericTablePage refreshInterval={refreshInterval} />
           </Provider>
         </Route>
       </Switch>

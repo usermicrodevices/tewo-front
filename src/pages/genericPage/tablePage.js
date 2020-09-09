@@ -41,13 +41,13 @@ class GenericTablePage extends React.Component {
   }
 
   render() {
-    const { storage, isFiltersOpen } = this.props;
+    const { storage } = this.props;
     const { elementForEdit } = storage;
     return (
       <>
         { elementForEdit && <Editor data={elementForEdit} isModal onCancel={this.onCancelEdditing} /> }
         <Card>
-          <Table isFiltersOpen={isFiltersOpen} />
+          <Table />
         </Card>
       </>
     );

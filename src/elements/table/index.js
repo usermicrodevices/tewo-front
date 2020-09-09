@@ -1,12 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import {
-  Input,
-  Dropdown,
-  Button,
-  Space,
-} from 'antd';
-import { FilterOutlined } from '@ant-design/icons';
+import { Input } from 'antd';
 import { withSize } from 'react-sizeme';
 
 import Icon from 'elements/icon';
@@ -15,7 +9,6 @@ import { ACTIONS_COLUMN_WIDT, SCROLL_PANE_WIDTH } from './row';
 import Content from './content';
 import style from './style.module.scss';
 import Header from './header';
-import Filters from './filters';
 
 const calculateColumnWidth = (tableWidth, columns, actions) => {
   const spacer = actions.isVisible ? ACTIONS_COLUMN_WIDT : SCROLL_PANE_WIDTH;
@@ -44,7 +37,6 @@ class TableComponent extends React.Component {
       },
       filter: { searchText, isShowSearch },
       size,
-      isFiltersOpen,
     } = this.props;
     const columnWidth = calculateColumnWidth(size.width, columns.map(({ width }) => width), actions);
     return (
@@ -53,7 +45,6 @@ class TableComponent extends React.Component {
           { isShowSearch && <Input prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} /> }
           { process.env.NODE_ENV !== 'production' && <p>{`Доступно ${data.length} записей`}</p> }
         </div>
-        { isFiltersOpen && <Filters /> }
         <Header columnWidth={columnWidth} />
         <Content width={size.width} columnWidth={columnWidth} />
       </div>

@@ -221,7 +221,7 @@ class Filters {
   }
 
   @action clear() {
-    this.data = {};
+    this.data.clear();
   }
 
   @computed get predicate() {
@@ -237,7 +237,6 @@ class Filters {
       for (const key of this.data.keys()) {
         const filter = this.filters[key];
         if (!filter.apply((d) => FILTER_TYPES[filter.type].apply(d, this.data.get(key)), data)) {
-          console.log('filter rejection', filter);
           return false;
         }
       }
