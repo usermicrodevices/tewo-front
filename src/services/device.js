@@ -59,10 +59,12 @@ function getDeviceModels(map) {
   return get('/refs/device_models').then((data) => {
     if (Array.isArray(data)) {
       for (const datum of data) {
-        if (!checkData(datum, { id: 'number', name: 'string' })) {
+        if (!checkData(datum, {
+          id: 'number', name: 'string', mileage: 'number', detergent: 'number',
+        })) {
           console.error('Неожиданные данные для моделей устройств /refs/device_models', datum);
         }
-        map.set(datum.id, datum.name);
+        map.set(datum.id, { name: datum.name, mileage: datum.mileage, detergent: datum.detergent });
       }
     }
     return map;

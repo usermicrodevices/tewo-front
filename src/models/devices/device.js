@@ -55,7 +55,8 @@ class Device {
     if (typeof this.deviceModelId !== 'number') {
       return this.deviceModelId;
     }
-    return this.session.deviceModels.get(this.deviceModelId);
+    const deviceModel = this.session.deviceModels.get(this.deviceModelId);
+    return deviceModel ? deviceModel.name : deviceModel;
   }
 
   @computed get companyId() {

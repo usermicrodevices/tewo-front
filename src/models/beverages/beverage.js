@@ -54,6 +54,11 @@ class Beverage {
     return this.session.devices.get(deviceId);
   }
 
+  @computed get companyId() {
+    const { device } = this;
+    return device ? device.companyId : device;
+  }
+
   @computed get deviceName() {
     return (this.device || { name: undefined }).name;
   }
