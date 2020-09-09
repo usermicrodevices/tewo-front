@@ -113,7 +113,7 @@ const FILTER_TYPES = {
 };
 
 class Filters {
-  @observable data = {};
+  data = observable.map();
 
   filters;
 
@@ -127,20 +127,20 @@ class Filters {
     autorun(() => {
       transaction(() => {
         // проверка, изменяющая зависимые селекторы, если они потеряли смысл
-        for (const key of Object.keys(this.data)) {
+        for (const key of this.data.keys()) {
           const filter = this.filters[key];
           if (filter.type === 'selector') {
             const items = filter.selector(this);
             if (Array.isArray(items)) {
               const selector = new Map(items);
               if (selector.size <= 1) {
-                delete this.data[key];
+                this.data.delete(key);
               } else {
-                const checked = this.data[key].slice().filter((id) => selector.has(id));
+                const checked = this.data.get(key).slice().filter((id) => selector.has(id));
                 if (checked.length === 0) {
-                  delete this.data[key];
-                } else if (this.data[key].length !== checked.length) {
-                  this.data[key] = checked;
+                  delete this.data.get(key);
+                } else if (this.data.get(key).length !== checked.length) {
+                  this.data.set(key, checked);
                 }
               }
             }
@@ -154,7 +154,7 @@ class Filters {
   // не строгую в том смысле, что из rhs может быть вычтено не всё, что в this
   isGreater(rhs) {
     console.assert(rhs.filters === this.filters);
-    for (const [key, value] of Object.entries(this.data)) {
+    for (const [key, value] of this.data.entries()) {
       const rhsValue = rhs.data[key];
       if (typeof rhsValue === 'undefined') {
         return false;
@@ -170,7 +170,7 @@ class Filters {
 
   set search(args) {
     transaction(() => {
-      this.data = {};
+      this.data.clear();
       if (!args.includes('=')) {
         return;
       }
@@ -184,26 +184,26 @@ class Filters {
           const filterType = this.filterType(key);
           const { operators, initialValue, parser } = FILTER_TYPES[filterType];
 
-          if (!(key in this.data)) {
-            this.data[key] = initialValue;
+          if (!this.data.has(key)) {
+            this.data.set(key, initialValue);
           }
 
           const id = operators.findIndex((op) => op === operator);
           if (id < 0) {
             console.error(`unknown operator type ${operator}. Known operators list: ${operators.join(', ')}`);
           } else {
-            const filterValue = parser(value, id, this.data[key]);
-            this.data[key] = filterValue;
+            const filterValue = parser(value, id, this.data.get(key));
+            this.data.set(key, filterValue);
           }
         } else {
           console.error(`unknown filter key ${key}. Known keys: ${Object.keys(this.filters).join(', ')}`);
         }
       }
-      for (const [key, value] of Object.entries(this.data)) {
+      for (const [key, value] of this.data.entries()) {
         const filter = this.filters[key];
         const { isNullValue } = FILTER_TYPES[filter.type];
         if (isNullValue(value, filter)) {
-          delete this.data[key];
+          this.data.delete(key);
         }
       }
     });
@@ -214,9 +214,9 @@ class Filters {
     const filter = this.filters[key];
     const { isNullValue } = FILTER_TYPES[filter.type];
     if (isNullValue(value, filter)) {
-      delete this.data[key];
+      this.data.delete(key);
     } else {
-      this.data[key] = value;
+      this.data.set(key, value);
     }
   }
 
@@ -226,17 +226,19 @@ class Filters {
 
   @computed get predicate() {
     return (data) => {
+      if (typeof data === 'undefined') {
+        return true;
+      }
       if ('name' in data) {
         if (data.name.toLowerCase().indexOf(this.searchText.toLowerCase()) < 0) {
           return false;
         }
       }
-      for (const key of Object.keys(this.data)) {
-        if (key in data) {
-          const filter = this.filters[key];
-          if (!filter.apply((d) => FILTER_TYPES[filter.type].apply(d, this.data[key]), data)) {
-            return false;
-          }
+      for (const key of this.data.keys()) {
+        const filter = this.filters[key];
+        if (!filter.apply((d) => FILTER_TYPES[filter.type].apply(d, this.data.get(key)), data)) {
+          console.log('filter rejection', filter);
+          return false;
         }
       }
       return true;
@@ -252,7 +254,7 @@ class Filters {
   }
 
   @computed get search() {
-    return Object.entries(this.data).map(([key, value]) => {
+    return [...this.data.entries()].map(([key, value]) => {
       const type = this.filterType(key);
       const { operators, convertor } = FILTER_TYPES[type];
       const adaptedValue = convertor(value);
@@ -266,8 +268,8 @@ class Filters {
 
   get(key) {
     const { type } = this.filters[key];
-    if (key in this.data) {
-      return this.data[key];
+    if (this.data.has(key)) {
+      return this.data.get(key);
     }
     if (type === 'selector') {
       return [];

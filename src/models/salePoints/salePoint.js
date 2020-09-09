@@ -1,6 +1,5 @@
 import { observable, computed } from 'mobx';
 import Datum from 'models/datum';
-import { min } from 'moment';
 
 class SalePoint extends Datum {
   id = null;
@@ -214,9 +213,7 @@ class SalePoint extends Datum {
   }
 
   constructor(session) {
-    super(() => new Promise((resolve) => {
-      setTimeout(resolve, 2000);
-    }));
+    super(session.points.applyer);
 
     this.session = session;
   }

@@ -2,7 +2,7 @@
 import { observable, computed, action } from 'mobx';
 
 import Table from 'models/table';
-import getSalePoints from 'services/salePoints';
+import { getSalePoints, applySalePoint } from 'services/salePoints';
 import Filters from 'models/filters';
 
 import Point from './salePoint';
@@ -120,13 +120,13 @@ const declareFilters = (session) => ({
   isHaveDisabledEquipment: {
     type: 'checkbox',
     title: 'С выключенным оборудованием',
-    apply: (general, data) => data.isHaveDisabledEquipment,
+    apply: (_, data) => data.isHaveDisabledEquipment,
     passiveValue: false,
   },
   isOutOfWaterQuality: {
     type: 'checkbox',
     title: 'На оборудовании превышена жесткость воды',
-    apply: (general, data) => data.isOutOfWaterQuality,
+    apply: (_, data) => data.isOutOfWaterQuality,
     passiveValue: false,
   },
 });
@@ -171,6 +171,13 @@ class SalePoints extends Table {
 
   @action create() {
     this.elementForEdit = new Point(this.session);
+  }
+
+  get applyer() {
+    return (item, changes) => applySalePoint(item, changes).then((response) => ({
+      response,
+      sorageData: this.rawData,
+    }));
   }
 }
 

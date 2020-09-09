@@ -32,6 +32,10 @@ class Event {
     this.session = session;
   }
 
+  get device__sale_point__company__id() {
+    return this.company.id;
+  }
+
   get durationText() {
     const beginYear = this.openDate.year();
     if (!this.closeDate.isValid()) {
@@ -75,11 +79,7 @@ class Event {
     return this.openDate.format();
   }
 
-  get device_id() {
-    return this.deviceId;
-  }
-
-  @computed get sale_point_id() {
+  @computed get salePointId() {
     const { salePoint } = this;
     if (!salePoint) {
       return undefined;
@@ -109,6 +109,14 @@ class Event {
       return undefined;
     }
     return device.company;
+  }
+
+  @computed get companyId() {
+    const { company } = this;
+    if (!company) {
+      return undefined;
+    }
+    return company.id;
   }
 
   @computed get deviceName() {

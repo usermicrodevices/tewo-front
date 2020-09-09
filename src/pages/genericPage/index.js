@@ -34,9 +34,6 @@ const GenericPage = ({
   const OverviewActions = typeof overviewActions === 'undefined' ? () => null : overviewActions;
   const [isFiltersOpen, setFiltersOpen] = useState(false);
   const storage = session[storageName];
-  if (!storage.isLoaded) {
-    return <Loader size="huge" />;
-  }
   const { filter, visibleColumns } = storage;
   const { filters } = filter;
   const isHaveFilters = Object.keys(filters).length !== 0;
@@ -135,6 +132,9 @@ const GenericPage = ({
           <Route
             path={`${path}/:id/:action`}
             render={({ match: { params: { id, action } } }) => {
+              if (!storage.isLoaded) {
+                return <Loader size="huge" />;
+              }
               const elementForEdit = storage.get(parseInt(id, 10));
               if (!elementForEdit) {
                 return <Redirect path={path} />;
@@ -155,6 +155,9 @@ const GenericPage = ({
           <Route
             path={`${path}/:id`}
             render={({ match: { params: { id } } }) => {
+              if (!storage.isLoaded) {
+                return <Loader size="huge" />;
+              }
               const elementForEdit = storage.get(parseInt(id, 10));
               if (!elementForEdit) {
                 return <Redirect to={path} />;

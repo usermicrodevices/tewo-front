@@ -1,6 +1,6 @@
 import React from 'react';
-import { withRouter, Redirect } from 'react-router-dom';
-import { inject, observer, Provider } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 
 import Table from 'elements/table';
 import Editor from 'elements/editor';

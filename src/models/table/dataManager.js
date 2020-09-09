@@ -34,8 +34,8 @@ class DataManager {
         this.data.replace(results.concat(new Array(amount - results.length)));
         this.isAsync = amount !== results.length && constants.smallDataLimit < amount;
         if (!this.isAsync && amount !== results.length) {
-          this.partialLoader().then(({ results: wholeData }) => {
-            this.data = wholeData;
+          this.partialLoader(amount).then(({ results: wholeData }) => {
+            this.data.replace(wholeData);
           });
         }
       });

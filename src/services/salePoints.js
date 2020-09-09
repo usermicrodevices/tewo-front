@@ -1,11 +1,61 @@
-import { get } from 'utils/request';
+/* eslint no-param-reassign: "off" */
+import { get, post, patch } from 'utils/request';
 import moment from 'moment';
 import SalePoint from 'models/salePoints/salePoint';
 import checkData from 'utils/dataCheck';
 
+const RENAMER = {
+  id: 'id',
+  name: 'name',
+  company: 'companyId',
+  address: 'address',
+  created_date: 'createdDate',
+  map_point: 'mapPoint',
+  city: 'cityId',
+  person: 'person',
+  phone: 'phone',
+  emails: 'email',
+  has_overloc_ppm: 'isOutOfWaterQuality',
+  has_off_devices: 'isHaveDisabledEquipment',
+  need_tech_service: 'isNeedOverhaul',
+  overdue_tasks: 'isHaveOutdatedEvents',
+};
+
+const LOCATION = '/refs/sale_points/';
+
+const SHUILD_BE = {
+  id: 'number',
+  name: 'string',
+  company: 'number',
+  created_date: 'date',
+  has_overloc_ppm: 'boolean',
+  has_off_devices: 'boolean',
+  need_tech_service: 'boolean',
+  overdue_tasks: 'boolean',
+};
+
+const MAY_BE = {
+  emails: 'string',
+  person: 'string',
+  phone: 'string',
+  address: 'string',
+  city: 'number',
+  map_point: 'location',
+};
+
+const converter = (data, result) => {
+  if (!checkData(data, SHUILD_BE, MAY_BE)) {
+    console.error(`обнаружены ошибки при обработке эндпоинта ${LOCATION}`);
+  }
+
+  for (const [jsonName, objectName] of Object.entries(RENAMER)) {
+    result[objectName] = jsonName === 'created_date' ? moment(data[jsonName]) : data[jsonName];
+  }
+  return result;
+};
+
 const getSalePoints = (session) => () => new Promise((resolve, reject) => {
-  const location = '/refs/sale_points/';
-  get(location).then((salePoints) => {
+  get(LOCATION).then((salePoints) => {
     if (!Array.isArray(salePoints)) {
       console.error(`/refs/sale_points ожидаеся в ответ массив, получен ${typeof salePoints}`, salePoints);
       reject(salePoints);
@@ -14,53 +64,19 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
 
     resolve({
       count: salePoints.length,
-      results: salePoints.map((data) => {
-        const stouldBe = {
-          id: 'number',
-          name: 'string',
-          company: 'number',
-          created_date: 'date',
-          has_overloc_ppm: 'boolean',
-          has_off_devices: 'boolean',
-          need_tech_service: 'boolean',
-          overdue_tasks: 'boolean',
-        };
-        const mayBe = {
-          emails: 'string',
-          person: 'string',
-          phone: 'string',
-          address: 'string',
-          city: 'number',
-          map_point: 'location',
-        };
-        if (!checkData(data, stouldBe, mayBe)) {
-          console.error(`обнаружены ошибки при обработке эндпоинта ${location}`);
-        }
-
-        const point = new SalePoint(session);
-
-        for (const [jsonName, objectName] of Object.entries({
-          id: 'id',
-          name: 'name',
-          company: 'companyId',
-          address: 'address',
-          created_date: 'createdDate',
-          map_point: 'mapPoint',
-          city: 'cityId',
-          person: 'person',
-          phone: 'phone',
-          emails: 'email',
-          has_overloc_ppm: 'isOutOfWaterQuality',
-          has_off_devices: 'isHaveDisabledEquipment',
-          need_tech_service: 'isNeedOverhaul',
-          overdue_tasks: 'isHaveOutdatedEvents',
-        })) {
-          point[objectName] = jsonName === 'created_date' ? moment(data[jsonName]) : data[jsonName];
-        }
-        return point;
-      }),
+      results: salePoints.map((data) => converter(data, new SalePoint(session))),
     });
   }).catch(reject);
 });
 
-export default getSalePoints;
+const applySalePoint = (item, changes) => {
+  const data = {};
+  const renamer = new Map(Object.entries(RENAMER).map(([a, b]) => [b, a]));
+  for (const [key, value] of Object.entries(changes)) {
+    data[renamer.get(key)] = value;
+  }
+  const request = item === null ? post(LOCATION, data) : patch(`${LOCATION}${item}`, data);
+  request.then((response) => converter(response, {}));
+};
+
+export { applySalePoint, getSalePoints };

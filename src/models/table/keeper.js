@@ -38,9 +38,9 @@ class Keeper {
       if (isImpossibleToBeAsync) {
         return;
       }
-      if (!this.isAsync) {
+      if (!this.isAsync && this.isLoaded) {
         const isGreater = this.filter.isGreater(this.consideredFilter);
-        if (isGreater) {
+        if (!isGreater) {
           // Если данных мало и фильтр был ужесточен то ничего
           // грузить не надо, можно отфильтровать имеющиеся данные
           return;

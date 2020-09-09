@@ -18,14 +18,14 @@ class Datum {
 
   update(data) {
     console.assert(
-      Object.entries(data).filter(([key]) => !(key in this)).length === 0,
+      Object.entries(data).filter(([key]) => typeof this[key] === 'undefined').length === 0,
       'not all keys from update data is expected in pbject',
       this,
       data,
     );
 
     if (this.isSomeChanged(data)) {
-      return this.updater(data).then((response) => {
+      return this.updater(this.id, data).then((response) => {
         transaction(() => {
           for (const [key, value] of Object.entries(data)) {
             this[key] = value;

@@ -64,7 +64,7 @@ const declareFilters = (session) => ({
   device_date: {
     type: 'daterange',
     title: 'Момент налива',
-    apply: (general, data) => general(data.device_date),
+    apply: (general, data) => general(data.deviceDate),
   },
   device__sale_point__company__id: {
     type: 'selector',
@@ -81,15 +81,15 @@ const declareFilters = (session) => ({
   device__id: {
     type: 'selector',
     title: 'Оборудование',
-    apply: (general, data) => general(data.drink),
-    selector: (filter) => session.devices.salePointsSelector(filter.data.sale_point),
+    apply: (general, data) => general(data.deviceId),
+    selector: (filter) => session.devices.salePointsSelector(filter.data.get('sale_point__id')),
   },
   drink__id: {
     type: 'selector',
     title: 'Напиток',
     apply: (general, data) => general(data.drink),
     selector: () => session.drinks.selector,
-    disabled: (filter) => !filter.data.device,
+    disabled: (filter) => !filter.data.has('device__id'),
   },
   operation__id: {
     type: 'selector',
