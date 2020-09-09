@@ -3,11 +3,25 @@ import { inject, observer } from 'mobx-react';
 
 import GenericPage from 'pages/genericPage';
 
+import { SalePointOverview, SalePointTitleAction } from 'components/salePoint';
+
 const Points = () => (
   <GenericPage
     storageName="points"
     tableTitle="Список объектов"
-    subrout={{}}
+    overview={SalePointOverview}
+    overviewActions={SalePointTitleAction}
+    overviewSubmenu={[
+      {
+        path: '',
+        text: 'Сводная информация',
+      },
+      {
+        path: 'view',
+        text: 'Справочная информация',
+        explains: '',
+      },
+    ]}
   />
 );
 

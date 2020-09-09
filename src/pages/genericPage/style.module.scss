@@ -18,3 +18,10 @@
         }
     }
 }
+
+.submenu {
+    :global .ant-menu-light {
+        background-color: transparent;
+        margin-bottom: 24px;
+    }
+}

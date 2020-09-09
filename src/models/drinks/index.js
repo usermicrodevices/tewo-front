@@ -77,6 +77,9 @@ class Drinks extends Table {
   actions = {
     isVisible: true,
     isEditable: () => true,
+    onEdit: (datum) => {
+      this.elementForEdit = datum;
+    },
   };
 
   constructor(session) {

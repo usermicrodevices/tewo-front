@@ -1,0 +1,17 @@
+.main {
+    grid-template-columns: 913fr 252fr;
+    display: grid;
+    margin: -12px;
+
+    :nth-child(2) {
+        min-width: 228px;
+    }
+
+    :nth-child(n+3) {
+        grid-column-start: span 2;
+    }
+
+    >* {
+        margin: 12px;
+    }
+}

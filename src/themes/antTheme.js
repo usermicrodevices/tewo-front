@@ -5,5 +5,5 @@ module.exports = {
   'line-height-base': 1.3,
   'border-radius-base': '8px',
   'text-color': '#595959',
-  'body-background': '#EBF4F4',
+  'body-background': '#F3F5F7',
 };
