@@ -22,10 +22,10 @@ const Editor = ({
 }) => {
   const [isEdditing, setRawIsEdditing] = useState(action === 'edit' || data.id === null);
   const setIsEdditing = (v) => {
-    setRawIsEdditing(v);
     if (isRecipeMode && !v) { data.cancel(); }
     if (!isModal) { history.push(url.replace(!v ? 'edit' : 'view', v ? 'edit' : 'view')); }
     if (data.id === null) { onCancel(); }
+    setRawIsEdditing(v);
   };
   const [isUpdating, setIsUpdating] = useState(false);
   const [form] = Form.useForm();
