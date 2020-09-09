@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Checkbox, Input, Space } from 'antd';
+import { Button, Checkbox, Input } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
 
 import DataRangePicker from 'elements/filters/daterangepicker';
@@ -46,8 +46,8 @@ const Filter = (
 
 const Filters = ({ filter }) => (
   <div className={style['filters-block']}>
-    <Space direction="vertical">
-      <Button type="text" icon={<ReloadOutlined />} onClick={() => { filter.clear(); }}>Сбросить</Button>
+    <Button type="text" icon={<ReloadOutlined />} onClick={() => { filter.clear(); }}>Сбросить</Button>
+    <div className={style.filters}>
       {
         filter.elements.map(({
           title, selector, type, key, disabled,
@@ -68,7 +68,7 @@ const Filters = ({ filter }) => (
           );
         })
       }
-    </Space>
+    </div>
   </div>
 );
 
