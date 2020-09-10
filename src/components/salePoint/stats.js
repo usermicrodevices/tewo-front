@@ -19,8 +19,8 @@ const Stats = () => {
         Общая статистика
       </div>
       <div className={style.groups}>
-        <Link><Format width={170}>Группа цен 1</Format></Link>
-        <Link><Format width={170}>Группа цен цен цен цен цен 1</Format></Link>
+        <Link to="/"><Format width={170}>Группа цен 1</Format></Link>
+        <Link to="/"><Format width={170}>Группа цен цен цен цен цен 1</Format></Link>
       </div>
       <div className={style.outdatedtasks}>
         <div className={style.value}>{isLoaded ? 5 : <Loader />}</div>
