@@ -1,6 +1,8 @@
 import { observable, computed } from 'mobx';
 import Datum from 'models/datum';
 
+import Details from './details';
+
 class SalePoint extends Datum {
   id = null;
 
@@ -35,6 +37,15 @@ class SalePoint extends Datum {
   @observable tags = [];
 
   session;
+
+  detailsData;
+
+  get details() {
+    if (typeof detailsData === 'undefined') {
+      this.detailsData = new Details(this.session);
+    }
+    return this.detailsData;
+  }
 
   @computed get values() {
     return [

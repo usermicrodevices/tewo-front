@@ -21,7 +21,7 @@ const ViewerPage = ({
   history,
 }) => {
   if (!storage.isLoaded) {
-    return <Loader size="huge" />;
+    return <Loader size="large" />;
   }
 
   const { params: { id } } = match;

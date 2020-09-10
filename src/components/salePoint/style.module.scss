@@ -3,11 +3,11 @@
     display: grid;
     margin: -12px;
 
-    :nth-child(2) {
+    >:nth-child(2) {
         min-width: 228px;
     }
 
-    :nth-child(n+3) {
+    >:nth-child(n+3) {
         grid-column-start: span 2;
     }
 

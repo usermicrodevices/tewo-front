@@ -1,0 +1,108 @@
+@import 'src/themes/constants';
+
+.root>div {
+  display: flex;
+  height: 100%;
+  justify-content: space-between;
+  flex-direction: column;
+  .title {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      line-height: 22px;
+      font-size: 14px;
+      .icon {
+          margin-right: 8px;
+          fill: $link-color;
+      }
+  }
+  .groups {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      line-height: 50px;
+
+      a {
+        text-decoration: underline;
+      }
+  }
+  .outdatedtasks {
+    .value {
+      font-size: 16px;
+      line-height: 32px;
+      height: 32px;
+      max-width: 30px;
+    }
+  }
+  .equipment {
+    .value {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 32px;
+      max-width: 30px;
+    }
+  }
+  .outdatedtasks, .equipment {
+    .sublabel {
+      color: #8C8C8C;
+    }
+  }
+  .conditions {
+    margin-bottom: 10px;
+
+    .sublabel {
+      line-height: 32px;
+    }
+
+    .state {
+      display: flex;
+      justify-content: flex-start;
+      border-radius: 8px;
+      background: #EEFBFB;
+
+      margin: 3px 0px;
+
+      .value {
+        width: 44px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .sublabel {
+        color: #8C8C8C;
+      }
+
+      &.danger>div.sublabel  {
+        color: #F5222D;
+      }
+    }
+}
+  .state, .equipment, .outdatedtasks, .groups {
+    flex-grow: 1;
+  }
+  .downtime.sublabel {
+    display: flex;
+    justify-content: space-between;
+    .label {
+      color: #8C8C8C;
+    }
+  }
+
+  :global .ant-divider-horizontal {
+    margin: 0px 0px 10px 0px;
+  }
+}
+
+.sublabel {
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.danger>div {
+  color: #F5222D;
+}
