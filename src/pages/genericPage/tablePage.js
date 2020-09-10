@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
 import Table from 'elements/table';
@@ -9,7 +9,7 @@ import Card from 'elements/card';
 import { TableHeader } from './headers';
 
 @withRouter
-@inject('storage')
+@inject('table')
 @observer
 class GenericTablePage extends React.Component {
   updateTimeout = null;
@@ -17,15 +17,15 @@ class GenericTablePage extends React.Component {
   constructor(props) {
     super(props);
 
-    const { storage, location } = props;
-    storage.filter.search = location.search.slice(1);
+    const { table, location } = props;
+    table.filter.search = location.search.slice(1);
   }
 
   componentDidMount() {
-    const { storage, refreshInterval } = this.props;
+    const { table, refreshInterval } = this.props;
     if (refreshInterval) {
       const update = () => {
-        storage.validate().then(() => {
+        table.validate().then(() => {
           this.updateTimeout = setTimeout(update, refreshInterval);
         });
       };
@@ -38,13 +38,18 @@ class GenericTablePage extends React.Component {
   }
 
   onCancelEdditing = () => {
-    const { storage } = this.props;
-    storage.elementForEdit = null;
+    const { table } = this.props;
+    table.elementForEdit = null;
   }
 
   render() {
-    const { storage, title } = this.props;
-    const { elementForEdit } = storage;
+    const { table, title, location } = this.props;
+    const { elementForEdit } = table;
+    if (table.isLoaded && table.rawData.length === 1 && location.search === '') {
+      const [element] = table.rawData;
+      const path = location.pathname.split('/').slice(0, 2).join('/');
+      return <Redirect to={`${path}/${element.id}`} />;
+    }
     return (
       <>
         <TableHeader title={title} />
