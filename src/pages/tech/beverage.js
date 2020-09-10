@@ -8,7 +8,7 @@ const Beverage = () => (
   <GenericPage
     refreshInterval={beveragesAndEventsUpdateFrequency}
     storageName="beverages"
-    isNotEditable
+    isHaveNotOverview
     tableTitle="Наливы"
   />
 );

@@ -6,6 +6,8 @@ import Table from 'elements/table';
 import Editor from 'elements/editor';
 import Card from 'elements/card';
 
+import { TableHeader } from './headers';
+
 @withRouter
 @inject('storage')
 @observer
@@ -41,10 +43,11 @@ class GenericTablePage extends React.Component {
   }
 
   render() {
-    const { storage } = this.props;
+    const { storage, title } = this.props;
     const { elementForEdit } = storage;
     return (
       <>
+        <TableHeader title={title} />
         { elementForEdit && <Editor data={elementForEdit} isModal onCancel={this.onCancelEdditing} /> }
         <Card>
           <Table />
