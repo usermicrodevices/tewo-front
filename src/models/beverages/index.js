@@ -72,7 +72,7 @@ const declareFilters = (session) => ({
     apply: (general, data) => general(data.companyId),
     selector: () => session.companies.selector,
   },
-  sale_point__id: {
+  device__sale_point__id: {
     type: 'selector',
     title: 'Объект',
     apply: (general, data) => general(data.salePointId),

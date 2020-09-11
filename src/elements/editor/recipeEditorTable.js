@@ -7,7 +7,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import Icon from 'elements/icon';
 
 import Format from 'elements/format';
-import NoData from 'elements/table/noData';
+import NoData from 'elements/noData';
 
 import style from './style.module.scss';
 

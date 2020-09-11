@@ -5,7 +5,7 @@ import { VariableSizeList as List } from 'react-window';
 import Loader from 'elements/loader';
 
 import Cell, { MAX_ROWS_AMOUNT } from './row';
-import NoData from './noData';
+import NoData from 'elements/noData';
 import style from './style.module.scss';
 
 const ROW_HEIGHT = 54;

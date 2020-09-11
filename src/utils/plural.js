@@ -1,7 +1,8 @@
-function plural(amount, options) {
-  if (typeof amount !== 'number') {
+function plural(v, options) {
+  if (typeof v !== 'number') {
     return '';
   }
+  const amount = v % 100;
   if (amount >= 10 && amount < 20) {
     return options[1];
   }

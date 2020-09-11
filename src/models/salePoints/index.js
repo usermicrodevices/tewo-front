@@ -2,7 +2,7 @@
 import { observable, computed, action } from 'mobx';
 
 import Table from 'models/table';
-import { getSalePoints, applySalePoint } from 'services/salePoints';
+import { getSalePoints, applySalePoint, getSalesTop } from 'services/salePoints';
 import Filters from 'models/filters';
 
 import Point from './salePoint';
@@ -172,6 +172,8 @@ class SalePoints extends Table {
   @action create() {
     this.elementForEdit = new Point(this.session);
   }
+
+  getSalesTop = getSalesTop;
 
   get applyer() {
     return (item, changes) => applySalePoint(item, changes).then((response) => ({

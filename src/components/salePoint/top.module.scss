@@ -1,0 +1,71 @@
+.root>div {
+  display: flex;
+  height: 250px;
+
+  .title {
+    width: 100px;
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .chart {
+    align-self: center;
+    width: 300px;
+  }
+  .list {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    .item {
+      margin-left: 50px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #E8E8E8;
+      .label {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        .mark {
+          width: 15px;
+          height: 15px;
+          border-radius: 7.5px;
+          margin: 0px 7.5px 0px -7.5px;
+        }
+      }
+      .value {
+        background: #EEFBFB;
+        border-radius: 8px;
+        display: flex;
+        padding: 4px 14px 4px 14px;
+        .number {
+          font-weight: 600;
+          font-size: 14px;
+          margin-right: 5px;
+        }
+        .sublabel {
+          font-size: 11px;
+          white-space: nowrap;
+          color: #8C8C8C;
+        }
+      }
+    }
+  }
+
+  .emergency {
+    text-align: center;
+    margin-top: -130px;
+
+    .strong {
+      font-weight: 600;
+    }
+  }
+
+  .loadin, .emergency {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+  }
+}

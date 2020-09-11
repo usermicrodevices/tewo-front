@@ -6,7 +6,7 @@ import Loader from 'elements/loader';
 import classNames from 'classnames';
 import Format from 'elements/format';
 import styles from './style.module.scss';
-import NoData from './noData';
+import NoData from 'elements/noData';
 
 const ACTIONS_COLUMN_WIDT = 70;
 const SCROLL_PANE_WIDTH = 25;

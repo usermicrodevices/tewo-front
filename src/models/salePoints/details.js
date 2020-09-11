@@ -1,12 +1,12 @@
 /* eslint class-methods-use-this: "off" */
-import { computed } from 'mobx';
+import { computed, observable, reaction } from 'mobx';
 import localStorage from 'mobx-localstorage';
 import moment from 'moment';
 
 const STORAGE_KEY = 'salePoints_details_forms_data';
 
 class Details {
-  performanceData;
+  @observable salesTopData = null;
 
   session;
 
@@ -28,7 +28,7 @@ class Details {
   set dateRange(dateRange) {
     this.sorageData = {
       ...this.sorageData,
-      dateRange: dateRange.map((t) => (moment.isMoment(t) ? t : moment(t))),
+      dateRange: dateRange ? dateRange.map((t) => (moment.isMoment(t) ? t : moment(t))) : ['', ''],
     };
   }
 
@@ -43,8 +43,28 @@ class Details {
     };
   }
 
-  constructor(session) {
+  @computed get salesTop() {
+    if (!Array.isArray(this.salesTopData)) {
+      return this.salesTopData;
+    }
+    return this.salesTopData.map((data) => {
+      const drink = this.session.drinks.get(data.drinkId);
+      const drinkName = drink ? drink.name : drink;
+      return { drinkName, ...data };
+    });
+  }
+
+  constructor(session, myId) {
     this.session = session;
+
+    const updateSalesTop = () => {
+      this.salesTopData = null;
+      session.points.getSalesTop(myId, this.dateRange).then((top) => {
+        this.salesTopData = top.sort((a, b) => Math.sign(b.beverages - a.beverages) || Math.sign(b.drinkId - a.drinkId));
+      });
+    };
+    reaction(() => this.dateRange, updateSalesTop);
+    updateSalesTop();
   }
 }
 

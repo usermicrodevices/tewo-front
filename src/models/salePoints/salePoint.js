@@ -41,8 +41,8 @@ class SalePoint extends Datum {
   detailsData;
 
   get details() {
-    if (typeof detailsData === 'undefined') {
-      this.detailsData = new Details(this.session);
+    if (typeof this.detailsData === 'undefined') {
+      this.detailsData = new Details(this.session, this.id);
     }
     return this.detailsData;
   }

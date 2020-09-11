@@ -2,6 +2,7 @@ import {
   action, observable, computed, transaction, autorun, toJS,
 } from 'mobx';
 import moment from 'moment';
+import { momentToArg } from 'utils/date';
 
 const rangeComparator = (lhs, rhs) => {
   const [lBegin, lEnd] = lhs;
@@ -24,7 +25,7 @@ const selectorsComparator = (lhs, rhs) => {
 
 const DATE_RANGE_TYPE = {
   operators: ['gte', 'lte'],
-  convertor: (v) => v.map((d) => d.format().replace('+', '%2B')),
+  convertor: (v) => v.map(momentToArg),
   parser: (v, id, old) => { const r = [...old]; r[id] = moment(v.replace('%2B', '+')); return r; },
   initialValue: [null, null],
   complement: rangeComparator,

@@ -3,6 +3,7 @@ import { get, post, patch } from 'utils/request';
 import moment from 'moment';
 import SalePoint from 'models/salePoints/salePoint';
 import checkData from 'utils/dataCheck';
+import { daterangeToArgs } from 'utils/date';
 
 const RENAMER = {
   id: 'id',
@@ -79,4 +80,32 @@ const applySalePoint = (item, changes) => {
   request.then((response) => converter(response, {}));
 };
 
-export { applySalePoint, getSalePoints };
+const getSalesTop = (pointId, daterange) => {
+  const rangeArg = daterangeToArgs(daterange, 'device_date');
+  const location = `/data/beverages/stats_drinks/?device__sale_point__id=${pointId}${rangeArg}`;
+  return get(location)
+    .then((result) => {
+      if (!Array.isArray(result)) {
+        console.error(`can not ger data from ${location}`, result);
+        return [];
+      }
+      const mustBe = {
+        drink_id: 'number',
+        total: 'number',
+        sum: 'number',
+      };
+      return result.map((d) => {
+        if (!checkData(d, mustBe)) {
+          console.error(`unexpected data from ${location}`, d);
+          return null;
+        }
+        return {
+          drinkId: d.drink_id,
+          beverages: d.total,
+          sales: d.sum,
+        };
+      }).filter((d) => d !== null);
+    });
+};
+
+export { applySalePoint, getSalePoints, getSalesTop };

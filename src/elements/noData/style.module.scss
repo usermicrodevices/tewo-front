@@ -1,0 +1,12 @@
+.nodata {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 150px;
+  width: 100%;
+
+  > svg {
+    margin-bottom: 30px;
+    transform: scale(1.3);
+  }
+}
