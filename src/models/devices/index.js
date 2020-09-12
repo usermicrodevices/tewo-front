@@ -150,6 +150,13 @@ class Devices extends Table {
   get(deviceId) {
     return this.rawData.find(({ id }) => id === deviceId);
   }
+
+  getPointDevices(pointId) {
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    return this.rawData.filter(({ salePointId }) => pointId === salePointId);
+  }
 }
 
 export default Devices;

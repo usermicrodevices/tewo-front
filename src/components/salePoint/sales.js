@@ -7,8 +7,10 @@ import classNames from 'classnames';
 import DatergangePicker from 'elements/filters/daterangepicker';
 import Icon from 'elements/icon';
 import Loader from 'elements/loader';
+import Format from 'elements/format';
 
 import CurvesPicker from './salesCurvePicker';
+import Chart from './chart';
 
 import styles from './sales.module.scss';
 
@@ -22,13 +24,21 @@ const ChangesLabel = ({ value }) => {
   return (
     <div className={styles.growth}>
       { <Icon name={value > 0 ? 'arrow-upward-outline' : 'arrow-downward-outline'} className={value > 0 ? styles.rise : styles.fail} /> }
-      {`${value}%`}
+      {`${Math.round(value)}%`}
     </div>
   );
 };
 
-const Chart = ({ element: { details } }) => {
-  const isLoaded = details.curves;
+const Sales = ({ element: { details } }) => {
+  const {
+    salesDiff,
+    beveragesDiff,
+    curBeverages,
+    prwBeverages,
+    curSales,
+    prwSales,
+  } = details;
+  const isLoaded = details.isSeriesLoaded;
   return (
     <Card className={styles.root}>
       <div className={styles.chart}>
@@ -36,10 +46,10 @@ const Chart = ({ element: { details } }) => {
           <DatergangePicker title="Период" value={details.dateRange} onChange={(v) => { details.dateRange = v; }} />
           <CurvesPicker />
         </div>
-        <div className={styles.curves}>
+        <div className={styles.picker}>
           {
             isLoaded
-              ? null
+              ? <Chart />
               : <Loader size="large" />
           }
         </div>
@@ -51,14 +61,14 @@ const Chart = ({ element: { details } }) => {
         </div>
         <div className={styles.rangereport}>
           <div className={styles.values}>
-            <div>{false ? 1840 : <Loader />}</div>
-            <ChangesLabel value={undefined} />
+            <div><Format>{curSales}</Format></div>
+            <ChangesLabel value={salesDiff} />
           </div>
           <div className={styles.sublabel}>продаж за текущий период</div>
         </div>
         <div className={classNames(styles.rangereport, styles.prew)}>
           <div className={styles.values}>
-            <div>1840</div>
+            <div><Format>{prwSales}</Format></div>
           </div>
           <div className={styles.sublabel}>продаж за предыдущий период</div>
         </div>
@@ -66,14 +76,14 @@ const Chart = ({ element: { details } }) => {
         <div className={styles.beverages}>
           <div className={styles.values}>
             <div className={styles.sublabel}>Колличество наливов</div>
-            <ChangesLabel value={undefined} />
+            <ChangesLabel value={beveragesDiff} />
           </div>
           <div className={styles.amount}>
-            <div className={styles.value}>{false ? 1840 : <Loader />}</div>
+            <div className={styles.value}><Format>{curBeverages}</Format></div>
             <div className={styles.sublabel}>текущий</div>
           </div>
           <div className={styles.amount}>
-            <div className={styles.value}>378</div>
+            <div className={styles.value}><Format>{prwBeverages}</Format></div>
             <div className={styles.sublabel}>предыдущий</div>
           </div>
         </div>
@@ -82,4 +92,4 @@ const Chart = ({ element: { details } }) => {
   );
 };
 
-export default inject('element')(observer(Chart));
+export default inject('element')(observer(Sales));

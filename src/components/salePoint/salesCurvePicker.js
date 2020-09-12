@@ -6,27 +6,9 @@ import {
 } from 'antd';
 
 import Icon from 'elements/icon';
+import { CURVE_TYPES } from 'models/salePoints/details';
 
 import style from './sales.module.scss';
-
-const CURVE_TYPES = [
-  {
-    value: 'beverages',
-    label: 'Наливы за текущий период',
-  },
-  {
-    value: 'beveragesPrev',
-    label: 'Наливы за прошлый период',
-  },
-  {
-    value: 'sales',
-    label: 'Продажи за текущий период',
-  },
-  {
-    value: 'salesPrev',
-    label: 'Продажи за прошлый период',
-  },
-];
 
 const CurveMenu = inject('element')(observer(({ element: { details } }) => {
   const options = CURVE_TYPES.map((data) => ({

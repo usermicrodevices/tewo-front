@@ -4,6 +4,7 @@ import moment from 'moment';
 import SalePoint from 'models/salePoints/salePoint';
 import checkData from 'utils/dataCheck';
 import { daterangeToArgs } from 'utils/date';
+import { getEvents } from './events';
 
 const RENAMER = {
   id: 'id',
@@ -83,29 +84,61 @@ const applySalePoint = (item, changes) => {
 const getSalesTop = (pointId, daterange) => {
   const rangeArg = daterangeToArgs(daterange, 'device_date');
   const location = `/data/beverages/stats_drinks/?device__sale_point__id=${pointId}${rangeArg}`;
+  const mustBe = {
+    drink_id: 'number',
+    total: 'number',
+    sum: 'number',
+  };
   return get(location)
     .then((result) => {
       if (!Array.isArray(result)) {
         console.error(`can not ger data from ${location}`, result);
         return [];
       }
-      const mustBe = {
-        drink_id: 'number',
-        total: 'number',
-        sum: 'number',
-      };
       return result.map((d) => {
         if (!checkData(d, mustBe)) {
           console.error(`unexpected data from ${location}`, d);
-          return null;
         }
         return {
           drinkId: d.drink_id,
           beverages: d.total,
-          sales: d.sum,
+          sales: d.sum / 100,
         };
-      }).filter((d) => d !== null);
+      });
     });
 };
 
-export { applySalePoint, getSalePoints, getSalesTop };
+const getSalesChart = (pointId, daterange) => {
+  const rangeArg = daterangeToArgs(daterange, 'device_date');
+  const location = `/data/beverages/stats/?device__sale_point__id=${pointId}${rangeArg}`;
+  const mustBe = {
+    day: 'date',
+    total: 'number',
+    sum: 'number',
+  };
+  return get(location).then((result) => {
+    if (!Array.isArray(result)) {
+      console.error(`can not ger data from ${location}`, result);
+      return [];
+    }
+    return result.map((d) => {
+      if (!checkData(d, mustBe)) {
+        console.error(`Неожиданные данные для эндпоинта ${location}`, d);
+      }
+      return {
+        day: moment(d.day),
+        beverages: d.total,
+        sales: d.sum / 100,
+      };
+    });
+  });
+};
+
+const getOutdatedTasks = (pointId) => {
+  const lastDay = [moment().subtract(1, 'day'), moment()];
+  return getEvents(null)(1, 0, `device__sale_point__id__exact=${pointId}&overdued=1${daterangeToArgs(lastDay, 'open_date')}`).then(({ count }) => count);
+};
+
+export {
+  applySalePoint, getSalePoints, getSalesTop, getSalesChart, getOutdatedTasks,
+};

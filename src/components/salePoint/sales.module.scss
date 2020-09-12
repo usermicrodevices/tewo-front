@@ -8,11 +8,12 @@
         flex-direction: column;
 
         .filters {
+            z-index: 2;
             display: flex;
             justify-content: flex-start;
         }
 
-        .curves {
+        .picker {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -71,6 +72,7 @@
         .sublabel {
             font-size: 11px;
             line-height: 43px;
+            white-space: nowrap;
         }
         .beverages {
             display: grid;
@@ -120,6 +122,8 @@
 .curvemenu {
     min-width: 300px;
     margin: 10px;
+    background-color: white;
+    border-radius: 8px;
 
     label {
         margin: 5px 0px 5px 0px;

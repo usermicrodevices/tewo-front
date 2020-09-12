@@ -1,0 +1,17 @@
+.curves {
+  &>:nth-child(1) {
+    margin-top: -28px;
+    margin-bottom: -10px;
+    z-index: 1;
+    svg, foreignObject {
+      z-index: 1;
+    }
+  }
+  &>:nth-child(2) {
+    margin-top: -20px;
+    margin-bottom: -33px;
+  }
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}

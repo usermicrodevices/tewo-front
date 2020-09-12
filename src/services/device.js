@@ -25,6 +25,8 @@ const getDevices = (session) => () => get('/refs/devices/').then((result) => {
           serial: 'string',
           device_model: 'number',
           price_group: 'number',
+          maintenance: 'date',
+          status: 'number',
         },
       )) {
         console.error('Неожиданный ответ по адресу /refs/devices/', deviceData);
