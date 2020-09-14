@@ -155,7 +155,11 @@ class Devices extends Table {
     if (!this.isLoaded) {
       return undefined;
     }
-    return this.rawData.filter(({ salePointId }) => pointId === salePointId);
+    return this.rawData.filter(({ salePointId, isInactive }) => pointId === salePointId && !isInactive);
+  }
+
+  count(predicate) {
+    return this.rawData.filter(predicate).length;
   }
 }
 

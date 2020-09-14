@@ -12,7 +12,6 @@ const COLORS = ['#99C2A2', '#66C7F4', '#228148', '#142288'];
 const ChartWidget = ({ size: { width }, element: { details } }) => {
   const series = details.series.map((d) => ({ ...d, type: 'line' }));
   const x = details.xSeria.map((d) => +d);
-  console.log(x.slice(-1));
   const data = {
     chart: {
       type: 'line',

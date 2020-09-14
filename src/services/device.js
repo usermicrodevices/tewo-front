@@ -21,12 +21,12 @@ const getDevices = (session) => () => get('/refs/devices/').then((result) => {
           name: 'string',
           sale_point: 'number',
           tz: 'string',
+          status: 'number',
         }, {
           serial: 'string',
           device_model: 'number',
           price_group: 'number',
           maintenance: 'date',
-          status: 'number',
         },
       )) {
         console.error('Неожиданный ответ по адресу /refs/devices/', deviceData);
@@ -52,6 +52,8 @@ const getDevices = (session) => () => get('/refs/devices/').then((result) => {
           device[modelName] = deviceData[jsonName];
         }
       }
+      device.isOn = deviceData.status === 1;
+      device.isInactive = deviceData.status === -1;
       return device;
     }),
   };

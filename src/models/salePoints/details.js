@@ -70,19 +70,19 @@ class Details {
   }
 
   @computed get beveragesSeriaCur() {
-    return mapToSeria(this.prewChartData, 'beverages');
-  }
-
-  @computed get beveragesSeriaPrv() {
     return mapToSeria(this.chartData, 'beverages');
   }
 
+  @computed get beveragesSeriaPrv() {
+    return mapToSeria(this.prewChartData, 'beverages');
+  }
+
   @computed get salesSeriaCur() {
-    return mapToSeria(this.prewChartData, 'sales');
+    return mapToSeria(this.chartData, 'sales');
   }
 
   @computed get salesSeriaPrv() {
-    return mapToSeria(this.chartData, 'sales');
+    return mapToSeria(this.prewChartData, 'sales');
   }
 
   @computed get dateRange() {
@@ -90,7 +90,15 @@ class Details {
   }
 
   set dateRange(dateRange) {
-    localStorage.setItem(`${STORAGE_KEY}_date`, dateRange ? dateRange.map((t) => (moment.isMoment(t) ? t : moment(t))) : ['', '']);
+    localStorage.setItem(`${STORAGE_KEY}_date`, (() => {
+      if (Array.isArray(dateRange) && dateRange.length === 2 && moment.isMoment(dateRange[0]) && moment.isMoment(dateRange[1])) {
+        return [
+          dateRange[0].startOf('day'),
+          dateRange[1].endOf('day'),
+        ];
+      }
+      return ['', ''];
+    })());
   }
 
   @computed get visibleCurves() {
@@ -169,14 +177,6 @@ class Details {
     return this.devices.length;
   }
 
-  @computed get devicesDisabledAmount() {
-    const { devices } = this;
-    if (!Array.isArray(devices)) {
-      return undefined;
-    }
-    return undefined;// this.devices.filter(({ isDisabled }) => isDisabled).length;
-  }
-
   @computed get devicesServceRequiredAmount() {
     const { devices } = this;
     if (!Array.isArray(devices)) {
@@ -195,6 +195,14 @@ class Details {
 
   @computed get downtime() {
     return reduce(this.devices, 'downtime');
+  }
+
+  @computed get offDevicesAmount() {
+    const { devices } = this;
+    if (!devices) {
+      return devices;
+    }
+    return devices.filter((device) => !device.isOn).length;
   }
 
   constructor(session, myId) {
@@ -222,7 +230,7 @@ class Details {
     };
     reaction(() => this.dateRange, updateSalesTop);
     updateSalesTop();
-    session.points.getOutdatedTasks(myId).then((count) => { this.outdatedTasks = count; console.log(this.outdatedTasks); });
+    session.points.getOutdatedTasks(myId).then((count) => { this.outdatedTasks = count; });
   }
 }
 

@@ -12,14 +12,14 @@ import style from './stats.module.scss';
 
 const Stats = ({ element: { details } }) => {
   const {
-    devicesDisabledAmount,
     devicesServceRequiredAmount,
     devicesHardWaterAmount,
     devicesAmount,
     downtime,
     outdatedTasks,
+    offDevicesAmount,
   } = details;
-  const isLoaded = typeof devicesDisabledAmount === 'number';
+  const isLoaded = typeof devicesServceRequiredAmount === 'number';
   return (
     <Card className={style.root}>
       <div className={style.title}>
@@ -42,7 +42,7 @@ const Stats = ({ element: { details } }) => {
       <div className={style.conditions}>
         <div className={style.sublabel}>Состояние оборудования</div>
         <div className={style.state}>
-          <div className={style.value}>{isLoaded ? devicesDisabledAmount : <Loader size="small" />}</div>
+          <div className={style.value}>{typeof offDevicesAmount === 'number' ? offDevicesAmount : <Loader size="small" />}</div>
           <div className={style.sublabel}>не работает</div>
         </div>
         <div className={classNames(style.state, style.danger)}>

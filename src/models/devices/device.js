@@ -23,6 +23,10 @@ class Device {
 
   session;
 
+  isOn;
+
+  isInactive;
+
   constructor(session) {
     this.session = session;
   }

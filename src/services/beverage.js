@@ -49,7 +49,7 @@ const getBeverages = (session) => (limit, offset = 0, filter = '') => new Promis
         beverage.deviceId = datum.device;
         beverage.drinkId = datum.drink;
         beverage.operationId = datum.operation;
-        beverage.saleSum = datum.sale_sum;
+        beverage.saleSum = datum.sale_sum / 100;
         beverage.canceled = datum.canceled;
         return beverage;
       }),

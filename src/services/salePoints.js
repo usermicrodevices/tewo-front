@@ -3,7 +3,7 @@ import { get, post, patch } from 'utils/request';
 import moment from 'moment';
 import SalePoint from 'models/salePoints/salePoint';
 import checkData from 'utils/dataCheck';
-import { daterangeToArgs } from 'utils/date';
+import { daterangeToArgs, isDateRange } from 'utils/date';
 import { getEvents } from './events';
 
 const RENAMER = {
@@ -121,16 +121,32 @@ const getSalesChart = (pointId, daterange) => {
       console.error(`can not ger data from ${location}`, result);
       return [];
     }
-    return result.map((d) => {
+    for (const d of result) {
       if (!checkData(d, mustBe)) {
         console.error(`Неожиданные данные для эндпоинта ${location}`, d);
       }
-      return {
-        day: moment(d.day),
-        beverages: d.total,
-        sales: d.sum / 100,
-      };
-    });
+    }
+    const isRangeGiven = isDateRange(daterange);
+    if (!isRangeGiven && result.length === 0) {
+      return [];
+    }
+    function* g(curDay, lastDay) {
+      while (curDay <= lastDay) {
+        curDay.add(1, 'days');
+        const item = result.find(({ day }) => {
+          const m = moment(day);
+          return curDay.dayOfYear() === m.dayOfYear() && curDay.year() === m.year();
+        }) || { total: 0, sum: 0 };
+        yield {
+          day: moment(curDay),
+          beverages: item.total,
+          sales: item.sum / 100,
+        };
+      }
+    }
+    return isRangeGiven
+      ? [...g(moment(daterange[0]), moment(daterange[1]))]
+      : [...g(moment(result[0].day), moment(result[result.length - 1].day))];
   });
 };
 
