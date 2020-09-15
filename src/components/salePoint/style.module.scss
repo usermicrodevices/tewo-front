@@ -1,13 +1,21 @@
 .main {
-    grid-template-columns: 913fr 252fr;
+    grid-template-columns: 648fr 265fr 252fr;
     display: grid;
     margin: -12px;
+
+    >:nth-child(1) {
+        grid-column-start: span 2;
+    }
 
     >:nth-child(2) {
         min-width: 228px;
     }
 
-    >:nth-child(n+3) {
+    >:nth-child(3) {
+        grid-column-start: span 3;
+    }
+
+    >:nth-child(5) {
         grid-column-start: span 2;
     }
 

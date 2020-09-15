@@ -2,6 +2,8 @@
 import { computed, observable, reaction } from 'mobx';
 import localStorage from 'mobx-localstorage';
 import moment from 'moment';
+
+import { devices as deviceRout } from 'routes';
 import { isDateRange, stepToPast } from 'utils/date';
 
 const STORAGE_KEY = 'salePoints_details_forms_data';
@@ -51,6 +53,8 @@ class Details {
   id;
 
   session;
+
+  devicesPath = deviceRout.path;
 
   @computed get isSeriesLoaded() {
     return Array.isArray(this.chartData);

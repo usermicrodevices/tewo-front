@@ -3,8 +3,6 @@ import { inject, observer } from 'mobx-react';
 import Chart from 'react-apexcharts';
 import { withSize } from 'react-sizeme';
 
-import { CURVE_TYPES } from 'models/salePoints/details';
-
 import style from './chart.module.scss';
 
 const COLORS = ['#99C2A2', '#66C7F4', '#228148', '#142288'];

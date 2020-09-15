@@ -4,18 +4,27 @@ import { withSize } from 'react-sizeme';
 
 const ChartWidget = ({ size }) => {
   const colors = ['#228148', '#66C7F4', '#142288', '#99C2A2'];
-  const dataLength = 50;
-  const seria = new Array(dataLength).fill(null).map(() => Math.floor(Math.random() * 300 + 500));
+  const dataLength = 8;
   const series = [
     {
       name: 'Наливы',
       type: 'line',
-      data: seria,
+      data: new Array(dataLength).fill(null).map(() => Math.floor(Math.random() * 100 + 100)),
     },
     {
       name: 'Отмены',
       type: 'line',
-      data: seria.map((v) => Math.floor(v * Math.random() * 0.3)),
+      data: new Array(dataLength).fill(null).map(() => Math.floor(Math.random() * 100 + 100)),
+    },
+    {
+      name: 'Отмены',
+      type: 'line',
+      data: new Array(dataLength).fill(200),
+    },
+    {
+      name: 'Отмены',
+      type: 'line',
+      data: new Array(dataLength).fill(100),
     },
   ];
   const data = {

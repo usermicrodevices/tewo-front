@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Space } from 'antd';
+import { Card, Space } from 'antd';
 
 import LocationPopup from 'elements/locationPopup';
 import Format from 'elements/format';
@@ -10,6 +10,7 @@ import Chart from './sales';
 import Stats from './stats';
 import Top from './top';
 import Performance from './performance';
+import DevicesList from './devicesList';
 
 import style from './style.module.scss';
 
@@ -39,6 +40,7 @@ const SalePointOverview = () => (
     <Stats />
     <Top />
     <Performance />
+    <DevicesList />
   </div>
 );
 
