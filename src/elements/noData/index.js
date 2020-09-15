@@ -1,5 +1,7 @@
 /* eslint max-len: off */
 import React from 'react';
+import classnames from 'classnames';
+
 import style from './style.module.scss';
 
 const icon = (
@@ -14,8 +16,8 @@ const icon = (
   </svg>
 );
 
-const NoData = ({ children }) => (
-  <div className={style.nodata}>
+const NoData = ({ children, noMargin }) => (
+  <div className={classnames(style.nodata, { [style.margin]: !noMargin })}>
     {icon}
     <div>{children}</div>
   </div>

@@ -27,6 +27,11 @@ const declareColumns = () => ({
     sortDirections: 'both',
     transform: (_, data, width) => colorizedCell({ children: data.eventName, color: data.eventColor, width }),
   },
+  eventDescription: {
+    isVisibleByDefault: true,
+    title: 'Описание',
+    grow: 2,
+  },
   eventPriority: {
     isVisibleByDefault: true,
     title: 'Приоритет события',

@@ -1,13 +1,12 @@
 /* eslint class-methods-use-this: off */
-import { observable, computed, action } from 'mobx';
+import { observable, computed } from 'mobx';
 
 import Table from 'models/table';
 import getCompanies from 'services/companies';
 import Filters from 'models/filters';
+import { linkedCell } from 'elements/table/trickyCells';
 
-import Company from './company';
-
-const COLUMNS_LIST = {
+const COLUMNS_LIST = () => ({
   id: {
     isVisibleByDefault: true,
     title: 'ID',
@@ -36,7 +35,7 @@ const COLUMNS_LIST = {
     width: 120,
     sortDirections: 'both',
   },
-};
+});
 
 class Companies extends Table {
   chart = null;
@@ -60,7 +59,10 @@ class Companies extends Table {
   session;
 
   constructor(session) {
-    super(COLUMNS_LIST, getCompanies(session), new Filters({}));
+    const columns = COLUMNS_LIST();
+    const onClick = (datum) => () => { this.actions.onEdit(datum); };
+    columns.name.transform = linkedCell(onClick);
+    super(columns, getCompanies(session), new Filters({}));
 
     this.session = session;
   }

@@ -1,4 +1,5 @@
 import moment from 'moment';
+import plural from 'utils/plural';
 
 const momentToArg = (m) => m.format().replace('+', '%2B');
 
@@ -24,6 +25,25 @@ const stepToPast = (range) => {
   ];
 };
 
+const humanizeSeconds = (wholeSeconds) => {
+  const integerSeconds = Math.fround(wholeSeconds);
+  const seconds = integerSeconds % 60;
+  const minutes = Math.floor(integerSeconds / 60 % 60);
+  const hours = Math.floor(integerSeconds / 3600 % 24);
+  const days = Math.floor(integerSeconds / 3600 / 24);
+  let result = `${minutes} ${plural(minutes, ['минута', 'минут', 'минуты'])}`;
+  if (hours || days) {
+    result = `${hours} ${plural(hours, ['час', 'часов', 'часа'])}${minutes || seconds ? ` ${result}` : ''}`;
+  }
+  if (days) {
+    result = `${days} ${plural(days, ['день', 'дней', 'дня'])}${minutes || seconds || hours ? ` ${result}` : ''}`;
+  }
+  if (seconds) {
+    result = `${minutes || hours || days ? `${result} ` : ''}${seconds} ${plural(seconds, ['секунда', 'секунд', 'секунды'])}`;
+  }
+  return result;
+};
+
 export {
-  daterangeToArgs, momentToArg, isDateRange, stepToPast,
+  daterangeToArgs, momentToArg, isDateRange, stepToPast, humanizeSeconds,
 };

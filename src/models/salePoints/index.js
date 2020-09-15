@@ -8,7 +8,7 @@ import {
 import Filters from 'models/filters';
 
 import { salePoints as salePointsRout } from 'routes';
-import tableItemLink from 'elements/link';
+import { tableItemLink } from 'elements/table/trickyCells';
 
 import Point from './salePoint';
 

@@ -1,7 +1,6 @@
 /* eslint class-methods-use-this: off */
 import { observable, computed } from 'mobx';
 
-import plural from 'utils/plural';
 import Table from 'models/table';
 import Filters from 'models/filters';
 import { getEventTypes } from 'services/events';
@@ -22,12 +21,11 @@ const declareColumns = () => ({
     sortDirections: 'both',
     transform: (_, data, width) => colorizedCell({ children: data.name, color: data.color, width }),
   },
-  reactionTime: {
+  reactionTimeText: {
     isVisibleByDefault: true,
     title: 'Время для отчета просроченные задачи',
     grow: 3,
     sortDirections: 'both',
-    transform: (value) => (typeof value === 'number' ? `${value} ${plural(value, ['минуту', 'минут', 'минуты'])}` : value),
   },
   priority: {
     isVisibleByDefault: true,

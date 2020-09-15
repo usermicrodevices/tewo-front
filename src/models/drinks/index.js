@@ -6,6 +6,9 @@ import Filters from 'models/filters';
 import getDrinks from 'services/drinks';
 import cup from 'elements/cup';
 
+import { drink as drinksRout } from 'routes';
+import { tableItemLink } from 'elements/table/trickyCells';
+
 import RecipeEditor from './recipeEditor';
 
 const declareColumns = (onEditRecipe) => ({
@@ -21,6 +24,7 @@ const declareColumns = (onEditRecipe) => ({
     title: 'Название',
     grow: 3,
     sortDirections: 'both',
+    transform: (_, datum, width) => tableItemLink(datum.name, `${drinksRout.path}/${datum.id}`, width),
   },
   companyName: {
     isVisibleByDefault: true,

@@ -15,6 +15,7 @@
 :global {
     .ant-menu-item-selected .anticon,
     .ant-menu-item-active .anticon,
+    .ant-btn:hover .anticon,
     .ant-menu-submenu-active .anticon {
         fill: $link-color;
     }

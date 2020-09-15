@@ -21,6 +21,7 @@ const DatergangePicker = ({
       <p>{ `${title}:` }</p>
       <RangePicker
         showTime={showTime}
+        placeholder={['с', 'по']}
         ranges={{
           Сегодня: [moment().startOf('day'), moment().endOf('day')],
           Вчера: [moment().subtract(1, 'day').startOf('day'), moment().subtract(1, 'day').endOf('day')],

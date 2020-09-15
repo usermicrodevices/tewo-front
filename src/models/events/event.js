@@ -98,7 +98,7 @@ class Event {
   @computed get salePoint() {
     const { device } = this;
     if (!device) {
-      return undefined;
+      return device;
     }
     return device.salePoint;
   }
@@ -106,7 +106,7 @@ class Event {
   @computed get company() {
     const { device } = this;
     if (!device) {
-      return undefined;
+      return device;
     }
     return device.company;
   }
@@ -114,7 +114,7 @@ class Event {
   @computed get companyId() {
     const { company } = this;
     if (!company) {
-      return undefined;
+      return company;
     }
     return company.id;
   }
@@ -122,7 +122,7 @@ class Event {
   @computed get deviceName() {
     const { device } = this;
     if (!device) {
-      return undefined;
+      return device;
     }
     return device.name;
   }
@@ -132,7 +132,15 @@ class Event {
     if (event) {
       return event.name;
     }
-    return undefined;
+    return event;
+  }
+
+  @computed get eventDescription() {
+    const { event } = this;
+    if (event) {
+      return event.description;
+    }
+    return event;
   }
 
   @computed get eventPriority() {
@@ -140,7 +148,7 @@ class Event {
     if (event) {
       return event.priority;
     }
-    return undefined;
+    return event;
   }
 
   @computed get companyName() {
@@ -148,7 +156,7 @@ class Event {
     if (company) {
       return company.name;
     }
-    return undefined;
+    return company;
   }
 }
 

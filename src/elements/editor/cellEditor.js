@@ -6,12 +6,17 @@ import LocationPicker from './locationpicker';
 
 import ColorPicker from './colorpicker';
 
-const CellEditor = ({ editor: { type, selector, isMultiple }, name }) => {
+const CellEditor = ({
+  editor: {
+    type, selector, isMultiple, rows,
+  },
+  name,
+}) => {
   switch (type) {
     case 'text': {
       return (
         <Form.Item name={name}>
-          <Input />
+          { rows ? <Input.TextArea rows={rows} /> : <Input /> }
         </Form.Item>
       );
     }

@@ -4,6 +4,9 @@ import Filter from 'models/filters';
 import { getDevices } from 'services//device';
 import { computed } from 'mobx';
 
+import { devices as devicesRout } from 'routes';
+import { tableItemLink } from 'elements/table/trickyCells';
+
 const COLUMNS = {
   id: {
     isVisibleByDefault: true,
@@ -17,6 +20,7 @@ const COLUMNS = {
     title: 'Название',
     grow: 3,
     sortDirections: 'both',
+    transform: (_, datum, width) => tableItemLink(datum.name, `${devicesRout.path}/${datum.id}`, width),
   },
   salePointName: {
     isVisibleByDefault: true,

@@ -1,27 +1,41 @@
 .head {
-    .goback {
-        font-size: 14px;
-        color: #8C8C8C;
-        line-height: 22px;
-    }
-    .titleRow {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
+  .goback {
+    font-size: 14px;
+    color: #8C8C8C;
+    line-height: 22px;
+  }
+  .titleRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
 
-        h1 {
-            font-size: 30px;
-            line-height: 38px;
-            font-weight: bold;
-            margin-bottom: 0;
+    h1 {
+      font-size: 30px;
+      line-height: 38px;
+      font-weight: bold;
+      margin-bottom: 0;
+
+      :global {
+        .ant-btn-icon-only {
+          margin: 0px;
+          padding: 0px;
         }
+        .ant-space-item {
+          height: 38px;
+        }
+      }
     }
+
+    :global .ant-btn {
+      border: none;
+    }
+  }
 }
 
 .submenu {
-    :global .ant-menu-light {
-        background-color: transparent;
-        margin-bottom: 24px;
-    }
+  :global .ant-menu-light {
+    background-color: transparent;
+    margin-bottom: 24px;
+  }
 }

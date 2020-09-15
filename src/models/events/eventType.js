@@ -1,5 +1,6 @@
 import { computed, observable } from 'mobx';
 import Datum from 'models/datum';
+import { humanizeSeconds } from 'utils/date';
 
 class EventType extends Datum {
   id;
@@ -28,6 +29,10 @@ class EventType extends Datum {
     this.session = session;
   }
 
+  @computed get reactionTimeText() {
+    return humanizeSeconds(this.reactionTime * 60);
+  }
+
   editable = {
     name: {
       type: 'text',
@@ -43,6 +48,7 @@ class EventType extends Datum {
     },
     description: {
       type: 'text',
+      rows: 4,
     },
   }
 

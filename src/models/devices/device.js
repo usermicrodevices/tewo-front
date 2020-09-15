@@ -86,6 +86,27 @@ class Device {
     }
     return priceGroup.name;
   }
+
+  editable = {
+    name: {
+      type: 'text',
+    },
+  }
+
+  @computed get values() {
+    return [
+      {
+        dataIndex: 'id',
+        title: 'ID',
+        value: this.id,
+      },
+      {
+        dataIndex: 'name',
+        title: 'Название',
+        value: this.name,
+      },
+    ];
+  }
 }
 
 export default Device;
