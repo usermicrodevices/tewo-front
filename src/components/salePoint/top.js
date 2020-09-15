@@ -80,7 +80,8 @@ const Top = ({ size: { width }, element: { details: { salesTop } } }) => {
             <div className={style.item} key={drinkId}>
               <div className={style.label}>
                 <div className={style.mark} style={{ backgroundColor: COLORS[index] }} />
-                <Format width={labelAllowedWidth}>{drinkName}</Format>
+                <div className={style.text}><Format width={labelAllowedWidth}>{drinkName}</Format></div>
+                <div className={style.phonetext}><Format width={100}>{drinkName}</Format></div>
               </div>
               <div className={style.value}>
                 <div className={style.number}><Format>{beverages}</Format></div>

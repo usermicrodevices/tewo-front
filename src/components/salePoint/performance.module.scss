@@ -5,3 +5,11 @@
       font-size: 16px;
     }
 }
+
+@media screen and (max-width: 1000px) {
+  .root>div {
+    .chart {
+      margin: 0px -25px;
+    }
+  }
+}

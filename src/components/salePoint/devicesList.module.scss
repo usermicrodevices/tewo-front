@@ -5,3 +5,26 @@
       font-size: 16px;
     }
 }
+
+@media screen and (max-width: 1000px) {
+  .root>div {
+    flex-direction: column;
+    height: 600px;
+    .chart {
+      width: inherit;
+    }
+    .list {
+      .item {
+        margin-left: 0px;
+        .label {
+          .text {
+            display: none;
+          }
+          .phonetext {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}

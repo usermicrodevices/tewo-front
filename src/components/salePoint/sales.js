@@ -46,7 +46,7 @@ const Sales = ({ element: { details } }) => {
           <DatergangePicker title="Период" value={details.dateRange} onChange={(v) => { details.dateRange = v; }} />
           <CurvesPicker />
         </div>
-        <div className={styles.picker}>
+        <div className={styles.curves}>
           {
             isLoaded
               ? <Chart />

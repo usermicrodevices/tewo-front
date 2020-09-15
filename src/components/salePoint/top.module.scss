@@ -27,6 +27,9 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
+        .phonetext {
+          display: none;
+        }
         .mark {
           width: 15px;
           height: 15px;
@@ -67,5 +70,29 @@
     flex-grow: 1;
     align-items: center;
     justify-content: center;
+  }
+}
+
+
+@media screen and (max-width: 1000px) {
+  .root>div {
+    flex-direction: column;
+    height: 600px;
+    .chart {
+      width: inherit;
+    }
+    .list {
+      .item {
+        margin-left: 0px;
+        .label {
+          .text {
+            display: none;
+          }
+          .phonetext {
+            display: block;
+          }
+        }
+      }
+    }
   }
 }

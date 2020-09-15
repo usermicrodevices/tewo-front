@@ -8,7 +8,7 @@ import style from './performance.module.scss';
 const SETTINGS = {
   series: new Array(24).fill(null).map((_, id) => ({
     name: `${id % 12}${id >= 12 ? 'pm' : 'am'}`,
-    data: new Array(7).fill(null).map(() => (1.2 - (Math.random() * Math.random())) * Math.pow(12 - Math.abs(id - 12), 2) + 40),
+    data: new Array(7).fill(null).map(() => (1.2 - (Math.random() * Math.random())) * Math.pow(12 - Math.abs(id - 12), 2) + 40).map(Math.round),
   })),
   options: {
     chart: {
@@ -16,7 +16,10 @@ const SETTINGS = {
       type: 'heatmap',
     },
     dataLabels: {
-      enabled: false,
+      enabled: true,
+      style: {
+        colors: ['#FFFFFF'],
+      },
     },
     colors: ['#008FFB'],
     title: {
@@ -27,16 +30,16 @@ const SETTINGS = {
       position: 'top',
       categories: new Array(7).fill(null).map((_, id) => moment().add(id, 'day').format('dd')),
     },
-    yAxis: [{
-      position: 'right',
-    }],
+    yAxis: {
+      opposite: true,
+    },
   },
 };
 
 const Performance = () => (
   <Card className={style.root}>
     <div className={style.title}>Загруженность</div>
-    <div id="chart">
+    <div className={style.chart}>
       <ReactApexChart options={SETTINGS.options} series={SETTINGS.series} type="heatmap" height={SETTINGS.options.chart.height} />
     </div>
   </Card>
