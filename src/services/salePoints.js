@@ -1,4 +1,4 @@
-/* eslint no-param-reassign: "off" */
+/* eslint no-param-reassign: off */
 import { get, post, patch } from 'utils/request';
 import moment from 'moment';
 import SalePoint from 'models/salePoints/salePoint';

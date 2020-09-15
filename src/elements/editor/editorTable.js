@@ -19,6 +19,7 @@ const EditorTable = ({
         {
           title: 'Информация',
           dataIndex: 'title',
+          width: 300,
         },
         {
           title: '',

@@ -1,4 +1,4 @@
-/* eslint class-methods-use-this: "off" */
+/* eslint class-methods-use-this: off */
 import Table from 'models/table';
 import Filters from 'models/filters';
 import { getEvents } from 'services/events';

@@ -1,4 +1,4 @@
-/* eslint jsx-a11y/no-static-element-interactions: "off" */
+/* eslint jsx-a11y/no-static-element-interactions: off */
 import React from 'react';
 import { Dropdown, Menu } from 'antd';
 

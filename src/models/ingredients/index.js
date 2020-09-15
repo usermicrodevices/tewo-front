@@ -1,4 +1,4 @@
-/* eslint class-methods-use-this: "off" */
+/* eslint class-methods-use-this: off */
 import { observable, computed } from 'mobx';
 
 import Table from 'models/table';

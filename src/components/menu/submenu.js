@@ -1,4 +1,4 @@
-/* eslint react/jsx-props-no-spreading: "off" */
+/* eslint react/jsx-props-no-spreading: off */
 import React from 'react';
 import { Menu } from 'antd';
 

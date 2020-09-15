@@ -1,4 +1,4 @@
-/* eslint class-methods-use-this: "off" */
+/* eslint class-methods-use-this: off */
 import { observable, computed, action } from 'mobx';
 
 import Table from 'models/table';
@@ -6,6 +6,9 @@ import {
   getSalePoints, applySalePoint, getSalesTop, getSalesChart, getOutdatedTasks,
 } from 'services/salePoints';
 import Filters from 'models/filters';
+
+import { salePoints as salePointsRout } from 'routes';
+import tableItemLink from 'elements/link';
 
 import Point from './salePoint';
 
@@ -23,6 +26,7 @@ const COLUMNS = {
     title: 'Название',
     grow: 3,
     sortDirections: 'both',
+    transform: (_, datum, width) => tableItemLink(datum.name, `${salePointsRout.path}/${datum.id}`, width),
   },
   companyName: {
     isVisibleByDefault: true,

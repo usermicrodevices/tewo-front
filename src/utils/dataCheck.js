@@ -1,4 +1,4 @@
-/* eslint valid-typeof: "off", max-len: "off" */
+/* eslint valid-typeof: "off", max-len: off */
 import { isColor } from './color';
 
 function checkData(data, shouldBe, mayBe, tests) {

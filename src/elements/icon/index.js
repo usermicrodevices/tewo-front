@@ -1,4 +1,4 @@
-/* eslint react/no-danger: "off" */
+/* eslint react/no-danger: off */
 import React from 'react';
 import { icons } from 'eva-icons';
 import classNames from 'classnames';

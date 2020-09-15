@@ -1,4 +1,4 @@
-/* eslint max-len: "off" */
+/* eslint max-len: off */
 import React from 'react';
 import style from './style.module.scss';
 

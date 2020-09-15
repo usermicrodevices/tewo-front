@@ -1,4 +1,4 @@
-/* eslint camelcase: "off" */
+/* eslint camelcase: off */
 import { computed } from 'mobx';
 
 import plural from 'utils/plural';

@@ -1,4 +1,4 @@
-/* eslint class-methods-use-this: "off" */
+/* eslint class-methods-use-this: off */
 import React, { useState } from 'react';
 import { Space } from 'antd';
 import { inject, observer, Provider } from 'mobx-react';

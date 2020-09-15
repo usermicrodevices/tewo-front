@@ -24,7 +24,7 @@
 
     .settings {
         margin-right: $generic-margin;
-        margin-left: -114.5px;
+        margin-left: -114.5px - $generic-margin;
         display: flex;
         align-items: center;
 

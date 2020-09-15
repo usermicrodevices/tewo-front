@@ -1,4 +1,4 @@
-/* eslint class-methods-use-this: "off" */
+/* eslint class-methods-use-this: off */
 import { observable, computed } from 'mobx';
 
 import plural from 'utils/plural';
@@ -24,7 +24,7 @@ const declareColumns = () => ({
   },
   reactionTime: {
     isVisibleByDefault: true,
-    title: 'Время реакции руководителя',
+    title: 'Время для отчета просроченные задачи',
     grow: 3,
     sortDirections: 'both',
     transform: (value) => (typeof value === 'number' ? `${value} ${plural(value, ['минуту', 'минут', 'минуты'])}` : value),

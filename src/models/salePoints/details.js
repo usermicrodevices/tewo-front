@@ -1,4 +1,4 @@
-/* eslint class-methods-use-this: "off" */
+/* eslint class-methods-use-this: off */
 import { computed, observable, reaction } from 'mobx';
 import localStorage from 'mobx-localstorage';
 import moment from 'moment';

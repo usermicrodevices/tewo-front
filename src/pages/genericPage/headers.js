@@ -1,4 +1,4 @@
-/* eslint no-param-reassign: "off" */
+/* eslint no-param-reassign: off */
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';

@@ -1,4 +1,4 @@
-/* eslint class-methods-use-this: "off" */
+/* eslint class-methods-use-this: off */
 
 import { computed } from 'mobx';
 import localStorage from 'mobx-localstorage';

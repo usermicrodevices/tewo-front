@@ -1,8 +1,9 @@
-/* eslint class-methods-use-this: "off" */
+/* eslint class-methods-use-this: off */
 import Table from 'models/table';
 import Filters from 'models/filters';
 import { getBeverages } from 'services/beverage';
 import TimeAgo from 'elements/timeago';
+import { typeNameToIcon, canceledIcon } from 'elements/beverageIcons';
 
 const declareColumns = (session) => ({
   id: {
@@ -50,6 +51,7 @@ const declareColumns = (session) => ({
     title: 'Операция',
     grow: 1,
     sortDirections: 'both',
+    transform: (name) => typeNameToIcon(name),
   },
   saleSum: {
     isVisibleByDefault: true,
@@ -57,6 +59,12 @@ const declareColumns = (session) => ({
     align: 'right',
     width: 100,
     sortDirections: 'both',
+  },
+  canceled: {
+    isVisibleByDefault: true,
+    title: 'Отменена',
+    width: 70,
+    transform: (v) => (v ? canceledIcon : ''),
   },
 });
 
