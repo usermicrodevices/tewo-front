@@ -27,6 +27,14 @@ class Device {
 
   isInactive;
 
+  downtime;
+
+  isHasOverlocPPM;
+
+  isNeedTechService;
+
+  overdueTasks;
+
   constructor(session) {
     this.session = session;
   }

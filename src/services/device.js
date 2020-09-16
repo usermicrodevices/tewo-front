@@ -22,6 +22,10 @@ const getDevices = (session) => () => get('/refs/devices/').then((result) => {
           sale_point: 'number',
           tz: 'string',
           status: 'number',
+          downtime: 'number',
+          has_overloc_ppm: 'boolean',
+          need_tech_service: 'boolean',
+          overdue_tasks: 'number',
         }, {
           serial: 'string',
           device_model: 'number',
@@ -43,6 +47,10 @@ const getDevices = (session) => () => get('/refs/devices/').then((result) => {
         device_model: 'deviceModelId',
         price_group: 'priceGroupId',
         tz: 'timeZone',
+        downtime: 'downtime',
+        has_overloc_ppm: 'hasOverlocPPM',
+        need_tech_service: 'needTechService',
+        overdue_tasks: 'overdueTasks',
       };
 
       for (const [jsonName, modelName] of Object.entries(renamer)) {

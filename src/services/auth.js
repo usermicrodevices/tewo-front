@@ -67,7 +67,6 @@ function me(deep) {
       is_superuser: 'boolean',
       last_login: 'date',
       last_name: 'string',
-      password: 'string',
       role: 'any',
       username: 'string',
       user_permissions: 'array',

@@ -76,7 +76,7 @@ const COLUMNS = {
     title: 'Количество просроченных задач',
     grow: 2,
   },
-  downTime: {
+  downtime: {
     isVisibleByDefault: true,
     title: 'Суммарный простой',
     grow: 2,
@@ -111,16 +111,16 @@ const declareFilters = (session) => ({
     apply: (general, data) => general(data.cityId),
     selector: () => session.locations.citiesSelector,
   },
-  isHaveOutdatedEvents: {
+  isHaveOverdueTasks: {
     type: 'checkbox',
     title: 'С просроченными событиями',
-    apply: (general, data) => data.isHaveOutdatedEvents,
+    apply: (_, data) => data.overdueTasks !== 0,
     passiveValue: false,
   },
-  isNeedOverhaul: {
+  isNeedTechService: {
     type: 'checkbox',
     title: 'Требуется тех. обслуживание',
-    apply: (general, data) => data.isNeedOverhaul,
+    apply: (_, data) => data.isNeedTechService,
     passiveValue: false,
   },
   isHaveDisabledEquipment: {
@@ -129,10 +129,10 @@ const declareFilters = (session) => ({
     apply: (_, data) => data.isHaveDisabledEquipment,
     passiveValue: false,
   },
-  isOutOfWaterQuality: {
+  isHasOverlocPPM: {
     type: 'checkbox',
     title: 'На оборудовании превышена жесткость воды',
-    apply: (_, data) => data.isOutOfWaterQuality,
+    apply: (_, data) => data.isHasOverlocPPM,
     passiveValue: false,
   },
 });

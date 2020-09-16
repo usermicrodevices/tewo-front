@@ -170,7 +170,7 @@ class Details {
   }
 
   @computed get devices() {
-    return this.session.devices.getPointDevices(this.id);
+    return this.me.devices;
   }
 
   @computed get devicesAmount() {
@@ -186,7 +186,7 @@ class Details {
     if (!Array.isArray(devices)) {
       return undefined;
     }
-    return undefined;// this.devices.filter(({ isServiceRequired }) => isDisabled).length;
+    return this.devices.filter(({ isNeedTechService }) => isNeedTechService).length;
   }
 
   @computed get devicesHardWaterAmount() {
@@ -194,7 +194,7 @@ class Details {
     if (!Array.isArray(devices)) {
       return undefined;
     }
-    return undefined;// this.devices.filter(({ isHardWater }) => isDisabled).length;
+    return this.devices.filter(({ isHasOverlocPPM }) => isHasOverlocPPM).length;
   }
 
   @computed get downtime() {
@@ -209,9 +209,10 @@ class Details {
     return devices.filter((device) => !device.isOn).length;
   }
 
-  constructor(session, myId) {
+  constructor(session, me) {
     this.session = session;
-    this.id = myId;
+    const myId = me.id;
+    this.me = me;
 
     const updateSalesTop = () => {
       this.salesTopData = null;

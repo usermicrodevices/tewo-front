@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import Icon from 'elements/icon';
 import Format from 'elements/format';
 import Loader from 'elements/loader';
+import { humanizeSeconds } from 'utils/date';
 
 import style from './stats.module.scss';
 
@@ -56,7 +57,7 @@ const Stats = ({ element: { details } }) => {
       </div>
       <div className={classNames(style.sublabel, style.downtime)}>
         <div className={style.label}>Время простоя</div>
-        <div><Format width={180}>{downtime}</Format></div>
+        <div><Format width={180}>{humanizeSeconds(downtime)}</Format></div>
       </div>
     </Card>
   );

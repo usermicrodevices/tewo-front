@@ -17,10 +17,11 @@ const RENAMER = {
   person: 'person',
   phone: 'phone',
   emails: 'email',
-  has_overloc_ppm: 'isOutOfWaterQuality',
   has_off_devices: 'isHaveDisabledEquipment',
-  need_tech_service: 'isNeedOverhaul',
-  overdue_tasks: 'isHaveOutdatedEvents',
+  overdue_tasks: 'overdueTasks',
+  has_overloc_ppm: 'isHasOverlocPPM',
+  need_tech_service: 'isNeedTechService',
+  downtime: 'downtime',
 };
 
 const LOCATION = '/refs/sale_points/';
@@ -33,7 +34,8 @@ const SHUILD_BE = {
   has_overloc_ppm: 'boolean',
   has_off_devices: 'boolean',
   need_tech_service: 'boolean',
-  overdue_tasks: 'boolean',
+  overdue_tasks: 'number',
+  downtime: 'number',
 };
 
 const MAY_BE = {

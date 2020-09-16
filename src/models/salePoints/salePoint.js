@@ -3,6 +3,13 @@ import Datum from 'models/datum';
 
 import Details from './details';
 
+function reduce(array, field) {
+  if (!Array.isArray(array)) {
+    return array;
+  }
+  return array.reduce((cur, datum) => cur + datum[field], 0);
+}
+
 class SalePoint extends Datum {
   id = null;
 
@@ -24,15 +31,17 @@ class SalePoint extends Datum {
 
   @observable cityId = null;
 
-  isOutOfWaterQuality = null;
-
-  isHaveDisabledEquipment = null;
-
-  isNeedOverhaul = null;
-
-  isHaveOutdatedEvents = null;
-
   @observable isClosed = false;
+
+  isHaveDisabledEquipment = false;
+
+  overdueTasks = 0;
+
+  isHasOverlocPPM = false;
+
+  isNeedTechService = false;
+
+  downtime = 0;
 
   @observable tags = [];
 
@@ -42,7 +51,7 @@ class SalePoint extends Datum {
 
   get details() {
     if (typeof this.detailsData === 'undefined') {
-      this.detailsData = new Details(this.session, this.id);
+      this.detailsData = new Details(this.session, this);
     }
     return this.detailsData;
   }
@@ -110,6 +119,10 @@ class SalePoint extends Datum {
         value: this.tags.join(', '),
       },
     ];
+  }
+
+  @computed get devices() {
+    return this.session.devices.getPointDevices(this.id);
   }
 
   get location() {
