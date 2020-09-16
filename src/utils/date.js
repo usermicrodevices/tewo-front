@@ -26,7 +26,7 @@ const stepToPast = (range) => {
 };
 
 const humanizeSeconds = (wholeSeconds) => {
-  const integerSeconds = Math.fround(wholeSeconds);
+  const integerSeconds = Math.round(wholeSeconds);
   const seconds = integerSeconds % 60;
   const minutes = Math.floor(integerSeconds / 60 % 60);
   const hours = Math.floor(integerSeconds / 3600 % 24);

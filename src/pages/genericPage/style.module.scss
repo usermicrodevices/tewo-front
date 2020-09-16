@@ -22,7 +22,7 @@
           padding: 0px;
         }
         .ant-space-item {
-          height: 38px;
+          min-height: 38px;
         }
       }
     }
@@ -37,5 +37,18 @@
   :global .ant-menu-light {
     background-color: transparent;
     margin-bottom: 24px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .head {
+    .titleRow {
+      flex-wrap: wrap;
+
+      h1 {
+        font-size: 25px;
+        line-height: 30px;
+      }
+    }
   }
 }

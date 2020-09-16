@@ -81,9 +81,10 @@ const CellEditor = ({
             style={{ width: '100%' }}
             allowClear={isMultiple}
             mode={isMultiple ? 'multiple' : undefined}
+            disabled={!Array.isArray(selector)}
           >
             {
-              selector.map(([key, text]) => (
+              Array.isArray(selector) && selector.map(([key, text]) => (
                 <Select.Option key={key} value={key}>
                   {text}
                 </Select.Option>
