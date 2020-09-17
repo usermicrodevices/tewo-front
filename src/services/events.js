@@ -21,6 +21,7 @@ const getEvents = (session) => (limit, offset = 0, filter = '') => {
     };
     const mayBe = {
       close_date: 'date',
+      overdued_duration: 'number',
     };
     checkData(response, {
       count: 'number',

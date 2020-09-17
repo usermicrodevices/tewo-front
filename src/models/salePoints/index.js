@@ -71,11 +71,6 @@ const COLUMNS = {
     title: 'Email',
     grow: 2,
   },
-  overdueTasks: {
-    isVisibleByDefault: true,
-    title: 'Количество просроченных задач',
-    grow: 2,
-  },
   downtime: {
     isVisibleByDefault: true,
     title: 'Суммарный простой',
@@ -114,7 +109,7 @@ const declareFilters = (session) => ({
   isHaveOverdueTasks: {
     type: 'checkbox',
     title: 'С просроченными событиями',
-    apply: (_, data) => data.overdueTasks !== 0,
+    apply: (_, data) => data.isHaveOverdueTasks,
     passiveValue: false,
   },
   isNeedTechService: {

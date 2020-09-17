@@ -13,11 +13,14 @@
 }
 
 :global {
-    .ant-menu-item-selected .anticon,
-    .ant-menu-item-active .anticon,
-    .ant-btn:hover .anticon,
-    .ant-menu-submenu-active .anticon {
-        fill: $link-color;
+    .ant-menu-item-selected,
+    .ant-menu-item-active,
+    .ant-btn:hover,
+    .ant-btn-link,
+    .ant-menu-submenu-active {
+        .anticon {
+            fill: $link-color;
+        }
     }
 
     a span.anticon {

@@ -35,7 +35,7 @@ class SalePoint extends Datum {
 
   isHaveDisabledEquipment = false;
 
-  overdueTasks = 0;
+  isHaveOverdueTasks = false;
 
   isHasOverlocPPM = false;
 

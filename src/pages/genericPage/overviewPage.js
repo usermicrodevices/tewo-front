@@ -12,6 +12,8 @@ import Loader from 'elements/loader';
 
 import { ElementHeader } from './headers';
 
+const isContains = (menu, action) => Array.isArray(menu) && menu.findIndex((v) => v === action || isContains(v, action)) >= 0;
+
 const ViewerPage = ({
   additionalActions,
   menu,
@@ -48,36 +50,36 @@ const ViewerPage = ({
     );
   });
 
+  const overview = Overview ? (
+    <Provider element={elementForEdit}>
+      <Header />
+      <Overview />
+    </Provider>
+  ) : <Redirect to={`${path}/view`} />;
+
   return (
     <Provider element={elementForEdit}>
       <Switch>
         <Route
           path={`${path}/:action`}
           render={({ match: { params: { action } } }) => {
-            if (action !== 'edit' && action !== 'view') {
-              return <Redirect to={path} />;
+            if (!isContains(menu.map(({ path: p }) => p), action)) {
+              return <Redirect to={`${path}${Overview ? '' : 'view'}`} />;
             }
-            return (
-              <>
-                <Header />
-                <Card><Editor data={elementForEdit} /></Card>
-              </>
-            );
+            if (action === 'view' || action === 'edit') {
+              return (
+                <>
+                  <Header />
+                  <Card><Editor data={elementForEdit} /></Card>
+                </>
+              );
+            }
+            return overview;
           }}
         />
-        <Route render={() => {
-          if (typeof Overview === 'undefined') {
-            return <Redirect to={`${path}/view`} />;
-          }
-
-          return (
-            <Provider element={elementForEdit}>
-              <Header />
-              <Overview />
-            </Provider>
-          );
-        }}
-        />
+        <Route>
+          {overview}
+        </Route>
       </Switch>
     </Provider>
   );

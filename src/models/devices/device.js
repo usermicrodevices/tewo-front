@@ -33,7 +33,9 @@ class Device {
 
   isNeedTechService;
 
-  overdueTasks;
+  isHaveOverdueTasks;
+
+  stopDate;
 
   constructor(session) {
     this.session = session;
@@ -85,6 +87,22 @@ class Device {
       return salePoint;
     }
     return salePoint.name;
+  }
+
+  @computed get salePointLocation() {
+    const { salePoint } = this;
+    if (!salePoint) {
+      return salePoint;
+    }
+    return salePoint.location;
+  }
+
+  @computed get salePointAddress() {
+    const { salePoint } = this;
+    if (!salePoint) {
+      return salePoint;
+    }
+    return salePoint.address;
   }
 
   @computed get priceGroupName() {

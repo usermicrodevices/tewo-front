@@ -13,12 +13,16 @@ import ColumnsPicker from 'elements/table/columnsPicker';
 
 import styles from './style.module.scss';
 
-const menuItemKeyFromAction = (a) => {
+const KEY_FOR_EMPTY_STRING = ';;;;';
+
+const menuItemKeyFromAction = (menu, a) => {
   if (typeof a === 'undefined' || a === '') {
-    return '/overview';
+    return KEY_FOR_EMPTY_STRING;
   }
-  if (a === 'edit' || a === 'view') {
-    return 'edit';
+  for (const { path } of menu.filter(({ path: p }) => Array.isArray(p))) {
+    if (path === a || path.findIndex((act) => act === a) >= 0) {
+      return path[0];
+    }
   }
   return a;
 };
@@ -46,13 +50,13 @@ const ElementHeader = withRouter(inject('element')(observer(({
         { children }
       </div>
       <div className={styles.submenu}>
-        <Menu selectedKeys={menuItemKeyFromAction(action)} mode="horizontal">
+        <Menu selectedKeys={menuItemKeyFromAction(menu, action)} mode="horizontal">
           { Array.isArray(menu)
             && menu.map(({
               icon, text, path: subPath, explains,
             }) => (
-              <Menu.Item key={menuItemKeyFromAction(subPath)} icon={icon} theme="none">
-                <Link to={`${path}/${id}/${subPath}`}>
+              <Menu.Item key={menuItemKeyFromAction(menu, subPath)} icon={icon} theme="none">
+                <Link to={`${path}/${id}/${Array.isArray(subPath) ? subPath[0] : subPath}`}>
                   {
                     typeof explains === 'string'
                       ? (

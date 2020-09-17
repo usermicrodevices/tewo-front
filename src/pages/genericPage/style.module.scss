@@ -12,19 +12,9 @@
 
     h1 {
       font-size: 30px;
-      line-height: 38px;
+      line-height: 43px;
       font-weight: bold;
       margin-bottom: 0;
-
-      :global {
-        .ant-btn-icon-only {
-          margin: 0px;
-          padding: 0px;
-        }
-        .ant-space-item {
-          min-height: 38px;
-        }
-      }
     }
 
     :global .ant-btn {

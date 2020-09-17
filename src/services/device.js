@@ -25,12 +25,13 @@ const getDevices = (session) => () => get('/refs/devices/').then((result) => {
           downtime: 'number',
           has_overloc_ppm: 'boolean',
           need_tech_service: 'boolean',
-          overdue_tasks: 'number',
+          overdue_tasks: 'boolean',
         }, {
           serial: 'string',
           device_model: 'number',
           price_group: 'number',
           maintenance: 'date',
+          lastoff: 'date',
         },
       )) {
         console.error('Неожиданный ответ по адресу /refs/devices/', deviceData);
@@ -50,7 +51,8 @@ const getDevices = (session) => () => get('/refs/devices/').then((result) => {
         downtime: 'downtime',
         has_overloc_ppm: 'hasOverlocPPM',
         need_tech_service: 'needTechService',
-        overdue_tasks: 'overdueTasks',
+        overdue_tasks: 'isHaveOverdueTasks',
+        lastoff: 'stopDate',
       };
 
       for (const [jsonName, modelName] of Object.entries(renamer)) {

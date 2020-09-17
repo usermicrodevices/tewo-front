@@ -4,6 +4,7 @@ import Filters from 'models/filters';
 import { getEvents } from 'services/events';
 import TimeAgo from 'elements/timeago';
 import colorizedCell from 'elements/table/colorizedCell';
+import { eventsLog } from 'routes';
 
 const declareColumns = () => ({
   id: {
@@ -110,6 +111,10 @@ class Events extends Table {
 
   toString() {
     return 'Events';
+  }
+
+  getPathForDevice(deviceId) {
+    return `${eventsLog.path}/?device__id__in=${deviceId}`;
   }
 }
 

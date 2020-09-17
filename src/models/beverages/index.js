@@ -4,6 +4,7 @@ import Filters from 'models/filters';
 import { getBeverages } from 'services/beverage';
 import TimeAgo from 'elements/timeago';
 import { typeNameToIcon, canceledIcon } from 'elements/beverageIcons';
+import { beverage } from 'routes';
 
 const declareColumns = (session) => ({
   id: {
@@ -124,6 +125,10 @@ class Beverages extends Table {
 
   toString() {
     return 'Beverages';
+  }
+
+  getPathForDevice(deviceId) {
+    return `${beverage.path}/?device__id__in=${deviceId}`;
   }
 }
 

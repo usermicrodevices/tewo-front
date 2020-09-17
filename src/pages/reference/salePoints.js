@@ -17,7 +17,7 @@ const Points = () => (
         text: 'Сводная информация',
       },
       {
-        path: 'view',
+        path: ['view', 'edit'],
         text: 'Справочная информация',
         explains: '',
       },

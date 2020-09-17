@@ -23,7 +23,7 @@ const declareColumns = () => ({
   },
   reactionTimeText: {
     isVisibleByDefault: true,
-    title: 'Время для отчета просроченные задачи',
+    title: 'Время для отчета "просроченные задачи"',
     grow: 3,
     sortDirections: 'both',
   },
