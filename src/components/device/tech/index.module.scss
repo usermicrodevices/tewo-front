@@ -1,0 +1,13 @@
+.root {
+  display: grid;
+  grid-template-columns: 701fr 464fr;
+
+  >:nth-child(1),
+  >:nth-child(4) {
+    grid-row-start: span 2;
+  }
+  >* {
+    margin: 12px;
+  }
+  margin: -12px;
+}

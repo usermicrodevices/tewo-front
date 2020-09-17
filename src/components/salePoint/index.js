@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 
 import Location from 'elements/location';
 
-import Chart from './sales';
+import Sales from './sales';
 import Stats from './stats';
 import Top from './top';
 import Performance from './performance';
@@ -17,7 +17,7 @@ const SalePointTitleAction = inject('element')(observer(({ element: { location, 
 
 const SalePointOverview = () => (
   <div className={style.main}>
-    <Chart />
+    <Sales />
     <Stats />
     <Top />
     <Performance />

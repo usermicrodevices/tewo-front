@@ -1,4 +1,5 @@
 import React from 'react';
+import { inject, observer } from 'mobx-react';
 
 import Clearance from '../clearance';
 import ChearanceChart from './clearanceChart';
@@ -9,30 +10,27 @@ import Statistic from './statistic';
 
 import style from './index.module.scss';
 
-const Commerce = () => {
-  const isWaterRated = false;
-  return (
-    <div style={style.root}>
-      <ChearanceChart />
-      <Statistic />
-      <Conditions />
-      {
-        isWaterRated
-          ? (
-            <>
-              <WaterChart />
-              <Clearance />
-              <Beverages />
-            </>
-          ) : (
-            <>
-              <Beverages />
-              <Clearance />
-            </>
-          )
-      }
-    </div>
-  );
-};
+const Commerce = ({ element: { details: { isWaterQualified } } }) => (
+  <div className={style.root}>
+    <ChearanceChart />
+    <Statistic />
+    <Conditions />
+    {
+      isWaterQualified
+        ? (
+          <>
+            <WaterChart />
+            <Clearance />
+            <Beverages />
+          </>
+        ) : (
+          <>
+            <Beverages />
+            <Clearance />
+          </>
+        )
+    }
+  </div>
+);
 
-export default Commerce;
+export default inject('element')(observer(Commerce));

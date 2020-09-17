@@ -1,4 +1,6 @@
-import { computed } from 'mobx';
+import { computed, observable } from 'mobx';
+
+import Details from './details';
 
 class Device {
   id;
@@ -35,10 +37,19 @@ class Device {
 
   isHaveOverdueTasks;
 
+  detailsData = null;
+
   stopDate;
 
   constructor(session) {
     this.session = session;
+  }
+
+  get details() {
+    if (this.detailsData === null) {
+      this.detailsData = new Details(this);
+    }
+    return this.detailsData;
   }
 
   @computed get salePoint() {

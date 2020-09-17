@@ -1,0 +1,19 @@
+.root>div {
+  display: flex;
+  flex-direction: column;
+
+  .chart {
+    height: 334px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .selectors {
+    display: flex;
+    align-items: center;
+    >* {
+      width: 50%;
+    }
+  }
+}

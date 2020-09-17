@@ -1,0 +1,14 @@
+@import 'src/themes/constants';
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  .link {
+    :global .ant-icon {
+      fill: $link-color;
+    }
+    color: $link-color;
+  }
+}
