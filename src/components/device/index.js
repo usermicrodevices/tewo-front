@@ -24,7 +24,7 @@ const DeviceTitleAction = withRouter(inject(({ element, session }) => ({ element
   <div className={style.actions}>
     <Space>
       <Location location={salePointLocation} address={salePointAddress} />
-      <Space>
+      <Space size={4}>
         <span className={style.link}><Icon name="power-outline" /></span>
         Статус
         <span className={style.link}>{isOn ? 'ВКЛ' : 'ВЫКЛ'}</span>

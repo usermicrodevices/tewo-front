@@ -4,9 +4,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+    margin-top: -31px;
+
+  >:first-child {
+    margin-bottom: 8px;
+  }
 
   .link {
-    :global .ant-icon {
+    :global .anticon {
       fill: $link-color;
     }
     color: $link-color;

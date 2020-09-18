@@ -1,0 +1,43 @@
+.badge {
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 118.95px;
+  height: 88.04px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 18px;
+
+  .head {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    height: 24px;
+    margin-bottom: 6px;
+
+    display: flex;
+    align-items: flex-start;
+
+    .subvalue {
+      color: #8C8C8C;
+    }
+    .rise {
+      fill: #54DA33;
+    }
+    .fail {
+      fill: #F5222D;
+    }
+  }
+
+  .label {
+    font-size: 10px;
+    line-height: 14px;
+    color: #8C8C8C;
+  }
+}
+
+.actable {
+  background-color: #EEFBFB;
+  cursor: pointer;
+}
