@@ -39,5 +39,10 @@
 
 .actable {
   background-color: #EEFBFB;
+  transition: all 0.6s;
   cursor: pointer;
+}
+
+.actable:hover {
+  background-color: #E0F8F8;
 }

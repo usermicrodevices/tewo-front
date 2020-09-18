@@ -12,7 +12,7 @@ const Devices = () => (
     overviewActions={DeviceTitleAction}
     overviewSubmenu={[
       {
-        path: '',
+        path: ['', 'calendar'],
         text: 'Техническая информация',
       },
       {

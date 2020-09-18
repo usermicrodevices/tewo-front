@@ -1,16 +1,23 @@
 import React from 'react';
 import { Card, Table } from 'antd';
 import moment from 'moment';
+import classnames from 'classnames';
 
 import Icon from 'elements/icon';
 import { canceledIcon } from 'elements/beverageIcons';
 
 import style from './index.module.scss';
+import genericStyle from '../genericStyle.module.scss';
 
 const COLUMNS = [
   {
     dataIndex: 'deviceDate',
-    render: (date) => date.format('DD.MM.yy hh:mm'),
+    render: (date) => (
+      <>
+        <Icon name="clock-outline" />
+        { date.format('DD.MM.yy hh:mm') }
+      </>
+    ),
   },
   {
     dataIndex: 'drinkName',
@@ -29,7 +36,7 @@ const DATA = new Array(20).fill(null).map(() => ({
 
 const Beverages = () => (
   <Card className={style.beverages}>
-    <div className={style.title}>
+    <div className={classnames(genericStyle.title, style.title)}>
       <Icon size={18} name="droplet-outline" />
       Последние наливы
     </div>

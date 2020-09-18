@@ -5,14 +5,15 @@ import Icon from 'elements/icon';
 
 import Badge from '../badge';
 import style from './index.module.scss';
+import genericStyle from '../genericStyle.module.scss';
 
 const Statistic = () => (
   <Card className={style.statistic}>
-    <div className={style.title}>
+    <div className={genericStyle.title}>
       <Icon size={18} name="bar-chart-outline" />
       Статистика за период
     </div>
-    <div className={style.badges}>
+    <div className={genericStyle.badges}>
       <Badge
         value={undefined}
         subvalue={undefined}

@@ -1,15 +1,17 @@
 import React from 'react';
 import { Card, Progress } from 'antd';
+import classnames from 'classnames';
 
 import Badge from '../badge';
 import style from './index.module.scss';
+import genericStyle from '../genericStyle.module.scss';
 
 const Condition = () => (
   <Card className={style.condition}>
-    <div className={style.title}>
+    <div className={classnames(genericStyle.title, style.title)}>
       <Progress percent={50} showInfo={false} size="small" strokeColor="#2979BD" />
     </div>
-    <div className={style.badges}>
+    <div className={genericStyle.badges}>
       <Badge
         value="1200"
         subvalue="/38800"

@@ -1,12 +1,13 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { Card, Button } from 'antd';
 
 import Icon from 'elements/icon';
 
 import Badge from './badge';
-import style from './tech/index.module.scss';
+import style from './genericStyle.module.scss';
 
-const Clearance = () => (
+const Clearance = ({ history: { push }, location: { pathname } }) => (
   <Card className={style.clearance}>
     <div className={style.title}>
       <div>
@@ -15,6 +16,7 @@ const Clearance = () => (
       </div>
       <div className={style.calendar}>
         <Button
+          onClick={() => { push(`${pathname.split('/').slice(0, 3).join('/')}/calendar`); }}
           icon={<Icon size={18} name="calendar-outline" />}
           type="text"
         >
@@ -40,4 +42,4 @@ const Clearance = () => (
   </Card>
 );
 
-export default Clearance;
+export default withRouter(Clearance);

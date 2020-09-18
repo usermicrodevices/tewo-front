@@ -21,6 +21,9 @@ const menuItemKeyFromAction = (menu, a) => {
   }
   for (const { path } of menu.filter(({ path: p }) => Array.isArray(p))) {
     if (path === a || path.findIndex((act) => act === a) >= 0) {
+      if (typeof path[0] === 'undefined' || path[0] === '') {
+        return KEY_FOR_EMPTY_STRING;
+      }
       return path[0];
     }
   }
@@ -62,7 +65,7 @@ const ElementHeader = withRouter(inject('element')(observer(({
                       ? (
                         <Space>
                           {text}
-                          <Tooltip placement="top" title={text}><Icon name="info-outline" /></Tooltip>
+                          <Tooltip placement="top" title={explains}><Icon name="info-outline" /></Tooltip>
                         </Space>
                       )
                       : text

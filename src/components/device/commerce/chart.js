@@ -1,8 +1,13 @@
 import React from 'react';
-import { Card } from 'antd';
+
+import Loader from 'elements/loader';
+
+import ChartWrapper from '../chartWrapper';
 
 const Chart = () => (
-  <Card />
+  <ChartWrapper>
+    <Loader />
+  </ChartWrapper>
 );
 
 export default Chart;

@@ -7,7 +7,7 @@ import Statistic from './statistic';
 import style from './index.module.scss';
 
 const Commerce = () => (
-  <div style={style.root}>
+  <div className={style.root}>
     <Chart />
     <Statistic />
     <Clearance />
