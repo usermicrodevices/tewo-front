@@ -1,7 +1,7 @@
 /* eslint class-methods-use-this: off */
 import Table from 'models/table';
 import Filter from 'models/filters';
-import { getDevices } from 'services//device';
+import { getDevices, getStats } from 'services//device';
 import { computed } from 'mobx';
 
 import { devices as devicesRout } from 'routes';
@@ -165,6 +165,8 @@ class Devices extends Table {
   count(predicate) {
     return this.rawData.filter(predicate).length;
   }
+
+  getStats = getStats;
 }
 
 export default Devices;

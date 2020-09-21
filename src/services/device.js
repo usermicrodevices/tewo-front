@@ -26,6 +26,7 @@ const getDevices = (session) => () => get('/refs/devices/').then((result) => {
           has_overloc_ppm: 'boolean',
           need_tech_service: 'boolean',
           overdue_tasks: 'boolean',
+          tech: 'boolean',
         }, {
           serial: 'string',
           device_model: 'number',
@@ -53,6 +54,7 @@ const getDevices = (session) => () => get('/refs/devices/').then((result) => {
         need_tech_service: 'needTechService',
         overdue_tasks: 'isHaveOverdueTasks',
         lastoff: 'stopDate',
+        tech: 'isNeedTechService',
       };
 
       for (const [jsonName, modelName] of Object.entries(renamer)) {
@@ -85,4 +87,47 @@ function getDeviceModels(map) {
   });
 }
 
-export { getDevices, getDeviceModels };
+const getStats = (id) => get(`refs/devices/${id}/stats/`).then((data) => {
+  const mustBe = {
+    beverages: 'number',
+    beverages_prev: 'number',
+    downtime: 'number',
+    forecast_date: 'date',
+    has_overloc_ppm: 'boolean',
+    iterations: 'number',
+    iterations_to: 'number',
+    need_tech_service: 'boolean',
+    overdue_tasks: 'number',
+    ppm: 'number',
+    remain_iterations_to: 'number',
+    sum: 'number',
+    sum_prev: 'number',
+  };
+
+  if (!checkData(data, mustBe)) {
+    console.error(`undexpected responce for ${id} device details`);
+  }
+
+  if (data.iterations !== data.iterations_to + data.remain_iterations_to) {
+    console.error(`device dtail consistency error: ${data.iterations_to} + ${data.remain_iterations_to} !== ${data.iterations}
+      (${data.iterations_to + data.remain_iterations_to} found)`);
+  }
+
+  const renamer = {
+    beverages:         'beveragesLastDayAmount',
+    beverages_prev:    'beveragesPrewDayAmount',
+    downtime:          'downtime',
+    forecast_date:     'date',
+    has_overloc_ppm:   'isHaveWaterQualityMetric',
+    iterations:        'techServicesWhole',
+    iterations_to:     'techServicesDid',
+    need_tech_service: 'isNeedTechService',
+    overdue_tasks:     'overdueTasksAmount',
+    ppm:               'waterQualityMetric',
+    remain_iterations_to: 'techServicesRemain',
+    sum:               'salesLastDayAmount',
+    sum_prev:          'salesPrewDayAmount',
+  };
+});
+
+export { getDevices, getDeviceModels, getStats };

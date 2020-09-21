@@ -28,6 +28,7 @@ function contacts() {
       if (!checkData(item, {
         id: 'number',
         info: 'string',
+        privacy: 'string',
       })) {
         console.error(`${path} получил некорректные данные`);
         return defaultContacts;

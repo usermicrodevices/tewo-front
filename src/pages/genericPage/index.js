@@ -7,6 +7,13 @@ import { inject, observer, Provider } from 'mobx-react';
 import GenericTablePage from './tablePage';
 import OverviewPage from './overviewPage';
 
+const DEFAULT_SUBMENU = [
+  {
+    path: ['view', 'edit'],
+    text: 'Справочная информация',
+  },
+];
+
 const GenericPage = ({
   isHaveNotOverview,
   refreshInterval,
@@ -23,6 +30,16 @@ const GenericPage = ({
   const storage = session[storageName];
   const { filter } = storage;
   const isNeedToRedirect = location.search.slice(1) !== filter.search;
+  if (typeof overviewSubmenu === 'undefined') {
+    overviewSubmenu = [
+      {
+        path: ['view', 'edit'],
+        text: 'Справочная информация',
+      },
+    ];
+  }
+
+  const submenu = Array.isArray(overviewSubmenu) ? overviewSubmenu : DEFAULT_SUBMENU;
 
   return (
     <Provider storage={storage} filter={filter}>
@@ -31,7 +48,7 @@ const GenericPage = ({
           <Route path={`${path}/:id`}>
             <OverviewPage
               additionalActions={overviewActions}
-              menu={overviewSubmenu}
+              menu={submenu}
               widget={overview}
             />
           </Route>

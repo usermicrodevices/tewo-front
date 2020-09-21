@@ -40,6 +40,7 @@ class Details {
     this.me = me;
 
     const updateData = () => {
+      me.session.devices.getStats(me.id);
       setTimeout(
         () => { this.waterQuality = new Array(Math.round(2 + Math.random() * 12)).fill(null).map(() => Math.random()); },
         2000,
