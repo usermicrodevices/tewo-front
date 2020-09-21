@@ -17,6 +17,8 @@ class EventType extends Datum {
 
   @observable description;
 
+  isHidden;
+
   isOverdued;
 
   get key() { return this.id; }

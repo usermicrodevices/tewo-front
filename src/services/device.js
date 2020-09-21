@@ -1,3 +1,4 @@
+/* eslint key-spacing: off */
 import moment from 'moment';
 
 import { get } from 'utils/request';
@@ -87,7 +88,7 @@ function getDeviceModels(map) {
   });
 }
 
-const getStats = (id) => get(`refs/devices/${id}/stats/`).then((data) => {
+const getStats = (id) => get(`refs/devices/${id}/stats/`).then((json) => {
   const mustBe = {
     beverages: 'number',
     beverages_prev: 'number',
@@ -104,30 +105,38 @@ const getStats = (id) => get(`refs/devices/${id}/stats/`).then((data) => {
     sum_prev: 'number',
   };
 
-  if (!checkData(data, mustBe)) {
+  if (!checkData(json, mustBe)) {
     console.error(`undexpected responce for ${id} device details`);
   }
 
-  if (data.iterations !== data.iterations_to + data.remain_iterations_to) {
-    console.error(`device dtail consistency error: ${data.iterations_to} + ${data.remain_iterations_to} !== ${data.iterations}
-      (${data.iterations_to + data.remain_iterations_to} found)`);
+  if (json.iterations !== json.iterations_to + json.remain_iterations_to) {
+    console.error(`device dtail consistency error: ${json.iterations_to} + ${json.remain_iterations_to} !== ${json.iterations}
+      (${json.iterations_to + json.remain_iterations_to} found)`);
   }
 
   const renamer = {
     beverages:         'beveragesLastDayAmount',
     beverages_prev:    'beveragesPrewDayAmount',
     downtime:          'downtime',
-    forecast_date:     'date',
+    forecast_date:     'techServiceForecastDate',
     has_overloc_ppm:   'isHaveWaterQualityMetric',
-    iterations:        'techServicesWhole',
-    iterations_to:     'techServicesDid',
     need_tech_service: 'isNeedTechService',
     overdue_tasks:     'overdueTasksAmount',
     ppm:               'waterQualityMetric',
     remain_iterations_to: 'techServicesRemain',
+    iterations:           'techServicesWhole',
+    iterations_to:        'techServicesDid',
     sum:               'salesLastDayAmount',
     sum_prev:          'salesPrewDayAmount',
   };
+  const result = {};
+  for (const [jsonName, dataName] of Object.entries(renamer)) {
+    result[dataName] = json[jsonName];
+  }
+  result.waterQualityMetric = result.isHaveWaterQualityMetric ? result.waterQualityMetric : null;
+  result.techServiceForecastDate = moment(result.techServiceForecastDate);
+  result.techServicesPercentage = result.techServicesDid / result.techServicesWhole * 100;
+  return result;
 });
 
 export { getDevices, getDeviceModels, getStats };

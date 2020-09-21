@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card, Table } from 'antd';
-import moment from 'moment';
+import { inject, observer } from 'mobx-react';
 import classnames from 'classnames';
 
+import Format from 'elements/format';
 import Icon from 'elements/icon';
 import { canceledIcon } from 'elements/beverageIcons';
 
@@ -12,12 +13,7 @@ import genericStyle from '../genericStyle.module.scss';
 const COLUMNS = [
   {
     dataIndex: 'deviceDate',
-    render: (date) => (
-      <>
-        <Icon name="clock-outline" />
-        { date.format('DD.MM.yy hh:mm') }
-      </>
-    ),
+    render: (date) => <Format>{ date }</Format>,
   },
   {
     dataIndex: 'drinkName',
@@ -28,22 +24,16 @@ const COLUMNS = [
   },
 ];
 
-const DATA = new Array(20).fill(null).map(() => ({
-  deviceDate: moment(),
-  drinkName: 'golovonogies',
-  canceled: !!Math.round(Math.random()),
-}));
-
-const Beverages = () => (
+const Beverages = ({ element: { details: { lastBeverages } } }) => (
   <Card className={style.beverages}>
     <div className={classnames(genericStyle.title, style.title)}>
       <Icon size={18} name="droplet-outline" />
       Последние наливы
     </div>
     <div className={style.table}>
-      <Table pagination={false} columns={COLUMNS} dataSource={DATA} />
+      <Table pagination={false} columns={COLUMNS} dataSource={lastBeverages} />
     </div>
   </Card>
 );
 
-export default Beverages;
+export default inject('element')(observer(Beverages));

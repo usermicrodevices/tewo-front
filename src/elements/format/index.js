@@ -1,6 +1,8 @@
 import React from 'react';
 import { Tooltip } from 'antd';
+import moment from 'moment';
 
+import Icon from 'elements/icon';
 import Loader from 'elements/loader';
 import { isColor } from 'utils/color';
 
@@ -43,6 +45,13 @@ const Format = ({
     txt = children;
   } else if (typeof children === 'number') {
     txt = FORMAT.format(children);
+  } else if (moment.isMoment(children)) {
+    return (
+      <div className={style.clock}>
+        <Icon size={16} name="clock-outline" className={style.clockicon} />
+        <Format>{ children.format('DD.MM.yy hh:mm') }</Format>
+      </div>
+    );
   } else {
     console.error('unknown cell data', children);
     txt = `${children}`;

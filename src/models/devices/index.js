@@ -74,10 +74,10 @@ const COLUMNS = {
 };
 
 const declareFilters = (session) => ({
-  start_date: {
+  companyId: {
     type: 'selector',
     title: 'Компания',
-    apply: (general, data) => general(data.startDate),
+    apply: (general, data) => general(data.companyId),
     selector: () => session.companies.selector,
   },
   salePointId: {

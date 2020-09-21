@@ -18,7 +18,7 @@ const Recover = ({ auth }) => (
       <br />
       <br />
       или по телефону&ensp;
-      <Phone>{auth.contacts.email}</Phone>
+      <Phone>{auth.contacts.phone}</Phone>
     </p>
   </div>
 );

@@ -3,6 +3,7 @@ import classnames from 'classnames';
 
 import Icon from 'elements/icon';
 import Loader from 'elements/loader';
+import Format from 'elements/format';
 
 import style from './badge.module.scss';
 
@@ -17,8 +18,8 @@ const Badge = ({
         <div>
           { isLoading ? <Loader /> : (
             <>
-              { value }
-              { subvalue && <span className={style.subvalue}>{subvalue}</span> }
+              { typeof value !== 'undefined' && <Format>{ value }</Format>}
+              { subvalue && <span className={style.subvalue}><Format>{subvalue}</Format></span> }
             </>
           )}
         </div>

@@ -7,8 +7,8 @@ import EventType from 'models/events/eventType';
 import Event from 'models/events/event';
 
 const getEvents = (session) => (limit, offset = 0, filter = '') => {
-  console.assert(limit >= 0 && offset >= 0, `Неверные параметры запроса событий "${limit}" "${offset}"`);
-  return get(`/data/events/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
+  console.assert(limit > 0 && offset >= 0, `Неверные параметры запроса событий "${limit}" "${offset}"`);
+  return get(`/data/events/?event_reference__id=20&limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
     const mustBe = {
       id: 'number',
       cid: 'string',
@@ -86,6 +86,7 @@ const getEventTypes = () => get('/refs/event_references/').then((results) => {
           cid: 'string',
           name: 'string',
           reaction_time: 'number',
+          hidden: 'boolean',
         }, {
           priority: 'number',
           color: 'color',
@@ -102,6 +103,7 @@ const getEventTypes = () => get('/refs/event_references/').then((results) => {
         priority: 'priority',
         color: 'color',
         description: 'description',
+        hidden: 'isHidden',
       };
       const result = new EventType();
       for (const [jsonName, dataName] of Object.entries(rename)) {

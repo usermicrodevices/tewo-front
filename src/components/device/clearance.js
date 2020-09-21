@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import { Card, Button } from 'antd';
 
 import Icon from 'elements/icon';
@@ -7,7 +8,11 @@ import Icon from 'elements/icon';
 import Badge from './badge';
 import style from './genericStyle.module.scss';
 
-const Clearance = ({ history: { push }, location: { pathname } }) => (
+const Clearance = ({
+  history: { push },
+  location: { pathname },
+  element: { details: { serviceEvents } },
+}) => (
   <Card className={style.clearance}>
     <div className={style.title}>
       <div>
@@ -25,21 +30,24 @@ const Clearance = ({ history: { push }, location: { pathname } }) => (
       </div>
     </div>
     <div className={style.badges}>
-      <Badge
-        value={undefined}
-        label=""
-      />
-      <Badge
-        value={undefined}
-        label=""
-      />
-      <Badge
-        value="14.07.20"
-        action={() => 'xxx'}
-        label="11:34"
-      />
+      {
+        Array.isArray(serviceEvents)
+          ? serviceEvents.slice(0, 3).map(({ id, openDate }) => (
+            <Badge
+              key={id}
+              value={openDate.format('DD.MM.YY')}
+              label={openDate.format('hh:mm')}
+            />
+          ))
+          : (
+            <Badge
+              value={undefined}
+              label=""
+            />
+          )
+      }
     </div>
   </Card>
 );
 
-export default withRouter(Clearance);
+export default withRouter(inject('element')(observer(Clearance)));

@@ -1,46 +1,41 @@
 import React from 'react';
 import { Card, Progress } from 'antd';
+import { inject, observer } from 'mobx-react';
 import classnames from 'classnames';
 
 import Badge from '../badge';
 import style from './index.module.scss';
 import genericStyle from '../genericStyle.module.scss';
 
-const Condition = () => (
+const Condition = ({ element: { details: { stats } } }) => (
   <Card className={style.condition}>
     <div className={classnames(genericStyle.title, style.title)}>
-      <Progress percent={50} showInfo={false} size="small" strokeColor="#2979BD" />
+      <Progress percent={stats ? stats.techServicesPercentage : 0} showInfo={false} size="small" strokeColor="#2979BD" />
     </div>
     <div className={genericStyle.badges}>
       <Badge
-        value="1200"
-        subvalue="/38800"
+        value={stats && stats.techServicesDid}
+        subvalue={stats && `/${stats.techServicesWhole}`}
         label="тех. обслуживание"
       />
       <Badge
-        value={undefined}
-        subvalue={undefined}
+        value={stats && stats.waterQualityMetric}
         label="жесткость воды"
       />
       <Badge
         value={undefined}
-        subvalue={undefined}
-        action={() => 'xxx'}
         label="очисток за 7 дней"
       />
       <Badge
-        action={() => 'xxx'}
         value={undefined}
-        subvalue="15.05.20"
         label="предыдущее ТО"
       />
       <Badge
-        value={undefined}
-        subvalue={undefined}
+        value={stats && stats.techServiceForecastDate.format('DD.MM.YY')}
         label="следующее ТО"
       />
     </div>
   </Card>
 );
 
-export default Condition;
+export default inject('element')(observer(Condition));

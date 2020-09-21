@@ -5,6 +5,7 @@ import { getBeverages } from 'services/beverage';
 import TimeAgo from 'elements/timeago';
 import { typeNameToIcon, canceledIcon } from 'elements/beverageIcons';
 import { beverage } from 'routes';
+import { daterangeToArgs } from 'utils/date';
 
 const declareColumns = (session) => ({
   id: {
@@ -118,8 +119,11 @@ const declareFilters = (session) => ({
 class Beverages extends Table {
   chart = null;
 
+  session;
+
   constructor(session) {
     super(declareColumns(session), getBeverages(session), new Filters(declareFilters(session)));
+    this.session = session;
     this.filter.isShowSearch = false;
   }
 
@@ -129,6 +133,13 @@ class Beverages extends Table {
 
   getPathForDevice(deviceId) {
     return `${beverage.path}/?device__id__in=${deviceId}`;
+  }
+
+  getBeveragesForDevice(deviceId, limit, daterange) {
+    const rangeArg = typeof daterange === 'undefined'
+      ? ''
+      : daterangeToArgs(daterange, 'device_date');
+    return getBeverages(this.session)(limit, 0, `device__id__in=${deviceId}${rangeArg}`);
   }
 }
 

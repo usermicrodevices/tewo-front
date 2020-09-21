@@ -6,6 +6,8 @@ import TimeAgo from 'elements/timeago';
 import colorizedCell from 'elements/table/colorizedCell';
 import { eventsLog } from 'routes';
 
+const TECH_SERVICE_EVENT_ID = 20;
+
 const declareColumns = () => ({
   id: {
     isVisibleByDefault: true,
@@ -103,10 +105,13 @@ const declareFilters = (session) => ({
 class Events extends Table {
   chart = null;
 
+  session;
+
   constructor(session) {
     const filters = new Filters(declareFilters(session));
     super(declareColumns(), getEvents(session), filters);
     this.filter.isShowSearch = false;
+    this.session = session;
   }
 
   toString() {
@@ -115,6 +120,10 @@ class Events extends Table {
 
   getPathForDevice(deviceId) {
     return `${eventsLog.path}/?device__id__in=${deviceId}`;
+  }
+
+  getDeviceServiceEvents(deviceId) {
+    return getEvents(this.session)(1e3, 0, `event_reference__id=${TECH_SERVICE_EVENT_ID}&device__id__in=${deviceId}`);
   }
 }
 

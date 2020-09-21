@@ -8,6 +8,14 @@ const STORAGE_KEY = '';
 class Details {
   @observable waterQuality;
 
+  @observable stats = null;
+
+  @observable periodBeveragesAmount;
+
+  @observable lastBeverages;
+
+  @observable serviceEvents;
+
   @computed get dateRange() {
     return (localStorage.getItem(`${STORAGE_KEY}_date`) || ['', '']).map((t) => (moment.isMoment(t) || t === '' ? t : moment(t)));
   }
@@ -39,15 +47,26 @@ class Details {
   constructor(me) {
     this.me = me;
 
-    const updateData = () => {
-      me.session.devices.getStats(me.id);
+    const updateDateRelatedData = () => {
+      this.waterQuality = undefined;
+      this.periodBeveragesAmount = undefined;
       setTimeout(
         () => { this.waterQuality = new Array(Math.round(2 + Math.random() * 12)).fill(null).map(() => Math.random()); },
         2000,
       );
+      me.session.beverages.getBeveragesForDevice(me.id, 1, this.dateRange).then(({ count }) => {
+        this.periodBeveragesAmount = count;
+      });
     };
-    reaction(() => this.dateRange, updateData);
-    updateData();
+    reaction(() => this.dateRange, updateDateRelatedData);
+    updateDateRelatedData();
+    me.session.devices.getStats(me.id).then((stats) => { this.stats = stats; });
+    me.session.beverages.getBeveragesForDevice(me.id, 10).then(({ results }) => {
+      this.lastBeverages = results;
+    });
+    me.session.events.getDeviceServiceEvents(me.id).then(({ results }) => {
+      this.serviceEvents = results;
+    });
   }
 
   @computed get isWaterQualified() {
