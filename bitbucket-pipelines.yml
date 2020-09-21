@@ -18,7 +18,7 @@ pipelines:
             variables:
               USER: $SFTP_USER
               SERVER: $SFTP_SERVER
-              REMOTE_PATH: '~/'
+              REMOTE_PATH: '/public/'
               LOCAL_PATH: 'build/*'
               PASSWORD: $SFTP_PASSWORD
 
