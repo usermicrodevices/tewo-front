@@ -30,14 +30,6 @@ const GenericPage = ({
   const storage = session[storageName];
   const { filter } = storage;
   const isNeedToRedirect = location.search.slice(1) !== filter.search;
-  if (typeof overviewSubmenu === 'undefined') {
-    overviewSubmenu = [
-      {
-        path: ['view', 'edit'],
-        text: 'Справочная информация',
-      },
-    ];
-  }
 
   const submenu = Array.isArray(overviewSubmenu) ? overviewSubmenu : DEFAULT_SUBMENU;
 
