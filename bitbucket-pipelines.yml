@@ -21,4 +21,4 @@ pipelines:
               PASSWORD: $SFTP_PASSWORD
               REMOTE_PATH: '/public'
               LOCAL_PATH: 'build/*'
-
+              DEBUG: 'true'
