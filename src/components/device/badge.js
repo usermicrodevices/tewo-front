@@ -10,11 +10,11 @@ import style from './badge.module.scss';
 const Badge = ({
   value, subvalue, label, growth, action,
 }) => {
-  const isLoading = typeof value === 'undefined' && typeof subvalue === 'undefined';
+  const isLoading = typeof value === 'undefined' && typeof subvalue === 'undefined' && typeof growth === 'undefined';
   return (
     <div onClick={action} className={classnames(style.badge, { [style.actable]: !!action })}>
       <div className={style.head}>
-        { growth && <Icon name={growth > 0 ? 'arrow-upward-outline' : 'arrow-downward-outline'} className={growth > 0 ? style.rise : style.fail} /> }
+        { typeof growth === 'number' && growth !== 0 && <Icon name={growth > 0 ? 'arrow-upward-outline' : 'arrow-downward-outline'} className={growth > 0 ? style.rise : style.fail} /> }
         <div>
           { isLoading ? <Loader /> : (
             <>

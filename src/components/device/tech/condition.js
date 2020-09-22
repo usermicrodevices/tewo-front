@@ -7,14 +7,16 @@ import Badge from '../badge';
 import style from './index.module.scss';
 import genericStyle from '../genericStyle.module.scss';
 
-const Condition = ({ element: { details: { stats } } }) => (
+const DATE_FORMAT = 'DD.MM.YY';
+
+const Condition = ({ element: { details: { stats, lastService, clearancesAmount } } }) => (
   <Card className={style.condition}>
     <div className={classnames(genericStyle.title, style.title)}>
       <Progress percent={stats ? stats.techServicesPercentage : 0} showInfo={false} size="small" strokeColor="#2979BD" />
     </div>
     <div className={genericStyle.badges}>
       <Badge
-        value={stats && stats.techServicesDid}
+        value={stats && `${stats.techServicesDid}`}
         subvalue={stats && `/${stats.techServicesWhole}`}
         label="тех. обслуживание"
       />
@@ -23,15 +25,15 @@ const Condition = ({ element: { details: { stats } } }) => (
         label="жесткость воды"
       />
       <Badge
-        value={undefined}
+        value={clearancesAmount}
         label="очисток за 7 дней"
       />
       <Badge
-        value={undefined}
+        value={lastService && lastService.format(DATE_FORMAT)}
         label="предыдущее ТО"
       />
       <Badge
-        value={stats && stats.techServiceForecastDate.format('DD.MM.YY')}
+        value={stats && stats.techServiceForecastDate.format(DATE_FORMAT)}
         label="следующее ТО"
       />
     </div>

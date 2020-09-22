@@ -1,4 +1,7 @@
 /* eslint class-methods-use-this: off */
+import moment from 'moment';
+
+import { daterangeToArgs } from 'utils/date';
 import Table from 'models/table';
 import Filters from 'models/filters';
 import { getEvents } from 'services/events';
@@ -7,6 +10,8 @@ import colorizedCell from 'elements/table/colorizedCell';
 import { eventsLog } from 'routes';
 
 const TECH_SERVICE_EVENT_ID = 20;
+
+const TECH_CLEARANCE_EVENT_ID = 8;
 
 const declareColumns = () => ({
   id: {
@@ -124,6 +129,12 @@ class Events extends Table {
 
   getDeviceServiceEvents(deviceId) {
     return getEvents(this.session)(1e3, 0, `event_reference__id=${TECH_SERVICE_EVENT_ID}&close_date__isnull=1&device__id__in=${deviceId}`);
+  }
+
+  getDeviceClearancesEventsLastWeek(deviceId) {
+    const daterange = [moment().subtract(1, 'week'), moment()];
+    const datefilter = daterangeToArgs(daterange, 'open_date');
+    return getEvents(this.session)(1e3, 0, `event_reference__id=${TECH_CLEARANCE_EVENT_ID}&device__id__in=${deviceId}${datefilter}`);
   }
 }
 

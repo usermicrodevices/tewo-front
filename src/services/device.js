@@ -1,74 +1,80 @@
-/* eslint key-spacing: off */
+/* eslint key-spacing: off, no-param-reassign: off */
 import moment from 'moment';
 
-import { get } from 'utils/request';
+import { get, patch, post } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import Device from 'models/devices/device';
 
-const getDevices = (session) => () => get('/refs/devices/').then((result) => {
+import { getBeveragesStats } from './beverage';
+
+const LOCATION = '/refs/devices/';
+
+const RENAMER = {
+  id: 'id',
+  controller: 'controller',
+  created_date: 'createdDate',
+  setup_date: 'setupDate',
+  name: 'name',
+  sale_point: 'salePointId',
+  serial: 'serial',
+  device_model: 'deviceModelId',
+  price_group: 'priceGroupId',
+  tz: 'timeZone',
+  downtime: 'downtime',
+  has_overloc_ppm: 'hasOverlocPPM',
+  need_tech_service: 'needTechService',
+  opened_tasks: 'isHaveOpenedTasks',
+  lastoff: 'stopDate',
+  tech: 'isNeedTechService',
+};
+
+function converter(json, acceptor) {
+  if (!checkData(
+    json,
+    {
+      id: 'number',
+      controller: 'string',
+      created_date: 'date',
+      setup_date: 'date',
+      name: 'string',
+      sale_point: 'number',
+      tz: 'string',
+      status: 'number',
+      downtime: 'number',
+      has_overloc_ppm: 'boolean',
+      need_tech_service: 'boolean',
+      opened_tasks: 'boolean',
+      tech: 'boolean',
+    }, {
+      serial: 'string',
+      device_model: 'number',
+      price_group: 'number',
+      maintenance: 'date',
+      lastoff: 'date',
+    },
+  )) {
+    console.error(`Неожиданный ответ по адресу ${LOCATION}`, json);
+  }
+
+  for (const [jsonName, modelName] of Object.entries(RENAMER)) {
+    if (modelName.indexOf('Date') >= 0) {
+      acceptor[modelName] = moment(json[jsonName]);
+    } else {
+      acceptor[modelName] = json[jsonName];
+    }
+  }
+  acceptor.isOn = json.status === 1;
+  acceptor.isInactive = json.status === -1;
+  return acceptor;
+}
+
+const getDevices = (session) => () => get(LOCATION).then((result) => {
   if (!Array.isArray(result)) {
-    console.error(`по /refs/devices/ ожидается массив, получен ${typeof result}`, result);
+    console.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
   }
   return {
     count: result.length,
-    results: result.map((deviceData) => {
-      if (!checkData(
-        deviceData,
-        {
-          id: 'number',
-          controller: 'string',
-          created_date: 'date',
-          setup_date: 'date',
-          name: 'string',
-          sale_point: 'number',
-          tz: 'string',
-          status: 'number',
-          downtime: 'number',
-          has_overloc_ppm: 'boolean',
-          need_tech_service: 'boolean',
-          opened_tasks: 'boolean',
-          tech: 'boolean',
-        }, {
-          serial: 'string',
-          device_model: 'number',
-          price_group: 'number',
-          maintenance: 'date',
-          lastoff: 'date',
-        },
-      )) {
-        console.error('Неожиданный ответ по адресу /refs/devices/', deviceData);
-      }
-      const device = new Device(session);
-      const renamer = {
-        id: 'id',
-        controller: 'controller',
-        created_date: 'createdDate',
-        setup_date: 'setupDate',
-        name: 'name',
-        sale_point: 'salePointId',
-        serial: 'serial',
-        device_model: 'deviceModelId',
-        price_group: 'priceGroupId',
-        tz: 'timeZone',
-        downtime: 'downtime',
-        has_overloc_ppm: 'hasOverlocPPM',
-        need_tech_service: 'needTechService',
-        opened_tasks: 'isHaveOpenedTasks',
-        lastoff: 'stopDate',
-        tech: 'isNeedTechService',
-      };
-
-      for (const [jsonName, modelName] of Object.entries(renamer)) {
-        if (modelName.indexOf('Date') >= 0) {
-          device[modelName] = moment(deviceData[jsonName]);
-        } else {
-          device[modelName] = deviceData[jsonName];
-        }
-      }
-      device.isOn = deviceData.status === 1;
-      device.isInactive = deviceData.status === -1;
-      return device;
-    }),
+    results: result.map((deviceData) => converter(deviceData, new Device(session))),
   };
 });
 
@@ -88,7 +94,7 @@ function getDeviceModels(map) {
   });
 }
 
-const getStats = (id) => get(`refs/devices/${id}/stats/`).then((json) => {
+const getStats = (id) => get(`${LOCATION}${id}/stats/`).then((json) => {
   const mustBe = {
     beverages: 'number',
     beverages_prev: 'number',
@@ -139,4 +145,21 @@ const getStats = (id) => get(`refs/devices/${id}/stats/`).then((json) => {
   return result;
 });
 
-export { getDevices, getDeviceModels, getStats };
+const getSalesChart = (deviceId, daterange) => getBeveragesStats(deviceId, daterange, 'device__id');
+
+const applyDevice = (id, changes) => {
+  const data = {};
+  const renamer = new Map(Object.entries(RENAMER).map(([a, b]) => [b, a]));
+  for (const [key, value] of Object.entries(changes)) {
+    data[renamer.get(key)] = value;
+    if (moment.isMoment(value)) {
+      data[renamer.get(key)] = value.format();
+    }
+  }
+  const request = id === null ? post(LOCATION, data) : patch(`${LOCATION}${id}`, data);
+  return request.then((response) => converter(response, {}));
+};
+
+export {
+  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice,
+};

@@ -1,11 +1,13 @@
 /* eslint class-methods-use-this: off */
 import Table from 'models/table';
 import Filter from 'models/filters';
-import { getDevices, getStats } from 'services//device';
 import { computed } from 'mobx';
 
 import { devices as devicesRout } from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
+import {
+  getDevices, getStats, getSalesChart, applyDevice,
+} from 'services/device';
 
 const COLUMNS = {
   id: {
@@ -167,6 +169,10 @@ class Devices extends Table {
   }
 
   getStats = getStats;
+
+  getSalesChart = getSalesChart;
+
+  applyDevice = applyDevice;
 }
 
 export default Devices;

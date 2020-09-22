@@ -21,30 +21,21 @@ const Statistic = ({ element: { details } }) => (
       />
       <Badge
         value={undefined}
-        subvalue={undefined}
         label="использовано QR менеджера"
       />
       <Badge
-        value={undefined}
-        subvalue={undefined}
-        action={() => 'xxx'}
+        growth={details.salesGrowth}
+        value={`${Math.round(Math.abs(details.salesGrowth) * 10) / 10}%`}
         label="динамика продаж"
       />
       <Badge
-        value={undefined}
-        subvalue={undefined}
+        value={details.salesSum}
         label="сумма денег руб"
       />
       <Badge
-        value={undefined}
-        subvalue={undefined}
-        action={() => 'xxx'}
         label="потрачено зёрен"
       />
       <Badge
-        value={undefined}
-        subvalue={undefined}
-        action={() => 'xxx'}
         label="потрачено молока"
       />
     </div>

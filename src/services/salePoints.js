@@ -3,8 +3,9 @@ import { get, post, patch } from 'utils/request';
 import moment from 'moment';
 import SalePoint from 'models/salePoints/salePoint';
 import checkData from 'utils/dataCheck';
-import { daterangeToArgs, isDateRange } from 'utils/date';
+import { daterangeToArgs } from 'utils/date';
 import { getEvents } from './events';
+import { getBeveragesStats } from './beverage';
 
 const RENAMER = {
   id: 'id',
@@ -110,47 +111,7 @@ const getSalesTop = (pointId, daterange) => {
     });
 };
 
-const getSalesChart = (pointId, daterange) => {
-  const rangeArg = daterangeToArgs(daterange, 'device_date');
-  const location = `/data/beverages/stats/?device__sale_point__id=${pointId}${rangeArg}`;
-  const mustBe = {
-    day: 'date',
-    total: 'number',
-    sum: 'number',
-  };
-  return get(location).then((result) => {
-    if (!Array.isArray(result)) {
-      console.error(`can not ger data from ${location}`, result);
-      return [];
-    }
-    for (const d of result) {
-      if (!checkData(d, mustBe)) {
-        console.error(`Неожиданные данные для эндпоинта ${location}`, d);
-      }
-    }
-    const isRangeGiven = isDateRange(daterange);
-    if (!isRangeGiven && result.length === 0) {
-      return [];
-    }
-    function* g(curDay, lastDay) {
-      while (curDay <= lastDay) {
-        curDay.add(1, 'days');
-        const item = result.find(({ day }) => {
-          const m = moment(day);
-          return curDay.dayOfYear() === m.dayOfYear() && curDay.year() === m.year();
-        }) || { total: 0, sum: 0 };
-        yield {
-          day: moment(curDay),
-          beverages: item.total,
-          sales: item.sum / 100,
-        };
-      }
-    }
-    return isRangeGiven
-      ? [...g(moment(daterange[0]), moment(daterange[1]))]
-      : [...g(moment(result[0].day), moment(result[result.length - 1].day))];
-  });
-};
+const getSalesChart = (pointId, daterange) => getBeveragesStats(pointId, daterange, 'device__sale_point__id');
 
 const getOutdatedTasks = (pointId) => {
   const lastDay = [moment().subtract(1, 'day'), moment()];

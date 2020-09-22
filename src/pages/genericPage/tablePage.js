@@ -14,6 +14,8 @@ import { TableHeader } from './headers';
 class GenericTablePage extends React.Component {
   updateTimeout = null;
 
+  isUnmounted = false;
+
   constructor(props) {
     super(props);
 
@@ -26,7 +28,9 @@ class GenericTablePage extends React.Component {
     if (refreshInterval) {
       const update = () => {
         table.validate().then(() => {
-          this.updateTimeout = setTimeout(update, refreshInterval);
+          if (!this.isUnmounted) {
+            this.updateTimeout = setTimeout(update, refreshInterval);
+          }
         });
       };
       update();
@@ -34,7 +38,7 @@ class GenericTablePage extends React.Component {
   }
 
   componentWillUnmount() {
-    clearTimeout(this.updateTimeout);
+    this.isUnmounted = true;
   }
 
   onCancelEdditing = () => {

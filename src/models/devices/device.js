@@ -6,7 +6,7 @@ import Details from './details';
 class Device {
   id;
 
-  name;
+  @observable name;
 
   controller;
 
@@ -18,11 +18,11 @@ class Device {
 
   serial;
 
-  deviceModelId;
+  @observable deviceModelId;
 
   priceGroupId;
 
-  timeZone;
+  @observable timeZone;
 
   isOn;
 
@@ -53,7 +53,7 @@ class Device {
         type: 'selector',
         selector: this.session.deviceModels.selector,
       },
-      timezone: {
+      timeZone: {
         type: 'selector',
         selector: zones.RU.map((v) => [v, v]),
       },
@@ -149,6 +149,10 @@ class Device {
     return priceGroup.name;
   }
 
+  update(data) {
+    return this.session.devices.applyDevice(this.id, data);
+  }
+
   @computed get values() {
     return [
       {
@@ -177,9 +181,9 @@ class Device {
         value: this.salePointName,
       },
       {
-        dataIndex: 'timezone',
+        dataIndex: 'timeZone',
         title: 'Временная зона (time zone)',
-        value: null,
+        value: this.timeZone,
       },
       {
         dataIndex: 'deviceModelType',

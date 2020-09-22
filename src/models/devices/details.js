@@ -3,7 +3,11 @@ import { computed, observable, reaction } from 'mobx';
 import localStorage from 'mobx-localstorage';
 import moment from 'moment';
 
+import { isDateRange, stepToPast } from 'utils/date';
+
 const STORAGE_KEY = '';
+
+const reduceArray = (field, source) => source && source.reduce(((cur, val) => cur + val[field]), 0);
 
 class Details {
   @observable waterQuality;
@@ -12,9 +16,15 @@ class Details {
 
   @observable periodBeveragesAmount;
 
+  @observable clearancesAmount;
+
   @observable lastBeverages;
 
   @observable serviceEvents;
+
+  @observable sales;
+
+  @observable salesPrew;
 
   @computed get dateRange() {
     return (localStorage.getItem(`${STORAGE_KEY}_date`) || ['', '']).map((t) => (moment.isMoment(t) || t === '' ? t : moment(t)));
@@ -49,10 +59,21 @@ class Details {
 
     const updateDateRelatedData = () => {
       this.waterQuality = undefined;
-      this.periodBeveragesAmount = undefined;
+      this.sales = undefined;
+      this.salesPrew = undefined;
       me.session.beverages.getBeveragesForDevice(me.id, 1, this.dateRange).then(({ count }) => {
         this.periodBeveragesAmount = count;
       });
+      me.session.devices.getSalesChart(me.id, this.dateRange).then((sales) => {
+        this.sales = sales;
+      });
+      if (isDateRange(this.dateRange)) {
+        me.session.devices.getSalesChart(me.id, stepToPast(this.dateRange)).then((sales) => {
+          this.salesPrew = sales;
+        });
+      } else {
+        this.salesPrew = null;
+      }
     };
     reaction(() => this.dateRange, updateDateRelatedData);
     updateDateRelatedData();
@@ -63,6 +84,42 @@ class Details {
     me.session.events.getDeviceServiceEvents(me.id).then(({ results }) => {
       this.serviceEvents = results;
     });
+    me.session.events.getDeviceClearancesEventsLastWeek(me.id).then(({ count }) => {
+      this.clearancesAmount = count;
+    });
+  }
+
+  get salesPrewSum() {
+    return reduceArray('sales', this.salesPrew);
+  }
+
+  get salesSum() {
+    return reduceArray('sales', this.sales);
+  }
+
+  get salesGrowth() {
+    if (!this.sales || !this.salesPrew) {
+      return this.sales && this.salesPrew;
+    }
+    const { salesPrewSum, salesSum } = this;
+    if (salesPrewSum === 0) {
+      return 0;
+    }
+    return (salesSum - salesPrewSum) / salesPrewSum * 100;
+  }
+
+  get periodBeveragesAmount() {
+    return reduceArray('beverages', this.salesPrew);
+  }
+
+  @computed get lastService() {
+    if (!Array.isArray(this.serviceEvents)) {
+      return undefined;
+    }
+    if (this.serviceEvents.length === 0) {
+      return null;
+    }
+    return this.serviceEvents[this.serviceEvents.length - 1].closeDate;
   }
 
   @computed get isWaterQualified() {

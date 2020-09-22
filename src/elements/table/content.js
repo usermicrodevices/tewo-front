@@ -4,7 +4,7 @@ import { VariableSizeList as List } from 'react-window';
 
 import Loader from 'elements/loader';
 
-import Cell, { MAX_ROWS_AMOUNT } from './row';
+import Row, { MAX_ROWS_AMOUNT } from './row';
 import NoData from 'elements/noData';
 import style from './style.module.scss';
 
@@ -76,7 +76,7 @@ class Content extends React.Component {
         data={data}
       >
         {
-          Cell(data, columns, newElements, this.rowFunc, columnWidth, actions)
+          Row(data, columns, newElements, this.rowFunc, columnWidth, actions)
         }
       </List>
     );

@@ -24,7 +24,7 @@ const ChangesLabel = ({ value }) => {
   return (
     <div className={styles.growth}>
       <Icon name={value > 0 ? 'arrow-upward-outline' : 'arrow-downward-outline'} className={value > 0 ? styles.rise : styles.fail} />
-      {`${Math.round(value)}%`}
+      {`${Math.round(Math.abs(value))}%`}
     </div>
   );
 };

@@ -136,8 +136,8 @@ class SalePoints extends Table {
   actions = {
     isVisible: true,
     isEditable: () => true,
-    onEdit: (datum) => {
-      this.elementForEdit = datum;
+    onEdit: (datum, push) => {
+      push(`sale_points/${datum.id}/edit`);
     },
   };
 
