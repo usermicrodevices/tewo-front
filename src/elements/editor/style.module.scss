@@ -1,67 +1,77 @@
 .viewer {
-    :global {
-        .ant-table-cell {
-            height: 65px;
-        }
-
-        .ant-form-item-explain {
-            margin-bottom: -24px;
-        }
-
-        .ant-form-item {
-            margin-bottom: 0px;
-        }
+  :global {
+    .ant-table-cell {
+      height: 65px;
     }
+
+    .ant-form-item-explain {
+      margin-bottom: -24px;
+    }
+
+    .ant-form-item {
+      margin-bottom: 0px;
+    }
+  }
 }
 
 .start-edditing-button {
-    display: flex;
-    justify-content: flex-start;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .modal-bottom {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .bottom {
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .title {
-    display: flex;
-    justify-content: space-between;
-    margin-right: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-right: 20px;
 }
 
 .space>* {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .norecipe {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 
-    .strong {
-        font-size: 16px;
-        color: #262626;
-    }
-    color: #8C8C8C;
-    font-size: 14px;
-    line-height: 24px;
+  .strong {
+    font-size: 16px;
+    color: #262626;
+  }
+  color: #8C8C8C;
+  font-size: 14px;
+  line-height: 24px;
 }
 
 .location {
-    justify-content: space-between;
-    display: flex;
-    align-items: center;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
 
-    :global .ant-input {
-        width: 200px;
-    }
+  :global .ant-input {
+    width: 200px;
+  }
 
-    span {
-        white-space: nowrap;
-    }
+  span {
+    white-space: nowrap;
+  }
+}
+
+.ingredients {
+  >input {
+    display: none;
+  }
+
+  td {
+    padding-bottom: 8px;
+  }
 }

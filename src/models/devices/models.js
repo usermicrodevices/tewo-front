@@ -6,6 +6,10 @@ class DeviceModels extends Map {
 
     getDeviceModels(this);
   }
+
+  get selector() {
+    return [...this.entries()].map(([id, { name }]) => [id, name]);
+  }
 }
 
 export default DeviceModels;

@@ -29,6 +29,12 @@
     }
   }
 }
+.onlybeverages {
+  grid-row-start: span 2;
+  >div {
+    max-height: 480px;
+  }
+}
 
 .statistic {
   height: 152px;

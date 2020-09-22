@@ -24,8 +24,8 @@ const COLUMNS = [
   },
 ];
 
-const Beverages = ({ element: { details: { lastBeverages } } }) => (
-  <Card className={style.beverages}>
+const Beverages = ({ element: { details: { lastBeverages, serviceEvents } } }) => (
+  <Card className={classnames(style.beverages, { [style.onlybeverages]: !Array.isArray(serviceEvents) || serviceEvents.length === 0 })}>
     <div className={classnames(genericStyle.title, style.title)}>
       <Icon size={18} name="droplet-outline" />
       Последние наливы

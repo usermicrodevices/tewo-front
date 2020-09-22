@@ -12,7 +12,7 @@ const Clearance = ({
   history: { push },
   location: { pathname },
   element: { details: { serviceEvents } },
-}) => (
+}) => Array.isArray(serviceEvents) && serviceEvents.length > 0 && (
   <Card className={style.clearance}>
     <div className={style.title}>
       <div>
@@ -31,20 +31,13 @@ const Clearance = ({
     </div>
     <div className={style.badges}>
       {
-        Array.isArray(serviceEvents)
-          ? serviceEvents.slice(0, 3).map(({ id, openDate }) => (
-            <Badge
-              key={id}
-              value={openDate.format('DD.MM.YY')}
-              label={openDate.format('hh:mm')}
-            />
-          ))
-          : (
-            <Badge
-              value={undefined}
-              label=""
-            />
-          )
+        serviceEvents.slice(0, 3).map(({ id, openDate }) => (
+          <Badge
+            key={id}
+            value={openDate.format('DD.MM.YY')}
+            label={openDate.format('hh:mm')}
+          />
+        ))
       }
     </div>
   </Card>

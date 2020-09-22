@@ -26,7 +26,7 @@ const getDevices = (session) => () => get('/refs/devices/').then((result) => {
           downtime: 'number',
           has_overloc_ppm: 'boolean',
           need_tech_service: 'boolean',
-          overdue_tasks: 'boolean',
+          opened_tasks: 'boolean',
           tech: 'boolean',
         }, {
           serial: 'string',
@@ -53,7 +53,7 @@ const getDevices = (session) => () => get('/refs/devices/').then((result) => {
         downtime: 'downtime',
         has_overloc_ppm: 'hasOverlocPPM',
         need_tech_service: 'needTechService',
-        overdue_tasks: 'isHaveOverdueTasks',
+        opened_tasks: 'isHaveOpenedTasks',
         lastoff: 'stopDate',
         tech: 'isNeedTechService',
       };

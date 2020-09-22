@@ -123,7 +123,7 @@ class Events extends Table {
   }
 
   getDeviceServiceEvents(deviceId) {
-    return getEvents(this.session)(1e3, 0, `event_reference__id=${TECH_SERVICE_EVENT_ID}&device__id__in=${deviceId}`);
+    return getEvents(this.session)(1e3, 0, `event_reference__id=${TECH_SERVICE_EVENT_ID}&close_date__isnull=1&device__id__in=${deviceId}`);
   }
 }
 

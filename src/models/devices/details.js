@@ -50,10 +50,6 @@ class Details {
     const updateDateRelatedData = () => {
       this.waterQuality = undefined;
       this.periodBeveragesAmount = undefined;
-      setTimeout(
-        () => { this.waterQuality = new Array(Math.round(2 + Math.random() * 12)).fill(null).map(() => Math.random()); },
-        2000,
-      );
       me.session.beverages.getBeveragesForDevice(me.id, 1, this.dateRange).then(({ count }) => {
         this.periodBeveragesAmount = count;
       });

@@ -1,9 +1,10 @@
 import React from 'react';
 import {
-  Input, Form, Select, InputNumber, Checkbox,
+  Input, Form, Select, InputNumber, Checkbox, DatePicker,
 } from 'antd';
-import LocationPicker from './locationpicker';
 
+import IngredientsPicker from './ingredientspicker';
+import LocationPicker from './locationpicker';
 import ColorPicker from './colorpicker';
 
 const CellEditor = ({
@@ -70,6 +71,23 @@ const CellEditor = ({
         </Form.Item>
       );
     }
+    case 'date':
+      return (
+        <Form.Item name={name}>
+          <DatePicker />
+        </Form.Item>
+      );
+    case 'ingredients':
+      return (
+        <Form.Item
+          noStyle
+          shouldUpdate={(prevValues, currentValues) => JSON.stringify(prevValues[name]) !== JSON.stringify(currentValues[name])}
+        >
+          {({ getFieldValue, setFieldsValue }) => (
+            <IngredientsPicker getFieldValue={getFieldValue} setFieldsValue={setFieldsValue} name={name} />
+          )}
+        </Form.Item>
+      )
     case 'selector': {
       const filterComparator = (inputValue, { children }) => children.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
       return (

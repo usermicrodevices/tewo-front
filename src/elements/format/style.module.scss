@@ -10,15 +10,15 @@
 .clock {
   border-radius: 14px;
   width: 167px;
+  display: inline-block;
   height: 28px;
-  display: flex;
-  align-items: center;
+  line-height: 28px;
   background: #F3F5F7;
   justify-content: center;
   white-space: nowrap;
 
   .clockicon {
-    margin-right: 6px;
+    margin: 1px 6px -1px 6px;
     fill: $link-color
   }
 }

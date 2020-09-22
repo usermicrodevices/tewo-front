@@ -18,7 +18,7 @@ const RENAMER = {
   phone: 'phone',
   emails: 'email',
   has_off_devices: 'isHaveDisabledEquipment',
-  overdue_tasks: 'isHaveOverdueTasks',
+  opened_tasks: 'isHaveOpenedTasks',
   has_overloc_ppm: 'isHasOverlocPPM',
   need_tech_service: 'isNeedTechService',
   downtime: 'downtime',
@@ -34,7 +34,7 @@ const SHUILD_BE = {
   has_overloc_ppm: 'boolean',
   has_off_devices: 'boolean',
   need_tech_service: 'boolean',
-  overdue_tasks: 'boolean',
+  opened_tasks: 'boolean',
   downtime: 'number',
 };
 

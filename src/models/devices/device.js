@@ -1,4 +1,5 @@
 import { computed, observable } from 'mobx';
+import { zones } from 'utils/timezone';
 
 import Details from './details';
 
@@ -23,8 +24,6 @@ class Device {
 
   timeZone;
 
-  session;
-
   isOn;
 
   isInactive;
@@ -41,8 +40,34 @@ class Device {
 
   stopDate;
 
+  session;
+
   constructor(session) {
     this.session = session;
+
+    this.editable = {
+      name: {
+        type: 'text',
+      },
+      deviceModelName: {
+        type: 'selector',
+        selector: this.session.deviceModels.selector,
+      },
+      timezone: {
+        type: 'selector',
+        selector: zones.RU.map((v) => [v, v]),
+      },
+      setupDate: {
+        type: 'date',
+      },
+      description: {
+        type: 'text',
+        rows: 3,
+      },
+      ingredients: {
+        type: 'ingredients',
+      },
+    };
   }
 
   get details() {
@@ -124,23 +149,62 @@ class Device {
     return priceGroup.name;
   }
 
-  editable = {
-    name: {
-      type: 'text',
-    },
-  }
-
   @computed get values() {
     return [
       {
         dataIndex: 'id',
-        title: 'ID',
-        value: this.id,
+        title: 'ID контроллера',
+        value: this.controller,
+      },
+      {
+        dataIndex: 'serial',
+        title: 'Серийный номер (Serial)',
+        value: this.serial,
+      },
+      {
+        dataIndex: 'conception',
+        title: 'Концепция',
+        value: null,
       },
       {
         dataIndex: 'name',
         title: 'Название',
         value: this.name,
+      },
+      {
+        dataIndex: 'salePoint',
+        title: 'Объект',
+        value: this.salePointName,
+      },
+      {
+        dataIndex: 'timezone',
+        title: 'Временная зона (time zone)',
+        value: null,
+      },
+      {
+        dataIndex: 'deviceModelType',
+        title: 'Тип оборудования',
+        value: null,
+      },
+      {
+        dataIndex: 'deviceModelName',
+        title: 'Модель',
+        value: this.deviceModelName,
+      },
+      {
+        dataIndex: 'setupDate',
+        title: 'Дата монтажа',
+        value: this.setupDate,
+      },
+      {
+        dataIndex: 'description',
+        title: 'Описание',
+        value: null,
+      },
+      {
+        dataIndex: 'ingredients',
+        title: 'Настройка прогнозируемого пополнения ингредиентов',
+        value: null,
       },
     ];
   }
