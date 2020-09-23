@@ -10,6 +10,7 @@ const Devices = () => (
     tableTitle="Оборудование"
     overview={DeviceOverview}
     overviewActions={DeviceTitleAction}
+    allLinkText="Всё оборудование"
     overviewSubmenu={[
       {
         path: ['', 'calendar'],

@@ -4,8 +4,9 @@ import Filters from 'models/filters';
 import { getBeverages } from 'services/beverage';
 import TimeAgo from 'elements/timeago';
 import { typeNameToIcon, canceledIcon } from 'elements/beverageIcons';
-import { beverage } from 'routes';
+import { beverage as beverageRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { daterangeToArgs } from 'utils/date';
+import { tableItemLink } from 'elements/table/trickyCells';
 
 const declareColumns = (session) => ({
   id: {
@@ -37,10 +38,17 @@ const declareColumns = (session) => ({
   },
   deviceName: {
     isVisibleByDefault: true,
-    title: 'Устройство',
-    align: 'right',
+    title: 'Оборудование',
     grow: 1,
     sortDirections: 'both',
+    transform: (v, datum, width) => tableItemLink(v, `${devicesRout.path}/${datum.deviceId}`, width),
+  },
+  salePointName: {
+    isVisibleByDefault: true,
+    title: 'Объект',
+    grow: 1,
+    sortDirections: 'both',
+    transform: (v, datum, width) => tableItemLink(v, `${salePointsRout.path}/${datum.salePointId}`, width),
   },
   drinkName: {
     isVisibleByDefault: true,
@@ -132,7 +140,7 @@ class Beverages extends Table {
   }
 
   getPathForDevice(deviceId) {
-    return `${beverage.path}/?device__id__in=${deviceId}`;
+    return `${beverageRout.path}/?device__id__in=${deviceId}`;
   }
 
   getBeveragesForDevice(deviceId, limit, daterange) {

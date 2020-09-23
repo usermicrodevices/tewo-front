@@ -7,7 +7,8 @@ import Filters from 'models/filters';
 import { getEvents } from 'services/events';
 import TimeAgo from 'elements/timeago';
 import colorizedCell from 'elements/table/colorizedCell';
-import { eventsLog } from 'routes';
+import { eventsLog as eventsLogRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
+import { tableItemLink } from 'elements/table/trickyCells';
 
 const TECH_SERVICE_EVENT_ID = 20;
 
@@ -27,6 +28,19 @@ const declareColumns = () => ({
     title: 'Код',
     align: 'right',
     width: 70,
+  },
+  deviceName: {
+    isVisibleByDefault: true,
+    title: 'Оборудование',
+    grow: 1,
+    transform: (v, datum, width) => tableItemLink(v, `${devicesRout.path}/${datum.deviceId}`, width),
+  },
+  salePointName: {
+    isVisibleByDefault: true,
+    title: 'Объект',
+    grow: 1,
+    sortDirections: 'both',
+    transform: (v, datum, width) => tableItemLink(v, `${salePointsRout.path}/${datum.salePointId}`, width),
   },
   eventName: {
     isVisibleByDefault: true,
@@ -124,7 +138,7 @@ class Events extends Table {
   }
 
   getPathForDevice(deviceId) {
-    return `${eventsLog.path}/?device__id__in=${deviceId}`;
+    return `${eventsLogRout.path}/?device__id__in=${deviceId}`;
   }
 
   getDeviceServiceEvents(deviceId) {

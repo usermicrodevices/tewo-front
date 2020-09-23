@@ -25,6 +25,7 @@ const GenericPage = ({
   session,
   location,
   match: { path },
+  allLinkText,
 }) => {
   console.assert(typeof storageName === 'string', `Не задан storage для ${path}`);
   const storage = session[storageName];
@@ -42,6 +43,7 @@ const GenericPage = ({
               additionalActions={overviewActions}
               menu={submenu}
               widget={overview}
+              allLinkText={allLinkText || `Все ${(tableTitle || 'элементы').toLocaleLowerCase()}`}
             />
           </Route>
         )}

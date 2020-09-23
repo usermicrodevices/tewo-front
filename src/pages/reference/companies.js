@@ -3,7 +3,7 @@ import React from 'react';
 import GenericPage from 'pages/genericPage';
 
 const Companies = () => (
-  <GenericPage storageName="companies" tableTitle="Все компании" />
+  <GenericPage storageName="companies" tableTitle="Все компании" allLinkText="Все компании" />
 );
 
 export default Companies;

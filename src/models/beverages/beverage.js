@@ -59,8 +59,19 @@ class Beverage {
     return device ? device.companyId : device;
   }
 
+  @computed get salePointName() {
+    const { device } = this;
+    return device && device.salePointName;
+  }
+
+  @computed get salePointId() {
+    const { device } = this;
+    return device && device.salePointId;
+  }
+
   @computed get deviceName() {
-    return (this.device || { name: undefined }).name;
+    const { device } = this;
+    return device && device.name;
   }
 }
 

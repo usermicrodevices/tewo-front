@@ -40,6 +40,7 @@ const ElementHeader = withRouter(inject('element')(observer(({
   history,
   match,
   element: { id },
+  allLinkText,
 }) => {
   const { params: { action } } = match;
   const path = match.path.split('/').slice(0, 2).join('/');
@@ -47,7 +48,7 @@ const ElementHeader = withRouter(inject('element')(observer(({
     <div className={styles.head}>
       <Space>
         <GoBack />
-        <Button onClick={() => history.push(path)} className={styles.goback} type="text">Все объекты</Button>
+        <Button onClick={() => history.push(path)} className={styles.goback} type="text">{ allLinkText }</Button>
       </Space>
       <div className={styles.titleRow}>
         { children }

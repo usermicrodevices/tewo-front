@@ -9,6 +9,7 @@ const Points = () => (
   <GenericPage
     storageName="points"
     tableTitle="Список объектов"
+    allLinkText="Все объекты"
     overview={SalePointOverview}
     overviewActions={SalePointTitleAction}
     overviewSubmenu={[

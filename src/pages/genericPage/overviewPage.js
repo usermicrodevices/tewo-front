@@ -21,7 +21,9 @@ const ViewerPage = ({
   storage,
   match,
   history,
+  allLinkText,
 }) => {
+  console.log(allLinkText);
   if (!storage.isLoaded) {
     return <Loader size="large" />;
   }
@@ -38,7 +40,7 @@ const ViewerPage = ({
   const Header = withRouter(({ match: { params: { action } } }) => {
     const isEdditing = action === 'edit';
     return (
-      <ElementHeader menu={menu}>
+      <ElementHeader allLinkText={allLinkText} menu={menu}>
         <h1>
           <Space>
             {elementForEdit.name}

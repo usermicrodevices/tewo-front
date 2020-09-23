@@ -119,6 +119,11 @@ class Event {
     return company.id;
   }
 
+  @computed get salePointName() {
+    const { salePoint } = this;
+    return salePoint && salePoint.name;
+  }
+
   @computed get deviceName() {
     const { device } = this;
     if (!device) {
