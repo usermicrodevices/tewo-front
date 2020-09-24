@@ -10,7 +10,7 @@ import Loader from 'elements/loader';
 import Format from 'elements/format';
 import ScalebleChart from 'elements/chart/scaleble';
 
-import CurvesPicker from './salesCurvePicker';
+import CurvesPicker from 'elements/curvePicker';
 
 import styles from './sales.module.scss';
 

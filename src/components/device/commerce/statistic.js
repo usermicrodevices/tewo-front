@@ -24,8 +24,8 @@ const Statistic = ({ element: { details } }) => (
         label="использовано QR менеджера"
       />
       <Badge
-        growth={details.salesGrowth}
-        value={`${Math.round(Math.abs(details.salesGrowth) * 10) / 10}%`}
+        growth={details.beveragesStats.salesDiff}
+        value={details.beveragesStats.salesDiff && `${Math.round(Math.abs(details.beveragesStats.salesDiff) * 10) / 10}%`}
         label="динамика продаж"
       />
       <Badge

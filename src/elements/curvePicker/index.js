@@ -8,7 +8,7 @@ import {
 import Icon from 'elements/icon';
 import { SALES_DATA_TYPES } from 'models/detailsProps';
 
-import style from './sales.module.scss';
+import style from './style.module.scss';
 
 const CurveMenu = inject('element')(observer(({ element: { details: { imputsManager } } }) => {
   const options = SALES_DATA_TYPES.map((data) => ({

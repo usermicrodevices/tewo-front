@@ -31,7 +31,7 @@ const Beverages = ({ element: { details: { lastBeverages, serviceEvents } } }) =
       Последние наливы
     </div>
     <div className={style.table}>
-      <Table pagination={false} columns={COLUMNS} dataSource={lastBeverages} />
+      <Table pagination={false} columns={COLUMNS} dataSource={lastBeverages?.map((data) => ({ ...data, key: data.id }))} />
     </div>
   </Card>
 );

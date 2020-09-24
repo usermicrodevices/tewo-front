@@ -1,47 +1,16 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { withSize } from 'react-sizeme';
-import moment from 'moment';
 
-import Card from 'elements/card';
 import colors from 'themes/chart';
 import NoData from 'elements/noData';
 
+import locale from './locale';
 import style from './style.module.scss';
 
 const LENGTH_LIMIT = 30;
 
 const VIEW_CHART_HEIGHT_PART = 280 / (280 + 130);
-
-const monthMomentExporter = ((format) => {
-  const jan = moment().startOf('year');
-  return new Array(12).fill(null).map((_, id) => jan.clone().add(id, 'month').format(format).slice(0, -1));
-});
-
-const weekMomentExporter = ((format) => {
-  const mon = moment().startOf('week');
-  return new Array(7).fill(null).map((_, id) => mon.clone().add(id, 'day').format(format));
-});
-
-const LOCALE = {
-  defaultLocale: 'ru',
-  locales: [{
-    name: 'ru',
-    options: {
-      months: monthMomentExporter('MMMM'),
-      shortMonths: monthMomentExporter('MMM'),
-      days: weekMomentExporter('dd'),
-      shortDays: weekMomentExporter('dddd'),
-      toolbar: {
-        selectionZoom: 'Увеличение',
-        zoomIn: 'Приблизить',
-        zoomOut: 'Отдалить',
-        pan: 'Перетянуть',
-        reset: 'Сбросить увеличение',
-      },
-    },
-  }],
-};
 
 const provideAxis = (name, seriesName, opposite) => (
   {
@@ -107,12 +76,12 @@ const ScalebleChart = ({
         enabled: false,
       },
       stacked: false,
-      id: 'chart2',
-      height: isHaveOverviewChart ? VIEW_CHART_HEIGHT_PART * height : height,
-      ...LOCALE,
       toolbar: {
         show: false,
       },
+      id: 'chart2',
+      height: isHaveOverviewChart ? VIEW_CHART_HEIGHT_PART * height : height,
+      ...locale,
     },
     navigation: { menuItemStyle: { display: 'none' } },
     colors,
@@ -148,7 +117,7 @@ const ScalebleChart = ({
         target: 'chart2',
         enabled: true,
       },
-      ...LOCALE,
+      ...locale,
       selection: {
         enabled: true,
         xaxis: {
@@ -196,16 +165,4 @@ const Wrap = withSize()(({
   size: { width }, height, x, y, y1, y2,
 }) => (<div className={style.chartwrap}><ScalebleChart x={x} y={y} size={{ width, height }} y1={y1} y2={y2} /></div>));
 
-const TestChart = () => {
-  const length = 96;
-  const series = ['Наливы за текущий период'].map((label) => ({
-    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 500, 437, 502, 442, 412, 401, 389, 408, 362, 452, 985, 467, 499, 413, 441, 419, 456, 464, 408, 436, 416, 415, 464, 539, 419, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 111, 728, 372, 0, 0, 0, 409, 471, 450, 526, 442, 551, 415, 428, 553, 492, 631, 594, 648, 565, 616, 581, 650, 562, 696, 660, 589, 419, 547, 526, 187, 0, 0, 0, 0, 0, 0, 0],
-    name: label,
-    axis: Math.round(Math.random()),
-  }));
-  const x = new Array(length).fill(null).map((d, id) => +moment() + id * 3600 * 24 * 1000);
-  return <Card><Wrap x={x} y={series} height={280 + 130} y1={{ text: 'xxx', decimalsInFloat: 2 }} y2={{ text: 'Динамика продаж', decimalsInFloat: 0 }} /></Card>;
-};
-
-export { TestChart, Wrap as default };
-
+export { Wrap as default };

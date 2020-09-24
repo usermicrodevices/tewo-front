@@ -1,13 +1,11 @@
 /* eslint class-methods-use-this: off */
 import { computed, observable, reaction } from 'mobx';
-import localStorage from 'mobx-localstorage';
 import moment from 'moment';
 
-import { isDateRange, stepToPast } from 'utils/date';
+import BerevagesStatsPair from 'models/beverages/statsPair';
+import DetailsProps from 'models/detailsProps';
 
-const STORAGE_KEY = '';
-
-const reduceArray = (field, source) => source && source.reduce(((cur, val) => cur + val[field]), 0);
+const STORAGE_KEY = 'devices_inputs_storage';
 
 class Details {
   @observable waterQuality;
@@ -22,25 +20,9 @@ class Details {
 
   @observable serviceEvents;
 
-  @observable sales;
+  @observable beveragesStats;
 
-  @observable salesPrew;
-
-  @computed get dateRange() {
-    return (localStorage.getItem(`${STORAGE_KEY}_date`) || ['', '']).map((t) => (moment.isMoment(t) || t === '' ? t : moment(t)));
-  }
-
-  set dateRange(dateRange) {
-    localStorage.setItem(`${STORAGE_KEY}_date`, (() => {
-      if (Array.isArray(dateRange) && dateRange.length === 2 && moment.isMoment(dateRange[0]) && moment.isMoment(dateRange[1])) {
-        return [
-          dateRange[0].startOf('day'),
-          dateRange[1].endOf('day'),
-        ];
-      }
-      return ['', ''];
-    })());
-  }
+  imputsManager = new DetailsProps(STORAGE_KEY);
 
   @computed get xaxis() {
     const [begin, end] = [moment(), moment().add(this.waterQuality.length, 'day')];
@@ -59,21 +41,11 @@ class Details {
 
     const updateDateRelatedData = () => {
       this.waterQuality = undefined;
-      this.sales = undefined;
-      this.salesPrew = undefined;
+      this.periodBeveragesAmount  = undefined;
       me.session.beverages.getBeveragesForDevice(me.id, 1, this.dateRange).then(({ count }) => {
         this.periodBeveragesAmount = count;
       });
-      me.session.devices.getSalesChart(me.id, this.dateRange).then((sales) => {
-        this.sales = sales;
-      });
-      if (isDateRange(this.dateRange)) {
-        me.session.devices.getSalesChart(me.id, stepToPast(this.dateRange)).then((sales) => {
-          this.salesPrew = sales;
-        });
-      } else {
-        this.salesPrew = null;
-      }
+      this.beveragesStats = new BerevagesStatsPair((daterange) => me.session.devices.getSalesChart(me.id, daterange), this.imputsManager);
     };
     reaction(() => this.dateRange, updateDateRelatedData);
     updateDateRelatedData();
@@ -89,29 +61,6 @@ class Details {
     });
   }
 
-  get salesPrewSum() {
-    return reduceArray('sales', this.salesPrew);
-  }
-
-  get salesSum() {
-    return reduceArray('sales', this.sales);
-  }
-
-  get salesGrowth() {
-    if (!this.sales || !this.salesPrew) {
-      return this.sales && this.salesPrew;
-    }
-    const { salesPrewSum, salesSum } = this;
-    if (salesPrewSum === 0) {
-      return 0;
-    }
-    return (salesSum - salesPrewSum) / salesPrewSum * 100;
-  }
-
-  get periodBeveragesAmount() {
-    return reduceArray('beverages', this.salesPrew);
-  }
-
   @computed get lastService() {
     if (!Array.isArray(this.serviceEvents)) {
       return undefined;
@@ -119,7 +68,7 @@ class Details {
     if (this.serviceEvents.length === 0) {
       return null;
     }
-    return this.serviceEvents[this.serviceEvents.length - 1].closeDate;
+    return this.serviceEvents[this.serviceEvents.length - 1].openDate;
   }
 
   @computed get isWaterQualified() {

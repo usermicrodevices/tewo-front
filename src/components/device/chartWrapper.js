@@ -1,25 +1,18 @@
 /* eslint no-param-reassign: off */
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import {
-  Card, Dropdown, Menu, Space,
-} from 'antd';
+import { Card } from 'antd';
 
-import Icon from 'elements/icon';
 import DatergangePicker from 'elements/filters/daterangepicker';
+import CurvePicker from 'elements/curvePicker';
 
 import style from './chartWrapper.module.scss';
 
-const Clearance = ({ element: { details }, children }) => (
+const Clearance = ({ element: { details: { imputsManager } }, children }) => (
   <Card className={style.root}>
     <div className={style.selectors}>
-      <DatergangePicker title="Период" value={details.dateRange} onChange={(v) => { details.dateRange = v; }} />
-      <Dropdown overlay={<Menu />} placement="bottomRight">
-        <Space>
-          <span>Настройка источников</span>
-          <Icon name="arrow-ios-downward-outline" />
-        </Space>
-      </Dropdown>
+      <DatergangePicker title="Период" value={imputsManager.dateRange} onChange={(v) => { imputsManager.dateRange = v; }} />
+      <CurvePicker />
     </div>
     <div className={style.chart}>
       { children }

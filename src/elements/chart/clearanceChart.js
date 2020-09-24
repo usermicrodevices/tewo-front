@@ -2,6 +2,9 @@ import React from 'react';
 import Chart from 'react-apexcharts';
 import { withSize } from 'react-sizeme';
 
+import locale from './locale';
+import style from './style.module.scss';
+
 const ClearanceChart = withSize()(({ size }) => {
   const colors = ['#228148', '#66C7F4', '#142288', '#99C2A2'];
   const dataLength = 8;
@@ -26,29 +29,37 @@ const ClearanceChart = withSize()(({ size }) => {
         color: 'black',
       },
     },
+    decimalsInFloat: 0,
     tooltip: {
       enabled: true,
     },
   };
   const series = [{
-    name: 'Очистки',
+    name: 'Наливы',
     type: 'line',
     data: caps,
   }, {
-    name: 'Фактический расход чистящих средств',
+    name: 'Фактическое число очисток',
     type: 'column',
     data: new Array(dataLength).fill(null).map((_, id) => Math.floor(Math.random() * 3 + 1)),
   }, {
-    name: 'Ожидаемый расход чистящих средств',
+    name: 'Ожидаемое число очисток',
     type: 'column',
     data: caps.map((v) => Math.ceil(v / 400 * 5)),
   }];
   const data = {
     colors,
     chart: {
-      height: 350,
+      height: size.height,
       type: 'line',
       stacked: false,
+      toolbar: {
+        show: false,
+      },
+      zoom: {
+        enabled: false,
+      },
+      ...locale,
     },
     dataLabels: {
       enabled: [true, false, false],
@@ -58,7 +69,7 @@ const ClearanceChart = withSize()(({ size }) => {
       curve: 'smooth',
     },
     title: {
-      text: 'Расход чистящих средств',
+      text: 'Очисток в день',
       align: 'left',
       offsetX: 110,
     },
@@ -82,7 +93,7 @@ const ClearanceChart = withSize()(({ size }) => {
           },
         },
         title: {
-          text: 'Очисток в день',
+          text: 'Расход чистящих средств',
           style: {
             color: 'black',
           },
@@ -103,10 +114,14 @@ const ClearanceChart = withSize()(({ size }) => {
     <Chart
       series={series}
       width={size.width}
-      height={700}
+      height={data.chart.height}
       options={data}
     />
   );
 });
 
-export default ClearanceChart;
+const Wrap = withSize()(({
+  size: { width }, height, x, y, y1, y2,
+}) => (<div className={style.chartwrap}><ClearanceChart x={x} y={y} size={{ width, height }} y1={y1} y2={y2} /></div>));
+
+export default Wrap;
