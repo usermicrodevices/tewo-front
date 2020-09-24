@@ -1,15 +1,20 @@
 import React from 'react';
+import { inject, observer } from 'mobx-react';
 import { Card } from 'antd';
 import ReactApexChart from 'react-apexcharts';
 import moment from 'moment';
 
+import Loader from 'elements/loader';
+
 import style from './performance.module.scss';
 
-const SETTINGS = {
-  series: new Array(24).fill(null).map((_, id) => ({
-    name: `${id % 12}${id >= 12 ? 'pm' : 'am'}`,
-    data: new Array(7).fill(null).map(() => (1.2 - (Math.random() * Math.random())) * Math.pow(12 - Math.abs(id - 12), 2) + 40).map(Math.round),
-  })),
+const convertSeries = (data) => new Array(24).fill(null).map((_, hour) => ({
+  name: `${hour % 12}${hour >= 12 ? 'pm' : 'am'}`,
+  data: new Array(7).fill(null).map((__, day) => data[day][hour]),
+}));
+
+const settings = (data) => ({
+  series: convertSeries(data),
   options: {
     chart: {
       height: 750,
@@ -28,21 +33,26 @@ const SETTINGS = {
     xaxis: {
       type: 'category',
       position: 'top',
-      categories: new Array(7).fill(null).map((_, id) => moment().add(id, 'day').format('dd')),
+      categories: new Array(7).fill(null).map((_, id) => moment().subtract(6, 'day').add(id, 'day').format('dd')),
     },
     yAxis: {
       opposite: true,
     },
   },
-};
+});
 
-const Performance = () => (
+const Performance = ({ element: { details: { weekPerformance } } }) => (
   <Card className={style.root}>
     <div className={style.title}>Загруженность</div>
     <div className={style.chart}>
-      <ReactApexChart options={SETTINGS.options} series={SETTINGS.series} type="heatmap" height={SETTINGS.options.chart.height} />
+      { weekPerformance
+        ? (() => {
+          const { options, series } = settings(weekPerformance);
+          return <ReactApexChart options={options} series={series} type={options.chart.type} height={options.chart.height} />;
+        })()
+        : <Loader />}
     </div>
   </Card>
 );
 
-export default Performance;
+export default inject('element')(observer(Performance));

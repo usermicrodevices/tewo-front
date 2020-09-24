@@ -40,12 +40,12 @@ function converter(json, acceptor) {
       sale_point: 'number',
       tz: 'string',
       status: 'number',
-      downtime: 'number',
       has_overloc_ppm: 'boolean',
       need_tech_service: 'boolean',
       opened_tasks: 'boolean',
       tech: 'boolean',
     }, {
+      downtime: 'number',
       serial: 'string',
       device_model: 'number',
       price_group: 'number',

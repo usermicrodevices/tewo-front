@@ -36,10 +36,10 @@ const SHUILD_BE = {
   has_off_devices: 'boolean',
   need_tech_service: 'boolean',
   opened_tasks: 'boolean',
-  downtime: 'number',
 };
 
 const MAY_BE = {
+  downtime: 'number',
   emails: 'string',
   person: 'string',
   phone: 'string',
@@ -118,6 +118,9 @@ const getOutdatedTasks = (pointId) => {
   return getEvents(null)(1, 0, `device__sale_point__id__exact=${pointId}&overdued=1${daterangeToArgs(lastDay, 'open_date')}`).then(({ count }) => count);
 };
 
+const getSalePointLastDaysBeverages = (pointId) => (
+  getBeveragesStats(pointId, [moment().startOf('day').subtract(6, 'day'), moment().endOf('day')], 'device__sale_point__id', true));
+
 export {
-  applySalePoint, getSalePoints, getSalesTop, getSalesChart, getOutdatedTasks,
+  applySalePoint, getSalePoints, getSalesTop, getSalesChart, getOutdatedTasks, getSalePointLastDaysBeverages,
 };

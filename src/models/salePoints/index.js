@@ -3,7 +3,7 @@ import { observable, computed, action } from 'mobx';
 
 import Table from 'models/table';
 import {
-  getSalePoints, applySalePoint, getSalesTop, getSalesChart, getOutdatedTasks,
+  getSalePoints, applySalePoint, getSalesTop, getSalesChart, getOutdatedTasks, getSalePointLastDaysBeverages,
 } from 'services/salePoints';
 import Filters from 'models/filters';
 
@@ -179,6 +179,8 @@ class SalePoints extends Table {
   getSalesChart = getSalesChart;
 
   getOutdatedTasks = getOutdatedTasks;
+
+  getSalePointLastDaysBeverages = getSalePointLastDaysBeverages;
 
   get applyer() {
     return (item, changes) => applySalePoint(item, changes).then((response) => ({

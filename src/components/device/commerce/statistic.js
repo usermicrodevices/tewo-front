@@ -16,7 +16,7 @@ const Statistic = ({ element: { details } }) => (
     </div>
     <div className={genericStyle.badges}>
       <Badge
-        value={details.periodBeveragesAmount}
+        value={details.beveragesStats.beveragesCur}
         label="наливов за период"
       />
       <Badge
@@ -29,7 +29,7 @@ const Statistic = ({ element: { details } }) => (
         label="динамика продаж"
       />
       <Badge
-        value={details.salesSum}
+        value={details.beveragesStats.salesCur}
         label="сумма денег руб"
       />
       <Badge

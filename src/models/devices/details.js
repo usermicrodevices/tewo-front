@@ -12,8 +12,6 @@ class Details {
 
   @observable stats = null;
 
-  @observable periodBeveragesAmount;
-
   @observable clearancesAmount;
 
   @observable lastBeverages;
@@ -41,10 +39,6 @@ class Details {
 
     const updateDateRelatedData = () => {
       this.waterQuality = undefined;
-      this.periodBeveragesAmount  = undefined;
-      me.session.beverages.getBeveragesForDevice(me.id, 1, this.dateRange).then(({ count }) => {
-        this.periodBeveragesAmount = count;
-      });
       this.beveragesStats = new BerevagesStatsPair((daterange) => me.session.devices.getSalesChart(me.id, daterange), this.imputsManager);
     };
     reaction(() => this.dateRange, updateDateRelatedData);

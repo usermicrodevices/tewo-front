@@ -27,11 +27,13 @@ const CURVE_TYPES = [
 ];
 
 class Details {
-  @observable salesTopData = null;
+  @observable salesTopData;
 
   @observable beveragesStats;
 
   @observable outdatedTasksAmount;
+
+  @observable performance;
 
   id;
 
@@ -99,6 +101,15 @@ class Details {
     return devices.filter((device) => !device.isOn).length;
   }
 
+  @computed get weekPerformance() {
+    if (!this.performance) {
+      return undefined;
+    }
+    const { data } = this.performance;
+    console.assert(data.length === 168);
+    return new Array(7).fill(null).map((_, id) => data.slice(24 * id, 24 * (id + 1)).map(({ beverages }) => beverages));
+  }
+
   constructor(session, me) {
     this.session = session;
     const myId = me.id;
@@ -116,6 +127,7 @@ class Details {
     reaction(() => this.imputsManager.dateRange, updateSalesTop);
     updateSalesTop();
     session.points.getOutdatedTasks(myId).then((count) => { this.outdatedTasksAmount = count; });
+    session.points.getSalePointLastDaysBeverages(myId).then((performance) => { this.performance = performance; });
   }
 }
 
