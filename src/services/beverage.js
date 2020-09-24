@@ -4,6 +4,7 @@ import { get } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import { daterangeToArgs, isDateRange } from 'utils/date';
 import Beverage from 'models/beverages/beverage';
+import BeveragesStats from 'models/beverages/stats';
 
 const getBeverages = (session) => (limit, offset = 0, filter = '') => new Promise((resolve, reject) => {
   console.assert(limit >= 0 && offset >= 0, `Неверные параметры запроса наливов "${limit}" "${offset}"`);
@@ -100,15 +101,17 @@ const getBeveragesStats = (pointId, daterange, kind) => {
           return curDay.dayOfYear() === m.dayOfYear() && curDay.year() === m.year();
         }) || { total: 0, sum: 0 };
         yield {
-          day: moment(curDay),
+          day: curDay.clone(),
           beverages: item.total,
           sales: item.sum / 100,
         };
       }
     }
-    return isRangeGiven
-      ? [...g(moment(daterange[0]), moment(daterange[1]))]
-      : [...g(moment(result[0].day), moment(result[result.length - 1].day))];
+    return new BeveragesStats(
+      isRangeGiven
+        ? [...g(moment(daterange[0]), moment(daterange[1]))]
+        : [...g(moment(result[0].day), moment(result[result.length - 1].day))],
+    );
   });
 };
 

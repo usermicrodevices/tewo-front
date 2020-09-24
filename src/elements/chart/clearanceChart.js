@@ -2,7 +2,7 @@ import React from 'react';
 import Chart from 'react-apexcharts';
 import { withSize } from 'react-sizeme';
 
-const ChartWidget = ({ size }) => {
+const ClearanceChart = withSize()(({ size }) => {
   const colors = ['#228148', '#66C7F4', '#142288', '#99C2A2'];
   const dataLength = 8;
   const caps = new Array(dataLength).fill(null).map((_, id) => Math.floor(Math.random() * 300 + 100));
@@ -107,6 +107,6 @@ const ChartWidget = ({ size }) => {
       options={data}
     />
   );
-};
+});
 
-export default withSize()(ChartWidget);
+export default ClearanceChart;

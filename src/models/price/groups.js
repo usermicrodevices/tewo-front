@@ -1,10 +1,10 @@
-import { getCostGroups } from 'services/costs';
+import { getPriceGroups } from 'services/price';
 
 class CostGroups extends Map {
   constructor() {
     super();
 
-    getCostGroups(this);
+    getPriceGroups(this);
   }
 }
 

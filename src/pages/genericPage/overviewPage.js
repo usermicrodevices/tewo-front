@@ -23,7 +23,6 @@ const ViewerPage = ({
   history,
   allLinkText,
 }) => {
-  console.log(allLinkText);
   if (!storage.isLoaded) {
     return <Loader size="large" />;
   }

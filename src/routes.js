@@ -14,7 +14,7 @@ import EventTypes from 'pages/reference/eventTypes';
 import Events from 'pages/tech/events';
 import Drinks from 'pages/reference/drink';
 import Ingredients from 'pages/reference/ingredients';
-import Costs from 'pages/reference/costs';
+import PriceList from 'pages/reference/price';
 
 class Rout {
   path;
@@ -46,7 +46,7 @@ const beverage = new Rout('/beverage', Beverage);
 const devices = new Rout('/equipment', Devices);
 const drink = new Rout('/drink', Drinks);
 const ingredients = new Rout('/ingredients', Ingredients);
-const costs = new Rout('/costs', Costs);
+const priceList = new Rout('/pricelist', PriceList);
 const eventTypes = new Rout('/events', EventTypes);
 const overdueLog = new Rout('/overdue_log', Cleans);
 const eventsLog = new Rout('/events_log', Events);
@@ -75,7 +75,7 @@ const authorizedRoutes = [
   devices,
   drink,
   ingredients,
-  costs,
+  priceList,
   eventTypes,
   salePoints,
   beverage,
@@ -113,7 +113,7 @@ export {
   devices,
   drink,
   ingredients,
-  costs,
+  priceList,
   eventTypes,
   salePoints,
   defaultAuthorizedRout,

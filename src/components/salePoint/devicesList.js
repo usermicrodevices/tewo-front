@@ -27,7 +27,9 @@ const DeviceList = ({ element: { details: { devices, devicesPath } } }) => (
         if (!Array.isArray(devices)) {
           return <Loader />;
         }
-        const data = devices.map(({ id, name }) => ({ id, name, path: `${devicesPath}/${id}` }));
+        const data = devices.map(({ id, name }) => ({
+          id, name, path: `${devicesPath}/${id}`, key: id,
+        }));
         return <Table pagination={false} columns={COLUMNS} dataSource={data} />;
       })()
     }

@@ -17,7 +17,7 @@ const Stats = ({ element: { details } }) => {
     devicesHardWaterAmount,
     devicesAmount,
     downtime,
-    outdatedTasks,
+    outdatedTasksAmount,
     offDevicesAmount,
   } = details;
   const isLoaded = typeof devicesServceRequiredAmount === 'number';
@@ -32,7 +32,7 @@ const Stats = ({ element: { details } }) => {
         <Link to="/"><Format width={170}>Группа цен цен цен цен цен 1</Format></Link>
       </div>
       <div className={style.outdatedtasks}>
-        <div className={style.value}><Format>{ outdatedTasks }</Format></div>
+        <div className={style.value}><Format>{ outdatedTasksAmount }</Format></div>
         <div className={style.sublabel}>проссроченные задачи за 24 часа</div>
       </div>
       <Divider />

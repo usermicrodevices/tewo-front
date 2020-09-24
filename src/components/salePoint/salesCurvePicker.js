@@ -6,19 +6,19 @@ import {
 } from 'antd';
 
 import Icon from 'elements/icon';
-import { CURVE_TYPES } from 'models/salePoints/details';
+import { SALES_DATA_TYPES } from 'models/detailsProps';
 
 import style from './sales.module.scss';
 
-const CurveMenu = inject('element')(observer(({ element: { details } }) => {
-  const options = CURVE_TYPES.map((data) => ({
+const CurveMenu = inject('element')(observer(({ element: { details: { imputsManager } } }) => {
+  const options = SALES_DATA_TYPES.map((data) => ({
     ...data,
-    disabled: details.visibleCurves.length === 1 && details.visibleCurves[0] === data.value,
+    disabled: imputsManager.visibleCurves.length === 1 && imputsManager.visibleCurves[0] === data.value,
   }));
   return (
     <Menu>
       <div className={style.curvemenu}>
-        <Checkbox.Group options={options} defaultValue={details.visibleCurves} onChange={(d) => { details.visibleCurves = d; }} />
+        <Checkbox.Group options={options} defaultValue={imputsManager.visibleCurves} onChange={(d) => { imputsManager.visibleCurves = d; }} />
       </div>
     </Menu>
   );

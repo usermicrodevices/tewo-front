@@ -8,9 +8,9 @@ import DatergangePicker from 'elements/filters/daterangepicker';
 import Icon from 'elements/icon';
 import Loader from 'elements/loader';
 import Format from 'elements/format';
+import ScalebleChart from 'elements/chart/scaleble';
 
 import CurvesPicker from './salesCurvePicker';
-import Chart from './chart';
 
 import styles from './sales.module.scss';
 
@@ -33,23 +33,33 @@ const Sales = ({ element: { details } }) => {
   const {
     salesDiff,
     beveragesDiff,
-    curBeverages,
-    prwBeverages,
-    curSales,
-    prwSales,
-  } = details;
-  const isLoaded = details.isSeriesLoaded;
+    beveragesCur,
+    beveragesPrw,
+    salesCur,
+    salesPrw,
+    isSeriesLoaded,
+    series,
+    xSeria,
+  } = details.beveragesStats;
   return (
     <Card className={styles.root}>
       <div className={styles.chart}>
         <div className={styles.filters}>
-          <DatergangePicker title="Период" value={details.dateRange} onChange={(v) => { details.dateRange = v; }} />
+          <DatergangePicker title="Период" value={details.imputsManager.dateRange} onChange={(v) => { details.imputsManager.dateRange = v; }} />
           <CurvesPicker />
         </div>
         <div className={styles.curves}>
           {
-            isLoaded
-              ? <Chart />
+            isSeriesLoaded
+              ? (
+                <ScalebleChart
+                  y={series}
+                  x={xSeria}
+                  height={335}
+                  y1={{ text: 'Динамика продаж, ₽', decimalsInFloat: 2 }}
+                  y2={{ text: 'Наливов в день', decimalsInFloat: 0 }}
+                />
+              )
               : <Loader size="large" />
           }
         </div>
@@ -61,14 +71,14 @@ const Sales = ({ element: { details } }) => {
         </div>
         <div className={styles.rangereport}>
           <div className={styles.values}>
-            <div><Format>{curSales}</Format></div>
+            <div><Format>{salesCur}</Format></div>
             <ChangesLabel value={salesDiff} />
           </div>
           <div className={styles.sublabel}>продаж за текущий период</div>
         </div>
         <div className={classNames(styles.rangereport, styles.prew)}>
           <div className={styles.values}>
-            <div><Format>{prwSales}</Format></div>
+            <div><Format>{salesPrw}</Format></div>
           </div>
           <div className={styles.sublabel}>продаж за предыдущий период</div>
         </div>
@@ -79,11 +89,11 @@ const Sales = ({ element: { details } }) => {
             <ChangesLabel value={beveragesDiff} />
           </div>
           <div className={styles.amount}>
-            <div className={styles.value}><Format>{curBeverages}</Format></div>
+            <div className={styles.value}><Format>{beveragesCur}</Format></div>
             <div className={styles.sublabel}>текущий</div>
           </div>
           <div className={styles.amount}>
-            <div className={styles.value}><Format>{prwBeverages}</Format></div>
+            <div className={styles.value}><Format>{beveragesPrw}</Format></div>
             <div className={styles.sublabel}>предыдущий</div>
           </div>
         </div>

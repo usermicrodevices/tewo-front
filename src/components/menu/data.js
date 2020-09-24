@@ -9,7 +9,7 @@ import {
   devices,
   drink,
   ingredients,
-  costs,
+  priceList,
   eventTypes,
   cost,
   ingredientsRate,
@@ -115,7 +115,7 @@ const items = [
       },
       {
         text: 'Группы цен',
-        act: costs,
+        act: priceList,
       },
       {
         text: 'События',

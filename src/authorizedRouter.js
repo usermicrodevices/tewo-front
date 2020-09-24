@@ -5,6 +5,7 @@ import { Provider } from 'mobx-react';
 import Session from 'models/session';
 import AuthorizedPage from 'components/authorizedPage';
 import EroorPage from 'pages/eroor';
+import { TestChart } from 'elements/chart/scaleble';
 
 import { authorizedRoutes as routes } from './routes';
 
@@ -27,6 +28,7 @@ class AuthorizedRouter extends React.Component {
             ? <EroorPage error={error} />
             : (
               <Switch>
+                <Route path="/debug"><TestChart /></Route>
                 {
                   routes.map(({ path, component: Component, exact }) => (
                     <Route key={path} path={path} exact={exact}><Component /></Route>

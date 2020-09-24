@@ -1,11 +1,11 @@
 /* eslint class-methods-use-this: off */
 import Table from 'models/table';
 import Filter from 'models/filters';
-import { getCosts } from 'services/costs';
+import { getPriceList } from 'services/price';
 import { computed } from 'mobx';
 
 const COLUMNS = {
-  name: {
+  groupName: {
     isVisibleByDefault: true,
     title: 'Название группы',
     grow: 3,
@@ -29,11 +29,11 @@ const COLUMNS = {
 const declareFilters = (session) => ({
 });
 
-class Costs extends Table {
+class PriceList extends Table {
   get isImpossibleToBeAsync() { return true; }
 
   constructor(session) {
-    super(COLUMNS, getCosts(session), new Filter(declareFilters(session)));
+    super(COLUMNS, getPriceList(session), new Filter(declareFilters(session)));
   }
 
   toString() {
@@ -52,4 +52,4 @@ class Costs extends Table {
   }
 }
 
-export default Costs;
+export default PriceList;
