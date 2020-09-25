@@ -13,4 +13,12 @@ function parseColor(color) {
   ].map((v) => parseInt(v, 16));
 }
 
-export { parseColor, isColor };
+const gradient = (begin, end) => {
+  const a = parseColor(begin);
+  const b = parseColor(end);
+  return (part) => `#${
+    a.map((min, id) => Math.round(min + (b[id] - min) * Math.pow(part, 0.8)).toString(0x10)).join('')
+  }`;
+};
+
+export { parseColor, isColor, gradient };

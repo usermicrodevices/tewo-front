@@ -56,8 +56,7 @@ const Sales = ({ element: { details } }) => {
                   y={series}
                   x={xSeria}
                   height={335}
-                  y1={{ text: 'Динамика продаж, ₽', decimalsInFloat: 2 }}
-                  y2={{ text: 'Наливов в день', decimalsInFloat: 0 }}
+                  y1={[{ text: 'Наливов в день', decimalsInFloat: 0 }, { text: 'Динамика продаж, ₽', decimalsInFloat: 2 }][series[0].axis]}
                 />
               )
               : <Loader size="large" />

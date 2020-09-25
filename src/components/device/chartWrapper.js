@@ -8,11 +8,11 @@ import CurvePicker from 'elements/curvePicker';
 
 import style from './chartWrapper.module.scss';
 
-const Clearance = ({ element: { details: { imputsManager } }, children }) => (
+const Clearance = ({ element: { details: { imputsManager } }, children, withCurvepicker }) => (
   <Card className={style.root}>
     <div className={style.selectors}>
       <DatergangePicker title="Период" value={imputsManager.dateRange} onChange={(v) => { imputsManager.dateRange = v; }} />
-      <CurvePicker />
+      { withCurvepicker && <CurvePicker /> }
     </div>
     <div className={style.chart}>
       { children }

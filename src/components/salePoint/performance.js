@@ -5,6 +5,7 @@ import ReactApexChart from 'react-apexcharts';
 import moment from 'moment';
 
 import Loader from 'elements/loader';
+import { gradient } from 'utils/color';
 
 import style from './performance.module.scss';
 
@@ -13,12 +14,37 @@ const convertSeries = (data) => new Array(24).fill(null).map((_, hour) => ({
   data: new Array(7).fill(null).map((__, day) => data[day][hour]),
 }));
 
+const colorRanges = (scale, data, textScale) => {
+  const max = Math.max(...data.map((v) => Math.max(...v)));
+  const min = 0;
+  const steps = max - min;
+  return new Array(steps).fill(null).map((_, id) => ({
+    from: id,
+    to: id + 1,
+    color: scale(id / (steps - 1)),
+    foreColor: textScale(Math.floor(Math.ceil((id / (steps - 1)) * 3) / 2)),
+  }));
+};
+
 const settings = (data) => ({
   series: convertSeries(data),
   options: {
     chart: {
       height: 750,
       type: 'heatmap',
+      toolbar: {
+        show: false,
+      },
+    },
+    plotOptions: {
+      heatmap: {
+        enableShades: false,
+        colorScale: {
+          ranges: colorRanges(gradient('#D5E2F9', '#3265CB'), data, gradient('#3265CB', '#E5F2FF')),
+          min: 0,
+          max: 100,
+        },
+      },
     },
     dataLabels: {
       enabled: true,
@@ -26,9 +52,18 @@ const settings = (data) => ({
         colors: ['#FFFFFF'],
       },
     },
-    colors: ['#008FFB'],
+    legend: {
+      show: false,
+    },
     title: {
       show: false,
+    },
+    tooltip: {
+      shared: false,
+      intersect: true,
+      x: {
+        show: false,
+      },
     },
     xaxis: {
       type: 'category',

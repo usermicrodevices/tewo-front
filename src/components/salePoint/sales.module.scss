@@ -8,9 +8,12 @@
     flex-direction: column;
 
     .filters {
-      z-index: 2;
       display: flex;
       justify-content: flex-start;
+      align-items: center;
+      &>* {
+        margin-right: 24px;
+      }
     }
 
     .curves {

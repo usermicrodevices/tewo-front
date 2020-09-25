@@ -12,8 +12,9 @@
   .selectors {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     >* {
-      width: 50%;
+      margin-right: 24px;
     }
   }
 }
