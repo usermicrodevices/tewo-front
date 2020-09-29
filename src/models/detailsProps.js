@@ -2,6 +2,8 @@ import { computed } from 'mobx';
 import localStorage from 'mobx-localstorage';
 import moment from 'moment';
 
+const DEFAULT_DATE_RANGE = [moment().subtract(1, 'week').startOf('day'), moment().endOf('day')];
+
 const SALES_DATA_TYPES = [
   {
     value: 'beveragesSeriaCur',
@@ -25,11 +27,13 @@ const SALES_DATA_TYPES = [
   },
 ];
 
+const DEFAUL_CURVES = SALES_DATA_TYPES.filter(({ axis }) => axis).map(({ value }) => value);
+
 class DetailsProps {
   storageKey;
 
   @computed get dateRange() {
-    return (localStorage.getItem(`${this.storageKey}_date`) || ['', '']).map((t) => (moment.isMoment(t) || t === '' ? t : moment(t)));
+    return (localStorage.getItem(`${this.storageKey}_date`) || DEFAULT_DATE_RANGE).map((t) => (moment.isMoment(t) || t === '' ? t : moment(t)));
   }
 
   set dateRange(dateRange) {
@@ -40,12 +44,12 @@ class DetailsProps {
           dateRange[1].endOf('day'),
         ];
       }
-      return ['', ''];
+      return DEFAULT_DATE_RANGE;
     })());
   }
 
   @computed get visibleCurves() {
-    return (localStorage.getItem(`${this.storageKey}_chart`) || SALES_DATA_TYPES.map(({ value }) => value));
+    return localStorage.getItem(`${this.storageKey}_chart`) || DEFAUL_CURVES;
   }
 
   set visibleCurves(charts) {

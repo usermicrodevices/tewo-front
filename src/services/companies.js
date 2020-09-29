@@ -27,6 +27,7 @@ const getCompanies = (session) => () => new Promise((resolve, reject) => {
           phone: 'string',
           group: 'number',
           contact_people: 'string',
+          threshold_drinks_cleaning: 'number',
         };
 
         if (!checkData(data, shouldBe, mayBe)) {

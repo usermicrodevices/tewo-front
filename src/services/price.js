@@ -47,6 +47,8 @@ function getPriceGroups(map) {
         company: 'number',
         conception: 'number',
         system_key: 'string',
+        price_set: 'array',
+        device_set: 'array',
       })) {
         console.error('Неожиданные данные для групп цен /refs/price_group', datum);
       }
@@ -54,7 +56,9 @@ function getPriceGroups(map) {
         name: datum.name,
         companyId: datum.company,
         conception: datum.conception,
-        systemKey: 'string',
+        systemKey: datum.system_key,
+        pricesId: datum.price_set.map(({ id }) => id),
+        devicesId: datum.device_set.map(({ id }) => id),
       });
     }
   });

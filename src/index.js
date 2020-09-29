@@ -7,6 +7,8 @@ import 'mobx-react-lite/batchingForReactDom';
 import { YMaps } from 'react-yandex-maps';
 import moment from 'moment';
 import 'moment/locale/ru';
+import ru from 'antd/es/locale/ru_RU';
+import { ConfigProvider } from 'antd';
 
 import RootRouter from './rootRouter';
 
@@ -17,6 +19,12 @@ moment.locale('ru');
 const auth = new Auth();
 
 ReactDOM.render(
-  <Provider auth={auth}><YMaps><RootRouter /></YMaps></Provider>,
+  <ConfigProvider locale={ru}>
+    <Provider auth={auth}>
+      <YMaps>
+        <RootRouter />
+      </YMaps>
+    </Provider>
+  </ConfigProvider>,
   document.getElementById('root'),
 );

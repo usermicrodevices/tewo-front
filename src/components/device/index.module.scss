@@ -17,3 +17,9 @@
     color: $link-color;
   }
 }
+
+.calendar {
+  :global .ant-modal-content {
+    min-width: 800px;
+  }
+}

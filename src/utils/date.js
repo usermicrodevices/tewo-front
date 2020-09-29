@@ -44,6 +44,26 @@ const humanizeSeconds = (wholeSeconds) => {
   return result;
 };
 
+const intoComparationNumber = (m) => m.hour() + m.dayOfYear() * 1e2 + m.year() * 1e5;
+
+function* alineDates([firstDay, lastDay], isHoursMode, data, transform) {
+  const timeKey = isHoursMode ? 'hour' : 'day';
+  const dataMap = new Map(data.map((datum) => {
+    const m = moment(datum[timeKey]);
+    return [intoComparationNumber(m), datum];
+  }));
+  const curDay = firstDay.clone();
+  const timePart = isHoursMode ? 'hours' : 'days';
+  while (curDay <= lastDay) {
+    const item = dataMap.get(intoComparationNumber(curDay));
+    yield {
+      [timeKey]: curDay.clone(),
+      ...transform(item),
+    };
+    curDay.add(1, timePart);
+  }
+}
+
 export {
-  daterangeToArgs, momentToArg, isDateRange, stepToPast, humanizeSeconds,
+  daterangeToArgs, momentToArg, isDateRange, stepToPast, humanizeSeconds, alineDates,
 };

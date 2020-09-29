@@ -1,12 +1,14 @@
 .root>div {
   display: flex;
   flex-direction: column;
+  height: 100%;
 
   .chart {
-    height: 334px;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: visible;
+    flex-grow: 1;
   }
 
   .selectors {

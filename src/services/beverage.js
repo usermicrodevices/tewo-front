@@ -2,7 +2,7 @@ import moment from 'moment';
 
 import { get } from 'utils/request';
 import checkData from 'utils/dataCheck';
-import { daterangeToArgs, isDateRange } from 'utils/date';
+import { daterangeToArgs, isDateRange, alineDates } from 'utils/date';
 import Beverage from 'models/beverages/beverage';
 import BeveragesStats from 'models/beverages/stats';
 
@@ -94,25 +94,20 @@ const getBeveragesStats = (pointId, daterange, kind, hoursMode) => {
     if (!isRangeGiven && result.length === 0) {
       return [];
     }
-    function* g([firstDay, lastDay]) {
-      const curDay = firstDay.clone();
-      while (curDay <= lastDay) {
-        const item = result.find((datum) => {
-          const m = moment(datum[timeKey]);
-          return (curDay.hour() === m.hour() || !hoursMode) && curDay.dayOfYear() === m.dayOfYear() && curDay.year() === m.year();
-        }) || { total: 0, sum: 0 };
-        yield {
-          [timeKey]: curDay.clone(),
-          beverages: item.total,
-          sales: item.sum / 100,
-        };
-        curDay.add(1, hoursMode ? 'hours' : 'days');
-      }
-    }
     const finalDateRange = isRangeGiven
       ? daterange
       : [moment(result[0].day), moment(result[result.length - 1].day)];
-    return new BeveragesStats([...g(finalDateRange)]);
+    return new BeveragesStats([...alineDates(
+      finalDateRange,
+      hoursMode,
+      result,
+      (item) => (
+        item ? {
+          beverages: item.total,
+          sales: item.sum / 100,
+        } : { beverages: 0, sales: 0 }
+      ),
+    )]);
   });
 };
 

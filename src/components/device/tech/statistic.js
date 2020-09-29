@@ -20,14 +20,11 @@ const Statistic = ({ element: { details } }) => (
         label="наливов за период"
       />
       <Badge
-        value={undefined}
-        subvalue={undefined}
+        value={details.clearancesChart?.actualSum}
         label="фактическое кол-во очисток"
       />
       <Badge
-        value={undefined}
-        subvalue={undefined}
-        action={() => 'xxx'}
+        value={details.clearancesChart?.expectedSum}
         label="ожидаемое кол-во очисток"
       />
     </div>

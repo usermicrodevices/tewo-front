@@ -8,20 +8,20 @@ class BeveragesStatsPair {
 
   @observable prw;
 
-  props;
+  properties;
 
-  constructor(requester, props) {
-    requester(props.dateRange).then((sales) => {
+  constructor(requester, properties) {
+    requester(properties.dateRange).then((sales) => {
       this.cur = sales;
     });
 
-    if (isDateRange(props.dateRange)) {
-      requester(stepToPast(props.dateRange)).then((sales) => {
+    if (isDateRange(properties.dateRange)) {
+      requester(stepToPast(properties.dateRange)).then((sales) => {
         this.prw = sales;
       });
     }
 
-    this.props = props;
+    this.properties = properties;
   }
 
   @computed get beveragesSeriaCur() {
@@ -90,7 +90,7 @@ class BeveragesStatsPair {
   }
 
   @computed get series() {
-    const visibleCurves = new Set(this.props.visibleCurves);
+    const visibleCurves = new Set(this.properties.visibleCurves);
     const series = SALES_DATA_TYPES.filter(({ value }) => visibleCurves.has(value) && typeof this[value] !== 'undefined');
     return series.map(({ label, value, axis }) => ({ data: this[value], name: label, axis }));
   }

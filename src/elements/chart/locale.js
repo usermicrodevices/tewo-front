@@ -2,7 +2,7 @@ import moment from 'moment';
 
 const monthMomentExporter = ((format) => {
   const jan = moment().startOf('year');
-  return new Array(12).fill(null).map((_, id) => jan.clone().add(id, 'month').format(format).slice(0, -1));
+  return new Array(12).fill(null).map((_, id) => jan.clone().add(id, 'month').format(format));
 });
 
 const weekMomentExporter = ((format) => {

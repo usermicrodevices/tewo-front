@@ -36,10 +36,10 @@ const SHUILD_BE = {
   has_off_devices: 'boolean',
   need_tech_service: 'boolean',
   opened_tasks: 'boolean',
+  downtime: 'number',
 };
 
 const MAY_BE = {
-  downtime: 'number',
   emails: 'string',
   person: 'string',
   phone: 'string',

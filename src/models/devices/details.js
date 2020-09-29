@@ -20,6 +20,10 @@ class Details {
 
   @observable beveragesStats;
 
+  @observable allClearancesDates;
+
+  @observable clearancesChart;
+
   imputsManager = new DetailsProps(STORAGE_KEY);
 
   @computed get xaxis() {
@@ -40,8 +44,32 @@ class Details {
     const updateDateRelatedData = () => {
       this.waterQuality = undefined;
       this.beveragesStats = new BerevagesStatsPair((daterange) => me.session.devices.getSalesChart(me.id, daterange), this.imputsManager);
+
+      this.clearancesChart = undefined;
+
+      me.session.events.getDeviceClearancesChart(me.id, this.imputsManager.dateRange).then((result) => {
+        const series = {
+          x: [],
+          expected: [],
+          beverages: [],
+          actual: [],
+          expectedSum: 0,
+          actualSum: 0,
+        };
+        for (const {
+          expected, beverages, actual, day,
+        } of result) {
+          series.x.push(day);
+          series.expected.push(expected);
+          series.beverages.push(beverages);
+          series.actual.push(actual);
+          series.expectedSum += expected;
+          series.actualSum += actual;
+        }
+        this.clearancesChart = series;
+      });
     };
-    reaction(() => this.dateRange, updateDateRelatedData);
+    reaction(() => this.imputsManager.dateRange, updateDateRelatedData);
     updateDateRelatedData();
     me.session.devices.getStats(me.id).then((stats) => { this.stats = stats; });
     me.session.beverages.getBeveragesForDevice(me.id, 10).then(({ results }) => {
@@ -52,6 +80,15 @@ class Details {
     });
     me.session.events.getDeviceClearancesEventsLastWeek(me.id).then(({ count }) => {
       this.clearancesAmount = count;
+    });
+
+    me.session.events.getDeviceClearances(me.id).then(({ results }) => {
+      const datesMap = {};
+      results.forEach(({ openDate }) => {
+        const key = openDate.format('YYYYMMDD');
+        datesMap[key] = (datesMap[key] || 0) + 1;
+      });
+      this.allClearancesDates = datesMap;
     });
   }
 

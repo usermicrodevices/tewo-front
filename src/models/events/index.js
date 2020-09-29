@@ -4,7 +4,7 @@ import moment from 'moment';
 import { daterangeToArgs } from 'utils/date';
 import Table from 'models/table';
 import Filters from 'models/filters';
-import { getEvents } from 'services/events';
+import { getEvents, getEventsClearancesChart } from 'services/events';
 import TimeAgo from 'elements/timeago';
 import colorizedCell from 'elements/table/colorizedCell';
 import { eventsLog as eventsLogRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
@@ -150,6 +150,12 @@ class Events extends Table {
     const datefilter = daterangeToArgs(daterange, 'open_date');
     return getEvents(this.session)(1e3, 0, `event_reference__id=${TECH_CLEARANCE_EVENT_ID}&device__id__in=${deviceId}${datefilter}`);
   }
+
+  getDeviceClearances(deviceId) {
+    return getEvents(this.session)(3e4, 0, `event_reference__id=${TECH_CLEARANCE_EVENT_ID}&device__id__in=${deviceId}`);
+  }
+
+  getDeviceClearancesChart = getEventsClearancesChart;
 }
 
 export default Events;

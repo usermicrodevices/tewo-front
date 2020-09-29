@@ -44,8 +44,8 @@ function converter(json, acceptor) {
       need_tech_service: 'boolean',
       opened_tasks: 'boolean',
       tech: 'boolean',
-    }, {
       downtime: 'number',
+    }, {
       serial: 'string',
       device_model: 'number',
       price_group: 'number',
@@ -83,7 +83,11 @@ function getDeviceModels(map) {
     if (Array.isArray(data)) {
       for (const datum of data) {
         if (!checkData(datum, {
-          id: 'number', name: 'string', mileage: 'number', detergent: 'number',
+          id: 'number',
+          name: 'string',
+          mileage: 'number',
+          detergent: 'number',
+          threshold_drinks_cleaning: 'number',
         })) {
           console.error('Неожиданные данные для моделей устройств /refs/device_models', datum);
         }

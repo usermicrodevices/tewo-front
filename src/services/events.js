@@ -5,6 +5,7 @@ import checkData from 'utils/dataCheck';
 
 import EventType from 'models/events/eventType';
 import Event from 'models/events/event';
+import { daterangeToArgs, alineDates, isDateRange } from 'utils/date';
 
 const getEvents = (session) => (limit, offset = 0, filter = '') => {
   console.assert(limit > 0 && offset >= 0, `Неверные параметры запроса событий "${limit}" "${offset}"`);
@@ -114,4 +115,51 @@ const getEventTypes = () => get('/refs/event_references/').then((results) => {
   };
 });
 
-export { getEvents, getEventTypes };
+const getEventsClearancesChart = (deviceId, daterange) => get(
+  `/data/events/cleanings/?device__id=${deviceId}${daterangeToArgs(daterange, 'open_date')}`,
+).then((result) => {
+  if (!Array.isArray(result)) {
+    console.error('can not ger data from /data/events/cleanings/', result);
+    return [];
+  }
+  const mustBe = {
+    day: 'date',
+    actual: 'number',
+    expected: 'number',
+    beverages: 'number',
+  };
+  if (!Array.isArray(result)) {
+    console.error('can not ger data from /data/events/cleanings/', result);
+    return [];
+  }
+  for (const d of result) {
+    if (!checkData(d, mustBe)) {
+      console.error('Неожиданные данные для эндпоинта /data/events/cleanings/', d);
+    }
+  }
+  const isRangeGiven = isDateRange(daterange);
+  if (!isRangeGiven && result.length === 0) {
+    return [];
+  }
+  const finalDateRange = isRangeGiven
+    ? daterange
+    : [moment(result[0].day), moment(result[result.length - 1].day)];
+  return [...alineDates(
+    finalDateRange,
+    false,
+    result,
+    (item) => (
+      item ? {
+        actual: item.actual,
+        expected: item.expected,
+        beverages: item.beverages,
+      } : {
+        fact: 0,
+        expect: 0,
+        beverages: 0,
+      }
+    ),
+  )];
+});
+
+export { getEvents, getEventTypes, getEventsClearancesChart };
