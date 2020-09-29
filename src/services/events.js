@@ -9,7 +9,7 @@ import { daterangeToArgs, alineDates, isDateRange } from 'utils/date';
 
 const getEvents = (session) => (limit, offset = 0, filter = '') => {
   console.assert(limit > 0 && offset >= 0, `Неверные параметры запроса событий "${limit}" "${offset}"`);
-  return get(`/data/events/?event_reference__id=20&limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
+  return get(`/data/events/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
     const mustBe = {
       id: 'number',
       cid: 'string',
