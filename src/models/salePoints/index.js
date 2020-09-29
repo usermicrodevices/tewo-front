@@ -9,6 +9,7 @@ import Filters from 'models/filters';
 
 import { salePoints as salePointsRout } from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
+import { duration } from 'moment';
 
 import Point from './salePoint';
 
@@ -74,6 +75,7 @@ const COLUMNS = {
   downtime: {
     isVisibleByDefault: true,
     title: 'Суммарный простой',
+    transform: (v) => (v ? duration(v, 'seconds').humanize() : '0'),
     grow: 2,
   },
 };
