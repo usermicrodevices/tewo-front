@@ -1,5 +1,7 @@
 image: node:10.15.3
 
+options:
+  max-time: 5
 pipelines:
   default:
     - step:
