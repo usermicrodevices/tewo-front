@@ -1,8 +1,9 @@
 import { get } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import Price from 'models/price/price';
+import PriceGroup from 'models/price/group';
 
-function getPriceList(session) {
+function getPrices(session) {
   return () => get('refs/prices').then((result) => {
     if (!Array.isArray(result)) {
       console.error(`по /refs/prices/ ожидается массив, получен ${typeof result}`, result);
@@ -38,8 +39,11 @@ function getPriceList(session) {
   });
 }
 
-function getPriceGroups(map) {
-  return get('refs/price_groups').then((result) => {
+function getPriceGroups(session) {
+  return () => get('refs/price_groups').then((result) => {
+    if (!Array.isArray(result)) {
+      console.error(`по /refs/price_groups/ ожидается массив, получен ${typeof result}`, result);
+    }
     for (const datum of result) {
       if (!checkData(datum, {
         id: 'number',
@@ -47,21 +51,29 @@ function getPriceGroups(map) {
         company: 'number',
         conception: 'number',
         system_key: 'string',
+        // @todo попросил добавить эти поля в эндпоинт не до конца разобравшить
+        // в апи до конца. Они не используются. Можно бы было попросить убрать,
+        // но с другой стороны связки приходит null для device.price_group_id))
         price_set: 'array',
         device_set: 'array',
       })) {
         console.error('Неожиданные данные для групп цен /refs/price_group', datum);
       }
-      map.set(datum.id, {
-        name: datum.name,
-        companyId: datum.company,
-        conception: datum.conception,
-        systemKey: datum.system_key,
-        pricesId: datum.price_set.map(({ id }) => id),
-        devicesId: datum.device_set.map(({ id }) => id),
-      });
     }
+    return {
+      count: result.length,
+      results: result.map((json) => {
+        const group = new PriceGroup(session);
+        group.id = json.id;
+        group.name = json.name;
+        group.companyId = json.company;
+        group.conception = json.conception;
+        group.systemKey = json.system_key;
+        group.devicesIdSet = new Set(json.device_set);
+        return group;
+      }),
+    };
   });
 }
 
-export { getPriceList, getPriceGroups };
+export { getPrices, getPriceGroups };

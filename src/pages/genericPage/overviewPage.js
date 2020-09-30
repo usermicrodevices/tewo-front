@@ -22,6 +22,8 @@ const ViewerPage = ({
   match,
   history,
   allLinkText,
+  isEditable,
+  isNotEditable,
 }) => {
   if (!storage.isLoaded) {
     return <Loader size="large" />;
@@ -37,13 +39,13 @@ const ViewerPage = ({
 
   const AdditionalActions = additionalActions || (() => null);
   const Header = withRouter(({ match: { params: { action } } }) => {
-    const isEdditing = action === 'edit';
+    const isEditing = action === 'edit';
     return (
       <ElementHeader allLinkText={allLinkText} menu={menu}>
         <h1>
           <Space>
             {elementForEdit.name}
-            { !isEdditing && <Button onClick={() => { history.push(`${path}/edit`); }} icon={<EditOutlined />} type="text" /> }
+            { !isEditing && !isNotEditable && <Button onClick={() => { history.push(`${path}/edit`); }} icon={<EditOutlined />} type="text" /> }
           </Space>
         </h1>
         <AdditionalActions />

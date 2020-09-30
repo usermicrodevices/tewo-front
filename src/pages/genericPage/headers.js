@@ -53,29 +53,31 @@ const ElementHeader = withRouter(inject('element')(observer(({
       <div className={styles.titleRow}>
         { children }
       </div>
-      <div className={styles.submenu}>
-        <Menu selectedKeys={menuItemKeyFromAction(menu, action)} mode="horizontal">
-          { Array.isArray(menu)
-            && menu.map(({
-              icon, text, path: subPath, explains,
-            }) => (
-              <Menu.Item key={menuItemKeyFromAction(menu, subPath)} icon={icon} theme="none">
-                <Link to={`${path}/${id}/${Array.isArray(subPath) ? subPath[0] : subPath}`}>
-                  {
-                    typeof explains === 'string'
-                      ? (
-                        <Space>
-                          {text}
-                          <Tooltip placement="top" title={explains}><Icon name="info-outline" /></Tooltip>
-                        </Space>
-                      )
-                      : text
-                    }
-                </Link>
-              </Menu.Item>
-            )) }
-        </Menu>
-      </div>
+      { menu.length > 0 && (
+        <div className={styles.submenu}>
+          <Menu selectedKeys={menuItemKeyFromAction(menu, action)} mode="horizontal">
+            { Array.isArray(menu)
+              && menu.map(({
+                icon, text, path: subPath, explains,
+              }) => (
+                <Menu.Item key={menuItemKeyFromAction(menu, subPath)} icon={icon} theme="none">
+                  <Link to={`${path}/${id}/${Array.isArray(subPath) ? subPath[0] : subPath}`}>
+                    {
+                      typeof explains === 'string'
+                        ? (
+                          <Space>
+                            {text}
+                            <Tooltip placement="top" title={explains}><Icon name="info-outline" /></Tooltip>
+                          </Space>
+                        )
+                        : text
+                      }
+                  </Link>
+                </Menu.Item>
+              )) }
+          </Menu>
+        </div>
+      )}
     </div>
   );
 })));

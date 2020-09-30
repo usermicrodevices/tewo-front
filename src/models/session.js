@@ -10,7 +10,7 @@ import Drinks from './drinks';
 import Ingredients from './ingredients';
 import DeviceModels from './devices/models';
 import BeverageOperations from './beverages/operations';
-import Price from './price';
+import Prices from './price';
 import PriceGroups from './price/groups';
 
 class Session {
@@ -24,9 +24,9 @@ class Session {
 
   eventTypes = new EventTypes();
 
-  priceGroups = new PriceGroups();
+  priceGroups = new PriceGroups(this);
 
-  prices = new Price(this);
+  prices = new Prices(this);
 
   beverages = new Beverages(this);
 

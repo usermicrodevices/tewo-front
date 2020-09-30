@@ -26,6 +26,7 @@ const GenericPage = ({
   location,
   match: { path },
   allLinkText,
+  isNotEditable,
 }) => {
   console.assert(typeof storageName === 'string', `Не задан storage для ${path}`);
   const storage = session[storageName];
@@ -40,6 +41,7 @@ const GenericPage = ({
         { !isHaveNotOverview && (
           <Route path={`${path}/:id`}>
             <OverviewPage
+              isNotEditable={isNotEditable}
               additionalActions={overviewActions}
               menu={submenu}
               widget={overview}

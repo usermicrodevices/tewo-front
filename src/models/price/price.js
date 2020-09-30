@@ -19,20 +19,6 @@ class Price extends Datum {
     this.session = session;
   }
 
-  @computed get company() {
-    const { drink } = this;
-    return drink && drink.company;
-  }
-
-  @computed get companyName() {
-    const { company } = this;
-    return company && company.name;
-  }
-
-  @computed get devices() {
-    return [];
-  }
-
   @computed get drink() {
     return this.drinkId && this.session.drinks.get(this.drinkId);
   }

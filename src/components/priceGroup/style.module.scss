@@ -1,0 +1,14 @@
+@import 'src/themes/constants';
+
+.root {
+  .card {
+    margin-bottom: $generic-margin;
+    .title {
+      font-weight: 600;
+      font-size: 16px;
+      .amount {
+        color: #BFBFBF;
+      }
+    }
+  }
+}

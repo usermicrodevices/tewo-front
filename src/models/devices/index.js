@@ -157,6 +157,20 @@ class Devices extends Table {
     return this.rawData.find(({ id }) => id === deviceId);
   }
 
+  getByPriceGroupId(groupId) {
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    return this.rawData.filter(({ priceGroupId }) => priceGroupId === groupId);
+  }
+
+  getBySet(ids) {
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    return this.rawData.filter(({ id }) => ids.has(id));
+  }
+
   getPointDevices(pointId) {
     if (!this.isLoaded) {
       return undefined;
