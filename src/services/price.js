@@ -70,6 +70,7 @@ function getPriceGroups(session) {
         group.conception = json.conception;
         group.systemKey = json.system_key;
         group.devicesIdSet = new Set(json.device_set);
+        group.pricesIdSet = new Set(json.price_set);
         return group;
       }),
     };

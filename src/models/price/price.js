@@ -20,16 +20,15 @@ class Price extends Datum {
   }
 
   @computed get drink() {
-    return this.drinkId && this.session.drinks.get(this.drinkId);
+    return this.session.drinks.get(this.drinkId);
   }
 
-  @computed get group() {
-    return this.groupId && this.session.priceGroups.get(this.groupId);
+  @computed get plu() {
+    return this.drink?.plu;
   }
 
-  @computed get groupName() {
-    const { group } = this;
-    return group && group.name;
+  @computed get name() {
+    return this.drink?.name;
   }
 }
 

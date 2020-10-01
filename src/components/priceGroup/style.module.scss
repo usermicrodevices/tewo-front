@@ -4,11 +4,24 @@
   .card {
     margin-bottom: $generic-margin;
     .title {
-      font-weight: 600;
-      font-size: 16px;
-      .amount {
-        color: #BFBFBF;
+      display: flex;
+      align-items: center;
+      height: 22px;
+      .titletext {
+        font-weight: 600;
+        font-size: 16px;
+        .amount {
+          color: #BFBFBF;
+        }
+        margin-right: 15px;
       }
     }
+  }
+
+  .sync {
+    color: red;
+  }
+  .sync.synced {
+    color: green;
   }
 }

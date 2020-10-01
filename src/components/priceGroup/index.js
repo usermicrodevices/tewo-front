@@ -10,7 +10,7 @@ import DeviceList from './devicesList';
 import style from './style.module.scss';
 
 const PriceGroupTitleAction = inject('element')(observer(
-  ({ element }) => <Button icon={<Icon name="refresh-outline" />} onClick={() => element.synchronize()}>Синхронизировать</Button>,
+  ({ element }) => <Button disabled icon={<Icon name="refresh-outline" />} onClick={() => element.synchronize()}>Синхронизировать</Button>,
 ));
 
 const PriceGroupOverview = () => (

@@ -11,6 +11,8 @@ class PriceGroup {
 
   devicesIdSet;
 
+  pricesIdSet;
+
   id;
 
   session;
@@ -20,7 +22,6 @@ class PriceGroup {
   }
 
   @computed get devices() {
-    // return this.session.devices.getByPriceGroupId(this.groupId); не работает из-за неконсистентности api
     return this.session.devices.getBySet(this.devicesIdSet);
   }
 
@@ -30,6 +31,18 @@ class PriceGroup {
 
   @computed get companyName() {
     return this.company?.name;
+  }
+
+  @computed get prices() {
+    return this.session.prices.getBySet(this.pricesIdSet);
+  }
+
+  @computed get drinks() {
+    return this.prices?.map((price) => price.drink);
+  }
+
+  @computed get drinksCount() {
+    return this.pricesIdSet.size;
   }
 }
 

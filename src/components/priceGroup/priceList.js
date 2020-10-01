@@ -1,17 +1,66 @@
 import React from 'react';
+import { inject, observer } from 'mobx-react';
+import { Card, Table, Button } from 'antd';
+import classNames from 'classnames';
 
-import { Card, Table } from 'antd';
+import Icon from 'elements/icon';
+import Loader from 'elements/loader';
+import Format from 'elements/format';
 
 import style from './style.module.scss';
 
-const PriceList = () => (
+const COLUMNS = [
+  {
+    title: 'PLU (доп PLU)',
+    dataIndex: 'plu',
+  },
+  {
+    title: 'Название',
+    dataIndex: 'name',
+    render: (name) => <Format>{name}</Format>,
+  },
+  {
+    title: 'НДС',
+    dataIndex: 'syncDate',
+    render: () => <Format>{null}</Format>,
+  },
+  {
+    title: 'Валюта',
+    dataIndex: 'isCynchronized',
+    render: () => <Format>{null}</Format>,
+  },
+  {
+    title: 'Цена',
+    dataIndex: 'value',
+    render: (v) => <Format>{v}</Format>,
+  },
+  {
+    title: '',
+    dataIndex: 'rm',
+    render: (rm) => <Button className={classNames(style.rm)} onClick={rm} />,
+  },
+];
+
+const toDataSource = (price) => ({
+  plu: price.plu,
+  key: price.id,
+  name: price.name,
+  value: price.value,
+});
+
+const PriceList = ({ element }) => (
   <Card className={style.card}>
     <div className={style.title}>
-      Оборудование
-      <span className={style.amount}>{0}</span>
+      <div className={style.titletext}>
+        Список напитков
+        <span className={style.amount}>{` (${element.drinksCount})`}</span>
+      </div>
+      <Button type="text" icon={<Icon size={22} disabled name="plus-circle-outline" />} />
     </div>
-    <Table />
+    { element.prices
+      ? <Table pagination={false} columns={COLUMNS} dataSource={element.prices.map(toDataSource)} />
+      : <Loader size="large" /> }
   </Card>
 );
 
-export default PriceList;
+export default inject('element')(observer(PriceList));

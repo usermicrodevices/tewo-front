@@ -41,7 +41,14 @@ const declareFilters = (session) => ({
   device_model: {
     type: 'selector',
     title: 'Устройство',
-    apply: (general, data) => general(data.deviceModelId),
+    apply: (general, data) => {
+      for (const id of data.devicesIdSet.values()) {
+        if (general(id)) {
+          return true;
+        }
+      }
+      return false;
+    },
     selector: () => session.devices.selector,
   },
 });

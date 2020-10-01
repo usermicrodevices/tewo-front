@@ -45,6 +45,7 @@ function converter(json, acceptor) {
       opened_tasks: 'boolean',
       tech: 'boolean',
       downtime: 'number',
+      change_null_sum_bev_by_cost: 'boolean',
     }, {
       serial: 'string',
       device_model: 'number',

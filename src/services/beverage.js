@@ -18,6 +18,7 @@ const getBeverages = (session) => (limit, offset = 0, filter = '') => new Promis
       drink: 'number',
       sale_sum: 'number',
       canceled: 'boolean',
+      cost: 'number',
     };
     const mayBe = {
       operation: 'number',
