@@ -37,7 +37,7 @@ const COLUMNS = [
   {
     title: '',
     dataIndex: 'rm',
-    render: (rm) => <Button className={classNames(style.rm)} onClick={rm} />,
+    render: (rm) => <Button className={classNames(style.rm)} icon={<Icon size={20} name="trash-2-outline" />} type="text" onClick={rm} />,
   },
 ];
 
@@ -46,6 +46,7 @@ const toDataSource = (price) => ({
   key: price.id,
   name: price.name,
   value: price.value,
+  rm: () => {},
 });
 
 const PriceList = ({ element }) => (
@@ -55,7 +56,7 @@ const PriceList = ({ element }) => (
         Список напитков
         <span className={style.amount}>{` (${element.drinksCount})`}</span>
       </div>
-      <Button type="text" icon={<Icon size={22} disabled name="plus-circle-outline" />} />
+      <Button type="text" disabled icon={<Icon size={22} name="plus-circle-outline" />} />
     </div>
     { element.prices
       ? <Table pagination={false} columns={COLUMNS} dataSource={element.prices.map(toDataSource)} />

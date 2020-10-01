@@ -36,7 +36,7 @@ const COLUMNS = [
   {
     title: '',
     dataIndex: 'rm',
-    render: (rm) => <Button disabled className={style.rm} icon={<Icon name="trash-2-outline" />} type="text" onClick={rm} />,
+    render: (rm) => <Button disabled className={style.rm} icon={<Icon size={20} name="trash-2-outline" />} type="text" onClick={rm} />,
   },
 ];
 
@@ -55,7 +55,7 @@ const DevicesList = ({ element }) => (
         Список напитков
         <span className={style.amount}>{` (${element.devicesIdSet.size})`}</span>
       </div>
-      <Button type="text" icon={<Icon disabled size={22} name="plus-circle-outline" />} />
+      <Button type="text" disabled icon={<Icon size={22} name="plus-circle-outline" />} />
     </div>
     { element.devices
       ? <Table pagination={false} columns={COLUMNS} dataSource={element.devices.map(toDataSource)} />
