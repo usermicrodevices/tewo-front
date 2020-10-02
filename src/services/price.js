@@ -49,13 +49,14 @@ function getPriceGroups(session) {
         id: 'number',
         name: 'string',
         company: 'number',
-        conception: 'number',
-        system_key: 'string',
         // @todo попросил добавить эти поля в эндпоинт не до конца разобравшить
         // в апи до конца. Они не используются. Можно бы было попросить убрать,
         // но с другой стороны связки приходит null для device.price_group_id))
         price_set: 'array',
         device_set: 'array',
+      }, {
+        system_key: 'string',
+        conception: 'number',
       })) {
         console.error('Неожиданные данные для групп цен /refs/price_group', datum);
       }
