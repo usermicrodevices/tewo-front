@@ -64,6 +64,80 @@ function* alineDates([firstDay, lastDay], isHoursMode, data, transform) {
   }
 }
 
+const capitalize = (s) => {
+  if (typeof s !== 'string') return '';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+const quartalStart = () => moment().startOf('year').add(Math.floor(moment().month() / 3) * 3, 'month');
+const halfAYearStart = () => moment().startOf('year').add(Math.floor(moment().month() / 6) * 6, 'month');
+
+const SemanticRanges = {
+  today: {
+    title: 'Сегодня',
+    resolve: () => [moment().startOf('day'), moment().endOf('day')],
+  },
+  yesterday: {
+    title: 'Вчера',
+    resolver: () => [moment().subtract(1, 'day').startOf('day'), moment().subtract(1, 'day').endOf('day')],
+  },
+  curWeek: {
+    title: 'Текущая неделя',
+    resolver: () => [moment().startOf('week'), moment().endOf('week')],
+  },
+  prwWeek: {
+    title: 'Прошедшая неделя',
+    resolver: () => [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+  },
+  prw7Days: {
+    title: 'Прошедшие 7 дней',
+    resolver: () => [moment().subtract(7, 'day').startOf('day'), moment()],
+  },
+  prw30Days: {
+    title: 'Прошедшие 30 дней',
+    resolver: () => [moment().subtract(30, 'day').startOf('day'), moment()],
+  },
+  curMonth: {
+    title: capitalize(moment().format('MMMM')),
+    resolver: () => [moment().startOf('month'), moment().endOf('month')],
+  },
+  prwMonth: {
+    title: capitalize(moment().subtract(1, 'month').format('MMMM')),
+    resolver: () => [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+  },
+  twoMonthAgo: {
+    title: capitalize(moment().subtract(2, 'month').format('MMMM')),
+    resolver: () => [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
+  },
+  curQuartal: {
+    title: 'Текущий квартал',
+    resolver: () => [quartalStart(), quartalStart().clone().add(3, 'month').subtract(1, 'second')],
+  },
+  prwQuartal: {
+    title: 'Прошедший квартал',
+    resolver: () => [quartalStart().clone().subtract(3, 'month'), quartalStart().clone().subtract(1, 'second')],
+  },
+  curHalfAYear: {
+    title: 'Текущее полугодие',
+    resolver: () => [halfAYearStart(), halfAYearStart().clone().add(6, 'month').subtract(1, 'second')],
+  },
+  prwHalfAYear: {
+    title: 'Прошедшее полугодие',
+    resolver: () => [halfAYearStart().clone().subtract(6, 'month'), halfAYearStart().clone().subtract(1, 'second')],
+  },
+  prw12Month: {
+    title: 'Прошедшие двенадцать месяцев',
+    resolver: () => [moment().subtract(12, 'month'), moment()],
+  },
+  curYear: {
+    title: `${moment().format('YYYY')} год`,
+    resolver: () => [moment().startOf('year'), moment().endOf('year')],
+  },
+  prwYear: {
+    title: `${moment().subtract(1, 'year').format('YYYY')} год`,
+    resolver: () => [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+  },
+};
+
 export {
-  daterangeToArgs, momentToArg, isDateRange, stepToPast, humanizeSeconds, alineDates,
+  daterangeToArgs, momentToArg, isDateRange, stepToPast, humanizeSeconds, alineDates, SemanticRanges,
 };

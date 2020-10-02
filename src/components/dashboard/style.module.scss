@@ -1,0 +1,40 @@
+@import 'src/themes/constants';
+
+.wrapper {
+  margin: 0 -$generic-margin 0 -$generic-margin;
+}
+
+
+.item {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    .label {
+      font-weight: 600;
+      line-height: 20px;
+      display: flex;
+      align-items: flex-start;
+      .text {
+        margin-top: 5px;
+      }
+      .anchor {
+        cursor: grab;
+        &:active {
+          cursor: grabbing;
+        }
+      }
+    }
+    .toolbar {
+      opacity: 0;
+      transition: opacity 0.2s linear ;
+      display: flex;
+    }
+  }
+  &:hover {
+    .header {
+      .toolbar {
+        opacity: 1;
+      }
+    }
+  }
+}
