@@ -90,7 +90,7 @@ const SemanticRanges = {
   },
   prw7Days: {
     title: 'Прошедшие 7 дней',
-    resolver: () => [moment().subtract(7, 'day').startOf('day'), moment()],
+    resolver: () => [moment().subtract(6, 'day').startOf('day'), moment().endOf('day')],
   },
   prw30Days: {
     title: 'Прошедшие 30 дней',
@@ -138,6 +138,13 @@ const SemanticRanges = {
   },
 };
 
+const SmallSemanticRanges = {
+  prwHour: {
+    title: 'Прошедший час',
+    resolver: () => [moment().subtract(1, 'hour'), moment()],
+  },
+};
+
 export {
-  daterangeToArgs, momentToArg, isDateRange, stepToPast, humanizeSeconds, alineDates, SemanticRanges,
+  daterangeToArgs, momentToArg, isDateRange, stepToPast, humanizeSeconds, alineDates, SemanticRanges, SmallSemanticRanges,
 };

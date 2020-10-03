@@ -1,0 +1,15 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  .value {
+    font-size: 34px;
+    min-height: 50px;
+  }
+  .svg {
+    width: 187px;
+    height: 132px;
+  }
+}

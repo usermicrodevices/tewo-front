@@ -3,7 +3,7 @@ import { get, post, patch } from 'utils/request';
 import moment from 'moment';
 import SalePoint from 'models/salePoints/salePoint';
 import checkData from 'utils/dataCheck';
-import { daterangeToArgs } from 'utils/date';
+import { daterangeToArgs, SemanticRanges, SmallSemanticRanges } from 'utils/date';
 import { getEvents } from './events';
 import { getBeveragesStats } from './beverage';
 
@@ -119,8 +119,18 @@ const getOutdatedTasks = (pointId) => {
 };
 
 const getSalePointLastDaysBeverages = (pointId) => (
-  getBeveragesStats(pointId, [moment().startOf('day').subtract(6, 'day'), moment().endOf('day')], 'device__sale_point__id', true));
+  getBeveragesStats(pointId, SemanticRanges.prw7Days.resolver(), 'device__sale_point__id', true));
+
+const getBeveragesSpeed = (pointsId) => (
+  getBeveragesStats(pointsId.join(','), SmallSemanticRanges.prwHour.resolver(), 'device__sale_point__id__in').then(({ data }) => {
+    let sum = 0;
+    for (const { beverages } of data) {
+      sum += beverages;
+    }
+    return sum;
+  })
+);
 
 export {
-  applySalePoint, getSalePoints, getSalesTop, getSalesChart, getOutdatedTasks, getSalePointLastDaysBeverages,
+  applySalePoint, getSalePoints, getSalesTop, getSalesChart, getOutdatedTasks, getSalePointLastDaysBeverages, getBeveragesSpeed,
 };

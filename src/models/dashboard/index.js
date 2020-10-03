@@ -1,12 +1,14 @@
-import { action, computed } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import localStorage from 'mobx-localstorage';
+
+import Speedometer from './speedometer';
 
 const defaultLayout = [
   {
     i: 'begin_0', x: 0, y: 0, w: 3, h: 2,
   },
   {
-    i: 'begin_1', x: 3, y: 0, w: 1, h: 2,
+    i: 'begin_1', x: 3, y: 0, w: 1, h: 2, minH: 1, maxH: 4,
   },
   {
     i: 'begin_2', x: 0, y: 2, w: 2, h: 2,
@@ -21,7 +23,7 @@ const DEFAULT_ITEMS = [
     title: 'Живая статистика',
     widgetType: 'overview',
     settings: {
-      salePoints: null,
+      salePointsId: null,
       chartDateRange: 'prw30Days',
       numberDateRange: 'prw30Minutes',
     },
@@ -31,7 +33,7 @@ const DEFAULT_ITEMS = [
     title: 'Спидометр наливов',
     widgetType: 'speedometer',
     settings: {
-      salePoints: null,
+      salePointsId: null,
     },
     key: 'begin_1',
   },
@@ -39,7 +41,7 @@ const DEFAULT_ITEMS = [
     title: 'Простая динамика наливов',
     widgetType: 'dynamic',
     settings: {
-      salePoints: null,
+      salePointsId: null,
       dateRange: 'prw7Days',
     },
     key: 'begin_2',
@@ -48,7 +50,7 @@ const DEFAULT_ITEMS = [
     title: 'Простая динамика наливов',
     widgetType: 'statuses',
     settings: {
-      salePoints: null,
+      salePointsId: null,
       dateRange: 'curDay',
     },
     key: 'begin_3',
@@ -58,8 +60,15 @@ const DEFAULT_ITEMS = [
 class Grid {
   layoutKey;
 
-  constructor(layoutKey) {
+  session;
+
+  storages = new Map();
+
+  @observable editingItem = null;
+
+  constructor(layoutKey, session) {
     this.layoutKey = layoutKey;
+    this.session = session;
   }
 
   getLayout(columnsAmount) {
@@ -70,12 +79,32 @@ class Grid {
     return localStorage.setItem(`${this.layoutKey}_${columnsAmount}_layout`, layout);
   }
 
-  @computed get items() {
-    const key = `${this.layoutKey}_items`;
+  get itemKey() {
+    return `${this.layoutKey}_items`;
+  }
+
+  @computed get rawItems() {
+    const key = this.itemKey;
     if (localStorage.getItem(key) === null) {
       localStorage.setItem(key, DEFAULT_ITEMS);
     }
     return localStorage.getItem(key);
+  }
+
+  @computed get items() {
+    return this.rawItems.map((data) => {
+      if (!this.storages.has(data.key)) {
+        this.storages.set(data.key, this.initStorage(data.widgetType, data.settings));
+      }
+      return {
+        ...data,
+        storage: this.storages.get(data.key),
+      };
+    });
+  }
+
+  @action remove({ key: keyToRemove }) {
+    localStorage.setItem(this.itemKey, this.rawItems.filter(({ key }) => key !== keyToRemove));
   }
 
   @computed get itemsCounter() {
@@ -94,6 +123,29 @@ class Grid {
       key: this.itemsCounter,
     });
     this.itemsCounter += 1;
+  }
+
+  initStorage(type, settings) {
+    switch (type) {
+      case 'speedometer': {
+        return new Speedometer(settings, this.session);
+      }
+      default:
+        console.error(`unknown dashboard storage type ${type}`);
+        return {};
+    }
+  }
+
+  editSettings(item) {
+    this.editingItem = item;
+  }
+
+  updateSettings(settings) {
+    this.cancelEditSettings();
+  }
+
+  cancelEditSettings() {
+    this.editingItem = null;
   }
 }
 

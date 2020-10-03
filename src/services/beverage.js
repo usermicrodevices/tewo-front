@@ -15,13 +15,13 @@ const getBeverages = (session) => (limit, offset = 0, filter = '') => new Promis
       created_date: 'date',
       device_date: 'date',
       device: 'number',
-      drink: 'number',
       sale_sum: 'number',
       canceled: 'boolean',
       cost: 'number',
       sale_sum_hidden: 'number',
     };
     const mayBe = {
+      drink: 'number',
       operation: 'number',
     };
     checkData(response, {

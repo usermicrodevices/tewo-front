@@ -1,14 +1,15 @@
 import React from 'react';
+import { inject, observer } from 'mobx-react';
 import { Button, Card } from 'antd';
 import {
   MoreOutlined, SettingOutlined, CloseOutlined,
 } from '@ant-design/icons';
 import classnames from 'classnames';
 
-import classes from './style.module.scss';
+import classes from './item.module.scss';
 
 const Item = ({
-  children, title, className, style, onMouseDown, onMouseUp, onTouchEnd,
+  children, item, className, style, onMouseDown, onMouseUp, onTouchEnd, itemKey, grid,
 }) => (
   <Card
     className={classnames(classes.item, className)}
@@ -21,16 +22,16 @@ const Item = ({
       <div className={classes.label}>
         <Button type="text" className={classes.anchor} icon={<MoreOutlined />} />
         <div className={classes.text}>
-          { title }
+          { item.title }
         </div>
       </div>
       <div className={classes.toolbar}>
-        <Button type="text" icon={<SettingOutlined />} />
-        <Button type="text" icon={<CloseOutlined />} />
+        <Button type="text" onClick={() => grid.editSettings(item)} icon={<SettingOutlined />} />
+        <Button type="text" onClick={() => grid.remove(item)} icon={<CloseOutlined />} />
       </div>
     </div>
     {children}
   </Card>
 );
 
-export default Item;
+export default inject('grid')(observer(Item));

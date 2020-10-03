@@ -1,60 +1,30 @@
-import { Provider } from 'mobx-react';
 import React, { useState } from 'react';
-import GridLayout from 'react-grid-layout';
-import { withSize } from 'react-sizeme';
+import { Provider, inject } from 'mobx-react';
+import { Button, Space } from 'antd';
 
+import Icon from 'elements/icon';
 import DashboardModel from 'models/dashboard';
 
-import Item from './item';
+import Grid from './grid';
 
-import style from './style.module.scss';
+import style from './index.module.scss';
 
-const COLUMNS_MIN_WIDTH = 280;
-
-const cardsSwitch = (widgetType) => {
-  switch (widgetType) {
-    default:
-      return {
-        subtitle: () => null,
-        widget: () => 'В разработке',
-      };
-  }
-};
-
-const Dashboard = ({
-  children, size, storageKey,
-}) => {
-  const [storage] = useState(new DashboardModel(storageKey));
-  const colsAmount = Math.floor(size.width / COLUMNS_MIN_WIDTH);
+const Dashboard = ({ session }) => {
+  const [storage] = useState(new DashboardModel('dashboard', session));
   return (
-    <div className={style.wrapper}>
-      <Provider grid={storage}>
-        <GridLayout
-          width={size.width}
-          layout={storage.getLayout(colsAmount)}
-          cols={colsAmount}
-          margin={[24, 24]}
-          draggableHandle={`.${style.anchor}`}
-          onLayoutChange={(layout) => { storage.setLayout(colsAmount, layout); }}
-        >
-          {
-            storage.items.map(({
-              title, widgetType, settings, key,
-            }) => {
-              const { widget: Widget, subtitle: Subtitle } = cardsSwitch(widgetType);
-              return (
-                <Item key={key} title={title} subtitle={<Subtitle settings={settings} />}>
-                  <Provider settings={settings}>
-                    <Widget />
-                  </Provider>
-                </Item>
-              );
-            })
-          }
-        </GridLayout>
-      </Provider>
-    </div>
+    <Provider grid={storage}>
+      <div className={style.wrapper}>
+        <div className={style.header}>
+          <div className={style.title}>Панель управления</div>
+          <Space>
+            <Button icon={<Icon name="calendar-outline" />}>Диапазон дат</Button>
+            <Button>+ добавить</Button>
+          </Space>
+        </div>
+        <Grid />
+      </div>
+    </Provider>
   );
 };
 
-export default withSize()(Dashboard);
+export default inject('session')(Dashboard);

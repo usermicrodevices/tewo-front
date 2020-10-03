@@ -1,0 +1,16 @@
+@import 'src/themes/constants';
+
+.wrapper {
+  margin: 0 -$generic-margin 0 -$generic-margin;
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 65px $generic-margin 0 54px;
+    .title {
+      font-size: 48px;
+      font-weight: bold;
+    }
+  }
+}
+

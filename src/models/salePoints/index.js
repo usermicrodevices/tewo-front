@@ -3,7 +3,7 @@ import { observable, computed, action } from 'mobx';
 
 import Table from 'models/table';
 import {
-  getSalePoints, applySalePoint, getSalesTop, getSalesChart, getOutdatedTasks, getSalePointLastDaysBeverages,
+  getSalePoints, applySalePoint, getSalesTop, getSalesChart, getOutdatedTasks, getSalePointLastDaysBeverages, getBeveragesSpeed,
 } from 'services/salePoints';
 import Filters from 'models/filters';
 
@@ -189,6 +189,11 @@ class SalePoints extends Table {
       response,
       sorageData: this.rawData,
     }));
+  }
+
+  getBeveragesSpeed(salePointsId) {
+    const ids = (Array.isArray(salePointsId) ? salePointsId : this.rawData.map(({ id }) => id));
+    return getBeveragesSpeed(ids);
   }
 }
 
