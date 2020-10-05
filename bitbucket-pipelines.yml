@@ -3,24 +3,25 @@ image: node:10.15.3
 options:
   max-time: 5
 pipelines:
-  default:
-    - step:
-        caches:
-          - node
-        script:
-          - npm install
-          - npm run build
-        artifacts:
-          - build/**
-    - step:
-        name: SFTP Deploy
-        deployment: production
-        script:
-          - pipe: atlassian/sftp-deploy:0.5.6
-            variables:
-              USER: $SFTP_USER
-              SERVER: $SFTP_SERVER
-              PASSWORD: $SFTP_PASSWORD
-              REMOTE_PATH: '/public'
-              LOCAL_PATH: 'build/*'
-              DEBUG: 'true'
+  branches:
+    master:
+      - step:
+          caches:
+            - node
+          script:
+            - npm install
+            - npm run build
+          artifacts:
+            - build/**
+      - step:
+          name: SFTP Deploy
+          deployment: production
+          script:
+            - pipe: atlassian/sftp-deploy:0.5.6
+              variables:
+                USER: $SFTP_USER
+                SERVER: $SFTP_SERVER
+                PASSWORD: $SFTP_PASSWORD
+                REMOTE_PATH: '/public'
+                LOCAL_PATH: 'build/*'
+                DEBUG: 'true'
