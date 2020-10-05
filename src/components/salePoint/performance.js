@@ -18,6 +18,14 @@ const colorRanges = (scale, data, textScale) => {
   const max = Math.max(...data.map((v) => Math.max(...v)));
   const min = 0;
   const steps = max - min;
+  if (min === max) {
+    return [{
+      from: min - 1,
+      to: min + 1,
+      color: scale(0),
+      foreColor: textScale(0),
+    }];
+  }
   return new Array(steps).fill(null).map((_, id) => ({
     from: id,
     to: id + 1,

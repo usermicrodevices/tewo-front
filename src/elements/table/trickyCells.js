@@ -7,7 +7,7 @@ import Format from 'elements/format';
 import plural from 'utils/plural';
 
 const linkedCell = (onClick) => (name, datum, width) => (
-  <Button className="cell-link" onClick={onClick(datum)} type="link"><Format width={width}>{ name }</Format></Button>
+  <Button className="cell-link" style={{ height: 20 }} onClick={onClick(datum)} type="link"><Format width={width}>{ name }</Format></Button>
 );
 
 const tableItemLink = (text, to, width) => <Link to={to}><Format width={width}>{text}</Format></Link>;

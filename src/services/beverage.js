@@ -74,8 +74,8 @@ const getBeverageOperations = (map) => get('refs/operations/').then((data) => {
 });
 
 const getBeveragesStats = (pointId, daterange, kind, hoursMode) => {
-  const rangeArg = daterangeToArgs(daterange, 'device_date');
-  const location = `/data/beverages/stats${hoursMode ? '_hours' : ''}/?${kind}=${pointId}${rangeArg}`;
+  const rangeArg = daterangeToArgs(daterange, 'device_date').replace('&', pointId ? '&' : '');
+  const location = `/data/beverages/stats${hoursMode ? '_hours' : ''}/?${pointId ? `${kind}=${pointId}` : ''}${rangeArg}`;
   const timeKey = hoursMode ? 'hour' : 'day';
   const mustBe = {
     [timeKey]: 'date',
@@ -113,4 +113,30 @@ const getBeveragesStats = (pointId, daterange, kind, hoursMode) => {
   });
 };
 
-export { getBeverages, getBeverageOperations, getBeveragesStats };
+const getBeveragesSalePointsStats = (dateRange, step, session) => new Promise((resolve) => {
+  setTimeout(() => {
+    const d = {};
+    for (const { id } of session.points.rawData) {
+      const m = dateRange[0];
+      d[id] = [];
+      while (m < dateRange[1]) {
+        const from = m.clone();
+        const to = m.add(step, 'seconds').clone();
+        d[id].push({
+          from,
+          to,
+          beverages: Math.round(Math.random() * 100) + 100,
+          sales: Math.random() * 100 * 100,
+        });
+      }
+    }
+    resolve(d);
+  }, 1000);
+});
+
+export {
+  getBeverages,
+  getBeverageOperations,
+  getBeveragesStats,
+  getBeveragesSalePointsStats,
+};

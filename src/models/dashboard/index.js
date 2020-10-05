@@ -2,6 +2,7 @@ import { action, computed, observable } from 'mobx';
 import localStorage from 'mobx-localstorage';
 
 import Speedometer from './speedometer';
+import Statistic from './statistic';
 
 const defaultLayout = [
   {
@@ -129,6 +130,9 @@ class Grid {
     switch (type) {
       case 'speedometer': {
         return new Speedometer(settings, this.session);
+      }
+      case 'overview': {
+        return new Statistic(settings, this.session);
       }
       default:
         console.error(`unknown dashboard storage type ${type}`);

@@ -2,21 +2,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 
 import Format from 'elements/format';
-import plural from 'utils/plural';
 
 import style from './index.module.scss';
-
-const SpidometrTitle = inject('session')(observer(({ settings: { salePoints } }) => {
-  if (!Array.isArray(salePoints) || salePoints.length === 0) {
-    return null;
-  }
-  const { name } = salePoints[0];
-  if (salePoints.length === 1) {
-    return name;
-  }
-  const more = salePoints.length - 1;
-  return `${name} и ещё ${more} ${plural(more, ['объект', 'объектов', 'объекта'])}`;
-}));
 
 const Spidometr = inject('storage')(observer(({ storage: { value } }) => (
   <div className={style.root}>
@@ -30,4 +17,4 @@ const Spidometr = inject('storage')(observer(({ storage: { value } }) => (
   </div>
 )));
 
-export { Spidometr, SpidometrTitle };
+export default Spidometr;

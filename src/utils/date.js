@@ -143,6 +143,10 @@ const SmallSemanticRanges = {
     title: 'Прошедший час',
     resolver: () => [moment().subtract(1, 'hour'), moment()],
   },
+  prwHalfAnHour: {
+    title: 'Прошедше 30 минут',
+    resolver: () => [moment().subtract(30, 'minute'), moment()],
+  },
 };
 
 export {
