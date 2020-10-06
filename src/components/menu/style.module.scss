@@ -14,6 +14,13 @@
     }
     direction:ltr;
   }
+
+  // Disable jumping effect while menu toggling
+  :global(.ant-menu-item),
+  :global(.ant-menu-item .anticon),
+  :global(.ant-menu-item .anticon svg) {
+    transition: none;
+  }
 }
 
 $icon-size: 34px;
