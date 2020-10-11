@@ -32,12 +32,18 @@ const isHavePointsFilter = (key) => {
 };
 
 const SettingsEditor = inject(({ grid, session }) => ({ grid, session }))(observer(({ grid, session }) => {
-  const initialValues = grid.isEdditingNewItem ? {
+  const initialValues = {
     widgetType: undefined,
     dateFilter: undefined,
     salePontsFilter: [],
     companiesFilter: [],
-  } : grid.items[grid.editingItem];
+  };
+  if (!grid.isEdditingNewItem) {
+    initialValues.widgetType = grid.items[grid.editingItem].get('widgetType');
+    initialValues.dateFilter = grid.items[grid.editingItem].get('dateFilter');
+    initialValues.salePontsFilter = grid.items[grid.editingItem].get('salePontsFilter');
+    initialValues.companiesFilter = grid.items[grid.editingItem].get('companiesFilter');
+  }
 
   const [widgetType, setType] = useState(initialValues.widgetType);
   const [dateFilter, setDate] = useState(initialValues.dateFilter);

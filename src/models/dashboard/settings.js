@@ -8,7 +8,8 @@ class Settings {
   session;
 
   @computed get salePoints() {
-    const { salePontsFilter, companiesFilter } = this.settings;
+    const salePontsFilter = this.settings.get('salePontsFilter');
+    const companiesFilter = this.settings.get('companiesFilter');
     if (!Array.isArray(salePontsFilter) || salePontsFilter.length === 0) {
       if (!Array.isArray(companiesFilter) || companiesFilter.length === 0) {
         return null;
@@ -24,22 +25,23 @@ class Settings {
     return this.session.points.getSubset(new Set(salePontsFilter));
   }
 
-  @computed get salePointIds() {
-    const { salePontsFilter, companiesFilter } = this.settings;
+  @computed get salePointsId() {
+    const salePontsFilter = this.settings.get('salePontsFilter');
+    const companiesFilter = this.settings.get('companiesFilter');
     if (!Array.isArray(salePontsFilter) || salePontsFilter.length === 0) {
       if (!Array.isArray(companiesFilter) || companiesFilter.length === 0) {
         return null;
       }
-      if (!this.session.companies.isLoaded) {
+      if (!this.session.points.isLoaded) {
         return undefined;
       }
-      return this.session.companies.getByCompanyIdSet(new Set(companiesFilter)).map(({ id }) => id);
+      return this.session.points.getByCompanyIdSet(new Set(companiesFilter)).map(({ id }) => id);
     }
     return salePontsFilter;
   }
 
   @computed get dateRange() {
-    const { dateFilter } = this.settings;
+    const dateFilter = this.settings.get('dateFilter');
     if (dateFilter in SemanticRanges) {
       return SemanticRanges[dateFilter].resolver();
     }

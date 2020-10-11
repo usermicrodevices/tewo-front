@@ -2,7 +2,6 @@ import {
   action,
   computed,
   observable,
-  reaction,
 } from 'mobx';
 import localStorage from 'mobx-localstorage';
 
@@ -40,7 +39,10 @@ class Grid {
 
     getDashboardWidgetsInfo().then((typesInfo) => { this.widgetsInfo = typesInfo; });
 
-    this.items = localStorage.get(LOCAL_STORAGE_DASHBOARD_STATE_KEY) || getDefaultState(session);
+    this.items = (localStorage.get(LOCAL_STORAGE_DASHBOARD_STATE_KEY) || getDefaultState(session));
+    for (const [key, itm] of Object.entries(this.items)) {
+      this.items[key] = observable.map(Object.entries(itm));
+    }
   }
 
   getLayout(columnsAmount) {
@@ -60,6 +62,12 @@ class Grid {
     this.editingItem = itemKey;
   }
 
+  @action setDateRangeGlobal(range) {
+    for (const settings of Object.values(this.items)) {
+      settings.dateFilter = range;
+    }
+  }
+
   @action editNewSettings() {
     let key;
     while ((key = `${Math.random()}`.slice(2)) in this.items);
@@ -67,16 +75,16 @@ class Grid {
   }
 
   @computed get widgets() {
-    return Object.entries(this.items).map(([uid, { widgetType }]) => ({
-      widgetType,
+    return Object.entries(this.items).map(([uid, settings]) => ({
+      widgetType: settings.get('widgetType'),
       uid,
-      ...this.widgetsInfo[widgetType],
+      ...this.widgetsInfo[settings.get('widgetType')],
       storage: this.getStorage(uid),
     })).filter(({ storage }) => typeof storage !== 'undefined');
   }
 
   @action updateSettings(settings) {
-    this.items[this.editingItem] = settings;
+    this.items[this.editingItem].replace(settings);
     localStorage.set(LOCAL_STORAGE_DASHBOARD_STATE_KEY, this.items);
     this.cancelEditSettings();
   }
@@ -94,7 +102,7 @@ class Grid {
   }
 
   initStorage(settings) {
-    switch (settings.settings.widgetType) {
+    switch (settings.settings.get('widgetType')) {
       case 'speedometerBeverages': {
         return new Speedometer(settings, this.session);
       }
@@ -108,7 +116,7 @@ class Grid {
         return new Statistic(settings, this.session);
       }
       default:
-        console.error(`unknown dashboard storage type ${settings.settings.widgetType}`);
+        console.error(`unknown dashboard storage type ${settings.settings.get('widgetType')}`);
         return undefined;
     }
   }
