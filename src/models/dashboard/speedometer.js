@@ -1,18 +1,18 @@
 import { observable, reaction } from 'mobx';
 
 class Speedometr {
-  @observable settings;
+  generic;
 
   session;
 
   @observable value;
 
   constructor(settings, session) {
-    this.settings = settings;
+    this.generic = settings;
     this.session = session;
 
     const updateValue = () => session.points.getBeveragesSpeed(settings.salePointsId).then((value) => { this.value = value; });
-    reaction(() => this.settings.salePointsId, updateValue);
+    reaction(() => this.generic.salePointsId, updateValue);
     updateValue();
   }
 }

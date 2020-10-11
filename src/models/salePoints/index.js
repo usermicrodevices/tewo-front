@@ -165,6 +165,20 @@ class SalePoints extends Table {
     return this.rawData.find(({ id }) => id === pointId);
   }
 
+  getSubset(set) {
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    return this.rawData.filter(({ id }) => set.has(id));
+  }
+
+  getByCompanyIdSet(companyIdSet) {
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    return this.rawData.filter(({ companyId }) => companyIdSet.has(companyId));
+  }
+
   @computed get selector() {
     if (!this.isLoaded) {
       return undefined;

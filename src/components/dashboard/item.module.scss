@@ -1,35 +1,45 @@
-.item>div {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  .header {
+.wrap {
+  padding: 10px;
+  .item {
+    height: 100%;
+  }
+  .item>div {
+    height: 100%;
     display: flex;
-    justify-content: space-between;
-    .label {
-      font-weight: 600;
-      line-height: 20px;
+    flex-direction: column;
+    .header {
       display: flex;
-      align-items: flex-start;
-      .text {
-        margin-top: 5px;
-      }
-      .anchor {
-        cursor: grab;
-        &:active {
-          cursor: grabbing;
+      justify-content: space-between;
+      .label {
+        font-weight: 600;
+        line-height: 20px;
+        display: flex;
+        align-items: flex-start;
+        .text {
+          margin-top: 5px;
+          .subtitle {
+            font-weight: 400;
+            color: #9A9A9A;
+          }
+        }
+        .anchor {
+          cursor: grab;
+          &:active {
+            cursor: grabbing;
+          }
         }
       }
-    }
-    .toolbar {
-      opacity: 0;
-      transition: opacity 0.2s linear ;
-      display: flex;
-    }
-  }
-  &:hover {
-    .header {
       .toolbar {
-        opacity: 1;
+        opacity: 0;
+        transition: opacity 0.2s linear ;
+        display: flex;
+      }
+    }
+    &:hover {
+      .header {
+        .toolbar {
+          opacity: 1;
+        }
       }
     }
   }

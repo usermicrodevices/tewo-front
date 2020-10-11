@@ -89,10 +89,15 @@ function getDeviceModels(map) {
           mileage: 'number',
           detergent: 'number',
           threshold_drinks_cleaning: 'number',
-        })) {
+        }, { device_type: 'number' })) {
           console.error('Неожиданные данные для моделей устройств /refs/device_models', datum);
         }
-        map.set(datum.id, { name: datum.name, mileage: datum.mileage, detergent: datum.detergent });
+        map.set(datum.id, {
+          name: datum.name,
+          mileage: datum.mileage,
+          detergent: datum.detergent,
+          deviceTypeId: datum.dedevice_type,
+        });
       }
     }
     return map;

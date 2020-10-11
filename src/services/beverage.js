@@ -84,7 +84,7 @@ const getBeveragesStats = (pointId, daterange, kind, hoursMode) => {
   };
   return get(location).then((result) => {
     if (!Array.isArray(result)) {
-      console.error(`can not ger data from ${location}`, result);
+      console.error(`can not get data from ${location}`, result);
       return [];
     }
     for (const d of result) {
@@ -117,7 +117,7 @@ const getBeveragesSalePointsStats = (dateRange, step, session) => new Promise((r
   setTimeout(() => {
     const d = {};
     for (const { id } of session.points.rawData) {
-      const m = dateRange[0];
+      const m = dateRange[0].clone();
       d[id] = [];
       while (m < dateRange[1]) {
         const from = m.clone();
@@ -125,8 +125,8 @@ const getBeveragesSalePointsStats = (dateRange, step, session) => new Promise((r
         d[id].push({
           from,
           to,
-          beverages: Math.round(Math.random() * 100) + 100,
-          sales: Math.random() * 100 * 100,
+          beverages: Math.round(Math.pow(Math.random(), 100) * 100),
+          sales: Math.random() * 100,
         });
       }
     }

@@ -94,7 +94,7 @@ const SemanticRanges = {
   },
   prw30Days: {
     title: 'Прошедшие 30 дней',
-    resolver: () => [moment().subtract(30, 'day').startOf('day'), moment()],
+    resolver: () => [moment().subtract(30, 'day').startOf('day'), moment().endOf('day')],
   },
   curMonth: {
     title: capitalize(moment().format('MMMM')),
@@ -126,7 +126,7 @@ const SemanticRanges = {
   },
   prw12Month: {
     title: 'Прошедшие двенадцать месяцев',
-    resolver: () => [moment().subtract(12, 'month'), moment()],
+    resolver: () => [moment().subtract(11, 'month').startOf('month'), moment().endOf('month')],
   },
   curYear: {
     title: `${moment().format('YYYY')} год`,

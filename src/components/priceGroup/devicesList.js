@@ -52,7 +52,7 @@ const DevicesList = ({ element }) => (
   <Card className={style.card}>
     <div className={style.title}>
       <div className={style.titletext}>
-        Список напитков
+        Список оборудования
         <span className={style.amount}>{` (${element.devicesIdSet.size})`}</span>
       </div>
       <Button type="text" disabled icon={<Icon size={22} name="plus-circle-outline" />} />
