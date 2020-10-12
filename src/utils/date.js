@@ -44,23 +44,21 @@ const humanizeSeconds = (wholeSeconds) => {
   return result;
 };
 
-const intoComparationNumber = (m) => m.hour() + m.dayOfYear() * 1e2 + m.year() * 1e5;
+const intoComparationNumber = (m) => m.seconds() + m.minutes() * 60 + m.hour() * 3600 + m.dayOfYear() * 1e5 + m.year() * 1e8;
 
-function* alineDates([firstDay, lastDay], isHoursMode, data, transform) {
-  const timeKey = isHoursMode ? 'hour' : 'day';
+function* alineDates([firstDay, lastDay], step, data, transform) {
   const dataMap = new Map(data.map((datum) => {
-    const m = moment(datum[timeKey]);
+    const m = moment(datum.moment);
     return [intoComparationNumber(m), datum];
   }));
   const curDay = firstDay.clone();
-  const timePart = isHoursMode ? 'hours' : 'days';
   while (curDay <= lastDay) {
     const item = dataMap.get(intoComparationNumber(curDay));
     yield {
-      [timeKey]: curDay.clone(),
+      moment: curDay.clone(),
       ...transform(item),
     };
-    curDay.add(1, timePart);
+    curDay.add(step, 'seconds');
   }
 }
 

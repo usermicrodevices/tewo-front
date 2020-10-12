@@ -155,7 +155,7 @@ const getStats = (id) => get(`${LOCATION}${id}/stats/`).then((json) => {
   return result;
 });
 
-const getSalesChart = (deviceId, daterange) => getBeveragesStats(deviceId, daterange, 'device__id');
+const getSalesChart = (deviceId, daterange) => getBeveragesStats(daterange, `device__id=${deviceId}`, 86400);
 
 const applyDevice = (id, changes) => {
   const data = {};

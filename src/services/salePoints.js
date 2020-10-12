@@ -111,7 +111,7 @@ const getSalesTop = (pointId, daterange) => {
     });
 };
 
-const getSalesChart = (pointId, daterange) => getBeveragesStats(pointId, daterange, 'device__sale_point__id');
+const getSalesChart = (pointId, daterange) => getBeveragesStats(daterange, `device__sale_point__id=${pointId}`, 86400);
 
 const getOutdatedTasks = (pointId) => {
   const lastDay = [moment().subtract(1, 'day'), moment()];
@@ -119,10 +119,10 @@ const getOutdatedTasks = (pointId) => {
 };
 
 const getSalePointLastDaysBeverages = (pointId) => (
-  getBeveragesStats(pointId, SemanticRanges.prw7Days.resolver(), 'device__sale_point__id', true));
+  getBeveragesStats(SemanticRanges.prw7Days.resolver(), `device__sale_point__id=${pointId}`, 3600));
 
 const getBeveragesSpeed = (pointsId) => (
-  getBeveragesStats(pointsId.join(','), SmallSemanticRanges.prwHour.resolver(), 'device__sale_point__id__in').then(({ data }) => {
+  getBeveragesStats(SmallSemanticRanges.prwHour.resolver(), pointsId.length > 0 && `device__sale_point__id__in=${pointsId.join(',')}`, 60).then(({ data }) => {
     let sum = 0;
     for (const { beverages } of data) {
       sum += beverages;

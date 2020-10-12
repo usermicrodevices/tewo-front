@@ -73,12 +73,11 @@ const getBeverageOperations = (map) => get('refs/operations/').then((data) => {
   return map;
 });
 
-const getBeveragesStats = (pointId, daterange, kind, hoursMode) => {
-  const rangeArg = daterangeToArgs(daterange, 'device_date').replace('&', pointId ? '&' : '');
-  const location = `/data/beverages/stats${hoursMode ? '_hours' : ''}/?${pointId ? `${kind}=${pointId}` : ''}${rangeArg}`;
-  const timeKey = hoursMode ? 'hour' : 'day';
+const getBeveragesStats = (daterange, filters, step) => {
+  const rangeArg = daterangeToArgs(daterange, 'device_date');
+  const location = `/data/beverages/stats/?step=${step}${rangeArg}${filters ? `&${filters}` : ''}`;
   const mustBe = {
-    [timeKey]: 'date',
+    moment: 'date',
     total: 'number',
     sum: 'number',
   };
@@ -98,10 +97,10 @@ const getBeveragesStats = (pointId, daterange, kind, hoursMode) => {
     }
     const finalDateRange = isRangeGiven
       ? daterange
-      : [moment(result[0].day), moment(result[result.length - 1].day)];
+      : [moment(result[0].moment), moment(result[result.length - 1].moment)];
     return new BeveragesStats([...alineDates(
       finalDateRange,
-      hoursMode,
+      step,
       result,
       (item) => (
         item ? {
