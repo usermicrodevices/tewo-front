@@ -18,11 +18,14 @@
         .text {
           margin-top: 5px;
           .subtitle {
+            margin-right: -100px;
             font-weight: 400;
             color: #9A9A9A;
           }
         }
         .anchor {
+          margin-left: -15px;
+          margin-right: 15px;
           cursor: grab;
           &:active {
             cursor: grabbing;

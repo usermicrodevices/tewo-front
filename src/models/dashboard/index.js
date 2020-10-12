@@ -7,8 +7,8 @@ import localStorage from 'mobx-localstorage';
 
 import getDashboardWidgetsInfo from 'services/dashboard';
 
-import Speedometer from './speedometer';
-import Statistic from './statistic';
+import Speedometer from './widgets/speedometer';
+import Statistic from './widgets/statistic';
 import getDefaultState from './utils';
 import Settings from './settings';
 
