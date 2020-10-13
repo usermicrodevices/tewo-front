@@ -6,6 +6,7 @@ import { withSize } from 'react-sizeme';
 import Item from './item';
 import Spidometr from './spidometr';
 import Statistic from './statistic';
+import HeatmapDeviceStatuses from './heatmapDeviceStatuses';
 import generateLayout from './layoutGenerator';
 import ChartBeveragesSales from './chartBeveragesSales';
 
@@ -65,6 +66,8 @@ const cardsSwitch = ({ widgetType }) => {
       return Statistic;
     case 'chartBeveragesSales':
       return ChartBeveragesSales;
+    case 'heatmapDeviceStatuses':
+      return HeatmapDeviceStatuses;
     default:
       return () => 'В разработке';
   }
