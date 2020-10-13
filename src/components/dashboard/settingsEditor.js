@@ -13,6 +13,7 @@ const isHaveDateFilter = (key) => {
     case 'overview':
     case 'speedometerBeverages':
     case 'heatmapDeviceStatuses':
+    case 'diagramTechState':
       return false;
     default:
       return true;

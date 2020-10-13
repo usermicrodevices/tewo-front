@@ -1,0 +1,14 @@
+.root {
+  .diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}

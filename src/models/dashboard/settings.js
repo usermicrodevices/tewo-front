@@ -66,6 +66,16 @@ class Settings {
     return null;
   }
 
+  @computed get devices() {
+    if (!this.session.devices.isLoaded) {
+      return undefined;
+    }
+    if (this.salePointsId === null) {
+      return this.session.devices.rawData;
+    }
+    return this.session.devices.getPointsSetDevices(new Set(this.salePointsId));
+  }
+
   constructor(settings, session) {
     this.settings = settings;
     this.session = session;
