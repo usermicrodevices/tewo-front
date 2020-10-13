@@ -16,21 +16,21 @@ class DiagramTechState {
     if (!Array.isArray(this.generic.devices)) {
       return undefined;
     }
-    return this.generic.devices.filter(({ isOn }) => !isOn);
+    return this.generic.devices.filter(({ isOn }) => !isOn).length;
   }
 
   @computed get devicesServceRequiredAmount() {
     if (!Array.isArray(this.generic.devices)) {
       return undefined;
     }
-    return this.generic.devices.filter(({ isNeedTechService }) => !isNeedTechService).length;
+    return this.generic.devices.filter(({ isNeedTechService }) => isNeedTechService).length;
   }
 
   @computed get devicesHardWaterAmount() {
     if (!Array.isArray(this.generic.devices)) {
       return undefined;
     }
-    return this.generic.devices.filter(({ isHasOverlocPPM }) => !isHasOverlocPPM).length;
+    return this.generic.devices.filter(({ isHasOverlocPPM }) => isHasOverlocPPM).length;
   }
 
   constructor(settings, session) {
