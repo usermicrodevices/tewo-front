@@ -15,7 +15,9 @@ class HeatmapDeviceStatuses {
   }
 
   @computed({ keepAlive: true }) get devices() {
-    return this.session.devices.rawData.toJSON().map((d) => ({ ...d, state: Math.floor(Math.random() * 3) }));
+    return this.session.devices.rawData.toJSON()
+      .map((d) => ({ ...d, state: Math.floor(Math.random() * 3 + 1) }))
+      .map((d) => ({ name: d.id, value: d.state }));
   }
 }
 

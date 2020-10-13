@@ -13,7 +13,13 @@ function Legend() {
 const Chart = inject('storage')(observer(({
   storage,
 }) => {
-  const { isLoaded, devices } = storage;
+  const { isLoaded, chartData } = storage;
+  const legend = [{
+    from: 1,
+    to: 1,
+    name: 'Активно',
+    color: '#00A100',
+  }];
 
   if (!isLoaded) {
     return <Loader size="large" />;
@@ -21,11 +27,11 @@ const Chart = inject('storage')(observer(({
 
   return (
     <div className={classnames.root}>
-      <Heatmap />
+      <Heatmap legend={legend} data={chartData} />
       <Legend />
       <div>
         Оборудования найдено:
-        {devices.length}
+        {chartData.length}
       </div>
     </div>
   );
