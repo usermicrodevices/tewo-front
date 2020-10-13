@@ -72,7 +72,7 @@ const halfAYearStart = () => moment().startOf('year').add(Math.floor(moment().mo
 const SemanticRanges = {
   today: {
     title: 'Сегодня',
-    resolve: () => [moment().startOf('day'), moment().endOf('day')],
+    resolver: () => [moment().startOf('day'), moment().endOf('day')],
   },
   yesterday: {
     title: 'Вчера',

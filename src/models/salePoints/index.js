@@ -10,6 +10,7 @@ import Filters from 'models/filters';
 import { salePoints as salePointsRout } from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
 import { duration } from 'moment';
+import { daterangeToArgs } from 'utils/date';
 
 import Point from './salePoint';
 
@@ -190,7 +191,27 @@ class SalePoints extends Table {
     this.elementForEdit = new Point(this.session);
   }
 
-  getSalesTop = getSalesTop;
+  getSalesTop(points, daterange) {
+    let filter = '';
+    if (Array.isArray(points)) {
+      if (points.length !== 0) {
+        if (points.length === 1) {
+          filter = `device__sale_point__id=${points[0]}`;
+        } else {
+          filter = `device__sale_point__id__in=${points}`;
+        }
+      }
+    } else if (points !== null) {
+      filter = `device__sale_point__id=${points}`;
+    }
+    const rangeArg = daterangeToArgs(daterange, 'device_date');
+    if (filter.length === 0 && rangeArg.length !== 0) {
+      filter = rangeArg.slice(1);
+    } else {
+      filter = `${filter}${rangeArg}`;
+    }
+    return getSalesTop(filter);
+  }
 
   getSalesChart = getSalesChart;
 

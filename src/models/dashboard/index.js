@@ -11,6 +11,7 @@ import Speedometer from './widgets/speedometer';
 import Statistic from './widgets/statistic';
 import ChartBeveragesSales from './widgets/chartBeveragesSales';
 import DiagramTechState from './widgets/diagramTechState';
+import DiagramPopularity from './widgets/diagramPopularity';
 import getDefaultState from './utils';
 import Settings from './settings';
 
@@ -68,6 +69,12 @@ class Grid {
     for (const settings of Object.values(this.items)) {
       settings.set('dateFilter', range);
     }
+    localStorage.set(LOCAL_STORAGE_DASHBOARD_STATE_KEY, this.items);
+  }
+
+  @action setDateRange(range, itemKey) {
+    this.items[itemKey].set('dateFilter', range);
+    localStorage.set(LOCAL_STORAGE_DASHBOARD_STATE_KEY, this.items);
   }
 
   @action editNewSettings() {
@@ -109,23 +116,20 @@ class Grid {
 
   initStorage(settings) {
     switch (settings.settings.get('widgetType')) {
-      case 'speedometerBeverages': {
+      case 'speedometerBeverages':
         return new Speedometer(settings, this.session);
-      }
-      case 'overview': {
+      case 'overview':
         return new Statistic(settings, this.session);
-      }
-      case 'chartBeverages': {
+      case 'chartBeverages':
         return new Statistic(settings, this.session);
-      }
-      case 'heatmapDeviceStatuses': {
+      case 'heatmapDeviceStatuses':
         return new Statistic(settings, this.session);
-      }
-      case 'chartBeveragesSales': {
+      case 'chartBeveragesSales':
         return new ChartBeveragesSales(settings, this.session);
-      }
       case 'diagramTechState':
         return new DiagramTechState(settings, this.session);
+      case 'diagramPopularity':
+        return new DiagramPopularity(settings, this.session);
       default:
         console.error(`unknown dashboard storage type ${settings.settings.get('widgetType')}`);
         return undefined;

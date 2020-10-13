@@ -84,9 +84,8 @@ const applySalePoint = (item, changes) => {
   request.then((response) => converter(response, {}));
 };
 
-const getSalesTop = (filter, daterange) => {
-  const rangeArg = daterangeToArgs(daterange, 'device_date');
-  const location = `/data/beverages/stats_drinks/?${filter}${rangeArg}`;
+const getSalesTop = (filter) => {
+  const location = `/data/beverages/stats_drinks/?${filter}`;
   const mustBe = {
     drink_id: 'number',
     total: 'number',
