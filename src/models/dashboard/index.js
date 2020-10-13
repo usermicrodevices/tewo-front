@@ -10,6 +10,7 @@ import getDashboardWidgetsInfo from 'services/dashboard';
 import Speedometer from './widgets/speedometer';
 import Statistic from './widgets/statistic';
 import ChartBeveragesSales from './widgets/chartBeveragesSales';
+import DiagramTechState from './widgets/diagramTechState';
 import getDefaultState from './utils';
 import Settings from './settings';
 
@@ -123,6 +124,8 @@ class Grid {
       case 'chartBeveragesSales': {
         return new ChartBeveragesSales(settings, this.session);
       }
+      case 'diagramTechState':
+        return new DiagramTechState(settings, this.session);
       default:
         console.error(`unknown dashboard storage type ${settings.settings.get('widgetType')}`);
         return undefined;

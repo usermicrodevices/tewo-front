@@ -1,3 +1,4 @@
+/* eslint no-param-reassign: off */
 import React, { useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import {
@@ -65,8 +66,10 @@ const Item = ({
             placement="bottomRight"
           >
             <div>
-              {item.storage.generic.dateRangeName}
-              <DownOutlined />
+              <Space>
+                {item.storage.generic.dateRangeName}
+                <DownOutlined />
+              </Space>
             </div>
           </Dropdown>
         )}

@@ -8,6 +8,7 @@ import Spidometr from './spidometr';
 import Statistic from './statistic';
 import generateLayout from './layoutGenerator';
 import ChartBeveragesSales from './chartBeveragesSales';
+import DiagramTechState from './diagramTechState';
 
 import itemStyle from './item.module.scss';
 
@@ -32,6 +33,8 @@ const rowSpan = (type) => {
       return 96;
     case 'heatmapDeviceStatuses':
       return 80;
+    case 'diagramTechState':
+      return 71;
     default:
       console.error('row span not defined for', type);
       return 100;
@@ -65,6 +68,8 @@ const cardsSwitch = ({ widgetType }) => {
       return Statistic;
     case 'chartBeveragesSales':
       return ChartBeveragesSales;
+    case 'diagramTechState':
+      return DiagramTechState;
     default:
       return () => 'В разработке';
   }

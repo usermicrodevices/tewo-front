@@ -1,43 +1,36 @@
 import { computed } from 'mobx';
 
-class Chart {
+class DiagramTechState {
   generic;
 
   session;
 
-  @computed get devices() {
-    if (!this.session.devices.isLoaded) {
-      return undefined;
-    }
-    return this.session.devices.getPointsSetDevices(new Set(this.generic.salePointsId));
-  }
-
   @computed get devicesAmount() {
-    if (!this.session.devices.isLoaded) {
+    if (!Array.isArray(this.generic.devices)) {
       return undefined;
     }
-    return this.defices.length;
+    return this.generic.devices.length;
   }
 
   @computed get offDevicesAmount() {
-    if (!this.session.devices.isLoaded) {
+    if (!Array.isArray(this.generic.devices)) {
       return undefined;
     }
-    return this.devices.filter(({ isOn }) => !isOn);
+    return this.generic.devices.filter(({ isOn }) => !isOn);
   }
 
   @computed get devicesServceRequiredAmount() {
-    if (!this.session.devices.isLoaded) {
+    if (!Array.isArray(this.generic.devices)) {
       return undefined;
     }
-    return this.devices.filter(({ isNeedTechService }) => !isNeedTechService).length;
+    return this.generic.devices.filter(({ isNeedTechService }) => !isNeedTechService).length;
   }
 
   @computed get devicesHardWaterAmount() {
-    if (!this.session.devices.isLoaded) {
+    if (!Array.isArray(this.generic.devices)) {
       return undefined;
     }
-    return this.devices.filter(({ isHasOverlocPPM }) => !isHasOverlocPPM).length;
+    return this.generic.devices.filter(({ isHasOverlocPPM }) => !isHasOverlocPPM).length;
   }
 
   constructor(settings, session) {
@@ -46,4 +39,4 @@ class Chart {
   }
 }
 
-export default Chart;
+export default DiagramTechState;
