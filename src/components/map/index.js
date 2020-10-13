@@ -1,11 +1,18 @@
 import React, {
   useEffect, useState, useCallback, useRef,
 } from 'react';
-import { inject, observer } from 'mobx-react';
+import { inject, observer, Provider } from 'mobx-react';
 import { YMaps } from 'react-yandex-maps';
+import {
+  Button, Dropdown,
+} from 'antd';
+import { FilterOutlined } from '@ant-design/icons';
 
+import Filters from 'elements/filters';
 import Loader from 'elements/loader';
 import Card from 'elements/card';
+
+import MapStorage from 'models/map';
 
 import { getMapBoundaryOptions } from './utils';
 
@@ -61,15 +68,13 @@ const useMapState = (points) => {
   };
 };
 
-const YMapContainer = inject('session')(observer(({ session }) => {
-  const { points } = session;
-  const locations = points.rawData.filter(({ mapPoint }) => mapPoint !== null).map(({ location, id }) => ({ location, id }));
-  const hasData = points.rawData.length > 0;
+const YMapContainer = inject('storage', 'filter')(observer(({ storage, filter }) => {
+  const { points } = storage;
   const {
     zoom, center, zoomIn, zoomOut, toggleFullscreen, isFullscreen, onZoom, mapRef,
-  } = useMapState(locations);
+  } = useMapState(points);
 
-  if (!hasData) {
+  if (!storage.isLoaded) {
     return <Loader />;
   }
 
@@ -83,7 +88,13 @@ const YMapContainer = inject('session')(observer(({ session }) => {
         <button type="button" onClick={zoomIn}>ZoomIn</button>
         <button type="button" onClick={zoomOut}>ZoomOut</button>
         <button type="button" onClick={toggleFullscreen}>FullScreen</button>
-        <YMap fRef={mapRef} zoom={zoom} center={center} points={locations} onZoom={onZoom} />
+        <Dropdown overlay={<Filters />} placement="bottomLeft">
+          <Button
+            type={filter.search !== '' ? 'primary' : 'default'}
+            icon={<FilterOutlined />}
+          />
+        </Dropdown>
+        <YMap fRef={mapRef} zoom={zoom} center={center} points={points} onZoom={onZoom} />
       </div>
     </YMaps>
   );
@@ -93,11 +104,24 @@ const MapHeader = ({ title }) => (
   <div style={{ fontWeight: 600, fontSize: 42, marginBottom: 24 }}>{title}</div>
 );
 
-const MapWraped = () => (
-  <Card>
-    <MapHeader title="Карта объектов" />
-    <YMapContainer />
-  </Card>
-);
+@inject('session')
+class MapWraped extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.mapStorage = new MapStorage(props.session);
+  }
+
+  render() {
+    return (
+      <Card>
+        <MapHeader title="Карта объектов" />
+        <Provider storage={this.mapStorage} filter={this.mapStorage.filters}>
+          <YMapContainer />
+        </Provider>
+      </Card>
+    );
+  }
+}
 
 export default MapWraped;
