@@ -65,7 +65,7 @@ class Grid {
 
   @action setDateRangeGlobal(range) {
     for (const settings of Object.values(this.items)) {
-      settings.dateFilter = range;
+      settings.set('dateFilter', range);
     }
   }
 

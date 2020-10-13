@@ -26,7 +26,7 @@ const Chart = inject('storage')(observer(({
       <ScalebleChart
         y={series}
         x={xSeria}
-        height={350}
+        height={330}
         y1={[{ text: 'Наливов в день', decimalsInFloat: 0 }, { text: 'Динамика продаж, ₽', decimalsInFloat: 2 }][series[0].axis]}
       />
     </div>

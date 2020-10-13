@@ -45,5 +45,18 @@
         }
       }
     }
+
+    .datepicker {
+      background-color: #F3F5F7;
+      border-radius: 15px;
+      line-height: 30px;
+      color: #9A9A9A;
+      &:hover {
+        background-color: #EEEEEE;
+      }
+      cursor: pointer;
+      user-select:none;
+      padding: 0px 15px;
+    }
   }
 }

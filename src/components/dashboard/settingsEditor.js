@@ -136,11 +136,14 @@ const SettingsEditor = inject(({ grid, session }) => ({ grid, session }))(observ
   );
 }));
 
-const Wrap = ({ grid }) => {
+const Wrap = inject('grid')(observer(({ grid }) => {
   if (grid.isEdditing) {
     return <SettingsEditor />;
   }
   return null;
-};
+}));
 
-export default inject('grid')(observer(Wrap));
+export {
+  Wrap as default,
+  isHaveDateFilter,
+};
