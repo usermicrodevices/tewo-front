@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Card, Tooltip } from 'antd';
 import {
-  MoreOutlined, SettingOutlined, CloseOutlined, QuestionCircleOutlined,
+  Button, Card, Tooltip, Dropdown, Space,
+} from 'antd';
+import {
+  MoreOutlined, SettingOutlined, CloseOutlined, QuestionCircleOutlined, DownOutlined,
 } from '@ant-design/icons';
 import classnames from 'classnames';
+
 import plural from 'utils/plural';
+
+import DateSelector from './dateSelector';
+import { isHaveDateFilter } from './settingsEditor';
 
 import classes from './item.module.scss';
 
@@ -23,33 +29,50 @@ const SubTitle = ({ salePoints }) => {
 
 const Item = ({
   children, item, className, style, onMouseDown, onMouseUp, onTouchEnd, grid,
-}) => (
-  <div style={style} className={classnames(className, classes.wrap)}>
-    <Card
-      className={classes.item}
-      onMouseDown={onMouseDown}
-      onMouseUp={onMouseUp}
-      onTouchEnd={onTouchEnd}
-    >
-      <div className={classes.header}>
-        <div className={classes.label}>
-          <Button type="text" className={classes.anchor} icon={<MoreOutlined />} />
-          <div className={classes.text}>
-            <div className={classes.maintitle}>{item.title}</div>
-            <div className={classes.subtitle}>
-              <SubTitle salePoints={item.storage.generic.salePoints} />
+}) => {
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  return (
+    <div style={style} className={classnames(className, classes.wrap)}>
+      <Card
+        className={classes.item}
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
+        onTouchEnd={onTouchEnd}
+      >
+        <div className={classes.header}>
+          <div className={classes.label}>
+            <Button type="text" className={classes.anchor} icon={<MoreOutlined />} />
+            <div className={classes.text}>
+              <div className={classes.maintitle}>{item.title}</div>
+              <div className={classes.subtitle}>
+                <SubTitle salePoints={item.storage.generic.salePoints} />
+              </div>
             </div>
           </div>
+          <div className={classes.toolbar}>
+            <Tooltip placement="top" title={item.description}><Button type="text" icon={<QuestionCircleOutlined />} /></Tooltip>
+            <Button type="text" onClick={() => grid.editSettings(item.uid)} icon={<SettingOutlined />} />
+            <Button type="text" onClick={() => grid.remove(item.uid)} icon={<CloseOutlined />} />
+          </div>
         </div>
-        <div className={classes.toolbar}>
-          <Tooltip placement="top" title={item.description}><Button type="text" icon={<QuestionCircleOutlined />} /></Tooltip>
-          <Button type="text" onClick={() => grid.editSettings(item.uid)} icon={<SettingOutlined />} />
-          <Button type="text" onClick={() => grid.remove(item.uid)} icon={<CloseOutlined />} />
-        </div>
-      </div>
-      {children}
-    </Card>
-  </div>
-);
+        {children}
+        {isHaveDateFilter(item.storage.generic.widgetType) && (
+          <Dropdown
+            className={classes.datepicker}
+            onVisibleChange={setMenuOpen}
+            visible={isMenuOpen}
+            overlay={<DateSelector onClick={({ key }) => { setMenuOpen(false); item.storage.generic.dateRangeKey = key; }} />}
+            placement="bottomRight"
+          >
+            <div>
+              {item.storage.generic.dateRangeName}
+              <DownOutlined />
+            </div>
+          </Dropdown>
+        )}
+      </Card>
+    </div>
+  );
+};
 
 export default inject('grid')(observer(Item));

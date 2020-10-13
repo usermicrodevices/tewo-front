@@ -171,6 +171,13 @@ class Devices extends Table {
     return this.rawData.filter(({ id }) => ids.has(id));
   }
 
+  getPointsSetDevices(pointsSet) {
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    return this.rawData.filter(({ salePointId, isInactive }) => pointsSet.has(salePointId) && !isInactive);
+  }
+
   getPointDevices(pointId) {
     if (!this.isLoaded) {
       return undefined;

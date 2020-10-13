@@ -40,6 +40,24 @@ class Settings {
     return salePontsFilter;
   }
 
+  set dateRangeKey(key) {
+    if (key in SemanticRanges) {
+      this.settings.set('dateFilter', key);
+    }
+  }
+
+  @computed get widgetType() {
+    return this.settings.get('widgetType');
+  }
+
+  @computed get dateRangeName() {
+    const dateFilter = this.settings.get('dateFilter');
+    if (dateFilter in SemanticRanges) {
+      return SemanticRanges[dateFilter].title;
+    }
+    return null;
+  }
+
   @computed get dateRange() {
     const dateFilter = this.settings.get('dateFilter');
     if (dateFilter in SemanticRanges) {

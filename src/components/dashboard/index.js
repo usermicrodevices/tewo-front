@@ -1,30 +1,21 @@
 import React, { useState } from 'react';
 import { Provider, inject } from 'mobx-react';
 import {
-  Button, Dropdown, Menu, Space,
+  Button, Dropdown, Space,
 } from 'antd';
 
 import Icon from 'elements/icon';
 import DashboardModel from 'models/dashboard';
-import { SemanticRanges } from 'utils/date';
 
 import Grid from './grid';
 import SettingsEditor from './settingsEditor';
+import DateSelector from './dateSelector';
 
 import style from './index.module.scss';
 
-const DateSelector = inject('grid')(({ grid }) => (
-  <Menu style={{ width: 300 }}>
-    {
-      Object.entries(SemanticRanges).map(([range, { title }]) => (
-        <Menu.Item style={{ height: 'auto' }} key={range} onClick={() => { grid.setDateRangeGlobal(range); }}>{ title }</Menu.Item>
-      ))
-    }
-  </Menu>
-));
-
 const Dashboard = ({ session }) => {
   const [storage] = useState(new DashboardModel('dashboard', session));
+  const [isMenuOpen, setMenuOpen] = useState(false);
   return (
     <Provider grid={storage}>
       <SettingsEditor />
@@ -32,7 +23,12 @@ const Dashboard = ({ session }) => {
         <div className={style.header}>
           <div className={style.title}>Панель управления</div>
           <Space>
-            <Dropdown overlay={<DateSelector />} placement="bottomRight">
+            <Dropdown
+              onVisibleChange={setMenuOpen}
+              visible={isMenuOpen}
+              overlay={<DateSelector onClick={({ key }) => { setMenuOpen(false); storage.setDateRangeGlobal(key); }} />}
+              placement="bottomRight"
+            >
               <Button icon={<Icon name="calendar-outline" />}>Диапазон дат</Button>
             </Dropdown>
             <Button onClick={() => { storage.editNewSettings(); }}>+ добавить</Button>
