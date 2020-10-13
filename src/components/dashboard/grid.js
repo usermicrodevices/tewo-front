@@ -7,6 +7,7 @@ import Item from './item';
 import Spidometr from './spidometr';
 import Statistic from './statistic';
 import generateLayout from './layoutGenerator';
+import ChartBeveragesSales from './chartBeveragesSales';
 
 import itemStyle from './item.module.scss';
 
@@ -14,7 +15,7 @@ const COLUMNS_MIN_WIDTH = 280;
 
 const colSpan = (type) => {
   switch (type) {
-    case 'overview': return 3;
+    case 'overview': case 'chartBeveragesSales': return 3;
     case 'speedometerBeverages': return 1;
     default: return 2;
   }
@@ -27,6 +28,8 @@ const rowSpan = (type) => {
       return 76;
     case 'chartBeverages':
       return 74;
+    case 'chartBeveragesSales':
+      return 96;
     case 'heatmapDeviceStatuses':
       return 80;
     default:
@@ -60,6 +63,8 @@ const cardsSwitch = ({ widgetType }) => {
       return Spidometr;
     case 'overview':
       return Statistic;
+    case 'chartBeveragesSales':
+      return ChartBeveragesSales;
     default:
       return () => 'В разработке';
   }

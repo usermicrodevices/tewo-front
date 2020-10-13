@@ -9,6 +9,7 @@ import getDashboardWidgetsInfo from 'services/dashboard';
 
 import Speedometer from './widgets/speedometer';
 import Statistic from './widgets/statistic';
+import ChartBeveragesSales from './widgets/chartBeveragesSales';
 import getDefaultState from './utils';
 import Settings from './settings';
 
@@ -84,7 +85,11 @@ class Grid {
   }
 
   @action updateSettings(settings) {
-    this.items[this.editingItem].replace(settings);
+    if (this.editingItem in this.items) {
+      this.items[this.editingItem].replace(settings);
+    } else {
+      this.items[this.editingItem] = observable.map(Object.entries(settings));
+    }
     localStorage.set(LOCAL_STORAGE_DASHBOARD_STATE_KEY, this.items);
     this.cancelEditSettings();
   }
@@ -114,6 +119,9 @@ class Grid {
       }
       case 'heatmapDeviceStatuses': {
         return new Statistic(settings, this.session);
+      }
+      case 'chartBeveragesSales': {
+        return new ChartBeveragesSales(settings, this.session);
       }
       default:
         console.error(`unknown dashboard storage type ${settings.settings.get('widgetType')}`);

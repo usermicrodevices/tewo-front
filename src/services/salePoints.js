@@ -84,9 +84,9 @@ const applySalePoint = (item, changes) => {
   request.then((response) => converter(response, {}));
 };
 
-const getSalesTop = (pointId, daterange) => {
+const getSalesTop = (filter, daterange) => {
   const rangeArg = daterangeToArgs(daterange, 'device_date');
-  const location = `/data/beverages/stats_drinks/?device__sale_point__id=${pointId}${rangeArg}`;
+  const location = `/data/beverages/stats_drinks/?${filter}${rangeArg}`;
   const mustBe = {
     drink_id: 'number',
     total: 'number',
@@ -111,7 +111,19 @@ const getSalesTop = (pointId, daterange) => {
     });
 };
 
-const getSalesChart = (pointId, daterange) => getBeveragesStats(daterange, `device__sale_point__id=${pointId}`, 86400);
+const getSalesChart = (pointId, daterange) => {
+  let filter = '';
+  if (typeof pointId === 'number') {
+    filter = `device__sale_point__id=${pointId}`;
+  }
+  if (Array.isArray(pointId) && pointId.length === 1) {
+    filter = `device__sale_point__id=${pointId[0]}`;
+  }
+  if (Array.isArray(pointId) && pointId.length > 1) {
+    filter = `device__sale_point__id__in=${pointId.join(',')}`;
+  }
+  return getBeveragesStats(daterange, filter, 86400);
+};
 
 const getOutdatedTasks = (pointId) => {
   const lastDay = [moment().subtract(1, 'day'), moment()];
@@ -132,5 +144,11 @@ const getBeveragesSpeed = (pointsId) => (
 );
 
 export {
-  applySalePoint, getSalePoints, getSalesTop, getSalesChart, getOutdatedTasks, getSalePointLastDaysBeverages, getBeveragesSpeed,
+  applySalePoint,
+  getSalePoints,
+  getSalesTop,
+  getSalesChart,
+  getOutdatedTasks,
+  getSalePointLastDaysBeverages,
+  getBeveragesSpeed,
 };

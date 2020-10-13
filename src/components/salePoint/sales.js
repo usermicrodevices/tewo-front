@@ -46,7 +46,7 @@ const Sales = ({ element: { details } }) => {
       <div className={styles.chart}>
         <div className={styles.filters}>
           <DatergangePicker title="Период" value={details.imputsManager.dateRange} onChange={(v) => { details.imputsManager.dateRange = v; }} />
-          <CurvesPicker />
+          <CurvesPicker imputsManager={details.imputsManager} />
         </div>
         <div className={styles.curves}>
           {

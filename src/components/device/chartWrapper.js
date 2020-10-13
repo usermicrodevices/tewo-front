@@ -12,7 +12,7 @@ const Clearance = ({ element: { details: { imputsManager } }, children, withCurv
   <Card className={style.root}>
     <div className={style.selectors}>
       <DatergangePicker title="Период" value={imputsManager.dateRange} onChange={(v) => { imputsManager.dateRange = v; }} />
-      { withCurvepicker && <CurvePicker /> }
+      { withCurvepicker && <CurvePicker imputsManager={imputsManager} /> }
     </div>
     <div className={style.chart}>
       { children }

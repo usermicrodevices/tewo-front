@@ -92,6 +92,7 @@ class BeveragesStatsPair {
   @computed get series() {
     const visibleCurves = new Set(this.properties.visibleCurves);
     const series = SALES_DATA_TYPES.filter(({ value }) => visibleCurves.has(value) && typeof this[value] !== 'undefined');
+    console.log(visibleCurves);
     return series.map(({ label, value, axis }) => ({ data: this[value], name: label, axis }));
   }
 

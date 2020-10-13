@@ -65,6 +65,7 @@ class Statistic {
     this.session = session;
 
     reaction(() => session.points.isLoaded, () => {
+      this.data = null;
       getBeveragesSalePointsStats(
         SmallSemanticRanges.prwHalfAnHour.resolver(),
         60,

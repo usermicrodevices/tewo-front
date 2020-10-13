@@ -42,7 +42,7 @@ function findPosition(taken, size, columnsAmount) {
 function generateLayout(storedLayout, layoutDraft, columnsAmount) {
   const takenFields = new Set();
   const result = [];
-  if (Array.isArray(storedLayout) && false) {
+  if (Array.isArray(storedLayout)) {
     for (const [id, rect] of storedLayout.entries()) {
       fillRect(takenFields, rect);
       result.push(rect);
