@@ -9,6 +9,7 @@ import Statistic from './statistic';
 import generateLayout from './layoutGenerator';
 import DiagramPopularity from './diagramPopularity';
 import ChartBeveragesSales from './chartBeveragesSales';
+import ChartSales from './chartSales';
 import DiagramTechState from './diagramTechState';
 
 import itemStyle from './item.module.scss';
@@ -18,7 +19,10 @@ const COLUMNS_MIN_WIDTH = 280;
 const colSpan = (type) => {
   switch (type) {
     case 'overview': case 'chartBeveragesSales': return 3;
-    case 'speedometerBeverages': case 'diagramPopularity': return 1;
+    case 'speedometerBeverages':
+    case 'diagramPopularity':
+    case 'chartSales':
+      return 1;
     default: return 2;
   }
 };
@@ -27,6 +31,7 @@ const rowSpan = (type) => {
   switch (type) {
     case 'overview':
     case 'speedometerBeverages':
+    case 'chartSales':
       return 76;
     case 'chartBeverages':
       return 74;
@@ -75,6 +80,8 @@ const cardsSwitch = ({ widgetType }) => {
       return DiagramTechState;
     case 'diagramPopularity':
       return DiagramPopularity;
+    case 'chartSales':
+      return ChartSales;
     default:
       return () => 'В разработке';
   }
