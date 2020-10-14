@@ -1,7 +1,7 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 
-function getChartOptions({ labels }) {
+function getChartOptions({ labels, color }) {
   return {
     chart: {
       type: 'line',
@@ -12,6 +12,7 @@ function getChartOptions({ labels }) {
         show: false,
       },
     },
+    colors: [color],
     dataLabels: {
       enabled: false,
     },
@@ -42,8 +43,10 @@ function getChartOptions({ labels }) {
   };
 }
 
-function SimpleCurve({ labels = [], data = [], name = '' }) {
-  const options = getChartOptions({ labels });
+function SimpleCurve({
+  labels = [], data = [], name = '', color = '#0180E1',
+}) {
+  const options = getChartOptions({ labels, color });
   const series = [{ name, data }];
 
   return (
@@ -51,6 +54,7 @@ function SimpleCurve({ labels = [], data = [], name = '' }) {
       type="line"
       options={options}
       series={series}
+      height="100%"
     />
   );
 }

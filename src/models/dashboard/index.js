@@ -12,6 +12,7 @@ import Statistic from './widgets/statistic';
 import ChartBeveragesSales from './widgets/chartBeveragesSales';
 import HeatmapDeviceStatuses from './widgets/heatmapDeviceStatuses';
 import ChartSales from './widgets/chartSales';
+import ChartBeverages from './widgets/chartBeverages';
 import DiagramTechState from './widgets/diagramTechState';
 import DiagramPopularity from './widgets/diagramPopularity';
 import getDefaultState from './utils';
@@ -123,7 +124,7 @@ class Grid {
       case 'overview':
         return new Statistic(settings, this.session);
       case 'chartBeverages':
-        return new Statistic(settings, this.session);
+        return new ChartBeverages(settings, this.session);
       case 'heatmapDeviceStatuses':
         return new HeatmapDeviceStatuses(settings, this.session);
       case 'chartBeveragesSales':

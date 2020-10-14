@@ -8,7 +8,7 @@ import ChnagesLabel from 'elements/changesLabel';
 
 import classnames from './index.module.scss';
 
-const ChartSalesHeader = ({ diff, current }) => (
+const ChartBeveragesHeader = ({ diff, current }) => (
   <div className={classnames.header}>
     <h2>
       <Format>{current}</Format>
@@ -17,17 +17,17 @@ const ChartSalesHeader = ({ diff, current }) => (
   </div>
 );
 
-const ChartSales = ({ storage }) => {
+const ChartBeverages = ({ storage }) => {
   const {
-    chartData, currentSales, labels, isLoaded,
-    salesDiff,
+    chartData, currentBeverages, labels, isLoaded,
+    beveragesDiff,
   } = storage;
 
   const contentElement = isLoaded ? (
     <>
-      <ChartSalesHeader diff={salesDiff} current={currentSales} />
+      <ChartBeveragesHeader diff={beveragesDiff} current={currentBeverages} />
       <div className={classnames.chart}>
-        <SimpleCurve data={chartData} name="Продажи" labels={labels} color="#4CD964" />
+        <SimpleCurve data={chartData} name="Наливы" labels={labels} color="#0180E1" />
       </div>
     </>
   ) : (
@@ -43,4 +43,4 @@ const ChartSales = ({ storage }) => {
   );
 };
 
-export default inject('storage')(observer(ChartSales));
+export default inject('storage')(observer(ChartBeverages));
