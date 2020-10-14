@@ -17,6 +17,9 @@
     .value {
       padding: 5px 0px;
       >div {
+        &:hover {
+          background-color: #4889DA;
+        }
         height: 24px;
         background-color: #4F91E4;
       }

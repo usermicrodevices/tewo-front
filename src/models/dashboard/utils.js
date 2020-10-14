@@ -23,6 +23,12 @@ const getDefaultState = (session) => ({
     salePontsFilter: null,
     companiesFilter: null,
   },
+  begin_4: {
+    widgetType: 'chartSales',
+    dateFilter: 'prw7Days',
+    salePontsFilter: null,
+    companiesFilter: null,
+  },
 });
 
 export default getDefaultState;
