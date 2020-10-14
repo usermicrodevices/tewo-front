@@ -4,12 +4,24 @@
   justify-content: center;
   align-items: center;
   flex-grow: 1;
-  .value {
-    font-size: 34px;
-    min-height: 50px;
-  }
+
   .svg {
     width: 187px;
     height: 132px;
+  }
+}
+
+.header {
+  margin-bottom: 24px;
+  text-align: center;
+
+  .value {
+    font-size: 42px;
+    min-height: 50px;
+    color: black;
+  }
+
+  .label {
+
   }
 }
