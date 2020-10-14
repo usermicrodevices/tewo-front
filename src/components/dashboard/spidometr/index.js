@@ -1,20 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 
 import Format from 'elements/format';
+import SeedometrChart from 'elements/chart/speedometr';
 
-import style from './index.module.scss';
+import plural from 'utils/plural';
 
-const Spidometr = inject('storage')(observer(({ storage: { value } }) => (
-  <div className={style.root}>
-    <div className={style.value}><Format width={150}>{value}</Format></div>
-    <svg className={style.css} viewBox="-100 -100 200 200">
-      <path d="M0 0-50 50A50 70 0 0 1-50-50Z" fill="#f00" />
-      <path d="M0 0-50-50A99 99 0 0 1 50-50Z" fill="#080" />
-      <path d="M0 0 50-50A99 99 0 0 1 50 50Z" fill="#dd0" />
-      <path d="M0 0 50 50A99 99 0 0 1-50 50Z" fill="#04e" />
-    </svg>
-  </div>
-)));
+import classnames from './index.module.scss';
 
-export default Spidometr;
+const UPDATE_INTERVAL = 60 * 1000; // once per minute
+
+const Speedometr = ({ storage: { value, maxSpeed, updateValue } }) => {
+  useEffect(() => {
+    const intervalId = setInterval(updateValue, UPDATE_INTERVAL);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const speedLabelText = `${plural(value, ['налив', 'наливов', 'налива'])} / час`;
+
+  return (
+    <div className={classnames.root}>
+      <div className={classnames.header}>
+        <div className={classnames.value}>
+          <Format width={150}>{value}</Format>
+        </div>
+        <div className={classnames.label}>
+          <span>{speedLabelText}</span>
+        </div>
+      </div>
+      <SeedometrChart value={value} max={maxSpeed} />
+    </div>
+  );
+};
+
+export default inject('storage')(observer(Speedometr));
