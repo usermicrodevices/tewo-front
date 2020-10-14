@@ -112,26 +112,48 @@ const getBeveragesStats = (daterange, filters, step) => {
   });
 };
 
-const getBeveragesSalePointsStats = (dateRange, step, session) => new Promise((resolve) => {
-  setTimeout(() => {
-    const d = {};
-    for (const { id } of session.points.rawData) {
-      const m = dateRange[0].clone();
-      d[id] = [];
-      while (m < dateRange[1]) {
-        const from = m.clone();
-        const to = m.add(step, 'seconds').clone();
-        d[id].push({
-          from,
-          to,
-          beverages: Math.round(Math.pow(Math.random(), 100) * 100),
-          sales: Math.random() * 100,
-        });
+const getBeveragesSalePointsStats = (dateRange, step, salePoints) => {
+  const rangeArg = daterangeToArgs(dateRange, 'device_date');
+  let lnk = `/data/beverages/sale_points_stats/?step=${step}${rangeArg}`;
+  if (Array.isArray(salePoints)) {
+    if (salePoints.length === 1) {
+      lnk = `${lnk}&device__sale_point__id=${salePoints[0]}`;
+    }
+    if (salePoints.length > 1) {
+      lnk = `${lnk}&device__sale_point__id__in=${salePoints}`;
+    }
+  }
+  return get(lnk).then((json) => {
+    const mustBe = {
+      moment: 'date',
+      total: 'number',
+      sum: 'number',
+    };
+    const result = {};
+    for (const [salePointId, arr] of Object.entries(json)) {
+      if (!Array.isArray(arr)) {
+        console.error(`${lnk} ожидается массив, получен`, arr);
+      } else {
+        result[salePointId] = [];
+        for (const datum of arr) {
+          checkData(datum, mustBe);
+        }
+        result[salePointId] = [...alineDates(
+          dateRange,
+          step,
+          arr,
+          (item) => (
+            item ? {
+              beverages: item.total,
+              sales: item.sum / 100,
+            } : { beverages: 0, sales: 0 }
+          ),
+        )];
       }
     }
-    resolve(d);
-  }, 1000);
-});
+    return result;
+  });
+};
 
 export {
   getBeverages,

@@ -64,14 +64,16 @@ class Statistic {
     this.generic = settings;
     this.session = session;
 
-    reaction(() => session.points.isLoaded, () => {
+    const update = () => {
       this.data = null;
       getBeveragesSalePointsStats(
         SmallSemanticRanges.prwHalfAnHour.resolver(),
         60,
-        session,
+        this.generic.salePointsId,
       ).then((result) => { this.data = result; });
-    });
+    };
+    reaction(() => this.generic.salePointsId, update);
+    update();
   }
 }
 

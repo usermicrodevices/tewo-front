@@ -44,16 +44,16 @@ const humanizeSeconds = (wholeSeconds) => {
   return result;
 };
 
-const intoComparationNumber = (m) => m.seconds() + m.minutes() * 60 + m.hour() * 3600 + m.dayOfYear() * 1e5 + m.year() * 1e8;
+const intoComparationNumber = (m, step) => Math.floor(m / 1000 / step);
 
 function* alineDates([firstDay, lastDay], step, data, transform) {
   const dataMap = new Map(data.map((datum) => {
     const m = moment(datum.moment);
-    return [intoComparationNumber(m), datum];
+    return [intoComparationNumber(+m, step), datum];
   }));
   const curDay = firstDay.clone();
-  while (curDay <= lastDay) {
-    const item = dataMap.get(intoComparationNumber(curDay));
+  while (curDay + step <= lastDay) {
+    const item = dataMap.get(intoComparationNumber(+curDay, step));
     yield {
       moment: curDay.clone(),
       ...transform(item),
