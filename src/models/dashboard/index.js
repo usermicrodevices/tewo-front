@@ -10,6 +10,7 @@ import getDashboardWidgetsInfo from 'services/dashboard';
 import Speedometer from './widgets/speedometer';
 import Statistic from './widgets/statistic';
 import ChartBeveragesSales from './widgets/chartBeveragesSales';
+import HeatmapDeviceStatuses from './widgets/heatmapDeviceStatuses';
 import ChartSales from './widgets/chartSales';
 import DiagramTechState from './widgets/diagramTechState';
 import DiagramPopularity from './widgets/diagramPopularity';
@@ -124,7 +125,7 @@ class Grid {
       case 'chartBeverages':
         return new Statistic(settings, this.session);
       case 'heatmapDeviceStatuses':
-        return new Statistic(settings, this.session);
+        return new HeatmapDeviceStatuses(settings, this.session);
       case 'chartBeveragesSales':
         return new ChartBeveragesSales(settings, this.session);
       case 'chartSales':
