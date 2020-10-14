@@ -25,6 +25,7 @@ const isHavePointsFilter = (key) => {
     case 'latestEvents':
     case 'latestBeverages':
     case 'deviceListDisabled':
+    case 'diagramSalePointsBeveragesRate':
       return false;
     default:
       return true;

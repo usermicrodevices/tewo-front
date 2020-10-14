@@ -12,6 +12,7 @@ import Statistic from './widgets/statistic';
 import ChartBeveragesSales from './widgets/chartBeveragesSales';
 import DiagramTechState from './widgets/diagramTechState';
 import DiagramPopularity from './widgets/diagramPopularity';
+import DiagramSalePointsBeveragesRate from './widgets/diagramSalePointsBeveragesRate';
 import getDefaultState from './utils';
 import Settings from './settings';
 
@@ -130,6 +131,8 @@ class Grid {
         return new DiagramTechState(settings, this.session);
       case 'diagramPopularity':
         return new DiagramPopularity(settings, this.session);
+      case 'diagramSalePointsBeveragesRate':
+        return new DiagramSalePointsBeveragesRate(settings, this.session);
       default:
         console.error(`unknown dashboard storage type ${settings.settings.get('widgetType')}`);
         return undefined;

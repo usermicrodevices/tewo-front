@@ -8,6 +8,7 @@ import Spidometr from './spidometr';
 import Statistic from './statistic';
 import generateLayout from './layoutGenerator';
 import DiagramPopularity from './diagramPopularity';
+import DiagramSalePointsBeveragesRate from './diagramSalePointsBeveragesRate';
 import ChartBeveragesSales from './chartBeveragesSales';
 import DiagramTechState from './diagramTechState';
 
@@ -38,6 +39,8 @@ const rowSpan = (type) => {
       return 71;
     case 'diagramPopularity':
       return 118;
+    case 'diagramSalePointsBeveragesRate':
+      return 124;
     default:
       console.error('row span not defined for', type);
       return 100;
@@ -75,6 +78,8 @@ const cardsSwitch = ({ widgetType }) => {
       return DiagramTechState;
     case 'diagramPopularity':
       return DiagramPopularity;
+    case 'diagramSalePointsBeveragesRate':
+      return DiagramSalePointsBeveragesRate;
     default:
       return () => 'В разработке';
   }
