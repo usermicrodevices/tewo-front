@@ -2,7 +2,7 @@ import { computed, observable, reaction } from 'mobx';
 
 import BeveragesStatsPair from 'models/beverages/statsPair';
 
-class ChartSales {
+class ChartBeverages {
   generic;
 
   session;
@@ -14,7 +14,7 @@ class ChartSales {
   };
 
   @computed({ keepAlive: true }) get labels() {
-    return this.beveragesStats &&  this.beveragesStats.xSeria ? this.beveragesStats.xSeria.map((v) => +v) : [];
+    return this.beveragesStats.xSeria ? this.beveragesStats.xSeria.map((v) => +v) : [];
   }
 
   @computed({ keepAlive: true }) get isLoaded() {
@@ -22,15 +22,15 @@ class ChartSales {
   }
 
   @computed({ keepAlive: true }) get chartData() {
-    return this.beveragesStats ? this.beveragesStats.salesSeriaCur : [];
+    return this.beveragesStats.beveragesSeriaCur;
   }
 
-  @computed({ keepAlive: true }) get currentSales() {
-    return this.beveragesStats ? this.beveragesStats.salesCur : 0;
+  @computed({ keepAlive: true }) get currentBeverages() {
+    return this.beveragesStats.beveragesCur;
   }
 
-  @computed({ keepAlive: true }) get salesDiff() {
-    return this.beveragesStats ? this.beveragesStats.salesDiff : 0;
+  @computed({ keepAlive: true }) get beveragesDiff() {
+    return this.beveragesStats.beveragesDiff;
   }
 
   constructor(settings, session) {
@@ -44,9 +44,9 @@ class ChartSales {
       this.properties.dateRange = this.generic.dateRange;
       this.beveragesStats = new BeveragesStatsPair((dateRange) => session.points.getSalesChart(this.generic.salePointsId, dateRange), this.properties);
     };
-    updateValue();
     reaction(() => [this.generic.salePointsId, this.generic.dateRange], updateValue);
+    updateValue();
   }
 }
 
-export default ChartSales;
+export default ChartBeverages;

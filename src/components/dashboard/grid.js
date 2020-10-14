@@ -11,6 +11,7 @@ import generateLayout from './layoutGenerator';
 import DiagramPopularity from './diagramPopularity';
 import ChartBeveragesSales from './chartBeveragesSales';
 import ChartSales from './chartSales';
+import ChartBeverages from './chartBeverages';
 import DiagramTechState from './diagramTechState';
 
 import itemStyle from './item.module.scss';
@@ -23,6 +24,7 @@ const colSpan = (type) => {
     case 'speedometerBeverages':
     case 'diagramPopularity':
     case 'chartSales':
+    case 'chartBeverages':
       return 1;
     default: return 2;
   }
@@ -33,13 +35,11 @@ const rowSpan = (type) => {
     case 'overview':
     case 'speedometerBeverages':
     case 'chartSales':
-      return 76;
     case 'chartBeverages':
-      return 74;
+    case 'heatmapDeviceStatuses':
+      return 76;
     case 'chartBeveragesSales':
       return 96;
-    case 'heatmapDeviceStatuses':
-      return 80;
     case 'diagramTechState':
       return 71;
     case 'diagramPopularity':
@@ -85,6 +85,8 @@ const cardsSwitch = ({ widgetType }) => {
       return DiagramPopularity;
     case 'chartSales':
       return ChartSales;
+    case 'chartBeverages':
+      return ChartBeverages;
     default:
       return () => 'В разработке';
   }
