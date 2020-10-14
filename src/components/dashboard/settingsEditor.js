@@ -22,7 +22,6 @@ const isHaveDateFilter = (key) => {
 
 const isHavePointsFilter = (key) => {
   switch (key) {
-    case 'overview':
     case 'latestEvents':
     case 'latestBeverages':
     case 'deviceListDisabled':
@@ -53,7 +52,7 @@ const SettingsEditor = inject(({ grid, session }) => ({ grid, session }))(observ
 
   const title = grid.isEdditingNewItem
     ? 'Создание нового виджета'
-    : `Редактирование виджета ${grid.widgetsInfo[initialValues.widgetType].title}`;
+    : `Редактирование виджета ${grid.widgetsInfo[initialValues.widgetType]?.title || ''}`;
   const commit = () => {
     grid.updateSettings({
       widgetType,

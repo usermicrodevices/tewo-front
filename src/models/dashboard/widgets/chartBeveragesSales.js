@@ -3,7 +3,7 @@ import { observable, reaction } from 'mobx';
 import BeveragesStatsPair from 'models/beverages/statsPair';
 import { SALES_DATA_TYPES } from 'models/detailsProps';
 
-class Chart {
+class ChartBeveragesSales {
   generic;
 
   session;
@@ -20,7 +20,6 @@ class Chart {
     this.session = session;
 
     const updateValue = () => {
-      this.value = undefined;
       if (typeof this.generic.salePointsId === 'undefined') {
         return;
       }
@@ -32,4 +31,4 @@ class Chart {
   }
 }
 
-export default Chart;
+export default ChartBeveragesSales;

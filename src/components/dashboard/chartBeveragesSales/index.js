@@ -8,15 +8,19 @@ import Loader from 'elements/loader';
 import classnames from './index.module.scss';
 
 const Chart = inject('storage')(observer(({
-  storage: {
+  storage,
+}) => {
+  if (typeof storage.beveragesStats === 'undefined') {
+    return <div className={classnames.root}><Loader /></div>;
+  }
+  const {
     beveragesStats: {
       isSeriesLoaded,
       series,
       xSeria,
     },
     properties,
-  },
-}) => {
+  } = storage;
   if (!isSeriesLoaded) {
     return <Loader size="large" />;
   }
@@ -26,7 +30,7 @@ const Chart = inject('storage')(observer(({
       <ScalebleChart
         y={series}
         x={xSeria}
-        height={330}
+        height={290}
         y1={[{ text: 'Наливов в день', decimalsInFloat: 0 }, { text: 'Динамика продаж, ₽', decimalsInFloat: 2 }][series[0].axis]}
       />
     </div>

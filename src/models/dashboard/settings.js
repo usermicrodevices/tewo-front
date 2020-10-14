@@ -55,7 +55,7 @@ class Settings {
     if (dateFilter in SemanticRanges) {
       return SemanticRanges[dateFilter].title;
     }
-    return null;
+    return 'За всё время';
   }
 
   @computed get dateRange() {

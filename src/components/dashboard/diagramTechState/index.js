@@ -8,8 +8,13 @@ import classes from './index.module.scss';
 
 const Diagram = ({ value, amount, label }) => (
   <div className={classes.diagram}>
-    <Progress type="circle" percent={value / amount * 100} format={() => (amount ? `${value}/${amount}` : <Loader />)} />
-    <div>{label}</div>
+    <Progress
+      strokeColor="#FABC5F"
+      type="circle"
+      percent={value / amount * 100}
+      format={() => (amount ? `${value}/${amount}` : <Loader />)}
+    />
+    <div className={classes.label}>{label}</div>
   </div>
 );
 

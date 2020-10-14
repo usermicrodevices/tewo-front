@@ -1,4 +1,3 @@
-/* eslint no-param-reassign: off */
 import React, { useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import {
@@ -62,7 +61,7 @@ const Item = ({
             className={classes.datepicker}
             onVisibleChange={setMenuOpen}
             visible={isMenuOpen}
-            overlay={<DateSelector onClick={({ key }) => { setMenuOpen(false); item.storage.generic.dateRangeKey = key; }} />}
+            overlay={<DateSelector onClick={({ key }) => { setMenuOpen(false); grid.setDateRange(key, item.uid); }} />}
             placement="bottomRight"
           >
             <div>

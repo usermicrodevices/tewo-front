@@ -29,8 +29,10 @@ const Statistic = inject(({ session, storage }) => ({ session, storage }))(obser
           .sort(([_, b1], [__, b2]) => Math.sign(b2.beverages - b1.beverages))
           .slice(0, 6);
         const salePointsSet = new Set(items.map(([id]) => parseInt(id, 10)));
-        for (const { id, name } of session.points.getSubset(salePointsSet)) {
-          namesMap[id] = name;
+        if (session.points.isLoaded) {
+          for (const { id, name } of session.points.getSubset(salePointsSet)) {
+            namesMap[id] = name;
+          }
         }
         return (
           <>
