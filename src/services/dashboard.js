@@ -21,8 +21,8 @@ const TYPES = new Set(Object.keys({
   diagramPopularity: 'Диаграмма популярности напитков',
   diagramTechState: 'Статистика состояния оборудования',
   chartBeveragesSales: 'Динамика наливов и продаж',
-  chartBeverages: 'Простая динамика наливов',
-  chartSales: 'Простая динамика продаж',
+  chartBeverages: 'Динамика наливов',
+  chartSales: 'Динамика продаж',
   chartBeveragesChange: 'Отмена напитков',
   chartCost: 'Себестоимость',
 }));
