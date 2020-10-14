@@ -1,7 +1,8 @@
-export function mapDataItem({ name, value }, idx) {
+export function mapDataItem({ id, name, value }, idx) {
   return {
-    x: name,
+    x: id,
     y: value,
+    name,
   };
 }
 
@@ -43,6 +44,7 @@ export const getHeatmapOptions = ({
     enabled: false,
   },
   grid: {
+    show: false,
     padding: {
       right: 20,
     },
@@ -58,6 +60,15 @@ export const getHeatmapOptions = ({
   xaxis: {
     labels: {
       show: false,
+    },
+    axisBorder: {
+      show: false,
+    },
+    axisTicks: {
+      show: false,
+    },
+    tooltip: {
+      enabled: false,
     },
   },
   yaxis: {
