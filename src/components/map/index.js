@@ -1,12 +1,15 @@
 import React, {
   useEffect, useState, useCallback, useRef,
 } from 'react';
+import { withSize } from 'react-sizeme';
 import { inject, observer, Provider } from 'mobx-react';
 import { YMaps } from 'react-yandex-maps';
 import {
   Button, Dropdown,
 } from 'antd';
-import { FilterOutlined } from '@ant-design/icons';
+import {
+  FilterOutlined, PlusOutlined, MinusOutlined, FullscreenOutlined, FullscreenExitOutlined,
+} from '@ant-design/icons';
 
 import Filters from 'elements/filters';
 import Loader from 'elements/loader';
@@ -33,6 +36,18 @@ const useMapState = (points) => {
     }
   }, [points]);
 
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.fitToViewport();
+    }
+  }, [mapState.isFullscreen]);
+
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.fitToViewport();
+    }
+  }, [mapRef]);
+
   const onZoom = useCallback((zoom) => {
     setMapState((state) => ({ ...state, zoom }));
   }, []);
@@ -49,12 +64,6 @@ const useMapState = (points) => {
     setMapState((state) => ({ ...state, isFullscreen: !state.isFullscreen }));
   }, []);
 
-  useEffect(() => {
-    if (mapRef.current && mapState.isFullscreen) {
-      mapRef.current.fitToViewport();
-    }
-  }, [mapState.isFullscreen]);
-
   return {
     zoom: mapState.zoom,
     center: mapState.center,
@@ -68,7 +77,7 @@ const useMapState = (points) => {
   };
 };
 
-const YMapContainer = inject('storage', 'filter')(observer(({ storage, filter }) => {
+const YMapContainer = inject('storage', 'filter')(observer(({ storage, filter, size }) => {
   const { points } = storage;
   const {
     zoom, center, zoomIn, zoomOut, toggleFullscreen, isFullscreen, onZoom, mapRef,
@@ -79,21 +88,37 @@ const YMapContainer = inject('storage', 'filter')(observer(({ storage, filter })
   }
 
   const containerStyles = isFullscreen ? {
-    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-  } : {};
+    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, borderRadius: '8px', overflow: 'hidden',
+  } : { position: 'relative', width: '100%', height: '100%', flex: 1, borderRadius: '8px', overflow: 'hidden', };
+
+  const bottomActionsStyle = {
+    display: 'flex', flexDirection: 'column', position: 'absolute', right: '20px', bottom: '40px', zIndex: 1,
+  };
+
+  const topActionsStyle = {
+    display: 'flex', flexDirection: 'column', position: 'absolute', right: '20px', top: '20px', zIndex: 1,
+  };
+
+  const styleBigMargin = { marginBottom: '24px' };
+  const styleSmallMargin = { marginBottom: '8px' };
 
   return (
     <YMaps>
-      <div style={{ width: '100%', height: '100%', ...containerStyles }}>
-        <button type="button" onClick={zoomIn}>ZoomIn</button>
-        <button type="button" onClick={zoomOut}>ZoomOut</button>
-        <button type="button" onClick={toggleFullscreen}>FullScreen</button>
-        <Dropdown overlay={<Filters />} placement="bottomLeft">
-          <Button
-            type={filter.search !== '' ? 'primary' : 'default'}
-            icon={<FilterOutlined />}
-          />
-        </Dropdown>
+      <div style={containerStyles}>
+        <div style={bottomActionsStyle}>
+          <Button style={styleSmallMargin} onClick={zoomIn} icon={<PlusOutlined />} />
+          <Button style={styleBigMargin} onClick={zoomOut} icon={<MinusOutlined />} />
+          <Button onClick={toggleFullscreen} icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />} />
+        </div>
+
+        <div style={topActionsStyle}>
+          <Dropdown overlay={<Filters />} trigger={['click', 'hover']} placement="bottomRight">
+            <Button
+              type={filter.search !== '' ? 'primary' : 'default'}
+              icon={<FilterOutlined />}
+            />
+          </Dropdown>
+        </div>
         <YMap fRef={mapRef} zoom={zoom} center={center} points={points} onZoom={onZoom} />
       </div>
     </YMaps>
@@ -101,7 +126,7 @@ const YMapContainer = inject('storage', 'filter')(observer(({ storage, filter })
 }));
 
 const MapHeader = ({ title }) => (
-  <div style={{ fontWeight: 600, fontSize: 42, marginBottom: 24 }}>{title}</div>
+  <div style={{ fontWeight: 700, fontSize: 30, marginBottom: 24 }}>{title}</div>
 );
 
 @inject('session')
@@ -115,10 +140,12 @@ class MapWraped extends React.Component {
   render() {
     return (
       <Card>
-        <MapHeader title="Карта объектов" />
-        <Provider storage={this.mapStorage} filter={this.mapStorage.filters}>
-          <YMapContainer />
-        </Provider>
+        <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <MapHeader title="Карта объектов" />
+          <Provider storage={this.mapStorage} filter={this.mapStorage.filters}>
+            <YMapContainer />
+          </Provider>
+        </div>
       </Card>
     );
   }

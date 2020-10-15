@@ -7,7 +7,8 @@ import { Map as YandexMap, Placemark, Clusterer } from 'react-yandex-maps';
 // Presets: error – islands#redDotIcon, warning – islands#darkOrangeDotIcon, success – islands#darkGreenDotIcon
 
 const yMapStyle = {
-  borderRadius: '8px', height: '100%', width: '100%', overflow: 'hidden',
+  width: '100%',
+  height: '100%'
 };
 
 const yMapModules = ['geoObject.addon.balloon', 'geoObject.addon.hint'];
@@ -42,12 +43,12 @@ function YMapCluster({ points, options }) {
 }
 
 function YMap({
-  points, center, zoom, onZoom, fRef,
+  points, center, zoom, onZoom, fRef, height,
 }) {
   const mapRef = useRef(null);
 
   useImperativeHandle(fRef, () => ({
-    fitToViewport: () => mapRef.current.container.fitToViewport(),
+    fitToViewport: () => mapRef.current && mapRef.current.container.fitToViewport(),
   }));
 
   const initInstanceRef = useCallback((map) => {
@@ -66,6 +67,7 @@ function YMap({
     <YandexMap
       instanceRef={initInstanceRef}
       style={yMapStyle}
+      height={height}
       defaultState={{ modules: yMapModules }}
       state={{ center, zoom }}
     >
