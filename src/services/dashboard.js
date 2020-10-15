@@ -1,32 +1,6 @@
 import { get } from 'utils/request';
 import checkData from 'utils/dataCheck';
 
-const TYPES = new Set(Object.keys({
-  favoriteObjects: 'Избранные объекты',
-  speedometerBeverages: 'Спидометр наливов',
-  mapSalePoints: 'Карта объектов',
-  overview: 'Живая статистика',
-  deviceListPendingMaintenance: 'Список оборудования на ТО',
-  deviceListOverdudeTasks: 'Просроченные события по оборудованию',
-  deviceListDowntime: 'Объекты с простоем',
-  deviceListDisabled: 'Неиспользуемое оборудование',
-  deviceListAwaitingCleaning: 'Не вымытое оборудование',
-  latestEvents: 'Последние события',
-  latestBeverages: 'Последние наливы',
-  heatmapDeviceStatuses: 'Тепловая карта статусов устройств',
-  heatmapOverdudeTasks: 'Тепловая карта просроченных событий',
-  heatmapClearances: 'Тепловая карта очисток',
-  diagramSalePointsBeveragesRate: 'Рейтинг объектов по наливам',
-  diagramIngredientsUsage: 'Диаграмма расхода ингредиентов',
-  diagramPopularity: 'Диаграмма популярности напитков',
-  diagramTechState: 'Статистика состояния оборудования',
-  chartBeveragesSales: 'Динамика наливов и продаж',
-  chartBeverages: 'Динамика наливов',
-  chartSales: 'Динамика продаж',
-  chartBeveragesChange: 'Отмена напитков',
-  chartCost: 'Себестоимость',
-}));
-
 const DASHBOARD_WIDGETS_TYPE = (() => {
   const t = {};
   for (const i of [
@@ -58,15 +32,15 @@ const getDashboardWidgetsInfo = () => get('/refs/widget_references/').then((resu
   const types = {};
   for (const json of result) {
     checkData(json, mustBe);
-    if (!TYPES.has(json.uid)) {
-      console.error('unflown widget type', json);
+    if (!(json.uid in DASHBOARD_WIDGETS_TYPE)) {
+      console.warn('не реализован виджет', `${json.uid}: ${json.name}`);
     }
     types[json.uid] = {
       title: json.name,
       description: json.description,
     };
   }
-  for (const key of TYPES.keys()) {
+  for (const key of Object.keys(DASHBOARD_WIDGETS_TYPE)) {
     if (!(key in types)) {
       console.error(`виджет типа ${key} не описан в справочнике виджетов /refs/widget_references/`);
     }
@@ -74,4 +48,4 @@ const getDashboardWidgetsInfo = () => get('/refs/widget_references/').then((resu
   return types;
 });
 
-export default getDashboardWidgetsInfo;
+export { getDashboardWidgetsInfo as default, DASHBOARD_WIDGETS_TYPE };

@@ -5,15 +5,16 @@ import { inject, observer } from 'mobx-react';
 import Selector from 'elements/filters/select';
 import { SemanticRanges } from 'utils/date';
 import Icon from 'elements/icon';
+import { DASHBOARD_WIDGETS_TYPE as WIDGET_TYPES } from 'services/dashboard';
 
 import style from './settingsEditor.module.scss';
 
 const isHaveDateFilter = (key) => {
   switch (key) {
-    case 'overview':
-    case 'speedometerBeverages':
-    case 'heatmapDeviceStatuses':
-    case 'diagramTechState':
+    case WIDGET_TYPES.overview:
+    case WIDGET_TYPES.speedometerBeverages:
+    case WIDGET_TYPES.heatmapDeviceStatuses:
+    case WIDGET_TYPES.diagramTechState:
       return false;
     default:
       return true;
@@ -22,10 +23,10 @@ const isHaveDateFilter = (key) => {
 
 const isHavePointsFilter = (key) => {
   switch (key) {
-    case 'latestEvents':
-    case 'latestBeverages':
-    case 'deviceListDisabled':
-    case 'diagramSalePointsBeveragesRate':
+    case WIDGET_TYPES.latestEvents:
+    case WIDGET_TYPES.latestBeverages:
+    case WIDGET_TYPES.deviceListDisabled:
+    case WIDGET_TYPES.diagramSalePointsBeveragesRate:
       return false;
     default:
       return true;

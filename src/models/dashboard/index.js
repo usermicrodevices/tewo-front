@@ -5,7 +5,7 @@ import {
 } from 'mobx';
 import localStorage from 'mobx-localstorage';
 
-import getDashboardWidgetsInfo from 'services/dashboard';
+import getDashboardWidgetsInfo, { DASHBOARD_WIDGETS_TYPE as WIDGET_TYPES } from 'services/dashboard';
 
 import Speedometer from './widgets/speedometer';
 import Statistic from './widgets/statistic';
@@ -120,23 +120,23 @@ class Grid {
 
   initStorage(settings) {
     switch (settings.settings.get('widgetType')) {
-      case 'speedometerBeverages':
+      case WIDGET_TYPES.speedometerBeverages:
         return new Speedometer(settings, this.session);
-      case 'overview':
+      case WIDGET_TYPES.overview:
         return new Statistic(settings, this.session);
-      case 'chartBeverages':
+      case WIDGET_TYPES.chartBeverages:
         return new ChartBeverages(settings, this.session);
-      case 'heatmapDeviceStatuses':
+      case WIDGET_TYPES.heatmapDeviceStatuses:
         return new HeatmapDeviceStatuses(settings, this.session);
-      case 'chartBeveragesSales':
+      case WIDGET_TYPES.chartBeveragesSales:
         return new ChartBeveragesSales(settings, this.session);
-      case 'chartSales':
+      case WIDGET_TYPES.chartSales:
         return new ChartSales(settings, this.session);
-      case 'diagramTechState':
+      case WIDGET_TYPES.diagramTechState:
         return new DiagramTechState(settings, this.session);
-      case 'diagramPopularity':
+      case WIDGET_TYPES.diagramPopularity:
         return new DiagramPopularity(settings, this.session);
-      case 'diagramSalePointsBeveragesRate':
+      case WIDGET_TYPES.diagramSalePointsBeveragesRate:
         return new DiagramSalePointsBeveragesRate(settings, this.session);
       default:
         console.error(`unknown dashboard storage type ${settings.settings.get('widgetType')}`);
