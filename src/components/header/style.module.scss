@@ -9,6 +9,7 @@
     .title {
         min-height: $header-height;
         flex-grow: 1;
+        max-width: 200px;
         background-image: url('./logo-dark-blue.svg');
         background-size: 100% ($header-height - 10);
         background-repeat: no-repeat;
