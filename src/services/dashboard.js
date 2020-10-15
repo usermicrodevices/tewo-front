@@ -27,6 +27,24 @@ const TYPES = new Set(Object.keys({
   chartCost: 'Себестоимость',
 }));
 
+const DASHBOARD_WIDGETS_TYPE = (() => {
+  const t = {};
+  for (const i of [
+    'speedometerBeverages',
+    'overview',
+    'chartBeveragesSales',
+    'heatmapDeviceStatuses',
+    'diagramTechState',
+    'diagramPopularity',
+    'diagramSalePointsBeveragesRate',
+    'chartSales',
+    'chartBeverages',
+  ]) {
+    t[i] = i;
+  }
+  return t;
+})();
+
 const getDashboardWidgetsInfo = () => get('/refs/widget_references/').then((result) => {
   if (!Array.isArray(result)) {
     console.error('unexpected respounce from /refs/widget_references/', result);

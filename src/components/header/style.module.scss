@@ -7,10 +7,12 @@
     background-color: white;
 
     .title {
-        line-height: $header-height;
-        margin: 0px;
-        font-size: 20px;
-        font-weight: 600;
+        min-height: $header-height;
+        flex-grow: 1;
+        background-image: url('./logo-dark-blue.svg');
+        background-size: 100% ($header-height - 10);
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
     }
 
     .menuButton {
