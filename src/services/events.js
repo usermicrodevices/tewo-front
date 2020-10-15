@@ -146,12 +146,12 @@ const getEventsClearancesChart = (deviceId, daterange) => get(
     : [moment(result[0].day), moment(result[result.length - 1].day)];
   return [...alineDates(
     finalDateRange,
-    false,
-    result,
+    86400,
+    result.map(({ day, ...other }) => ({ moment: day, ...other })),
     (item) => (
       item ? {
-        actual: item.actual,
-        expected: item.expected,
+        fact: item.actual,
+        expect: item.expected,
         beverages: item.beverages,
       } : {
         fact: 0,

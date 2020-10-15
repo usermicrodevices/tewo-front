@@ -2,85 +2,128 @@ import { Provider, inject, observer } from 'mobx-react';
 import React from 'react';
 import GridLayout from 'react-grid-layout';
 import { withSize } from 'react-sizeme';
-import { Modal } from 'antd';
-import plural from 'utils/plural';
 
 import Item from './item';
 import Spidometr from './spidometr';
 import Statistic from './statistic';
+import HeatmapDeviceStatuses from './heatmapDeviceStatuses';
+import generateLayout from './layoutGenerator';
+import DiagramPopularity from './diagramPopularity';
+import DiagramSalePointsBeveragesRate from './diagramSalePointsBeveragesRate';
+import ChartBeveragesSales from './chartBeveragesSales';
+import ChartSales from './chartSales';
+import ChartBeverages from './chartBeverages';
+import DiagramTechState from './diagramTechState';
 
 import itemStyle from './item.module.scss';
 
 const COLUMNS_MIN_WIDTH = 280;
 
-const SalePointsAnnounce = inject('session')(observer(({ settings: { salePoints } }) => {
-  if (!Array.isArray(salePoints) || salePoints.length === 0) {
-    return null;
+const colSpan = (type) => {
+  switch (type) {
+    case 'overview': case 'chartBeveragesSales': return 3;
+    case 'speedometerBeverages':
+    case 'diagramPopularity':
+    case 'chartSales':
+    case 'chartBeverages':
+      return 1;
+    default: return 2;
   }
-  const { name } = salePoints[0];
-  if (salePoints.length === 1) {
-    return name;
+};
+
+const rowSpan = (type) => {
+  switch (type) {
+    case 'overview':
+    case 'speedometerBeverages':
+    case 'chartSales':
+    case 'chartBeverages':
+    case 'heatmapDeviceStatuses':
+      return 76;
+    case 'chartBeveragesSales':
+      return 96;
+    case 'diagramTechState':
+      return 71;
+    case 'diagramPopularity':
+      return 118;
+    case 'diagramSalePointsBeveragesRate':
+      return 124;
+    default:
+      console.error('row span not defined for', type);
+      return 100;
   }
-  const more = salePoints.length - 1;
-  return `${name} и ещё ${more} ${plural(more, ['объект', 'объектов', 'объекта'])}`;
-}));
+};
+
+const dressLayout = (layout, widgets, columnsAmount) => {
+  const result = [];
+  for (const { uid, widgetType } of widgets) {
+    result.push({
+      i: uid,
+      w: colSpan(widgetType),
+      h: rowSpan(widgetType),
+    });
+  }
+  const finalLayout = Array.isArray(layout) && layout.length >= widgets.length
+    ? layout
+    : generateLayout(layout, result, columnsAmount);
+  for (let i = 0; i < result.length; i += 1) {
+    result[i].x = finalLayout[i].x;
+    result[i].y = finalLayout[i].y;
+  }
+  return result;
+};
 
 const cardsSwitch = ({ widgetType }) => {
   switch (widgetType) {
-    case 'speedometer':
-      return {
-        subtitle: SalePointsAnnounce,
-        widget: Spidometr,
-      };
+    case 'speedometerBeverages':
+      return Spidometr;
     case 'overview':
-      return {
-        subtitle: SalePointsAnnounce,
-        widget: Statistic,
-      };
+      return Statistic;
+    case 'chartBeveragesSales':
+      return ChartBeveragesSales;
+    case 'heatmapDeviceStatuses':
+      return HeatmapDeviceStatuses;
+    case 'diagramTechState':
+      return DiagramTechState;
+    case 'diagramPopularity':
+      return DiagramPopularity;
+    case 'diagramSalePointsBeveragesRate':
+      return DiagramSalePointsBeveragesRate;
+    case 'chartSales':
+      return ChartSales;
+    case 'chartBeverages':
+      return ChartBeverages;
     default:
-      return {
-        subtitle: () => null,
-        widget: () => 'В разработке',
-      };
+      return () => 'В разработке';
   }
 };
 
 const Dashboard = ({ size, grid }) => {
   const colsAmount = Math.floor(size.width / COLUMNS_MIN_WIDTH);
+  const { widgets } = grid;
+  const layout = dressLayout(grid.getLayout(colsAmount), widgets, colsAmount);
   return (
-    <>
-      <Modal
-        title={grid.editingItem !== null && grid.editingItem.title}
-        visible={grid.editingItem !== null}
-        onOk={() => { grid.updateSettings(null); }}
-        onCancel={() => { grid.cancelEditSettings(); }}
-      >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Modal>
-      <GridLayout
-        width={size.width}
-        layout={grid.getLayout(colsAmount)}
-        cols={colsAmount}
-        margin={[24, 24]}
-        draggableHandle={`.${itemStyle.anchor}`}
-        onLayoutChange={(layout) => { grid.setLayout(colsAmount, layout); }}
-      >
-        {
-          grid.items.map((item) => {
-            const { widget: Widget, subtitle: Subtitle } = cardsSwitch(item);
-            return (
-              <Item key={item.key} item={item} subtitle={<Subtitle settings={item.settings} />}>
-                <Provider storage={item.storage}>
-                  <Widget />
-                </Provider>
-              </Item>
-            );
-          })
-        }
-      </GridLayout>
-    </>
+    <GridLayout
+      width={size.width}
+      layout={layout}
+      cols={colsAmount}
+      margin={[0, 0]}
+      draggableHandle={`.${itemStyle.anchor}`}
+      onLayoutChange={(newLayout) => { grid.setLayout(colsAmount, newLayout); }}
+      rowHeight={5}
+    >
+      {
+        widgets.map((item) => {
+          const Widget = cardsSwitch(item);
+          return (
+            <Item key={item.uid} item={item}>
+              <Provider storage={item.storage}>
+                <Widget />
+              </Provider>
+            </Item>
+          );
+        })
+      }
+    </GridLayout>
   );
 };
 

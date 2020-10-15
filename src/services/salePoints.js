@@ -84,9 +84,8 @@ const applySalePoint = (item, changes) => {
   request.then((response) => converter(response, {}));
 };
 
-const getSalesTop = (pointId, daterange) => {
-  const rangeArg = daterangeToArgs(daterange, 'device_date');
-  const location = `/data/beverages/stats_drinks/?device__sale_point__id=${pointId}${rangeArg}`;
+const getSalesTop = (filter) => {
+  const location = `/data/beverages/stats_drinks/?${filter}`;
   const mustBe = {
     drink_id: 'number',
     total: 'number',
@@ -111,7 +110,19 @@ const getSalesTop = (pointId, daterange) => {
     });
 };
 
-const getSalesChart = (pointId, daterange) => getBeveragesStats(pointId, daterange, 'device__sale_point__id');
+const getSalesChart = (pointId, daterange) => {
+  let filter = '';
+  if (typeof pointId === 'number') {
+    filter = `device__sale_point__id=${pointId}`;
+  }
+  if (Array.isArray(pointId) && pointId.length === 1) {
+    filter = `device__sale_point__id=${pointId[0]}`;
+  }
+  if (Array.isArray(pointId) && pointId.length > 1) {
+    filter = `device__sale_point__id__in=${pointId.join(',')}`;
+  }
+  return getBeveragesStats(daterange, filter, 86400);
+};
 
 const getOutdatedTasks = (pointId) => {
   const lastDay = [moment().subtract(1, 'day'), moment()];
@@ -119,10 +130,10 @@ const getOutdatedTasks = (pointId) => {
 };
 
 const getSalePointLastDaysBeverages = (pointId) => (
-  getBeveragesStats(pointId, SemanticRanges.prw7Days.resolver(), 'device__sale_point__id', true));
+  getBeveragesStats(SemanticRanges.prw7Days.resolver(), `device__sale_point__id=${pointId}`, 3600));
 
 const getBeveragesSpeed = (pointsId) => (
-  getBeveragesStats(pointsId.join(','), SmallSemanticRanges.prwHour.resolver(), 'device__sale_point__id__in').then(({ data }) => {
+  getBeveragesStats(SmallSemanticRanges.prwHour.resolver(), pointsId.length > 0 && `device__sale_point__id__in=${pointsId.join(',')}`, 60).then(({ data }) => {
     let sum = 0;
     for (const { beverages } of data) {
       sum += beverages;
@@ -132,5 +143,11 @@ const getBeveragesSpeed = (pointsId) => (
 );
 
 export {
-  applySalePoint, getSalePoints, getSalesTop, getSalesChart, getOutdatedTasks, getSalePointLastDaysBeverages, getBeveragesSpeed,
+  applySalePoint,
+  getSalePoints,
+  getSalesTop,
+  getSalesChart,
+  getOutdatedTasks,
+  getSalePointLastDaysBeverages,
+  getBeveragesSpeed,
 };

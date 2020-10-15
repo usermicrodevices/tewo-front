@@ -78,6 +78,13 @@ class Companies extends Table {
     return 'Companies';
   }
 
+  getSubset(idsSubset) {
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    return this.rawData.filter(({ id }) => idsSubset.has(id));
+  }
+
   get(companyId) {
     return this.rawData.find(({ id }) => companyId === id);
   }

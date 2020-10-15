@@ -57,14 +57,14 @@ class Details {
           actualSum: 0,
         };
         for (const {
-          expected, beverages, actual, day,
+          expect, beverages, fact, moment: rangeMoment,
         } of result) {
-          series.x.push(day);
-          series.expected.push(expected);
+          series.x.push(rangeMoment);
+          series.expected.push(expect);
           series.beverages.push(beverages);
-          series.actual.push(actual);
-          series.expectedSum += expected;
-          series.actualSum += actual;
+          series.actual.push(fact);
+          series.expectedSum += expect;
+          series.actualSum += fact;
         }
         this.clearancesChart = series;
       });

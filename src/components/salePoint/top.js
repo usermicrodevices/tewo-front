@@ -2,24 +2,14 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Card } from 'antd';
 import { withSize } from 'react-sizeme';
-import Chart from 'react-apexcharts';
 
 import plural from 'utils/plural';
 import Loader from 'elements/loader';
 import Format from 'elements/format';
 import NoData from 'elements/noData';
+import { Pie, PIE_COLORS } from 'elements/chart/pie';
 
 import style from './top.module.scss';
-
-const COLORS = [
-  '#94FBD0',
-  '#3791F3',
-  '#F4B144',
-  '#CCCCCC',
-  '#EBCFC0',
-  '#B5EE93',
-  '#B5CFD0',
-];
 
 const FOUR_MAGIC_NUMBERS = [450, 3, 200, 1.5];
 
@@ -56,22 +46,13 @@ const Top = ({ size: { width }, element: { details: { salesTop } } }) => {
     series.push(salesTop.slice(MAX_DRINKS_AMOUNT).map(({ beverages }) => beverages).reduce((a, b) => a + b), 0);
     labels.push(`Остальные (${salesTop.length - MAX_DRINKS_AMOUNT})`);
   }
-  const options = {
-    labels,
-    colors: COLORS,
-    legend: {
-      show: false,
-    },
-  };
   return (
     <Wrap>
       <div className={style.chart}>
-        <Chart
-          type="pie"
+        <Pie
           series={series}
           width={200}
           labels={labels}
-          options={options}
         />
       </div>
       <div className={style.list}>
@@ -79,7 +60,7 @@ const Top = ({ size: { width }, element: { details: { salesTop } } }) => {
           salesTop.slice(0, MAX_DRINKS_AMOUNT).map(({ drinkName, beverages, drinkId }, index) => (
             <div className={style.item} key={drinkId}>
               <div className={style.label}>
-                <div className={style.mark} style={{ backgroundColor: COLORS[index] }} />
+                <div className={style.mark} style={{ backgroundColor: PIE_COLORS[index] }} />
                 <div className={style.text}><Format width={labelAllowedWidth}>{drinkName}</Format></div>
                 <div className={style.phonetext}><Format width={100}>{drinkName}</Format></div>
               </div>

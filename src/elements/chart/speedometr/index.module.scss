@@ -1,0 +1,33 @@
+.root {
+    position: relative;
+    width: 100%;
+}
+
+.background {
+    width: 100%;
+    position: relative;
+
+    .image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+}
+
+.arrow {
+    width: 12%;
+    position: absolute;
+    left: 50%;
+    margin-left: -6%;
+    bottom: -8%;
+
+    .image {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        transform-origin: 48% 80%;
+        transition: transform 0.4s ease-in;
+    }
+}

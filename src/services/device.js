@@ -89,10 +89,15 @@ function getDeviceModels(map) {
           mileage: 'number',
           detergent: 'number',
           threshold_drinks_cleaning: 'number',
-        })) {
+        }, { device_type: 'number' })) {
           console.error('Неожиданные данные для моделей устройств /refs/device_models', datum);
         }
-        map.set(datum.id, { name: datum.name, mileage: datum.mileage, detergent: datum.detergent });
+        map.set(datum.id, {
+          name: datum.name,
+          mileage: datum.mileage,
+          detergent: datum.detergent,
+          deviceTypeId: datum.dedevice_type,
+        });
       }
     }
     return map;
@@ -150,7 +155,7 @@ const getStats = (id) => get(`${LOCATION}${id}/stats/`).then((json) => {
   return result;
 });
 
-const getSalesChart = (deviceId, daterange) => getBeveragesStats(deviceId, daterange, 'device__id');
+const getSalesChart = (deviceId, daterange) => getBeveragesStats(daterange, `device__id=${deviceId}`, 86400);
 
 const applyDevice = (id, changes) => {
   const data = {};

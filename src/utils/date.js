@@ -44,23 +44,21 @@ const humanizeSeconds = (wholeSeconds) => {
   return result;
 };
 
-const intoComparationNumber = (m) => m.hour() + m.dayOfYear() * 1e2 + m.year() * 1e5;
+const intoComparationNumber = (m, step) => Math.floor(m / 1000 / step);
 
-function* alineDates([firstDay, lastDay], isHoursMode, data, transform) {
-  const timeKey = isHoursMode ? 'hour' : 'day';
+function* alineDates([firstDay, lastDay], step, data, transform) {
   const dataMap = new Map(data.map((datum) => {
-    const m = moment(datum[timeKey]);
-    return [intoComparationNumber(m), datum];
+    const m = moment(datum.moment);
+    return [intoComparationNumber(+m, step), datum];
   }));
   const curDay = firstDay.clone();
-  const timePart = isHoursMode ? 'hours' : 'days';
-  while (curDay <= lastDay) {
-    const item = dataMap.get(intoComparationNumber(curDay));
+  while (curDay + step <= lastDay) {
+    const item = dataMap.get(intoComparationNumber(+curDay, step));
     yield {
-      [timeKey]: curDay.clone(),
+      moment: curDay.clone(),
       ...transform(item),
     };
-    curDay.add(1, timePart);
+    curDay.add(step, 'seconds');
   }
 }
 
@@ -74,7 +72,7 @@ const halfAYearStart = () => moment().startOf('year').add(Math.floor(moment().mo
 const SemanticRanges = {
   today: {
     title: 'Сегодня',
-    resolve: () => [moment().startOf('day'), moment().endOf('day')],
+    resolver: () => [moment().startOf('day'), moment().endOf('day')],
   },
   yesterday: {
     title: 'Вчера',
@@ -94,7 +92,7 @@ const SemanticRanges = {
   },
   prw30Days: {
     title: 'Прошедшие 30 дней',
-    resolver: () => [moment().subtract(30, 'day').startOf('day'), moment()],
+    resolver: () => [moment().subtract(30, 'day').startOf('day'), moment().endOf('day')],
   },
   curMonth: {
     title: capitalize(moment().format('MMMM')),
@@ -126,7 +124,7 @@ const SemanticRanges = {
   },
   prw12Month: {
     title: 'Прошедшие двенадцать месяцев',
-    resolver: () => [moment().subtract(12, 'month'), moment()],
+    resolver: () => [moment().subtract(11, 'month').startOf('month'), moment().endOf('month')],
   },
   curYear: {
     title: `${moment().format('YYYY')} год`,

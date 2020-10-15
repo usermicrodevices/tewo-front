@@ -1,0 +1,25 @@
+.title {
+  color: #8C8C8C;
+}
+
+.type {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+
+.root {
+  min-width: 717px;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 16px;
+  row-gap: 16px;
+  align-items: start;
+
+  :first-child, :last-child {
+    grid-column-start: span 3;
+  }
+}

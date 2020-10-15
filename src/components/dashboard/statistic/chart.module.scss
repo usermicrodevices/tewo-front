@@ -1,0 +1,40 @@
+.chart {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  .column {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    overflow: visible;
+    flex-grow: 1;
+    overflow: visible;
+    .value {
+      background-color: #E3E6EA;
+      border-radius: 8px;
+      cursor: default;
+      user-select: none;
+      min-height: 8px;
+      min-width: 8px;
+    }
+    .tooltip {
+      opacity: 0;
+      transition: opacity linear 0.2s;
+      color: #0180E1;
+      position: absolute;
+      text-align: center;
+      margin-top: 25px;
+      margin-bottom: -25px;
+    }
+    &:hover {
+      .value {
+        background-color: #0180E1;
+      }
+      .tooltip {
+        opacity: 1;
+      }
+    }
+  }
+}
