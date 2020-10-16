@@ -79,23 +79,23 @@ const dressLayout = (layout, widgets, columnsAmount) => {
 
 const cardsSwitch = ({ widgetType }) => {
   switch (widgetType) {
-    case 'speedometerBeverages':
+    case WIDGET_TYPES.speedometerBeverages:
       return Spidometr;
-    case 'overview':
+    case WIDGET_TYPES.overview:
       return Statistic;
-    case 'chartBeveragesSales':
+    case WIDGET_TYPES.chartBeveragesSales:
       return ChartBeveragesSales;
-    case 'heatmapDeviceStatuses':
+    case WIDGET_TYPES.heatmapDeviceStatuses:
       return HeatmapDeviceStatuses;
-    case 'diagramTechState':
+    case WIDGET_TYPES.diagramTechState:
       return DiagramTechState;
-    case 'diagramPopularity':
+    case WIDGET_TYPES.diagramPopularity:
       return DiagramPopularity;
-    case 'diagramSalePointsBeveragesRate':
+    case WIDGET_TYPES.diagramSalePointsBeveragesRate:
       return DiagramSalePointsBeveragesRate;
-    case 'chartSales':
+    case WIDGET_TYPES.chartSales:
       return ChartSales;
-    case 'chartBeverages':
+    case WIDGET_TYPES.chartBeverages:
       return ChartBeverages;
     default:
       return () => 'В разработке';
