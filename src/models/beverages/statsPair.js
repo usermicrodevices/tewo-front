@@ -99,7 +99,7 @@ class BeveragesStatsPair {
     if (!this.isSeriesLoaded) {
       return null;
     }
-    return this.cur.data.map(({ moment }) => moment);
+    return this.cur.xSeria;
   }
 }
 

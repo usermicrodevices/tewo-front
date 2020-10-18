@@ -13,6 +13,7 @@ const DASHBOARD_WIDGETS_TYPE = (() => {
     'diagramSalePointsBeveragesRate',
     'chartSales',
     'chartBeverages',
+    'chartBeveragesChange',
   ]) {
     t[i] = i;
   }

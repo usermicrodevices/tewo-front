@@ -6,14 +6,13 @@ import classNames from 'classnames';
 import { HumanizedPhone } from 'elements/phone';
 import Version from 'elements/version';
 
-import { appName } from 'config';
 import style from './style.module.scss';
 
 const UnauthorizedPage = ({ auth, children }) => {
   const isShouldIHideContacts = useLocation().pathname === '/signup';
   return (
     <div className={style.login}>
-      <h1>{appName}</h1>
+      <div className={style.logo} />
       <div className={style.content}>{children}</div>
       <p className={classNames(style.contacts, { [style.hide]: isShouldIHideContacts })}>
         {auth.contacts.email}

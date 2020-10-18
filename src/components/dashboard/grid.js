@@ -9,6 +9,7 @@ import Item from './item';
 import Spidometr from './spidometr';
 import Statistic from './statistic';
 import HeatmapDeviceStatuses from './heatmapDeviceStatuses';
+import ChartBeveragesChange from './chartBeveragesChange';
 import generateLayout from './layoutGenerator';
 import DiagramPopularity from './diagramPopularity';
 import DiagramSalePointsBeveragesRate from './diagramSalePointsBeveragesRate';
@@ -43,6 +44,7 @@ const rowSpan = (type) => {
     case WIDGET_TYPES.chartSales:
     case WIDGET_TYPES.chartBeverages:
     case WIDGET_TYPES.heatmapDeviceStatuses:
+    case WIDGET_TYPES.chartBeveragesChange:
       return 76;
     case WIDGET_TYPES.chartBeveragesSales:
       return 96;
@@ -97,6 +99,8 @@ const cardsSwitch = ({ widgetType }) => {
       return ChartSales;
     case WIDGET_TYPES.chartBeverages:
       return ChartBeverages;
+    case WIDGET_TYPES.chartBeveragesChange:
+      return ChartBeveragesChange;
     default:
       return () => 'В разработке';
   }

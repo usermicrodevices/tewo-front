@@ -30,6 +30,10 @@ class BeveragesStats {
     }
     return sum;
   }
+
+  @computed get xSeria() {
+    return this.data.map(({ moment }) => moment);
+  }
 }
 
 export default BeveragesStats;
