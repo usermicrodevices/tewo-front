@@ -1,12 +1,8 @@
 import React, {
   useEffect, useState, useCallback, useRef,
 } from 'react';
-import { withSize } from 'react-sizeme';
 import { inject, observer, Provider } from 'mobx-react';
-import { YMaps } from 'react-yandex-maps';
-import {
-  Button, Dropdown,
-} from 'antd';
+import { Button, Dropdown } from 'antd';
 import {
   FilterOutlined, PlusOutlined, MinusOutlined, FullscreenOutlined, FullscreenExitOutlined,
 } from '@ant-design/icons';
@@ -20,6 +16,10 @@ import MapStorage from 'models/map';
 import { getMapBoundaryOptions } from './utils';
 
 import YMap from './yMap';
+import ActionsContainer from './actions';
+import MapContainer from './mapContainer';
+import MapHeader from './mapHeader';
+import SalePointInfoModal from './salePointInfoModal';
 
 const MIN_ZOOM = 0;
 const MAX_ZOOM = 25;
@@ -80,54 +80,59 @@ const useMapState = (points) => {
 const YMapContainer = inject('storage', 'filter')(observer(({ storage, filter, size }) => {
   const { points } = storage;
   const {
-    zoom, center, zoomIn, zoomOut, toggleFullscreen, isFullscreen, onZoom, mapRef,
+    zoom, center, zoomIn, zoomOut, isFullscreen, onZoom, mapRef,
   } = useMapState(points);
+
+  const onShowInfo = useCallback(({ id }) => {
+    storage.showPointInfo(id);
+  }, []);
+
+  const onHideInfo = useCallback(() => {
+    storage.hidePointInfo();
+  }, []);
 
   if (!storage.isLoaded) {
     return <Loader />;
   }
 
-  const containerStyles = isFullscreen ? {
-    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, borderRadius: '8px', overflow: 'hidden',
-  } : { position: 'relative', width: '100%', height: '100%', flex: 1, borderRadius: '8px', overflow: 'hidden', };
-
-  const bottomActionsStyle = {
-    display: 'flex', flexDirection: 'column', position: 'absolute', right: '20px', bottom: '40px', zIndex: 1,
-  };
-
-  const topActionsStyle = {
-    display: 'flex', flexDirection: 'column', position: 'absolute', right: '20px', top: '20px', zIndex: 1,
-  };
-
-  const styleBigMargin = { marginBottom: '24px' };
-  const styleSmallMargin = { marginBottom: '8px' };
-
   return (
-    <YMaps>
-      <div style={containerStyles}>
-        <div style={bottomActionsStyle}>
-          <Button style={styleSmallMargin} onClick={zoomIn} icon={<PlusOutlined />} />
-          <Button style={styleBigMargin} onClick={zoomOut} icon={<MinusOutlined />} />
-          <Button onClick={toggleFullscreen} icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />} />
-        </div>
+    <MapContainer isFullscreen={isFullscreen}>
+      <ActionsContainer position="bottomRight">
+        <ActionsContainer.Group>
+          <Button onClick={zoomIn} icon={<PlusOutlined />} />
+          <Button onClick={zoomOut} icon={<MinusOutlined />} />
+        </ActionsContainer.Group>
+        <ActionsContainer.Group>
+          <Button icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />} />
+        </ActionsContainer.Group>
+      </ActionsContainer>
 
-        <div style={topActionsStyle}>
-          <Dropdown overlay={<Filters />} trigger={['click', 'hover']} placement="bottomRight">
-            <Button
-              type={filter.search !== '' ? 'primary' : 'default'}
-              icon={<FilterOutlined />}
-            />
-          </Dropdown>
-        </div>
-        <YMap fRef={mapRef} zoom={zoom} center={center} points={points} onZoom={onZoom} />
-      </div>
-    </YMaps>
+      <ActionsContainer position="topRight">
+        <Dropdown overlay={<Filters />} trigger={['click', 'hover']} placement="bottomRight">
+          <Button
+            type={filter.search !== '' ? 'primary' : 'default'}
+            icon={<FilterOutlined />}
+          />
+        </Dropdown>
+      </ActionsContainer>
+
+      <YMap
+        fRef={mapRef}
+        zoom={zoom}
+        center={center}
+        points={points}
+        onZoom={onZoom}
+        onInfoShow={onShowInfo}
+      />
+
+      <SalePointInfoModal
+        salePoint={storage.selectedPoint}
+        visible={storage.isInfoModalShown}
+        onCancel={onHideInfo}
+      />
+    </MapContainer>
   );
 }));
-
-const MapHeader = ({ title }) => (
-  <div style={{ fontWeight: 700, fontSize: 30, marginBottom: 24 }}>{title}</div>
-);
 
 @inject('session')
 class MapWraped extends React.Component {

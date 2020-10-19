@@ -1,4 +1,4 @@
-import { computed } from 'mobx';
+import { computed, observable, action } from 'mobx';
 
 import Filters from './filters';
 
@@ -47,14 +47,47 @@ const declareFilters = (session) => ({
   },
 });
 
+const getStateForSalepoint = (salePoint) => {
+  if (salePoint.isClosed) {
+    return 4;
+  }
+
+  if (salePoint.isHaveDisabledEquipment) {
+    return 3;
+  }
+
+  if (salePoint.isNeedTechService || salePoint.isHasOverlocPPM || salePoint.isHaveOverdueTasks) {
+    return 2;
+  }
+
+  return 1;
+};
+
 class Map {
   session;
 
   filters;
 
+  @observable selectedPoint = null;
+
+  @observable isInfoModalShown = false;
+
   constructor(session) {
     this.session = session;
     this.filters = new Filters(declareFilters(session));
+  }
+
+  @action showPointInfo(id) {
+    this.selectedPoint = this.session.points.get(id);
+    this.isInfoModalShown = true;
+  }
+
+  @action hidePointInfo(id) {
+    this.isInfoModalShown = false;
+  }
+
+  @computed({ keepAlive: true }) get selectedPointDevices() {
+    return this.selectedPoint ? this.selectedPoint.devices : [];
   }
 
   @computed({ keepAlive: true }) get isLoaded() {
@@ -63,7 +96,16 @@ class Map {
 
   @computed({ keepAlive: true }) get points() {
     const { points } = this.session;
-    const locations = points.rawData.filter(this.filters.predicate).filter(({ mapPoint }) => mapPoint !== null).map(({ location, id }) => ({ location, id }));
+    const locations = points.rawData
+      .filter(this.filters.predicate)
+      .filter(({ mapPoint }) => mapPoint !== null)
+      .map((salePoint) => ({
+        id: salePoint.id,
+        name: salePoint.name,
+        values: salePoint.values,
+        location: salePoint.location,
+        state: getStateForSalepoint(salePoint),
+      }));
 
     return locations;
   }
