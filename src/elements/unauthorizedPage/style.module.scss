@@ -1,32 +1,37 @@
 @import 'src/themes/constants';
 
 .login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh;
+
+  >p.contacts {
+    flex-grow: 1000;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    height: 100vh;
+    text-align: center;
+  }
 
-    >p.contacts {
-        flex-grow: 1000;
-        display: flex;
-        align-items: center;
-        text-align: center;
-    }
+  .hide {
+    opacity: 0;
+  }
 
-    >h1 {
-        margin-top: calc(25vh / 2 - 24px);
-        margin-bottom: calc(25vh / 2 - 25px);
-    }
+  .content {
+    padding: $generic-margin;
+    width: 330px;
+    background-color: white;
+    border-radius: 8px;
+  }
 
-    .hide {
-        opacity: 0;
-    }
-
-    .content {
-        padding: $generic-margin;
-        width: 330px;
-        background-color: white;
-        border-radius: 8px;
-    }
+  .logo {
+    margin-top: calc(25vh / 2 - 75px);
+    margin-bottom: calc(25vh / 2 - 75px);
+    height: 150px;
+    width: 100%;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-image: url('../../components/header/logo-dark-blue.svg');
+  }
 }

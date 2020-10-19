@@ -84,7 +84,7 @@ const getBeveragesStats = (daterange, filters, step) => {
   return get(location).then((result) => {
     if (!Array.isArray(result)) {
       console.error(`can not get data from ${location}`, result);
-      return [];
+      return new BeveragesStats([]);
     }
     for (const d of result) {
       if (!checkData(d, mustBe)) {
@@ -93,7 +93,7 @@ const getBeveragesStats = (daterange, filters, step) => {
     }
     const isRangeGiven = isDateRange(daterange);
     if (!isRangeGiven && result.length === 0) {
-      return [];
+      return new BeveragesStats([]);
     }
     const finalDateRange = isRangeGiven
       ? daterange

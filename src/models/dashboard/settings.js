@@ -76,6 +76,20 @@ class Settings {
     return this.session.devices.getPointsSetDevices(new Set(this.salePointsId));
   }
 
+  getPointsFilter(field) {
+    const { salePointsId } = this;
+    if (typeof salePointsId === 'undefined') {
+      return undefined;
+    }
+    if (Array.isArray(salePointsId)) {
+      if (salePointsId.length === 1) {
+        return `${field}=${salePointsId[0]}`;
+      }
+      return `${field}__in=${salePointsId}`;
+    }
+    return '';
+  }
+
   constructor(settings, session) {
     this.settings = settings;
     this.session = session;

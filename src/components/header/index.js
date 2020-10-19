@@ -6,7 +6,6 @@ import {
 } from 'antd';
 import Icon from 'elements/icon';
 
-import { appName } from 'config';
 import {
   account,
   notifications,
@@ -58,7 +57,7 @@ class Header extends React.Component {
     return (
       <div className={style.head}>
         <Icon className={style.menuButton} reflex={!menu.isOpen} name="menu-arrow-outline" color="primary" onClick={this.onMenuToggle} />
-        <Link className={style.title} to={defaultAuthorizedRout.path}>{appName}</Link>
+        <Link className={style.title} to={defaultAuthorizedRout.path} />
         <Dropdown overlay={this.menu} placement="bottomRight">
           <div className={style.settings}>
             <Icon className={style.gear} color="text" name="settings-outline" />
