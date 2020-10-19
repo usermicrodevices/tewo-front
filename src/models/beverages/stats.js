@@ -15,6 +15,10 @@ class BeveragesStats {
     return this.data.map(({ sales }) => sales);
   }
 
+  @computed get length() {
+    return this.data.length;
+  }
+
   @computed get sales() {
     let sum = 0;
     for (const { sales } of this.data) {

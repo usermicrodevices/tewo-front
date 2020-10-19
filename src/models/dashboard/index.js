@@ -5,18 +5,8 @@ import {
 } from 'mobx';
 import localStorage from 'mobx-localstorage';
 
-import getDashboardWidgetsInfo, { DASHBOARD_WIDGETS_TYPE as WIDGET_TYPES } from 'services/dashboard';
+import getDashboardWidgetsInfo, { WIDGETS_ADDITIONAL_INFORMATION } from 'services/dashboard';
 
-import Speedometer from './widgets/speedometer';
-import Statistic from './widgets/statistic';
-import ChartBeveragesSales from './widgets/chartBeveragesSales';
-import HeatmapDeviceStatuses from './widgets/heatmapDeviceStatuses';
-import ChartSales from './widgets/chartSales';
-import ChartBeverages from './widgets/chartBeverages';
-import DiagramTechState from './widgets/diagramTechState';
-import DiagramPopularity from './widgets/diagramPopularity';
-import ChartBeveragesChange from './widgets/chartBeveragesChange';
-import DiagramSalePointsBeveragesRate from './widgets/diagramSalePointsBeveragesRate';
 import getDefaultState from './utils';
 import Settings from './settings';
 
@@ -120,31 +110,13 @@ class Grid {
   }
 
   initStorage(settings) {
-    switch (settings.settings.get('widgetType')) {
-      case WIDGET_TYPES.speedometerBeverages:
-        return new Speedometer(settings, this.session);
-      case WIDGET_TYPES.overview:
-        return new Statistic(settings, this.session);
-      case WIDGET_TYPES.chartBeverages:
-        return new ChartBeverages(settings, this.session);
-      case WIDGET_TYPES.heatmapDeviceStatuses:
-        return new HeatmapDeviceStatuses(settings, this.session);
-      case WIDGET_TYPES.chartBeveragesSales:
-        return new ChartBeveragesSales(settings, this.session);
-      case WIDGET_TYPES.chartSales:
-        return new ChartSales(settings, this.session);
-      case WIDGET_TYPES.diagramTechState:
-        return new DiagramTechState(settings, this.session);
-      case WIDGET_TYPES.diagramPopularity:
-        return new DiagramPopularity(settings, this.session);
-      case WIDGET_TYPES.diagramSalePointsBeveragesRate:
-        return new DiagramSalePointsBeveragesRate(settings, this.session);
-      case WIDGET_TYPES.chartBeveragesChange:
-        return new ChartBeveragesChange(settings, this.session);
-      default:
-        console.error(`unknown dashboard storage type ${settings.settings.get('widgetType')}`);
-        return undefined;
+    const type = settings.settings.get('widgetType');
+    if (type in WIDGETS_ADDITIONAL_INFORMATION) {
+      const Storage = WIDGETS_ADDITIONAL_INFORMATION[type].model;
+      return new Storage(settings, this.session);
     }
+    console.error(`unknown dashboard storage type ${settings.settings.get('widgetType')}`);
+    return undefined;
   }
 
   @computed get widgetTypeSelector() {

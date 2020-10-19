@@ -1,32 +1,34 @@
-import { DASHBOARD_WIDGETS_TYPE as WIDGET_TYPES } from 'services/dashboard';
+import { WIDGETS_ADDITIONAL_INFORMATION as WIDGETS } from 'services/dashboard';
+
+const k = (itm) => Object.keys(WIDGETS).find((t) => WIDGETS[t] === itm);
 
 const getDefaultState = (session) => ({
   begin_0: {
-    widgetType: WIDGET_TYPES.overview,
+    widgetType: k(WIDGETS.overview),
     dateFilter: null,
     salePontsFilter: null,
     companiesFilter: null,
   },
   begin_1: {
-    widgetType: WIDGET_TYPES.speedometerBeverages,
+    widgetType: k(WIDGETS.speedometerBeverages),
     dateFilter: null,
     salePontsFilter: null,
     companiesFilter: null,
   },
   begin_2: {
-    widgetType: WIDGET_TYPES.chartBeverages,
+    widgetType: k(WIDGETS.chartBeverages),
     dateFilter: 'prw7Days',
     salePontsFilter: null,
     companiesFilter: null,
   },
   begin_3: {
-    widgetType: WIDGET_TYPES.heatmapDeviceStatuses,
+    widgetType: k(WIDGETS.heatmapDeviceStatuses),
     dateFilter: 'curDay',
     salePontsFilter: null,
     companiesFilter: null,
   },
   begin_4: {
-    widgetType: WIDGET_TYPES.chartSales,
+    widgetType: k(WIDGETS.chartSales),
     dateFilter: 'prw7Days',
     salePontsFilter: null,
     companiesFilter: null,

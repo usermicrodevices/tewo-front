@@ -81,7 +81,7 @@ const ClearanceChart = withSize()(({
     }
   }
   y.forEach(({ axis }, id) => {
-    yaxis[id].min = ranges[axis].min;
+    yaxis[id].min = 0;
     yaxis[id].max = ranges[axis].max;
   });
   const width = y.map(({ width: w }) => w);
@@ -100,7 +100,7 @@ const ClearanceChart = withSize()(({
       ...locale,
     },
     dataLabels: {
-      enabled: true,
+      enabled: y[0].data.length < 30,
     },
     stroke: {
       width,

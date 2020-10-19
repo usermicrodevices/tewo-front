@@ -2,7 +2,9 @@ import moment from 'moment';
 
 import { get } from 'utils/request';
 import checkData from 'utils/dataCheck';
-import { daterangeToArgs, isDateRange, alineDates } from 'utils/date';
+import {
+  daterangeToArgs, isDateRange, alineDates, momentToArg,
+} from 'utils/date';
 import Beverage from 'models/beverages/beverage';
 import BeveragesStats from 'models/beverages/stats';
 
@@ -74,7 +76,7 @@ const getBeverageOperations = (map) => get('refs/operations/').then((data) => {
 });
 
 const getBeveragesStats = (daterange, filters, step) => {
-  const rangeArg = daterangeToArgs(daterange, 'device_date');
+  const rangeArg = daterangeToArgs(daterange, 'device_date') || `device_date__gt=${momentToArg(moment(1))}`;
   const location = `/data/beverages/stats/?step=${step}${rangeArg}${filters ? `&${filters}` : ''}`;
   const mustBe = {
     moment: 'date',
@@ -97,7 +99,7 @@ const getBeveragesStats = (daterange, filters, step) => {
     }
     const finalDateRange = isRangeGiven
       ? daterange
-      : [moment(result[0].moment), moment(result[result.length - 1].moment)];
+      : [moment(result[moment(result[0].moment) > 0 ? 0 : 1].moment), moment(result[result.length - 1].moment)];
     return new BeveragesStats([...alineDates(
       finalDateRange,
       step,

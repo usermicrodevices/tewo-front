@@ -16,12 +16,10 @@ class ChartBeveragesChange {
       return;
     }
     const pointsFilter = this.generic.getPointsFilter('device__sale_point__id');
-    this.whole = undefined;
-    this.canceled = undefined;
     getBeveragesStats(dateRange, pointsFilter, 86400)
-      .then((data) => { console.log('given', data); this.whole = data; });
+      .then((data) => { this.whole = data; });
     getBeveragesStats(dateRange, `canceled=1${pointsFilter ? `&${pointsFilter}` : ''}`, 86400)
-      .then((data) => { console.log('canceled', data); this.canceled = data; });
+      .then((data) => { this.canceled = data; });
   };
 
   @computed get isLoaded() {
@@ -32,17 +30,12 @@ class ChartBeveragesChange {
     if (!this.isLoaded) {
       return undefined;
     }
-    console.log(this.whole, this.canceled);
     if (typeof this.whole === 'undefined') {
       return [
         {
-          data: this.canceled.beveragesSeria.slice().fill(0),
-          name: 'Всего наливов',
-          axis: 0,
-        },
-        {
           data: this.canceled.beveragesSeria,
           name: 'Отменённых наливов',
+          width: 4,
           axis: 0,
         },
       ];
@@ -52,11 +45,7 @@ class ChartBeveragesChange {
         {
           data: this.whole.beveragesSeria,
           name: 'Всего наливов',
-          axis: 0,
-        },
-        {
-          data: this.whole.beveragesSeria.slice().fill(0),
-          name: 'Отменённых наливов',
+          width: 4,
           axis: 0,
         },
       ];
@@ -65,11 +54,13 @@ class ChartBeveragesChange {
       {
         data: this.whole.beveragesSeria,
         name: 'Всего наливов',
+        width: 4,
         axis: 0,
       },
       {
-        data: this.canceled.beveragesSeria,
+        data: [...new Array(this.whole.length - this.canceled.length).fill(0), ...this.canceled.beveragesSeria],
         name: 'Отменённых наливов',
+        width: 4,
         axis: 0,
       },
     ];
@@ -85,14 +76,18 @@ class ChartBeveragesChange {
     if (typeof this.canceled === 'undefined') {
       return this.whole.xSeria;
     }
-    return this.whole.xSeria.length > this.canceled.xSeria.length ? this.whole.xSeria : this.canceled.xSeria;
+    return this.whole.length > this.canceled.length ? this.whole.xSeria : this.canceled.xSeria;
   }
 
   constructor(settings, session) {
     this.generic = settings;
     this.session = session;
 
-    reaction(() => [this.generic.salePointsId, this.generic.dateRange], this.update);
+    reaction(() => [this.generic.salePointsId, this.generic.dateRange], () => {
+      this.whole = undefined;
+      this.canceled = undefined;
+      this.update();
+    });
     this.update();
   }
 }
