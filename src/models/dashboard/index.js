@@ -31,6 +31,8 @@ class Grid {
 
   storages = new Map();
 
+  tickNumber = 0;
+
   constructor(layoutKey, session) {
     this.layoutKey = layoutKey;
     this.session = session;
@@ -40,6 +42,18 @@ class Grid {
     this.items = (localStorage.get(LOCAL_STORAGE_DASHBOARD_STATE_KEY) || getDefaultState(session));
     for (const [key, itm] of Object.entries(this.items)) {
       this.items[key] = observable.map(Object.entries(itm));
+    }
+  }
+
+  tick() {
+    this.tickNumber += 1;
+    for (const storage of this.storages.values()) {
+      const { widgetType } = storage.generic;
+      if (this.tickNumber % WIDGETS_ADDITIONAL_INFORMATION[widgetType].tickDuration === 0) {
+        if (typeof storage.update === 'function') {
+          storage.update();
+        }
+      }
     }
   }
 

@@ -17,12 +17,24 @@ import style from './index.module.scss';
 class Dashboard extends React.Component {
   storage;
 
+  interval = null;
+
   state = { isMenuOpen: false };
 
   constructor(props) {
     super(props);
 
     this.storage = new DashboardModel('dashboard', props.session);
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      this.storage.tick();
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   setMenuOpen = (isMenuOpen) => {

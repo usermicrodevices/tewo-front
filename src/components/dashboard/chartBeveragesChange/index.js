@@ -14,7 +14,7 @@ const Chart = inject('storage')(observer(({ storage }) => {
   return (
     <div className={classes.root}>
       <Multycurve
-        height={200}
+        height={215}
         x={xSeria}
         y={series}
         y1={{ text: 'Наливов в день', decimalsInFloat: 0 }}

@@ -60,17 +60,21 @@ class Statistic {
     return result;
   }
 
+  update = () => {
+    getBeveragesSalePointsStats(
+      SmallSemanticRanges.prwHalfAnHour.resolver(),
+      60,
+      this.generic.salePointsId,
+    ).then((result) => { this.data = result; });
+  };
+
   constructor(settings, session) {
     this.generic = settings;
     this.session = session;
 
     const update = () => {
       this.data = null;
-      getBeveragesSalePointsStats(
-        SmallSemanticRanges.prwHalfAnHour.resolver(),
-        60,
-        this.generic.salePointsId,
-      ).then((result) => { this.data = result; });
+      this.update();
     };
     reaction(() => this.generic.salePointsId, update);
     update();
