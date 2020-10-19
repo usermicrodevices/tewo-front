@@ -26,6 +26,10 @@ const clusterDefaultOptions = {
   minClusterSize: 3,
 };
 
+const mapDefaultOptions = {
+  suppressMapOpenBlock: true,
+};
+
 function getContentBody({ values, id }) {
   const infoRows = values.filter((v) => v.value).map((v) => `<li><b>${v.title}</b>: ${v.value}</li>`).join('');
   const info = `<ul>${infoRows}</ul>`;
@@ -120,6 +124,7 @@ function YMap({
         style={yMapStyle}
         height={height}
         state={{ center, zoom }}
+        options={mapDefaultOptions}
       >
         <YMapCluster options={clusterDefaultOptions} points={points} />
       </YandexMap>
