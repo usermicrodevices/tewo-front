@@ -47,22 +47,6 @@ const declareFilters = (session) => ({
   },
 });
 
-const getStateForSalepoint = (salePoint) => {
-  if (salePoint.isClosed) {
-    return 4;
-  }
-
-  if (salePoint.isHaveDisabledEquipment) {
-    return 3;
-  }
-
-  if (salePoint.isNeedTechService || salePoint.isHasOverlocPPM || salePoint.isHaveOverdueTasks) {
-    return 2;
-  }
-
-  return 1;
-};
-
 class Map {
   session;
 
@@ -98,14 +82,7 @@ class Map {
     const { points } = this.session;
     const locations = points.rawData
       .filter(this.filters.predicate)
-      .filter(({ mapPoint }) => mapPoint !== null)
-      .map((salePoint) => ({
-        id: salePoint.id,
-        name: salePoint.name,
-        values: salePoint.values,
-        location: salePoint.location,
-        state: getStateForSalepoint(salePoint),
-      }));
+      .filter(({ mapPoint }) => mapPoint !== null);
 
     return locations;
   }

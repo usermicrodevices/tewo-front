@@ -21,6 +21,16 @@ import ChartBeveragesWidget from 'components/dashboard/chartBeverages';
 import ChartBeveragesModel from 'models/dashboard/widgets/chartBeverages';
 import ChartBeveragesChangeWidget from 'components/dashboard/chartBeveragesChange';
 import ChartBeveragesChangeModel from 'models/dashboard/widgets/chartBeveragesChange';
+import FavoriteObjectsWidget from 'components/dashboard/favoriteObjects';
+import FavoriteObjectsModel from 'models/dashboard/widgets/favoriteObjects';
+import LatestBeveragesWidget from 'components/dashboard/latestBeverages';
+import LatestBeveragesModel from 'models/dashboard/widgets/latestBeverages';
+import LatestEventsWidget from 'components/dashboard/latestEvents';
+import LatestEventsModel from 'models/dashboard/widgets/latestEvents';
+import DeviceListDowntimeWidget from 'components/dashboard/latestEvents';
+import DeviceListDowntimeModel from 'models/dashboard/widgets/deviceListDowntime';
+import DeviceListOffWidget from 'components/dashboard/latestEvents';
+import DeviceListOffModel from 'models/dashboard/widgets/deviceListOff';
 
 /**
  *
@@ -131,15 +141,70 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     model: ChartBeveragesModel,
   },
   chartBeveragesChange: {
-    rowSpan: 76,
+    rowSpan: 99,
     colSpan: 2,
-    defaultDateRange: null,
+    defaultDateRange: 'prw7Days',
     excludedDateRandes: new Set([]),
     isHaveDateFilter: true,
     isHavePointsFilter: true,
     tickDuration: 3600,
     widget: ChartBeveragesChangeWidget,
     model: ChartBeveragesChangeModel,
+  },
+  favoriteObjects: {
+    rowSpan: 99,
+    colSpan: 2,
+    defaultDateRange: 'prw7Days',
+    excludedDateRandes: new Set([]),
+    isHaveDateFilter: true,
+    isHavePointsFilter: true,
+    tickDuration: 3600,
+    widget: FavoriteObjectsWidget,
+    model: FavoriteObjectsModel,
+  },
+  latestBeverages: {
+    rowSpan: 116,
+    colSpan: 3,
+    defaultDateRange: null,
+    excludedDateRandes: new Set(),
+    isHaveDateFilter: false,
+    isHavePointsFilter: true,
+    tickDuration: 3600,
+    widget: LatestBeveragesWidget,
+    model: LatestBeveragesModel,
+  },
+  latestEvents: {
+    rowSpan: 121,
+    colSpan: 2,
+    defaultDateRange: null,
+    excludedDateRandes: new Set(),
+    isHaveDateFilter: false,
+    isHavePointsFilter: true,
+    tickDuration: 3600,
+    widget: LatestEventsWidget,
+    model: LatestEventsModel,
+  },
+  deviceListDowntime: {
+    rowSpan: 93,
+    colSpan: 2,
+    defaultDateRange: 'prw7Days',
+    excludedDateRandes: new Set([]),
+    isHaveDateFilter: true,
+    isHavePointsFilter: true,
+    tickDuration: 3600,
+    widget: DeviceListOffWidget,
+    model: DeviceListDowntimeModel,
+  },
+  deviceListOff: {
+    rowSpan: 107,
+    colSpan: 2,
+    defaultDateRange: 'prw7Days',
+    excludedDateRandes: new Set([]),
+    isHaveDateFilter: true,
+    isHavePointsFilter: true,
+    tickDuration: 3600,
+    widget: DeviceListOffWidget,
+    model: DeviceListOffModel,
   },
 };
 

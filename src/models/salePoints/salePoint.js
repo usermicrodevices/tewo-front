@@ -175,6 +175,28 @@ class SalePoint extends Datum {
     };
   }
 
+  @computed get state() {
+    if (this.isClosed) {
+      return 4;
+    }
+    if (this.isHaveDisabledEquipment) {
+      return 3;
+    }
+    if (this.isNeedTechService || this.isHasOverlocPPM || this.isHaveOverdueTasks) {
+      return 2;
+    }
+    return 1;
+  }
+
+  @computed get stateColor() {
+    return [
+      '#4CD964',
+      '#FABC5F',
+      '#FF3B30',
+      '#9A9A9A',
+    ][this.state - 1];
+  }
+
   @computed get city() {
     if (this.cityId === null) {
       return null;
