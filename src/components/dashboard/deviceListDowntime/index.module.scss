@@ -1,0 +1,17 @@
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 295px;
+  height: 52px;
+  margin: 0px 20px;
+  border-bottom: 1px solid #D3D3D3;
+  transition: background-color 0.1s linear;
+
+  &:hover {
+    background: #fafafa;
+  }
+  &:last-child {
+    border-bottom: none;
+  }
+}

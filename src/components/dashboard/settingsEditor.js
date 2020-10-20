@@ -9,13 +9,9 @@ import { WIDGETS_ADDITIONAL_INFORMATION } from 'services/dashboard';
 
 import style from './settingsEditor.module.scss';
 
-const isHaveDateFilter = (key) => {
-  return WIDGETS_ADDITIONAL_INFORMATION[key]?.isHaveDateFilter;
-};
+const isHaveDateFilter = (key) => WIDGETS_ADDITIONAL_INFORMATION[key]?.isHaveDateFilter;
 
-const isHavePointsFilter = (key) => {
-  return WIDGETS_ADDITIONAL_INFORMATION[key]?.isHavePointsFilter;
-};
+const isHavePointsFilter = (key) => WIDGETS_ADDITIONAL_INFORMATION[key]?.isHavePointsFilter;
 
 const SettingsEditor = inject(({ grid, session }) => ({ grid, session }))(observer(({ grid, session }) => {
   const initialValues = {
@@ -31,10 +27,25 @@ const SettingsEditor = inject(({ grid, session }) => ({ grid, session }))(observ
     initialValues.companiesFilter = grid.items[grid.editingItem].get('companiesFilter');
   }
 
-  const [widgetType, setType] = useState(initialValues.widgetType);
+  const [widgetType, justSetType] = useState(initialValues.widgetType);
   const [dateFilter, setDate] = useState(initialValues.dateFilter);
   const [salePontsFilter, setPoints] = useState(initialValues.salePontsFilter || []);
   const [companiesFilter, setCompaniesValue] = useState(initialValues.companiesFilter || []);
+  const typeInfo = WIDGETS_ADDITIONAL_INFORMATION[widgetType] || {
+    defaultDateRange: null,
+    excludedDateRandes: new Set([]),
+  };
+  const setType = (newType) => {
+    const newTypeInfo = WIDGETS_ADDITIONAL_INFORMATION[newType];
+    justSetType(newType);
+    if (newTypeInfo.defaultDateRange !== null) {
+      setDate(newTypeInfo.defaultDateRange);
+    } else if (newTypeInfo.excludedDateRandes.has(dateFilter)) {
+      const anyAllow = Object.keys(SemanticRanges)
+        .find((k) => !newTypeInfo.excludedDateRandes.has(dateFilter));
+      setDate(anyAllow);
+    }
+  };
 
   const title = grid.isEdditingNewItem
     ? 'Создание нового виджета'
@@ -48,7 +59,9 @@ const SettingsEditor = inject(({ grid, session }) => ({ grid, session }))(observ
     });
   };
   const isTypeSelectorDisabled = !grid.isWidgetsInfoLoaded || !grid.isEdditingNewItem;
-  const dateSelector = Object.entries(SemanticRanges).map(([key, { title: rangeTitle }]) => [key, rangeTitle]);
+  const dateSelector = Object.entries(SemanticRanges)
+    .map(([key, { title: rangeTitle }]) => [key, rangeTitle])
+    .filter(([key]) => !typeInfo.excludedDateRandes.has(key));
   const datePickerTitle = (
     <>
       <Icon name="calendar-outline" />
@@ -97,6 +110,7 @@ const SettingsEditor = inject(({ grid, session }) => ({ grid, session }))(observ
           selector={dateSelector}
           disabled={!isHaveDateFilter(widgetType)}
           isSingle
+          disallowClear={typeInfo.excludedDateRandes.has(null)}
         />
         <Selector
           title="Компания"

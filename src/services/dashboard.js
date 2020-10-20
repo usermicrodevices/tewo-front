@@ -27,9 +27,9 @@ import LatestBeveragesWidget from 'components/dashboard/latestBeverages';
 import LatestBeveragesModel from 'models/dashboard/widgets/latestBeverages';
 import LatestEventsWidget from 'components/dashboard/latestEvents';
 import LatestEventsModel from 'models/dashboard/widgets/latestEvents';
-import DeviceListDowntimeWidget from 'components/dashboard/latestEvents';
+import DeviceListDowntimeWidget from 'components/dashboard/deviceListDowntime';
 import DeviceListDowntimeModel from 'models/dashboard/widgets/deviceListDowntime';
-import DeviceListOffWidget from 'components/dashboard/latestEvents';
+import DeviceListOffWidget from 'components/dashboard/deviceListOff';
 import DeviceListOffModel from 'models/dashboard/widgets/deviceListOff';
 
 /**
@@ -144,7 +144,7 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     rowSpan: 99,
     colSpan: 2,
     defaultDateRange: 'prw7Days',
-    excludedDateRandes: new Set([]),
+    excludedDateRandes: new Set([null]),
     isHaveDateFilter: true,
     isHavePointsFilter: true,
     tickDuration: 3600,
@@ -192,15 +192,15 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     isHaveDateFilter: true,
     isHavePointsFilter: true,
     tickDuration: 3600,
-    widget: DeviceListOffWidget,
+    widget: DeviceListDowntimeWidget,
     model: DeviceListDowntimeModel,
   },
   deviceListOff: {
     rowSpan: 107,
     colSpan: 2,
-    defaultDateRange: 'prw7Days',
+    defaultDateRange: null,
     excludedDateRandes: new Set([]),
-    isHaveDateFilter: true,
+    isHaveDateFilter: false,
     isHavePointsFilter: true,
     tickDuration: 3600,
     widget: DeviceListOffWidget,

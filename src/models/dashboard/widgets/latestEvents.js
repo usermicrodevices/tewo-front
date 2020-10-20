@@ -1,6 +1,6 @@
 import { computed } from 'mobx';
 
-class FavoriteObjects {
+class LastEvents {
   session;
 
   generic;
@@ -20,6 +20,7 @@ class FavoriteObjects {
     const pointsSet = this.generic.salePointsId === null ? { has: () => true } : new Set(this.generic.salePointsId);
     return this.session.events.rawData.filter(({ salePointId }) => pointsSet.has(salePointId)).slice(0, 6).map((e) => ({
       eventName: e.eventName,
+      key: e.id,
       salePoint: e.salePoint,
       timeInfo: { openDate: e.openDate, closeDate: e.closeDate },
     }));
@@ -30,4 +31,4 @@ class FavoriteObjects {
   };
 }
 
-export default FavoriteObjects;
+export default LastEvents;

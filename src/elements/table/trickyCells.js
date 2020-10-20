@@ -1,10 +1,15 @@
 import React from 'react';
-import { Button, Dropdown, Space } from 'antd';
+import {
+  Typography, Button, Dropdown, Space,
+} from 'antd';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 import { devices as devicesRout } from 'routes';
 import Format from 'elements/format';
 import plural from 'utils/plural';
+
+const { Text } = Typography;
 
 const linkedCell = (onClick) => (name, datum, width) => (
   <Button className="cell-link" style={{ height: 20 }} onClick={onClick(datum)} type="link"><Format width={width}>{ name }</Format></Button>
@@ -54,4 +59,18 @@ const devicesCell = (devices, _, width) => {
   );
 };
 
-export { tableItemLink, linkedCell, devicesCell };
+const durationCell = ({ openDate, closeDate }) => {
+  if (openDate.isValid()) {
+    return (
+      <>
+        <div><Text>{openDate.format('d MMMM, hh:mm')}</Text></div>
+        <div><Text type="secondary">{closeDate.isValid() ? moment.duration(closeDate - openDate).humanize() : 'не завершено'}</Text></div>
+      </>
+    );
+  }
+  return <Format>{null}</Format>;
+};
+
+export {
+  tableItemLink, linkedCell, devicesCell, durationCell,
+};

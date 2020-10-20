@@ -7,7 +7,7 @@ const { Option } = Select;
 const filterComparator = (inputValue, { children }) => children.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
 
 const Selector = ({
-  title, value, onChange, selector, isSingle, disabled,
+  title, value, onChange, selector, isSingle, disabled, disallowClear,
 }) => {
   const titleWidget = Array.isArray(selector) ? title : (
     <Loader />
@@ -19,7 +19,7 @@ const Selector = ({
       onChange={onChange}
       mode={isSingle ? undefined : 'multiple'}
       value={value}
-      allowClear
+      allowClear={!disallowClear}
       showSearch
       filterOption={filterComparator}
       disabled={disabled || !Array.isArray(selector) || selector.length === 0}

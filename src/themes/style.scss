@@ -1,10 +1,18 @@
 .ant-input-affix-wrapper > input.ant-input {
-    border-radius: 0px;
+  border-radius: 0px;
 }
 .ant-checkbox-inner {
-    border-radius: 2px;
+  border-radius: 2px;
 }
 .cell-link {
-    margin: 0px;
-    padding: 0px;
+  margin: 0px;
+  padding: 0px;
+}
+
+h4.ant-typography {
+  color: black;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0px;
+  padding: 0px;
 }

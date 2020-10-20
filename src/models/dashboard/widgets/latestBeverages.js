@@ -1,6 +1,6 @@
 import { computed } from 'mobx';
 
-class FavoriteObjects {
+class LastBeverages {
   session;
 
   generic;
@@ -26,4 +26,4 @@ class FavoriteObjects {
   };
 }
 
-export default FavoriteObjects;
+export default LastBeverages;

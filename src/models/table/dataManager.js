@@ -80,6 +80,9 @@ class DataManager {
       if (firstOld < 0) {
         // Можно ввообще проверить массивы на тождественность но ограничимся чем попроще
         console.assert(firstLoadedElementIndex === 0, 'implementation consistency error');
+        if (this.data.length === results.length) {
+          this.data.replace(results);
+        }
         return;
       }
       // Запоминаем индексы новых элементов
@@ -91,7 +94,6 @@ class DataManager {
       // Ставим таймер на исключение элементов из новых
       setTimeout(() => { this.newElements.clear(); }, NEW_ELEMENTS_ADDICTIVE_TIME);
       if (firstOld === 0) {
-        console.log('rare update branch');
         // Это значит, что все элементы новые. Значит, что данные обновили после большой паузы.
         console.assert(
           this.amount + results.length < count,

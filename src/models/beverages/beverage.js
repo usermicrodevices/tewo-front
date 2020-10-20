@@ -21,6 +21,8 @@ class Beverage {
 
   session;
 
+  get key() { return this.id; }
+
   constructor(session) {
     this.session = session;
   }

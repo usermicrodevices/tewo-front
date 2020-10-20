@@ -6,4 +6,5 @@ module.exports = {
   'border-radius-base': '8px',
   'text-color': '#595959',
   'body-background': '#F3F5F7',
+  'heading-4-size': '14px',
 };

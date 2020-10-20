@@ -159,6 +159,11 @@ class Events extends Table {
     return getEvents(this.session)(3e4, 0, `event_reference__id=${TECH_CLEARANCE_EVENT_ID}`);
   }
 
+  getOverdudeTasks(dateRange, salePointsFilter) {
+    const datefilter = daterangeToArgs(dateRange, 'open_date');
+    return getEvents(this.session)(3e4, 0, `overdued=1${datefilter}&${salePointsFilter}`);
+  }
+
   getDeviceClearancesChart = getEventsClearancesChart;
 }
 
