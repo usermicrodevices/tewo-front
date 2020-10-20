@@ -155,6 +155,10 @@ class Events extends Table {
     return getEvents(this.session)(3e4, 0, `event_reference__id=${TECH_CLEARANCE_EVENT_ID}&device__id__in=${deviceId}`);
   }
 
+  getClearances() {
+    return getEvents(this.session)(3e4, 0, `event_reference__id=${TECH_CLEARANCE_EVENT_ID}`);
+  }
+
   getDeviceClearancesChart = getEventsClearancesChart;
 }
 
