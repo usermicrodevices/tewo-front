@@ -33,23 +33,28 @@ const FavoriteObjects = tableWidget([
         ? <Badge><Title level={4}>{name}</Title></Badge>
         : <Loader />
     ),
+    sorter: (a, b) => {
+      if (a.name && b.name) {
+        return a.name.localeCompare(b.name) || a.key - b.key;
+      }
+      return a.key - b.key;
+    },
   },
   {
     title: 'Длительность простоя',
     dataIndex: 'value',
-    render: (v) => <Format><Text>{moment.duration(v, 'millisecond').humanize()}</Text></Format>,
-  },
-  {
-    title: '',
-    dataIndex: 'details',
     render: (v) => (
-      <Dropdown
-        overlay={overlay(v)}
-        placement="topRight"
-      >
-        <div><Icon size={20} name="alert-circle-outline" /></div>
-      </Dropdown>
+      <div className={classes.split}>
+        <Text><Format>{moment.duration(v.sum, 'millisecond').humanize()}</Format></Text>
+        <Dropdown
+          overlay={overlay(v.details)}
+          placement="topRight"
+        >
+          <div><Icon size={20} name="alert-circle-outline" /></div>
+        </Dropdown>
+      </div>
     ),
+    sorter: (a, b) => a.value.sum - b.value.sum || a.key - b.key,
   },
 ]);
 

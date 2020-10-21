@@ -77,8 +77,10 @@ class DeviceListOff {
       }
       return {
         name: pointsResolver[pointId]?.name,
-        value: sum,
-        details: detailsList,
+        value: {
+          sum,
+          details: detailsList,
+        },
         key: pointId,
       };
     });
