@@ -88,6 +88,7 @@ function getDeviceModels(map) {
           name: 'string',
           mileage: 'number',
           detergent: 'number',
+          decalcents: 'number',
           threshold_drinks_cleaning: 'number',
         }, { device_type: 'number' })) {
           console.error('Неожиданные данные для моделей устройств /refs/device_models', datum);

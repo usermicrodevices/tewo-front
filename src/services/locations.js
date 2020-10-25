@@ -10,8 +10,9 @@ const getLocations = () => Promise.all([
   for (const country of countriesData) {
     checkData(country, {
       name: 'string',
-      currency: 'string',
       id: 'number',
+    }, {
+      currency: 'string',
     });
   }
   for (const region of regionsData) {

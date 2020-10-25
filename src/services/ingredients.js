@@ -17,8 +17,10 @@ const getEvents = (session) => () => get('/refs/ingredients/').then((result) => 
           id: 'number',
           name: 'string',
           company: 'number',
+          cost: 'number',
         },
         {
+          currency: 'number',
           dimension: 'string',
         },
       )) {
