@@ -6,5 +6,10 @@ module.exports = {
   'border-radius-base': '8px',
   'text-color': '#595959',
   'body-background': '#F3F5F7',
+  'heading-1-size': '30px',
+  'heading-2-size': '20px',
+  'heading-3-size': '16px',
   'heading-4-size': '14px',
+  'modal-header-title-font-size': '@heading-2-size',
+  'card-head-font-size': '@heading-3-size',
 };
