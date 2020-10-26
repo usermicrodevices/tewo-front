@@ -1,6 +1,8 @@
 import { observable, computed } from 'mobx';
 import Datum from 'models/datum';
 
+import * as routes from 'routes';
+
 import Details from './details';
 
 function reduce(array, field) {
@@ -123,6 +125,10 @@ class SalePoint extends Datum {
 
   @computed get devices() {
     return this.session.devices.getPointDevices(this.id);
+  }
+
+  @computed get path() {
+    return `${routes.salePoints.path}/${this.id}`;
   }
 
   get location() {

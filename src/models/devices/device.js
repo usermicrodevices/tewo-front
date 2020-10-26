@@ -1,6 +1,8 @@
 import { computed, observable } from 'mobx';
 import { zones } from 'utils/timezone';
 
+import * as routes from 'routes';
+
 import Details from './details';
 
 class Device {
@@ -75,6 +77,10 @@ class Device {
       this.detailsData = new Details(this);
     }
     return this.detailsData;
+  }
+
+  @computed get path() {
+    return `${routes.devices.path}/${this.id}`;
   }
 
   @computed get salePoint() {
