@@ -8,6 +8,8 @@ import {
 } from '@ant-design/icons';
 import classnames from 'classnames';
 
+import Typography from 'elements/typography';
+
 import plural from 'utils/plural';
 
 import DateSelector from './dateSelector';
@@ -24,7 +26,9 @@ const SubTitle = ({ salePoints }) => {
     return name;
   }
   const more = salePoints.length - 1;
-  return `${name} и ещё ${more} ${plural(more, ['объект', 'объектов', 'объекта'])}`;
+  const text = `${name} и ещё ${more} ${plural(more, ['объект', 'объектов', 'объекта'])}`
+
+  return <Typography.Caption>{text}</Typography.Caption>;
 };
 
 const Item = ({
@@ -43,7 +47,7 @@ const Item = ({
           <div className={classes.label}>
             <Button type="text" className={classes.anchor} icon={<MoreOutlined />} />
             <div className={classes.text}>
-              <div className={classes.maintitle}>{item.title}</div>
+              <Typography.Title level={4}>{item.title}</Typography.Title>
               <div className={classes.subtitle}>
                 <SubTitle salePoints={item.storage.generic.salePoints} />
               </div>

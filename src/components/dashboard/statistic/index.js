@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 
 import Format from 'elements/format';
 import Loader from 'elements/loader';
+import Typography from 'elements/typography';
 import plural from 'utils/plural';
 
 import Chart from './chart';
@@ -13,11 +14,11 @@ const Statistic = inject(({ session, storage }) => ({ session, storage }))(obser
   <div className={style.layout}>
     <div className={style.beverages}>
       <div className={style.value}><Format>{storage.value}</Format></div>
-      <div className={style.explains}>
+      <Typography.Caption>
         {plural(storage.value, ['Налив', 'Наливов', 'Налива'])}
         <br />
         за 30 минут
-      </div>
+      </Typography.Caption>
     </div>
     <div className={style.top}>
       {(() => {
@@ -38,8 +39,8 @@ const Statistic = inject(({ session, storage }) => ({ session, storage }))(obser
           <>
             { items.map(([id, { beverages }]) => (
               <div key={id} className={style.note}>
-                <div><Format width={250}>{ namesMap[id] }</Format></div>
-                <div className={style.beverages}><Format>{ beverages }</Format></div>
+                <Typography.Text><Format width={250}>{ namesMap[id] }</Format></Typography.Text>
+                <Typography.Text className={style.beverages}><Format>{ beverages }</Format></Typography.Text>
               </div>
             ))}
           </>

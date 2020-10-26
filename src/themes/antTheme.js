@@ -12,4 +12,6 @@ module.exports = {
   'heading-4-size': '14px',
   'modal-header-title-font-size': '@heading-2-size',
   'card-head-font-size': '@heading-3-size',
+  'typography-title-margin-bottom': 0,
+  'typography-title-font-weight': 700,
 };
