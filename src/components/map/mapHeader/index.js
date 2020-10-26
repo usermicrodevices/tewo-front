@@ -1,8 +1,9 @@
 import React from 'react';
 
-// TODO change typography
+import Typography from 'elements/typography';
+
 function MapHeader({ title }) {
-  return <div style={{ fontWeight: 700, fontSize: 30, marginBottom: 24 }}>{title}</div>;
+  return <Typography.Title level={1} style={{ marginBottom: 24 }}>{title}</Typography.Title>;
 }
 
 export default MapHeader;
