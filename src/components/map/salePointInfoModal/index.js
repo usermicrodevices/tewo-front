@@ -31,7 +31,7 @@ function SalePointInfoModal({
     <Modal
       visible={visible}
       onCancel={onCancel}
-      onOk={onCancel}
+      onOk={() => history.push(salePoint.path)}
       okText="Перейти на объект"
       cancelText="Закрыть"
     >
