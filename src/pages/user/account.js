@@ -5,28 +5,40 @@ import Typography from 'elements/typography';
 
 const Account = () => (
   <Card title="Личный кабинет">
-    <Typography.Title level={1}>Пользователь (Заголовок 1) [заг страницы]</Typography.Title>
-    <Typography.Title level={2}>Пользователь (Заголовок 2) [заг модалки]</Typography.Title>
-    <Typography.Title level={3}>Пользователь (Заголовок 3) [заг секции]</Typography.Title>
-    <Typography.Title level={4}>Пользователь (Заголовок 4) [заг колонки таблицы, заг таба, заг элемента, заг виджета]</Typography.Title>
+    <Typography.Title level={1}>Typography.Title (level: 1) [заг страницы]</Typography.Title>
+    <Typography.Title level={2}>Typography.Title (level: 2) [заг модалки]</Typography.Title>
+    <Typography.Title level={3}>Typography.Title (level: 3) [заг секции]</Typography.Title>
+    <Typography.Title level={4}>Typography.Title (level: 4) [заг колонки таблицы, заг таба, заг элемента, заг виджета]</Typography.Title>
 
     <Divider />
 
-    <Typography.Text>Текстовая строка</Typography.Text>
+    <Typography.Text>Typography.Text</Typography.Text>
     <br />
-    <Typography.Text type="secondary">Текстовая строка (secondary)</Typography.Text>
+    <Typography.Text type="secondary">Typography.Text (type: secondary)</Typography.Text>
 
     <Divider />
 
-    <Typography.Caption>Подпись</Typography.Caption>
+    <Typography.Value size="s">Typography.Value (size: s)</Typography.Value>
     <br />
-    <Typography.Caption type="secondary">Подпись (secondary)</Typography.Caption>
+    <Typography.Value size="m">Typography.Value (size: m)</Typography.Value>
+    <br />
+    <Typography.Value size="l">Typography.Value (size: l)</Typography.Value>
+    <br />
+    <Typography.Value size="xl">Typography.Value (size: xl)</Typography.Value>
+    <br />
+    <Typography.Value size="xl" strong>Typography.Value (size: xl, strong: true)</Typography.Value>
 
     <Divider />
 
-    <Typography.Link>Ссылка</Typography.Link>
+    <Typography.Caption>Typography.Caption</Typography.Caption>
     <br />
-    <Typography.Link type="secondary">Ссылка (secondary)</Typography.Link>
+    <Typography.Caption type="secondary">Typography.Caption (type: secondary)</Typography.Caption>
+
+    <Divider />
+
+    <Typography.Link>Typography.Link</Typography.Link>
+    <br />
+    <Typography.Link type="secondary">Typography.Link (type: secondary)</Typography.Link>
 
     <Divider />
     <div style={{

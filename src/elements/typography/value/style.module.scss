@@ -1,0 +1,18 @@
+@import "src/themes/constants";
+
+.text {
+    font-size: $value-size-m;
+    color: $value-color;
+}
+
+.s {
+    font-size: $value-size-s;
+}
+
+.l {
+    font-size: $value-size-l;
+}
+
+.xl {
+    font-size: $value-size-xl;
+}
