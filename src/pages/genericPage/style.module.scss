@@ -10,13 +10,6 @@
     align-items: center;
     margin-bottom: 25px;
 
-    h1 {
-      font-size: 30px;
-      line-height: 43px;
-      font-weight: bold;
-      margin-bottom: 0;
-    }
-
     :global .ant-btn {
       border: none;
     }
@@ -34,11 +27,6 @@
   .head {
     .titleRow {
       flex-wrap: wrap;
-
-      h1 {
-        font-size: 25px;
-        line-height: 30px;
-      }
     }
   }
 }

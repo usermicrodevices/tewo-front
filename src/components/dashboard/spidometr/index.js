@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 
 import Format from 'elements/format';
+import Typography from 'elements/typography';
 import SeedometrChart from 'elements/chart/speedometr';
 
 import plural from 'utils/plural';
@@ -24,9 +25,7 @@ const Speedometr = ({ storage: { value, maxSpeed, updateValue } }) => {
         <div className={classnames.value}>
           <Format width={150}>{value}</Format>
         </div>
-        <div className={classnames.label}>
-          <span>{speedLabelText}</span>
-        </div>
+        <Typography.Text>{speedLabelText}</Typography.Text>
       </div>
       <SeedometrChart value={value} max={maxSpeed} />
     </div>

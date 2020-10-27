@@ -5,6 +5,7 @@ import {
 } from 'antd';
 
 import Icon from 'elements/icon';
+import Typography from 'elements/typography';
 import DashboardModel from 'models/dashboard';
 
 import Grid from './grid';
@@ -49,7 +50,7 @@ class Dashboard extends React.Component {
         <SettingsEditor />
         <div className={style.wrapper}>
           <div className={style.header}>
-            <div className={style.title}>Панель управления</div>
+            <Typography.Title level={1}>Панель управления</Typography.Title>
             <Space>
               <Dropdown
                 onVisibleChange={setMenuOpen}

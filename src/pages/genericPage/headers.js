@@ -9,6 +9,7 @@ import { FilterOutlined } from '@ant-design/icons';
 
 import Filters from 'elements/filters';
 import Icon from 'elements/icon';
+import Typography from 'elements/typography';
 import ColumnsPicker from 'elements/table/columnsPicker';
 
 import styles from './style.module.scss';
@@ -92,13 +93,11 @@ const TableHeader = inject('table')(observer(({ title, table }) => {
     <div className={styles.head}>
       <GoBack />
       <div className={styles.titleRow}>
-        <h1>
-          <Space>
-            {title}
-            { typeof table.create === 'function'
+        <Space>
+          <Typography.Title level={1}>{title}</Typography.Title>
+          { typeof table.create === 'function'
             && <Button onClick={() => { table.create(); }} icon={<Icon size={22} name="plus-circle-outline" />} type="text" /> }
-          </Space>
-        </h1>
+        </Space>
         <Space>
           <Dropdown overlay={<ColumnsPicker onReorder={onReorder} onChange={onColumnsPicked} visibleColumns={table.visibleColumns} />} placement="bottomLeft">
             <Button icon={<Icon name="more-vertical-outline" />}>Колонки</Button>

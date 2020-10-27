@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Progress } from 'antd';
 
 import Loader from 'elements/loader';
+import Typography from 'elements/typography';
 
 import classes from './index.module.scss';
 
@@ -14,7 +15,7 @@ const Diagram = ({ value, amount, label }) => (
       percent={value / amount * 100}
       format={() => (amount ? `${value}/${amount}` : <Loader />)}
     />
-    <div className={classes.label}>{label}</div>
+    <Typography.Text className={classes.label}>{label}</Typography.Text>
   </div>
 );
 

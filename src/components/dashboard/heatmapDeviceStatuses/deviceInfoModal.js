@@ -3,8 +3,6 @@ import { observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Modal, Divider, Button } from 'antd';
 
-import * as routes from 'routes';
-
 import Location from 'elements/location';
 
 const InfoRow = ({ label, text }) => (text ? (
@@ -25,10 +23,10 @@ function DeviceInfoModal({
       visible={visible}
       onCancel={onCancel}
       footer={[
-        <Button key="device" onClick={() => history.push(`${routes.devices.path}/${device.id}`)}>
+        <Button key="device" onClick={() => history.push(device.path)}>
           Перейти на оборудование
         </Button>,
-        <Button key="salePoint" onClick={() => history.push(`${routes.salePoints.path}/${device.salePoint.id}`)}>
+        <Button key="salePoint" onClick={() => history.push(device.salePoint.path)}>
           Перейти на объект
         </Button>,
       ]}
