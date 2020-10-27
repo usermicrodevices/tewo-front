@@ -1,0 +1,51 @@
+@import 'src/themes/constants';
+
+.grid {
+  display: grid;
+  grid-template-columns: auto 228px;
+  column-gap: $generic-margin;
+  row-gap: $generic-margin;
+
+  >div:last-child {
+    grid-column: span 2;
+  }
+
+
+  .legend {
+    display: flex;
+    align-items: flex-start;
+    >div {
+      margin-right: $generic-margin;
+    }
+  }
+
+  .stats > div {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100%;
+    &:before, &:after {
+      display: none;
+    }
+
+    .title {
+      svg {
+        fill: $link-color;
+        margin-right: 8px;
+        font-size: 14px;
+        line-height: 22px;
+      }
+    }
+
+    .value {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 35px;
+    }
+    .label {
+      color: #8C8C8C;
+      font-size: 10px;
+      line-height: 14px;
+    }
+  }
+}

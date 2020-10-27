@@ -7,6 +7,8 @@ import EventType from 'models/events/eventType';
 import Event from 'models/events/event';
 import { daterangeToArgs, alineDates, isDateRange } from 'utils/date';
 
+const TECH_CLEARANCE_EVENT_ID = 8;
+
 const getEvents = (session) => (limit, offset = 0, filter = '') => {
   console.assert(limit > 0 && offset >= 0, `Неверные параметры запроса событий "${limit}" "${offset}"`);
   return get(`/data/events/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
@@ -68,6 +70,10 @@ const getEvents = (session) => (limit, offset = 0, filter = '') => {
     };
   });
 };
+
+const getClearances = (session) => (limit, offset = 0, filter = '') => (
+  getEvents(session)(limit, offset, `event_reference__id=${TECH_CLEARANCE_EVENT_ID}${filter !== '' ? `&${filter}` : filter}`)
+);
 
 const getEventTypes = () => get('/refs/event_references/').then((results) => {
   if (!Array.isArray(results)) {
@@ -162,4 +168,15 @@ const getEventsClearancesChart = (deviceId, daterange) => get(
   )];
 });
 
-export { getEvents, getEventTypes, getEventsClearancesChart };
+const getDetergrnts = (filter) => get(`/data/events/detergent/?${filter}`).then((json) => {
+  checkData(json, {
+    decalcents: 'number',
+    detergent: 'number',
+    tablets: 'number',
+  });
+  return json;
+});
+
+export {
+  getEvents, getEventTypes, getEventsClearancesChart, getClearances, getDetergrnts,
+};
