@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 
+import Typography from 'elements/typography';
+
 import classnames from './index.module.scss';
 
 export const legend = [
@@ -36,7 +38,7 @@ export const getItemFromChartEvent = ({
 
 export const Tooltip = ({ name }) => (
   <div className={classnames.tooltip}>
-    <h3 className={classnames.text}>{name}</h3>
+    <Typography.Text>{name}</Typography.Text>
   </div>
 );
 

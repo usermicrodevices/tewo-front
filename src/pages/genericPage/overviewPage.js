@@ -9,6 +9,7 @@ import { EditOutlined } from '@ant-design/icons';
 import Editor from 'elements/editor';
 import Card from 'elements/card';
 import Loader from 'elements/loader';
+import Typography from 'elements/typography';
 
 import { ElementHeader } from './headers';
 
@@ -42,12 +43,12 @@ const ViewerPage = ({
     const isEditing = action === 'edit';
     return (
       <ElementHeader allLinkText={allLinkText} menu={menu}>
-        <h1>
-          <Space>
+        <Space>
+          <Typography.Title level={1}>
             {elementForEdit.name}
-            { !isEditing && !isNotEditable && <Button onClick={() => { history.push(`${path}/edit`); }} icon={<EditOutlined />} type="text" /> }
-          </Space>
-        </h1>
+          </Typography.Title>
+          { !isEditing && !isNotEditable && <Button onClick={() => { history.push(`${path}/edit`); }} icon={<EditOutlined />} type="text" /> }
+        </Space>
         <AdditionalActions />
       </ElementHeader>
     );
