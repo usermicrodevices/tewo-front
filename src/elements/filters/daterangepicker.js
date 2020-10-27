@@ -2,6 +2,8 @@ import React from 'react';
 import { DatePicker } from 'antd';
 import moment from 'moment';
 
+import Typography from 'elements/typography';
+
 import style from './style.module.scss';
 
 const { RangePicker } = DatePicker;
@@ -18,7 +20,7 @@ const DatergangePicker = ({
   const halfAYearStart = moment().startOf('year').add(Math.floor(moment().month() / 6) * 6, 'month');
   return (
     <div className={style.space}>
-      <p>{ `${title}:` }</p>
+      <Typography.Text>{ `${title}:` }</Typography.Text>
       <RangePicker
         showTime={showTime}
         placeholder={['с', 'по']}

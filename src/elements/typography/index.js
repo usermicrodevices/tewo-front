@@ -2,9 +2,10 @@ import { Typography } from 'antd';
 
 import Caption from './caption';
 import Value from './value';
+import Link from './link';
 
 const {
-  Title, Paragraph, Link, Text,
+  Title, Paragraph, Text,
 } = Typography;
 
 const CustomTypography = {

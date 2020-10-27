@@ -9,6 +9,7 @@ const { Text } = Typography;
 
 const getClassNameBySize = (size) => {
   switch (size) {
+    case 'xxxl': return style.xxxl;
     case 'xl': return style.xl;
     case 'l': return style.l;
     case 's': return style.s;
@@ -16,8 +17,10 @@ const getClassNameBySize = (size) => {
   }
 };
 
-function Value({ children, size, ...props }) {
-  const classes = cx([style.text, getClassNameBySize(size)]);
+function Value({
+  children, className, size, ...props
+}) {
+  const classes = cx([style.text, getClassNameBySize(size), className]);
   // eslint-disable-next-line react/jsx-props-no-spreading
   return <Text className={classes} {...props}>{children}</Text>;
 }

@@ -5,6 +5,7 @@ import ReactApexChart from 'react-apexcharts';
 import moment from 'moment';
 
 import Loader from 'elements/loader';
+import Typography from 'elements/typography';
 import { gradient } from 'utils/color';
 
 import style from './performance.module.scss';
@@ -86,7 +87,7 @@ const settings = (data) => ({
 
 const Performance = ({ element: { details: { weekPerformance } } }) => (
   <Card className={style.root}>
-    <div className={style.title}>Загруженность</div>
+    <Typography.Title level={3}>Загруженность</Typography.Title>
     <div className={style.chart}>
       { weekPerformance
         ? (() => {

@@ -3,6 +3,7 @@ import { Card, Table } from 'antd';
 import { inject, observer } from 'mobx-react';
 
 import Loader from 'elements/loader';
+import Typography from 'elements/typography';
 import { tableItemLink } from 'elements/table/trickyCells';
 
 import style from './devicesList.module.scss';
@@ -21,7 +22,7 @@ const COLUMNS = [
 
 const DeviceList = ({ element: { details: { devices, devicesPath } } }) => (
   <Card className={style.root}>
-    <div className={style.title}>Оборудование</div>
+    <Typography.Title level={3}>Оборудование</Typography.Title>
     {
       (() => {
         if (!Array.isArray(devices)) {

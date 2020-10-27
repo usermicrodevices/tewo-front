@@ -6,6 +6,7 @@ import { withSize } from 'react-sizeme';
 import plural from 'utils/plural';
 import Loader from 'elements/loader';
 import Format from 'elements/format';
+import Typography from 'elements/typography';
 import NoData from 'elements/noData';
 import { Pie, PIE_COLORS } from 'elements/chart/pie';
 
@@ -17,7 +18,7 @@ const MAX_DRINKS_AMOUNT = 6;
 
 const Wrap = ({ children }) => (
   <Card className={style.root}>
-    <div className={style.title}>Топ продаж</div>
+    <Typography.Title level={3}>Топ продаж</Typography.Title>
     {children}
   </Card>
 );
@@ -61,12 +62,12 @@ const Top = ({ size: { width }, element: { details: { salesTop } } }) => {
             <div className={style.item} key={drinkId}>
               <div className={style.label}>
                 <div className={style.mark} style={{ backgroundColor: PIE_COLORS[index] }} />
-                <div className={style.text}><Format width={labelAllowedWidth}>{drinkName}</Format></div>
-                <div className={style.phonetext}><Format width={100}>{drinkName}</Format></div>
+                <Typography.Text><Format width={labelAllowedWidth}>{drinkName}</Format></Typography.Text>
+                <Typography.Text className={style.phonetext}><Format width={100}>{drinkName}</Format></Typography.Text>
               </div>
               <div className={style.value}>
-                <div className={style.number}><Format>{beverages}</Format></div>
-                <div className={style.sublabel}>{plural(beverages, ['налив', 'наливов', 'налива'])}</div>
+                <Typography.Value strong><Format>{beverages}</Format></Typography.Value>
+                <Typography.Caption>{plural(beverages, ['налив', 'наливов', 'налива'])}</Typography.Caption>
               </div>
             </div>
           ))

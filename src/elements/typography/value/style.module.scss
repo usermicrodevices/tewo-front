@@ -1,6 +1,8 @@
 @import "src/themes/constants";
 
 .text {
+    display: block;
+    line-height: 1.2;
     font-size: $value-size-m;
     color: $value-color;
 }
@@ -16,3 +18,8 @@
 .xl {
     font-size: $value-size-xl;
 }
+
+.xxxl {
+    font-size: $value-size-xxxl;
+}
+

@@ -6,6 +6,7 @@ import classNames from 'classnames';
 
 import Icon from 'elements/icon';
 import Format from 'elements/format';
+import Typography from 'elements/typography';
 import Loader from 'elements/loader';
 import { humanizeSeconds } from 'utils/date';
 
@@ -23,41 +24,43 @@ const Stats = ({ element: { details } }) => {
   const isLoaded = typeof devicesServceRequiredAmount === 'number';
   return (
     <Card className={style.root}>
-      <div className={style.title}>
+      <Typography.Title level={3}>
         <Icon name="bar-chart-outline" className={style.icon} />
         Общая статистика
-      </div>
+      </Typography.Title>
       <div className={style.groups}>
-        <Link to="/"><Format width={170}>Группа цен 1</Format></Link>
-        <Link to="/"><Format width={170}>Группа цен цен цен цен цен 1</Format></Link>
+        <Typography.Link to="/"><Format width={170}>Группа цен 1</Format></Typography.Link>
+        <Typography.Link to="/"><Format width={170}>Группа цен цен цен цен цен 1</Format></Typography.Link>
       </div>
       <div className={style.outdatedtasks}>
-        <div className={style.value}><Format>{ outdatedTasksAmount }</Format></div>
-        <div className={style.sublabel}>проссроченные задачи за 24 часа</div>
+        <Typography.Value size="xl" strong><Format>{ outdatedTasksAmount }</Format></Typography.Value>
+        <Typography.Caption>проссроченные задачи за 24 часа</Typography.Caption>
       </div>
       <Divider />
       <div className={style.equipment}>
-        <div className={style.value}><Format>{ devicesAmount }</Format></div>
-        <div className={style.sublabel}>всего оборудования на объекте</div>
+        <Typography.Value size="xl" strong><Format>{ devicesAmount }</Format></Typography.Value>
+        <Typography.Caption>всего оборудования на объекте</Typography.Caption>
       </div>
       <div className={style.conditions}>
-        <div className={style.sublabel}>Состояние оборудования</div>
+        <Typography.Caption>Состояние оборудования</Typography.Caption>
         <div className={style.state}>
-          <div className={style.value}>{typeof offDevicesAmount === 'number' ? offDevicesAmount : <Loader size="small" />}</div>
-          <div className={style.sublabel}>не работает</div>
+          <Typography.Value className={style.value} size="l" strong>
+            {typeof offDevicesAmount === 'number' ? offDevicesAmount : <Loader size="small" />}
+          </Typography.Value>
+          <Typography.Caption>не работает</Typography.Caption>
         </div>
         <div className={classNames(style.state, style.danger)}>
-          <div className={style.value}>{isLoaded ? devicesServceRequiredAmount : <Loader size="small" />}</div>
-          <div className={style.sublabel}>нужен сервис</div>
+          <Typography.Value className={style.value} size="l" strong>{isLoaded ? devicesServceRequiredAmount : <Loader size="small" />}</Typography.Value>
+          <Typography.Caption>нужен сервис</Typography.Caption>
         </div>
         <div className={style.state}>
-          <div className={style.value}>{isLoaded ? devicesHardWaterAmount : <Loader size="small" />}</div>
-          <div className={style.sublabel}>жесткая вода</div>
+          <Typography.Value className={style.value} size="l" strong>{isLoaded ? devicesHardWaterAmount : <Loader size="small" />}</Typography.Value>
+          <Typography.Caption>жесткая вода</Typography.Caption>
         </div>
       </div>
       <div className={classNames(style.sublabel, style.downtime)}>
-        <div className={style.label}>Время простоя</div>
-        <div><Format width={180}>{humanizeSeconds(downtime)}</Format></div>
+        <Typography.Caption>Время простоя</Typography.Caption>
+        <Typography.Value strong><Format width={180}>{humanizeSeconds(downtime)}</Format></Typography.Value>
       </div>
     </Card>
   );

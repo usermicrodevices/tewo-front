@@ -5,29 +5,15 @@ import { Card, Divider } from 'antd';
 import classNames from 'classnames';
 
 import DatergangePicker from 'elements/filters/daterangepicker';
-import Icon from 'elements/icon';
 import Loader from 'elements/loader';
 import Format from 'elements/format';
+import Typography from 'elements/typography';
+import ChangesLabel from 'elements/changesLabel';
 import ScalebleChart from 'elements/chart/scaleble';
 
 import CurvesPicker from 'elements/curvePicker';
 
 import styles from './sales.module.scss';
-
-const ChangesLabel = ({ value }) => {
-  if (typeof value !== 'number') {
-    return <div className={styles.growth}><Loader /></div>;
-  }
-  if (value === 0) {
-    return null;
-  }
-  return (
-    <div className={styles.growth}>
-      <Icon name={value > 0 ? 'arrow-upward-outline' : 'arrow-downward-outline'} className={value > 0 ? styles.rise : styles.fail} />
-      {`${Math.round(Math.abs(value))}%`}
-    </div>
-  );
-};
 
 const Sales = ({ element: { details } }) => {
   const {
@@ -64,37 +50,36 @@ const Sales = ({ element: { details } }) => {
         </div>
       </div>
       <div className={styles.sider}>
-        <div className={styles.sidertitle}>
+        <Typography.Title level={3} className={styles.sidertitle}>
           <span className={styles.curency}>₽</span>
           <span>Статистика продаж</span>
-        </div>
+        </Typography.Title>
         <div className={styles.rangereport}>
           <div className={styles.values}>
-            <div><Format>{salesCur}</Format></div>
+            <Typography.Value size="xl" strong><Format>{salesCur}</Format></Typography.Value>
             <ChangesLabel value={salesDiff} />
           </div>
-          <div className={styles.sublabel}>продаж за текущий период</div>
+          <Typography.Caption>продаж за текущий период</Typography.Caption>
         </div>
         <div className={classNames(styles.rangereport, styles.prew)}>
           <div className={styles.values}>
-            <div><Format>{salesPrw}</Format></div>
+            <Typography.Value size="l"><Format>{salesPrw}</Format></Typography.Value>
           </div>
-          <div className={styles.sublabel}>продаж за предыдущий период</div>
+          <Typography.Caption>продаж за предыдущий период</Typography.Caption>
         </div>
         <Divider />
-        <div className={styles.beverages}>
+        <div className={styles.rangereport}>
           <div className={styles.values}>
-            <div className={styles.sublabel}>Колличество наливов</div>
+            <Typography.Value size="xl" strong><Format>{beveragesCur}</Format></Typography.Value>
             <ChangesLabel value={beveragesDiff} />
           </div>
-          <div className={styles.amount}>
-            <div className={styles.value}><Format>{beveragesCur}</Format></div>
-            <div className={styles.sublabel}>текущий</div>
+          <Typography.Caption>наливов за текущий период</Typography.Caption>
+        </div>
+        <div className={classNames(styles.rangereport, styles.prew)}>
+          <div className={styles.values}>
+            <Typography.Value size="l"><Format>{beveragesPrw}</Format></Typography.Value>
           </div>
-          <div className={styles.amount}>
-            <div className={styles.value}><Format>{beveragesPrw}</Format></div>
-            <div className={styles.sublabel}>предыдущий</div>
-          </div>
+          <Typography.Caption>наливов за предыдущий период</Typography.Caption>
         </div>
       </div>
     </Card>
