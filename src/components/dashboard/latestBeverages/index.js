@@ -3,7 +3,7 @@ import React from 'react';
 import Format from 'elements/format';
 import Loader from 'elements/loader';
 import { typeNameToIcon } from 'elements/beverageIcons';
-import Badge from 'elements/salePointBadge';
+import Badge from 'elements/badged';
 
 import tableWidget from '../tableWidget';
 
@@ -12,7 +12,7 @@ const FavoriteObjects = tableWidget([
     title: 'Название объекта',
     dataIndex: 'device',
     render: (device) => (
-      device && device.salePoint ? <Badge stateColor={device.salePoint.stateColor}><Format>{device.salePointName}</Format></Badge> : <Loader />
+      device && device.salePoint ? <Badge size={8} stateColor={device.salePoint.stateColor}><Format>{device.salePointName}</Format></Badge> : <Loader />
     ),
   },
   {

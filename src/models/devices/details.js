@@ -78,7 +78,7 @@ class Details {
     me.session.events.getDeviceServiceEvents(me.id).then(({ results }) => {
       this.serviceEvents = results;
     });
-    me.session.events.getDeviceClearancesEventsLastWeek(me.id).then(({ count }) => {
+    me.session.events.getDeviceClearancesEventsLastWeekCount(me.id).then((count) => {
       this.clearancesAmount = count;
     });
 

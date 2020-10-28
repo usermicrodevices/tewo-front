@@ -49,7 +49,7 @@ const rangesUnion = (lhs, rhs) => ({
   max: Math.max(lhs.max, rhs.max),
 });
 
-const ClearanceChart = withSize()(({
+const ClearanceChart = ({
   size, x, y, y1, y2,
 }) => {
   if (!Array.isArray(x) || !Array.isArray(y) || x.length <= 1 || y.length === 0) {
@@ -124,7 +124,7 @@ const ClearanceChart = withSize()(({
       options={data}
     />
   );
-});
+};
 
 const Wrap = withSize()(({
   size: { width }, height, x, y, y1, y2,

@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import Format from 'elements/format';
 import Loader from 'elements/loader';
-import Badge from 'elements/salePointBadge';
+import Badge from 'elements/badged';
 
 import Icon from 'elements/icon';
 
@@ -30,7 +30,7 @@ const FavoriteObjects = tableWidget([
     dataIndex: 'name',
     render: (name) => (
       name
-        ? <Badge><Title level={4}>{name}</Title></Badge>
+        ? <Badge size={8}><Title level={4}>{name}</Title></Badge>
         : <Loader />
     ),
     sorter: (a, b) => {

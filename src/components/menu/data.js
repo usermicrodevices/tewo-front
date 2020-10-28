@@ -11,13 +11,8 @@ import {
   ingredients,
   priceList,
   eventTypes,
-  cost,
-  ingredientsRate,
-  sales,
-  cancelationsRate,
-  cleansRate,
-  overdueLog,
   eventsLog,
+  downtimeLog,
   cleansLog,
 } from 'routes';
 
@@ -71,7 +66,8 @@ const items = [
     'Технический раздел',
     [
       {
-        text: 'Просроченные задачи',
+        text: 'Время прстоя оборудования',
+        act: downtimeLog,
       },
       {
         text: 'Журнал событий',
@@ -83,9 +79,7 @@ const items = [
       },
       {
         text: 'Журнал очисток',
-      },
-      {
-        text: 'Статистика напряжения',
+        act: cleansLog,
       },
     ],
   ),

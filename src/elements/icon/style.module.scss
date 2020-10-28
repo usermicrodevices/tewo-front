@@ -1,33 +1,33 @@
 @import 'src/themes/constants';
 
 .generic {
-    transition: all $transition-duration;
+  transition: all $transition-duration;
 }
 
 :global .anticon {
-    fill: $text-color;
+  fill: $text-color;
 }
 
 :global .ant-menu-item-disabled .anticon  {
-    fill: rgba(0, 0, 0, 0.25);
+  fill: rgba(0, 0, 0, 0.25);
 }
 
 :global {
-    .ant-menu-item-selected,
-    .ant-menu-item-active,
-    .ant-btn:hover,
-    .ant-btn-link,
-    .ant-menu-submenu-active {
-        .anticon {
-            fill: $link-color;
-        }
+  .ant-menu-item-selected,
+  .ant-menu-item-active,
+  .ant-btn:hover,
+  .ant-btn-link,
+  .ant-menu-submenu-active {
+    .anticon {
+      fill: $link-color;
     }
+  }
 
-    a span.anticon {
-        fill: $link-color;
-    }
+  a span.anticon {
+    fill: $link-color;
+  }
 }
 
 .reflex {
-    transform: scaleX(-1);
+  transform: scaleX(-1);
 }

@@ -3,7 +3,7 @@ import { Typography } from 'antd';
 
 import Format from 'elements/format';
 import Loader from 'elements/loader';
-import Badge from 'elements/salePointBadge';
+import Badge from 'elements/badged';
 import { durationCell } from 'elements/table/trickyCells';
 
 import tableWidget from '../tableWidget';
@@ -16,7 +16,7 @@ const FavoriteObjects = tableWidget([
     dataIndex: 'salePoint',
     render: (salePoint) => (
       salePoint
-        ? <Badge><Typography.Title level={4}>{salePoint.name}</Typography.Title></Badge>
+        ? <Badge size={8}><Typography.Title level={4}>{salePoint.name}</Typography.Title></Badge>
         : <Loader />
     ),
   },

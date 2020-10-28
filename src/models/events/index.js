@@ -4,15 +4,13 @@ import moment from 'moment';
 import { daterangeToArgs } from 'utils/date';
 import Table from 'models/table';
 import Filters from 'models/filters';
-import { getEvents, getEventsClearancesChart } from 'services/events';
+import { getEvents, getEventsClearancesChart, getClearances } from 'services/events';
 import TimeAgo from 'elements/timeago';
 import colorizedCell from 'elements/table/colorizedCell';
 import { eventsLog as eventsLogRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
 
 const TECH_SERVICE_EVENT_ID = 20;
-
-const TECH_CLEARANCE_EVENT_ID = 8;
 
 const declareColumns = () => ({
   id: {
@@ -122,8 +120,6 @@ const declareFilters = (session) => ({
 });
 
 class Events extends Table {
-  chart = null;
-
   session;
 
   constructor(session) {
@@ -145,21 +141,19 @@ class Events extends Table {
     return getEvents(this.session)(1e3, 0, `event_reference__id=${TECH_SERVICE_EVENT_ID}&close_date__isnull=1&device__id__in=${deviceId}`);
   }
 
-  getDeviceClearancesEventsLastWeek(deviceId) {
+  getDeviceClearancesEventsLastWeekCount(deviceId) {
     const daterange = [moment().subtract(1, 'week'), moment()];
     const datefilter = daterangeToArgs(daterange, 'open_date');
-    return getEvents(this.session)(1e3, 0, `event_reference__id=${TECH_CLEARANCE_EVENT_ID}&device__id__in=${deviceId}${datefilter}`);
+    return getClearances(this.session)(1, 0, `device__id__in=${deviceId}${datefilter}`).then(({ count }) => count);
   }
 
   getDeviceClearances(deviceId) {
-    return getEvents(this.session)(3e4, 0, `event_reference__id=${TECH_CLEARANCE_EVENT_ID}&device__id__in=${deviceId}`);
+    return getClearances(this.session)(3e4, 0, `device__id__in=${deviceId}`);
   }
 
-  getClearances() {
-    return getEvents(this.session)(3e4, 0, `event_reference__id=${TECH_CLEARANCE_EVENT_ID}`);
-  }
+  getClearances = getClearances;
 
-  getOverdudeTasks(dateRange, salePointsFilter) {
+  getOverdueTasks(dateRange, salePointsFilter) {
     const datefilter = daterangeToArgs(dateRange, 'open_date');
     return getEvents(this.session)(3e4, 0, `overdued=1${datefilter}&${salePointsFilter}`);
   }

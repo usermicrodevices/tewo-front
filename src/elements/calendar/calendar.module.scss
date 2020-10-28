@@ -1,42 +1,57 @@
 @import 'src/themes/constants';
 
-.items {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
-  flex-wrap: wrap;
+.wrap {
+  .items {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    flex-wrap: wrap;
 
-  height: 100%;
-
-  >* {
-    line-height: 24px;
-    width: 24px;
-    height: 24px;
-    border-radius: 12px;
-    overflow: hidden;
-    text-align: center;
-    margin: 1.5px;
-    color: white;
-    font-size: 12px;
+    >* {
+      line-height: 24px;
+      width: 24px;
+      height: 24px;
+      border-radius: 12px;
+      overflow: hidden;
+      text-align: center;
+      margin: 1.5px;
+      color: white;
+      font-size: 12px;
+    }
   }
-}
 
-.head {
-  display: flex;
-  align-items: center;
+  :global .ant-picker-calendar-date {
+    max-height: 64px;
+  }
 
-  .month {
-    flex-grow: 1;
+  .loader {
+    position: absolute;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: rgba(255,255,255,0.5);
+    z-index: 3;
+  }
 
-    .monthtext {
-      min-width: 225px;
-      text-align: center;
-      text-transform: capitalize;
-      color: $link-color;
-      font-weight: 600;
+  .head {
+    display: flex;
+    align-items: center;
+
+    .month {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .monthtext {
+        min-width: 225px;
+        text-align: center;
+        text-transform: capitalize;
+        color: $link-color;
+        font-weight: 600;
+      }
     }
   }
 }

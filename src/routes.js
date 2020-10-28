@@ -8,10 +8,11 @@ import MapPage from 'pages/map';
 import Companies from 'pages/reference/companies';
 import SalePoints from 'pages/reference/salePoints';
 import Beverage from 'pages/tech/beverage';
-import Cleans from 'pages/tech/cleans';
+import Clearances from 'pages/tech/clearances';
 import Devices from 'pages/reference/devices';
 import EventTypes from 'pages/reference/eventTypes';
 import Events from 'pages/tech/events';
+import Downtime from 'pages/tech/downtime';
 import Drinks from 'pages/reference/drink';
 import Ingredients from 'pages/reference/ingredients';
 import PriceList from 'pages/reference/price';
@@ -48,14 +49,9 @@ const drink = new Rout('/drink', Drinks);
 const ingredients = new Rout('/ingredients', Ingredients);
 const priceList = new Rout('/pricegroups', PriceList);
 const eventTypes = new Rout('/events', EventTypes);
-const overdueLog = new Rout('/overdue_log', Cleans);
+const downtimeLog = new Rout('/downtime_log', Downtime);
 const eventsLog = new Rout('/events_log', Events);
-const cleansLog = new Rout('/cleans_log', Cleans);
-const cost = new Rout('/cost', Cleans);
-const ingredientsRate = new Rout('/ingredients_rate', Cleans);
-const sales = new Rout('/sales', Cleans);
-const cancelationsRate = new Rout('/cancelations_rate', Cleans);
-const cleansRate = new Rout('/cleans_rate', Cleans);
+const cleansLog = new Rout('/cleans_log', Clearances);
 
 const authorizedRoutes = [
   account,
@@ -63,13 +59,8 @@ const authorizedRoutes = [
   usersList,
   map,
   cleansLog,
-  overdueLog,
+  downtimeLog,
   eventsLog,
-  cost,
-  ingredientsRate,
-  sales,
-  cancelationsRate,
-  cleansRate,
   eventsLog,
   companies,
   devices,
@@ -86,13 +77,6 @@ const defaultAuthorizedRout = dashboard;
 
 const defaultUnauthorizedRout = signin;
 
-const companiesSubmenu = [
-  {
-    path: companies.path,
-    text: 'Каталог',
-  },
-];
-
 export {
   signup,
   signin,
@@ -102,13 +86,8 @@ export {
   usersList,
   map,
   cleansLog,
-  overdueLog,
+  downtimeLog,
   eventsLog,
-  cost,
-  ingredientsRate,
-  sales,
-  cancelationsRate,
-  cleansRate,
   companies,
   devices,
   drink,
@@ -121,5 +100,4 @@ export {
   unauthorizedRoutes,
   authorizedRoutes,
   beverage,
-  companiesSubmenu,
 };

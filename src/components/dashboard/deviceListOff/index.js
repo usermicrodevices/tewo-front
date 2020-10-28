@@ -2,7 +2,7 @@ import React from 'react';
 
 import Format from 'elements/format';
 import Loader from 'elements/loader';
-import Badge from 'elements/salePointBadge';
+import Badge from 'elements/badged';
 import { durationCell } from 'elements/table/trickyCells';
 
 import tableWidget from '../tableWidget';
@@ -12,7 +12,7 @@ const FavoriteObjects = tableWidget([
     title: 'Название объекта',
     dataIndex: 'salePoint',
     render: (point) => (
-      point ? <Badge><Format>{point.name}</Format></Badge> : <Loader />
+      point ? <Badge size={8}><Format>{point.name}</Format></Badge> : <Loader />
     ),
     sorter: (a, b) => {
       if (a.salePoint && b.salePoint) {

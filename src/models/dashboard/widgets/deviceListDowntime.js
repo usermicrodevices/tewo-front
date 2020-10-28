@@ -87,7 +87,7 @@ class DeviceListOff {
   }
 
   update = () => {
-    this.session.events.getOverdudeTasks(this.generic.dateRange, this.generic.getPointsFilter('device__sale_point__id')).then(({ results }) => {
+    this.session.events.getOverdueTasks(this.generic.dateRange, this.generic.getPointsFilter('device__sale_point__id')).then(({ results }) => {
       const devices = {};
       for (const {
         openDate, closeDate, eventId, deviceId,
