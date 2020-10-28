@@ -9,30 +9,14 @@ import { tableItemLink } from 'elements/table/trickyCells';
 import TimeAgo from 'elements/timeago';
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
 
-import ClearancesCalendar from './clearancesCalendar';
-
 const declareColumns = () => ({
   id: {
-    isVisibleByDefault: true,
+    isVisibleByDefault: false,
     title: 'ID',
     width: 100,
     isAsyncorder: true,
     isDefaultSort: true,
     sortDirections: 'descend',
-  },
-  createdDate: {
-    isVisibleByDefault: false,
-    title: 'Время начала',
-    grow: 1,
-    transform: (date) => date && TimeAgo({ date }),
-    sortDirections: 'both',
-  },
-  duration: {
-    isVisibleByDefault: true,
-    title: 'Длительность',
-    grow: 2,
-    transform: (_, data) => data.durationText,
-    sortDirections: 'both',
   },
   companyName: {
     isVisibleByDefault: true,
@@ -64,6 +48,13 @@ const declareColumns = () => ({
     isVisibleByDefault: true,
     title: 'Описание',
     grow: 2,
+  },
+  closeDate: {
+    isVisibleByDefault: false,
+    title: 'Время исправления',
+    grow: 1,
+    transform: (date) => date && TimeAgo({ date }),
+    sortDirections: 'both',
   },
 });
 

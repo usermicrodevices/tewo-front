@@ -8,20 +8,10 @@ import NoData from 'elements/noData';
 import locale from './locale';
 import style from './style.module.scss';
 
-const range = (data) => {
-  const setRange = { min: data[0], max: data[0] };
-  for (const v of data) {
-    setRange.min = Math.min(setRange.min, v);
-    setRange.max = Math.max(setRange.max, v);
-  }
-  return setRange;
-};
-
 const Barchart = ({
   size, x, y, yAxis,
 }) => {
-  console.log(x, y);
-  if (!Array.isArray(x) || !Array.isArray(y) || x.length <= 1 || y.length === 0) {
+  if (!Array.isArray(x) || !Array.isArray(y) || x.length <= 1) {
     return <NoData noMargin>Недостаточно данных для построения графика</NoData>;
   }
   const categories = x;
@@ -46,7 +36,6 @@ const Barchart = ({
     plotOptions: {
       bar: {
         columnWidth: '50%',
-        endingShape: 'rounded',
       },
     },
     dataLabels: {
