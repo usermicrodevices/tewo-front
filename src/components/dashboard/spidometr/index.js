@@ -22,9 +22,9 @@ const Speedometr = ({ storage: { value, maxSpeed, updateValue } }) => {
   return (
     <div className={classnames.root}>
       <div className={classnames.header}>
-        <div className={classnames.value}>
+        <Typography.Value size="xxxl">
           <Format width={150}>{value}</Format>
-        </div>
+        </Typography.Value>
         <Typography.Text>{speedLabelText}</Typography.Text>
       </div>
       <SeedometrChart value={value} max={maxSpeed} />

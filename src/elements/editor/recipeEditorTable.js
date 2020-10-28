@@ -17,10 +17,11 @@ const RecipeEditroTable = ({ data, isEdditing }) => {
   if (!isEdditing && data.isEmpty) {
     return (
       <div className={style.norecipe}>
-        <NoData noMargin>
-          <div className={style.strong}>Рецептура не заполнена</div>
-          <div>Начните редактирование</div>
-        </NoData>
+        <NoData
+          noMargin
+          title="Рецептура не заполнена"
+          text="Начните редактирование"
+        />
       </div>
     );
   }

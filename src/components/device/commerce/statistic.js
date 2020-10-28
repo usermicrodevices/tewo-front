@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Card } from 'antd';
 
 import Icon from 'elements/icon';
+import Typography from 'elements/typography';
 
 import Badge from '../badge';
 import style from './index.module.scss';
@@ -10,10 +11,10 @@ import genericStyle from '../genericStyle.module.scss';
 
 const Statistic = ({ element: { details } }) => (
   <Card className={style.statistic}>
-    <div className={genericStyle.title}>
+    <Typography.Title level={4} className={genericStyle.title}>
       <Icon size={18} name="bar-chart-outline" />
       Статистика за период
-    </div>
+    </Typography.Title>
     <div className={genericStyle.badges}>
       <Badge
         value={details.beveragesStats.beveragesCur}

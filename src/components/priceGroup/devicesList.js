@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import Icon from 'elements/icon';
 import Loader from 'elements/loader';
 import Format from 'elements/format';
+import Typography from 'elements/typography';
 
 import style from './style.module.scss';
 
@@ -51,10 +52,10 @@ const toDataSource = (device) => ({
 const DevicesList = ({ element }) => (
   <Card className={style.card}>
     <div className={style.title}>
-      <div className={style.titletext}>
+      <Typography.Title level={3} className={style.titletext}>
         Список оборудования
-        <span className={style.amount}>{` (${element.devicesIdSet.size})`}</span>
-      </div>
+        <span>{` (${element.devicesIdSet.size})`}</span>
+      </Typography.Title>
       <Button type="text" disabled icon={<Icon size={22} name="plus-circle-outline" />} />
     </div>
     { element.devices

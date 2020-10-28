@@ -55,12 +55,10 @@ class Content extends React.Component {
     }
     if (data.length === 0) {
       return (
-        <NoData>
-          <div className={style.nodatatext}>
-            <div className={style.strong}>По результатам поиска совпадений не найдено</div>
-            <div>Повторите поиск или измените фильтры</div>
-          </div>
-        </NoData>
+        <NoData
+          title="По результатам поиска совпадений не найдено"
+          text="Повторите поиск или измените фильтры"
+        />
       );
     }
     return (

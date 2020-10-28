@@ -13,7 +13,7 @@ import style from './index.module.scss';
 const Statistic = inject(({ session, storage }) => ({ session, storage }))(observer(({ session, storage }) => (
   <div className={style.layout}>
     <div className={style.beverages}>
-      <div className={style.value}><Format>{storage.value}</Format></div>
+      <Typography.Value size="xxxl"><Format>{storage.value}</Format></Typography.Value>
       <Typography.Caption>
         {plural(storage.value, ['Налив', 'Наливов', 'Налива'])}
         <br />

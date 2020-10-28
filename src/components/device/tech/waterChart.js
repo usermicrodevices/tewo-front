@@ -4,7 +4,7 @@ import { Card } from 'antd';
 import Chart from 'react-apexcharts';
 import { withSize } from 'react-sizeme';
 
-import style from './index.module.scss';
+import Typography from 'elements/typography';
 
 const COLORS = ['#228148'];
 
@@ -51,7 +51,7 @@ const WaterChart = ({ size, element: { details: { waterQuality, xaxis } } }) => 
   };
   return (
     <Card>
-      <div className={style.charttitle}>Жесткость воды</div>
+      <Typography.Title level={3}>Жесткость воды</Typography.Title>
       <Chart
         series={series}
         width={size.width - 55}

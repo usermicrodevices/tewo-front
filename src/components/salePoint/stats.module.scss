@@ -1,96 +1,57 @@
-@import 'src/themes/constants';
+@import "src/themes/constants";
 
-.root>div {
+.root > div {
   display: flex;
   height: 100%;
   justify-content: space-between;
   flex-direction: column;
-  .title {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      line-height: 22px;
-      font-size: 14px;
-      .icon {
-          margin-right: 8px;
-          fill: $link-color;
-      }
-  }
-  .groups {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      line-height: 50px;
 
-      a {
-        text-decoration: underline;
-      }
-  }
-  .outdatedtasks {
-    .value {
-      font-size: 16px;
-      line-height: 32px;
-      height: 32px;
-      max-width: 30px;
+  .groups {
+    display: flex;
+    justify-content: space-between;
+    line-height: 50px;
+
+    a {
+      text-decoration: underline;
     }
   }
-  .equipment {
-    .value {
-      font-size: 20px;
-      font-weight: 600;
-      line-height: 32px;
-      max-width: 30px;
-    }
-  }
-  .outdatedtasks, .equipment {
-    .sublabel {
-      color: #8C8C8C;
-    }
-  }
+
   .conditions {
     margin-bottom: 10px;
 
-    .sublabel {
-      line-height: 32px;
-    }
-
     .state {
+      height: 40px;
+      box-sizing: border-box;
+      padding-left: 15px;
       display: flex;
       justify-content: flex-start;
+      align-items: center;
       border-radius: 8px;
-      background: #EEFBFB;
+      background: #eefbfb;
 
       margin: 3px 0px;
 
       .value {
-        width: 44px;
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 32px;
-        font-size: 16px;
-        font-weight: 600;
-      }
-
-      .sublabel {
-        color: #8C8C8C;
-      }
-
-      &.danger>div.sublabel  {
-        color: #F5222D;
+        width: 20px;
       }
     }
   }
-  .state, .equipment, .outdatedtasks, .groups {
+
+  .icon {
+    margin-right: 8px;
+    fill: $link-color;
+  }
+
+  .state,
+  .equipment,
+  .outdatedtasks,
+  .groups {
     flex-grow: 1;
   }
   .downtime.sublabel {
     display: flex;
     justify-content: space-between;
-    .label {
-      color: #8C8C8C;
-    }
+    align-items: center;
   }
 
   :global .ant-divider-horizontal {
@@ -98,11 +59,7 @@
   }
 }
 
-.sublabel {
-  font-size: 11px;
-  white-space: nowrap;
-}
-
-.danger>div {
-  color: #F5222D;
+.danger > div,
+.danger > span {
+  color: #f5222d;
 }

@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import Icon from 'elements/icon';
 import Loader from 'elements/loader';
 import Format from 'elements/format';
+import Typography from 'elements/typography';
 
 import style from './badge.module.scss';
 
@@ -18,13 +19,13 @@ const Badge = ({
         <div>
           { isLoading ? <Loader /> : (
             <>
-              { typeof value !== 'undefined' && <Format>{ value }</Format>}
+              { typeof value !== 'undefined' && <Typography.Value strong><Format>{ value }</Format></Typography.Value>}
               { subvalue && <span className={style.subvalue}><Format>{subvalue}</Format></span> }
             </>
           )}
         </div>
       </div>
-      <div className={style.label}>{ label }</div>
+      <Typography.Caption>{ label }</Typography.Caption>
     </div>
   );
 };

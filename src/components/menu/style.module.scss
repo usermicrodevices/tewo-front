@@ -26,17 +26,17 @@
 $icon-size: 34px;
 
 :global .ant-menu-vertical.ant-menu-root {
-  width: $small-menu-withd;
+  width: $small-menu-width;
   padding-top: 0px;
 
   > .ant-menu-item, .ant-menu-submenu-vertical > .ant-menu-submenu-title {
-    height: $small-menu-withd - 8px;
+    height: $small-menu-width - 8px;
   }
 
   .anticon {
     font-size: 34px;
-    margin-left: $small-menu-withd / 2 - $icon-size / 2 - 16px;
-    margin-top: $small-menu-withd / 2 - $icon-size / 2 - 4px;
+    margin-left: $small-menu-width / 2 - $icon-size / 2 - 16px;
+    margin-top: $small-menu-width / 2 - $icon-size / 2 - 4px;
   }
 
   .ant-menu-submenu-arrow {

@@ -1,14 +1,17 @@
 import { Typography } from 'antd';
 
 import Caption from './caption';
+import Value from './value';
+import Link from './link';
 
 const {
-  Title, Text, Paragraph, Link,
+  Title, Paragraph, Text,
 } = Typography;
 
 const CustomTypography = {
   Title,
   Text,
+  Value,
   Paragraph,
   Link,
   Caption,

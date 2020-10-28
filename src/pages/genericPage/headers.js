@@ -10,6 +10,7 @@ import { FilterOutlined } from '@ant-design/icons';
 import Filters from 'elements/filters';
 import Icon from 'elements/icon';
 import Typography from 'elements/typography';
+import HTMLEntity from 'elements/htmlEntity';
 import ColumnsPicker from 'elements/table/columnsPicker';
 
 import styles from './style.module.scss';
@@ -32,7 +33,13 @@ const menuItemKeyFromAction = (menu, a) => {
 };
 
 const GoBack = withRouter(
-  ({ history }) => <Button onClick={history.goBack} className={styles.goback} icon={<Icon name="arrow-ios-back-outline" />} type="text">Назад</Button>,
+  ({ history }) => (
+    <Typography.Link type="secondary" onClick={history.goBack}>
+      <HTMLEntity code="&#x02039;" />
+      {' '}
+      Назад
+    </Typography.Link>
+  ),
 );
 
 const ElementHeader = withRouter(inject('element')(observer(({
@@ -47,9 +54,9 @@ const ElementHeader = withRouter(inject('element')(observer(({
   const path = match.path.split('/').slice(0, 2).join('/');
   return (
     <div className={styles.head}>
-      <Space>
+      <Space size={16} className={styles.actions}>
         <GoBack />
-        <Button onClick={() => history.push(path)} className={styles.goback} type="text">{ allLinkText }</Button>
+        <Typography.Link type="secondary" onClick={() => history.push(path)}>{ allLinkText }</Typography.Link>
       </Space>
       <div className={styles.titleRow}>
         { children }
@@ -91,7 +98,9 @@ const TableHeader = inject('table')(observer(({ title, table }) => {
   const onColumnsPicked = (pickedColumns) => { table.visibleColumns = pickedColumns; };
   return (
     <div className={styles.head}>
-      <GoBack />
+      <Space size={16} className={styles.actions}>
+        <GoBack />
+      </Space>
       <div className={styles.titleRow}>
         <Space>
           <Typography.Title level={1}>{title}</Typography.Title>

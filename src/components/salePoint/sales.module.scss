@@ -1,4 +1,5 @@
 @import 'src/themes/constants';
+
 .root>div {
   display: flex;
 
@@ -34,89 +35,19 @@
       }
       margin-bottom: 34px;
     }
+
     .rangereport {
-      margin-top: 10px;
-      .values {
-        font-weight: 600;
-        font-size: 20px;
-        height: 26px;
-      }
-
-      .sublabel {
-        color: #8C8C8C;
-      }
-
-      &.prew {
-        .values {
-          font-weight: normal;
-          font-size: 16px;
-        }
-      }
+      margin-top: 24px;
+      margin-bottom: 24px;
     }
-    .growth {
-      font-size: 16px;
-      font-weight: 600;
-      display: flex;
 
-      .rise, .fail {
-        transform: scaleX(0.7);
-      }
-      .rise {
-        fill: #54DA33;
-      }
-      .fail {
-        fill: #F5222D;
-      }
-    }
     .values {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
+      margin-bottom: 8px;
     }
-    .sublabel {
-      font-size: 11px;
-      line-height: 43px;
-      white-space: nowrap;
-    }
-    .beverages {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
 
-      .values {
-        grid-column-start: span 2;
-      }
-
-      .growth {
-        align-self: center;
-      }
-
-      .sublabel {
-        line-height: 60px;
-      }
-      .amount {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 85px;
-        height: 122px;
-        background-color: #EEFBFB;
-        border-radius: 8px;
-        &:last-child {
-          margin-left: 6px;
-        }
-        .sublabel {
-          line-height: 24px;
-        }
-
-        .value {
-          font-weight: 600;
-          font-size: 16px;
-          line-height: 24px;
-          height: 24px;
-        }
-      }
-    }
     :global .ant-divider-horizontal {
       margin: 0px;
     }

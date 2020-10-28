@@ -2,6 +2,8 @@
 import React from 'react';
 import classnames from 'classnames';
 
+import Typography from 'elements/typography';
+
 import style from './style.module.scss';
 
 const icon = (
@@ -16,11 +18,23 @@ const icon = (
   </svg>
 );
 
-const NoData = ({ children, noMargin }) => (
-  <div className={classnames(style.nodata, { [style.margin]: !noMargin })}>
-    {icon}
-    <div>{children}</div>
-  </div>
+const NoData = ({
+  title, text, children, noMargin,
+}) => (
+  children ? (
+    <div className={classnames(style.nodata, { [style.margin]: !noMargin })}>
+      {icon}
+      <div>{children}</div>
+    </div>
+  ) : (
+    <div className={classnames(style.nodata, { [style.margin]: !noMargin })}>
+      {icon}
+      <div className={style.nodatatext}>
+        <Typography.Text strong>{title}</Typography.Text>
+        <Typography.Caption>{text}</Typography.Caption>
+      </div>
+    </div>
+  )
 );
 
 export default NoData;

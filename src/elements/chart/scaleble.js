@@ -41,7 +41,7 @@ const ScalebleChart = ({
   y1, y2,
 }) => {
   if (!Array.isArray(x) || !Array.isArray(y) || x.length <= 1 || y.length === 0) {
-    return <NoData noMargin>Недостаточно данных для построения графика</NoData>;
+    return <NoData noMargin text="Недостаточно данных для построения графика" />;
   }
   const categories = x.map((v) => +v);
   const series = y.map(({ name, data }) => ({ name, data, type: 'line' }));

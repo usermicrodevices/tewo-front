@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Card, Button } from 'antd';
 
 import Icon from 'elements/icon';
+import Typography from 'elements/typography';
 
 import Badge from './badge';
 import style from './genericStyle.module.scss';
@@ -15,10 +16,10 @@ const Clearance = ({
 }) => Array.isArray(serviceEvents) && serviceEvents.length > 0 && (
   <Card className={style.clearance}>
     <div className={style.title}>
-      <div>
+      <Typography.Title level={4}>
         <Icon size={18} name="flip-2-outline" />
         Очистка
-      </div>
+      </Typography.Title>
       <div className={style.calendar}>
         <Button
           onClick={() => { push(`${pathname.split('/').slice(0, 3).join('/')}/calendar`); }}

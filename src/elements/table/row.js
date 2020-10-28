@@ -21,12 +21,10 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions) => withRo
   if (rowIndex === MAX_ROWS_AMOUNT - 1) {
     return (
       <div style={style} className={styles.row}>
-        <NoData>
-          <div className={styles.nodatatext}>
-            <div className={styles.strong}>Достигнуто максимальное число строк</div>
-            <div>Измените найстройки фильтации или сортировки</div>
-          </div>
-        </NoData>
+        <NoData
+          title="Достигнуто максимальное число строк"
+          text="Измените найстройки фильтации или сортировки"
+        />
       </div>
     );
   }
