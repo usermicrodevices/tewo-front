@@ -31,10 +31,10 @@ const Top = ({ size: { width }, element: { details: { salesTop } } }) => {
     return (
       <Wrap>
         <div className={style.emergency}>
-          <NoData>
-            <div className={style.strong}>За указанный период не обнаружено записей о наливах</div>
-            <div>Измените дату поиска</div>
-          </NoData>
+          <NoData
+            title="За указанный период не обнаружено записей о наливах"
+            text="Измените дату поиска"
+          />
         </div>
       </Wrap>
     );

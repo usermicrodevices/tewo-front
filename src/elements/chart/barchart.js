@@ -12,7 +12,7 @@ const Barchart = ({
   size, x, y, yAxis,
 }) => {
   if (!Array.isArray(x) || !Array.isArray(y) || x.length <= 1) {
-    return <NoData noMargin>Недостаточно данных для построения графика</NoData>;
+    return <NoData noMargin text="Недостаточно данных для построения графика" />;
   }
   const categories = x;
   const series = [{

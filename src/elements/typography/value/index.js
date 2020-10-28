@@ -25,7 +25,7 @@ function Value({
   return <Text className={classes} {...props}>{children}</Text>;
 }
 
-Value.propTypes = { size: PropTypes.oneOf(['xl', 'l', 'm', 's']), ...Text.propTypes };
+Value.propTypes = { size: PropTypes.oneOf(['xxxl', 'xl', 'l', 'm', 's']), ...Text.propTypes };
 Value.defaultProps = { size: 'm', ...Text.defaultProps };
 
 export default Value;
