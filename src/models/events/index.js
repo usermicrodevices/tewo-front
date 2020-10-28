@@ -153,7 +153,7 @@ class Events extends Table {
 
   getClearances = getClearances;
 
-  getOverdudeTasks(dateRange, salePointsFilter) {
+  getOverdueTasks(dateRange, salePointsFilter) {
     const datefilter = daterangeToArgs(dateRange, 'open_date');
     return getEvents(this.session)(3e4, 0, `overdued=1${datefilter}&${salePointsFilter}`);
   }

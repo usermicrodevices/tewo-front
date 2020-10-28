@@ -75,6 +75,10 @@ const getClearances = (session) => (limit, offset = 0, filter = '') => (
   getEvents(session)(limit, offset, `event_reference__id=${TECH_CLEARANCE_EVENT_ID}${filter !== '' ? `&${filter}` : filter}`)
 );
 
+const getOverdued = (session) => (limit, offset = 0, filter = '') => (
+  getEvents(session)(limit, offset, `overdued=1${filter !== '' ? `&${filter}` : filter}`)
+);
+
 const getEventTypes = () => get('/refs/event_references/').then((results) => {
   if (!Array.isArray(results)) {
     console.error(`по /refs/event_references/ ожидается массив, получен ${typeof results}`, results);
@@ -178,5 +182,5 @@ const getDetergrnts = (filter) => get(`/data/events/detergent/?${filter}`).then(
 });
 
 export {
-  getEvents, getEventTypes, getEventsClearancesChart, getClearances, getDetergrnts,
+  getEvents, getEventTypes, getEventsClearancesChart, getClearances, getDetergrnts, getOverdued,
 };

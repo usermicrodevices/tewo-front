@@ -46,7 +46,7 @@ const Stats = inject('table')(observer(({ table }) => {
         Сводная информация
       </div>
       <div>
-        <div><span className={classes.value}><Format>{ table.isLoaded ? table.rawData.length : undefined }</Format></span></div>
+        <div><span className={classes.value}><Format>{ table.isLoaded ? table.data.length : undefined }</Format></span></div>
         <div className={classes.label}>очисток за период</div>
       </div>
       <div>
