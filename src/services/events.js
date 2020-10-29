@@ -173,11 +173,22 @@ const getEventsClearancesChart = (deviceId, daterange) => get(
 });
 
 const getDetergrnts = (filter) => get(`/data/events/detergent/?${filter}`).then((json) => {
-  checkData(json, {
+  const errorResponse = {
+    decalcents: 0,
+    detergent: 0,
+    tablets: 0,
+  };
+  if (typeof json !== 'object') {
+    console.error(`/data/events/detergent/?${filter} result not an object`);
+    return errorResponse;
+  }
+  if (!checkData(json, {
     decalcents: 'number',
     detergent: 'number',
     tablets: 'number',
-  });
+  })) {
+    return errorResponse;
+  }
   return json;
 });
 

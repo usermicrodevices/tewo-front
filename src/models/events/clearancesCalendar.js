@@ -14,14 +14,16 @@ class ClearancesCalendar {
 
   loaded = new Set();
 
-  month;
+  @observable month;
 
   session;
 
   table;
 
   @computed get isLoading() {
-    return Object.keys(this.beverages).length + Object.keys(this.clearance).length === 0;
+    const [year, month] = [Math.floor(this.month / 12), this.month % 12 + 1];
+    const key = `${year}${month >= 10 ? month : `0${month}`}01`;
+    return !(key in this.beverages && key in this.clearance);
   }
 
   static rangeLenght(dateRange) {
@@ -39,6 +41,10 @@ class ClearancesCalendar {
       it.add(1, 'day');
     }
     return result;
+  }
+
+  @action setDateFilter(range) {
+    this.table.filter.data.set('open_date', range);
   }
 
   @action setMonth(date) {

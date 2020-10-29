@@ -2,6 +2,7 @@ import React from 'react';
 import { Menu } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { useLocation } from 'react-router-dom';
+import classnames from 'classnames';
 
 import data from './data';
 import Item from './item';
@@ -41,7 +42,7 @@ const MenuComponent = inject('menu')(observer(({ menu }) => {
       defaultOpenKeys={menu.isOpen ? defaultOpenKeys : []}
       selectedKeys={defaultSelectedKeys}
       mode={menu.mode}
-      className={style.menu}
+      className={classnames(style.menu, { [style.vertical]: !menu.isOpen })}
     >
       {
         data.map(({ icon, text, act }) => {

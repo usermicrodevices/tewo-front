@@ -1,5 +1,7 @@
 @import 'src/themes/constants';
 
+$icon-size: 34px;
+
 .menu {
   margin-top: $generic-margin;
   border-top-right-radius: $border-radius-base;
@@ -21,25 +23,25 @@
   :global(.ant-menu-item .anticon svg) {
     transition: none;
   }
+
+
 }
 
-$icon-size: 34px;
-
-:global .ant-menu-vertical.ant-menu-root {
+.vertical {
   width: $small-menu-width;
   padding-top: 0px;
 
-  > .ant-menu-item, .ant-menu-submenu-vertical > .ant-menu-submenu-title {
+  > :global(.ant-menu-item), :global(.ant-menu-submenu-vertical) > :global(.ant-menu-submenu-title) {
     height: $small-menu-width - 8px;
   }
 
-  .anticon {
+  :global(.anticon) {
     font-size: 34px;
     margin-left: $small-menu-width / 2 - $icon-size / 2 - 16px;
     margin-top: $small-menu-width / 2 - $icon-size / 2 - 4px;
   }
 
-  .ant-menu-submenu-arrow {
+  :global(.ant-menu-submenu-arrow) {
     display: none;
   }
 }

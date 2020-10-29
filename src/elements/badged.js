@@ -1,4 +1,7 @@
+import React from 'react';
 import stylied from 'styled-components';
+
+import Typography from 'elements/typography';
 
 const Badged = stylied.div`
 &:${({ align }) => (align === 'right' ? 'after' : 'before')} {
@@ -15,4 +18,9 @@ const Badged = stylied.div`
 }
 `;
 
-export default Badged;
+const TypographedBadge = ({ children, ...props }) => (
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  <Badged {...props}><Typography.Text>{ children }</Typography.Text></Badged>
+);
+
+export default TypographedBadge;

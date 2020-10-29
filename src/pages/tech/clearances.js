@@ -11,11 +11,13 @@ import colors from 'themes/calendar';
 import Badge from 'elements/badged';
 import Icon from 'elements/icon';
 import Format from 'elements/format';
+import Typography from 'elements/typography';
 
 import classes from './clearances.module.scss';
 
 const Calendar = inject('table')(observer(({ table }) => {
   const { calendar } = table;
+  const onSelect = (date) => { calendar.setDateFilter([date.clone().startOf('day'), date.clone().endOf('day')]); };
   return (
     <AntdCard>
       <div className={classes.legend}>
@@ -23,6 +25,7 @@ const Calendar = inject('table')(observer(({ table }) => {
         <Badge size={11} align="right" stateColor={colors.clearance}>Очистки</Badge>
       </div>
       <GenericCalendar
+        onSelect={onSelect}
         clearances={calendar.clearance}
         beverages={calendar.beverages}
         onPanelChange={(moment) => calendar.setMonth(moment)}
@@ -34,6 +37,7 @@ const Calendar = inject('table')(observer(({ table }) => {
 
 const Stats = inject('table')(observer(({ table }) => {
   let { detergent } = table.stats;
+  const { tablets } = table.stats;
   let ext = 'мл';
   if (detergent > 1e5) {
     ext = 'л';
@@ -43,22 +47,22 @@ const Stats = inject('table')(observer(({ table }) => {
     <AntdCard className={classes.stats}>
       <div className={classes.title}>
         <Icon size={18} name="bar-chart-outline" />
-        Сводная информация
+        <Typography.Text>Сводная информация</Typography.Text>
       </div>
       <div>
-        <div><span className={classes.value}><Format>{ table.isLoaded ? table.data.length : undefined }</Format></span></div>
-        <div className={classes.label}>очисток за период</div>
+        <Typography.Value size="xl"><Format>{ table.isLoaded ? table.data.length : undefined }</Format></Typography.Value>
+        <Typography.Caption>очисток за период</Typography.Caption>
       </div>
       <div>
-        <div><span className={classes.value}><Format>{ table.stats.tablets }</Format></span></div>
-        <div className={classes.label}>потрачено таблеток</div>
+        <Typography.Value size="xl"><Format>{ tablets }</Format></Typography.Value>
+        <Typography.Caption>потрачено таблеток</Typography.Caption>
       </div>
       <div>
         <div>
-          <span className={classes.value}><Format>{ detergent }</Format></span>
-          { detergent && <span className={classes.label}>{ext}</span> }
+          <Typography.Value size="xl"><Format>{ detergent }</Format></Typography.Value>
+          { typeof detergent === 'number' && <Typography.Caption>{ext}</Typography.Caption> }
         </div>
-        <div className={classes.label}>потрачено жидкости</div>
+        <Typography.Caption>потрачено жидкости</Typography.Caption>
       </div>
     </AntdCard>
   );

@@ -5,6 +5,7 @@
   grid-template-columns: auto 228px;
   column-gap: $generic-margin;
   row-gap: $generic-margin;
+  max-height: calc(100vh - 210px);
 
   >div:last-child {
     grid-column: span 2;
@@ -28,6 +29,11 @@
       display: none;
     }
 
+    >div>div {
+      display: flex;
+      align-items: baseline;
+    }
+
     .title {
       svg {
         fill: $link-color;
@@ -35,17 +41,6 @@
         font-size: 14px;
         line-height: 22px;
       }
-    }
-
-    .value {
-      font-size: 20px;
-      font-weight: 600;
-      line-height: 35px;
-    }
-    .label {
-      color: #8C8C8C;
-      font-size: 10px;
-      line-height: 14px;
     }
   }
 }

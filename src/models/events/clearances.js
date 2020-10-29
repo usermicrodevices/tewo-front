@@ -53,13 +53,6 @@ const declareColumns = () => ({
     grow: 1,
     transform: (v, datum, width) => tableItemLink(v, `${devicesRout.path}/${datum.deviceId}`, width),
   },
-  eventName: {
-    isVisibleByDefault: true,
-    title: 'Тип события',
-    grow: 2,
-    sortDirections: 'both',
-    transform: (_, data, width) => colorizedCell({ children: data.eventName, color: data.eventColor, width }),
-  },
   eventDescription: {
     isVisibleByDefault: true,
     title: 'Описание',
@@ -84,6 +77,12 @@ const declareFilters = (session) => ({
     title: 'Объект',
     apply: (general, data) => general(data.salePointId),
     selector: () => session.points.selector,
+  },
+  device__sale_point__company__id: {
+    type: 'selector',
+    title: 'Компания',
+    apply: (general, data) => general(data.companyId),
+    selector: () => session.companies.selector,
   },
 });
 
