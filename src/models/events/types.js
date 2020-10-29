@@ -17,7 +17,7 @@ const declareColumns = () => ({
     isDefaultSort: true,
     isVisibleByDefault: true,
     title: 'Название',
-    grow: 3,
+    grow: 2,
     sortDirections: 'both',
     transform: (_, data, width) => colorizedCell({ children: data.name, color: data.color, width }),
   },
@@ -31,6 +31,12 @@ const declareColumns = () => ({
     isVisibleByDefault: true,
     title: 'Приоритет',
     grow: 1,
+    sortDirections: 'both',
+  },
+  description: {
+    isVisibleByDefault: true,
+    title: 'Описание',
+    grow: 3,
     sortDirections: 'both',
   },
 });

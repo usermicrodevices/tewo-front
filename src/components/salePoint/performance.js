@@ -7,6 +7,7 @@ import moment from 'moment';
 import Loader from 'elements/loader';
 import Typography from 'elements/typography';
 import { gradient } from 'utils/color';
+import NoData from 'elements/noData';
 
 import style from './performance.module.scss';
 
@@ -36,7 +37,7 @@ const colorRanges = (scale, data, textScale) => {
 };
 
 const settings = (data) => ({
-  series: convertSeries(data),
+  series: data,
   options: {
     chart: {
       height: 750,
@@ -92,7 +93,17 @@ const Performance = ({ element: { details: { weekPerformance } } }) => (
       { weekPerformance
         ? (() => {
           const { options, series } = settings(weekPerformance);
-          return <ReactApexChart options={options} series={series} type={options.chart.type} height={options.chart.height} />;
+          const converted = convertSeries(series);
+          const max = Math.max(...converted.map(({ data }) => Math.max(...data)));
+          if (max === 0) {
+            return (
+              <NoData
+                title="За указанный период не обнаружено записей о наливах"
+                text="Измените дату поиска"
+              />
+            );
+          }
+          return <ReactApexChart options={options} series={converted} type={options.chart.type} height={options.chart.height} />;
         })()
         : <Loader />}
     </div>

@@ -8,7 +8,6 @@ import Icon from 'elements/icon';
 import Calendar from 'elements/calendar';
 
 import Tech from './tech';
-import Voltage from './voltage';
 import Commerce from './commerce';
 
 import style from './index.module.scss';
@@ -45,8 +44,6 @@ const DeviceOverview = withRouter(inject('element')(observer(({
   match: { params: { action } },
 }) => {
   switch (action) {
-    case 'voltage':
-      return <Voltage />;
     case 'commerce':
       return <Commerce />;
     default:
