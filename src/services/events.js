@@ -192,6 +192,19 @@ const getDetergrnts = (filter) => get(`/data/events/detergent/?${filter}`).then(
   return json;
 });
 
+const getDowntimes = (filter) => get(`/data/events/downtime-salepoints/?${filter}`).then((json) => {
+  if (!Array.isArray(json)) {
+    console.error(`/data/events/downtime-salepoints/?${filter} isn't array`);
+  }
+  for (const datum of json) {
+    checkData(datum, {
+      salePointId: 'number',
+      downtime: 'number',
+    });
+  }
+  return json;
+});
+
 export {
-  getEvents, getEventTypes, getEventsClearancesChart, getClearances, getDetergrnts, getOverdued,
+  getEvents, getEventTypes, getEventsClearancesChart, getClearances, getDetergrnts, getOverdued, getDowntimes,
 };

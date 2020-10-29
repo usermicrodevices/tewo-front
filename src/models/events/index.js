@@ -71,7 +71,7 @@ const declareColumns = () => ({
     transform: (_, data) => data.durationText,
     sortDirections: 'both',
   },
-  createdDate: {
+  openDate: {
     isVisibleByDefault: false,
     title: 'Время начала',
     grow: 1,
@@ -116,6 +116,12 @@ const declareFilters = (session) => ({
     title: 'Компания',
     apply: (general, data) => general(data.companyId),
     selector: () => session.companies.selector,
+  },
+  event_reference: {
+    type: 'selector',
+    title: 'Тип события',
+    apply: (general, data) => general(data.eventId),
+    selector: () => session.eventTypes.selector,
   },
 });
 

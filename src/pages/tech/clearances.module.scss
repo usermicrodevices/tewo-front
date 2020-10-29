@@ -6,6 +6,7 @@
   column-gap: $generic-margin;
   row-gap: $generic-margin;
   max-height: calc(100vh - 210px);
+  min-height: 1000px;
 
   >div:last-child {
     grid-column: span 2;

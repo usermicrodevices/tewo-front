@@ -1,3 +1,5 @@
+@import 'src/themes/constants';
+
 .values {
   display: flex;
   justify-content: flex-end;
@@ -20,4 +22,18 @@
       font-size: 11px;
     }
   }
+}
+
+.table {
+  max-height: calc(100vh - 700px);
+  min-height: 600px;
+  >div {
+    height: calc(100vh - 700px);
+    min-height: 600px;
+  }
+}
+
+.chart {
+  margin-bottom: $generic-margin;
+  height: 440px;
 }

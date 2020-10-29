@@ -8,6 +8,7 @@ import moment from 'moment';
 
 import Loader from 'elements/loader';
 import colors from 'themes/calendar';
+import Format from 'elements/format';
 
 import style from './calendar.module.scss';
 
@@ -34,8 +35,8 @@ const CalendarWidget = ({
     const key = value.format('YYYYMMDD');
     return (
       <div className={style.items}>
-        { clearances && clearances[key] > 0 && <div style={{ backgroundColor: colors.clearance }}>{clearances[key]}</div> }
-        { beverages && beverages[key] > 0 && <div style={{ backgroundColor: colors.beverages }}>{beverages[key]}</div> }
+        { clearances && clearances[key] > 0 && <div style={{ backgroundColor: colors.clearance }}><Format>{clearances[key]}</Format></div> }
+        { beverages && beverages[key] > 0 && <div style={{ backgroundColor: colors.beverages }}><Format>{beverages[key]}</Format></div> }
       </div>
     );
   };

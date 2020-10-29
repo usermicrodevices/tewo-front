@@ -8,13 +8,22 @@ import NoData from 'elements/noData';
 import locale from './locale';
 import style from './style.module.scss';
 
+const LONG_LIMIT = 17;
+
+const longCrop = (str) => {
+  if (str.length > LONG_LIMIT) {
+    return `${str.slice(0, LONG_LIMIT - 2).trim()}…`;
+  }
+  return str;
+};
+
 const Barchart = ({
   size, x, y, yAxis,
 }) => {
   if (!Array.isArray(x) || !Array.isArray(y) || x.length <= 1) {
     return <NoData noMargin text="Недостаточно данных для построения графика" />;
   }
-  const categories = x;
+  const categories = x.map(longCrop);
   const series = [{
     name: yAxis,
     data: y,
