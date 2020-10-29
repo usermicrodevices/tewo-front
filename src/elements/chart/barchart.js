@@ -8,7 +8,7 @@ import NoData from 'elements/noData';
 import locale from './locale';
 import style from './style.module.scss';
 
-const LONG_LIMIT = 17;
+const LONG_LIMIT = 15;
 
 const longCrop = (str) => {
   if (str.length > LONG_LIMIT) {

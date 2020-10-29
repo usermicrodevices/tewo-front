@@ -91,13 +91,15 @@ const CalendarWidget = ({
   const onSelectProtected = (date) => {
     if (isAfterPanelChange.value) {
       isAfterPanelChange.value = false;
-    } else {
+    } else if (typeof onSelect === 'function') {
       onSelect(date);
     }
   };
   const onPanelChangeProtected = (date) => {
     isAfterPanelChange.value = true;
-    onPanelChange(date);
+    if (typeof onPanelChange === 'function') {
+      onPanelChange(date);
+    }
   };
   return (
     <div className={style.wrap}>

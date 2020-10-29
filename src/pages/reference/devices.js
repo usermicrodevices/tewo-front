@@ -7,7 +7,7 @@ import { DeviceOverview, DeviceTitleAction } from 'components/device';
 const Devices = () => (
   <GenericPage
     storageName="devices"
-    tableTitle="Оборудование"
+    tableTitle="Всё оборудование"
     overview={DeviceOverview}
     overviewActions={DeviceTitleAction}
     allLinkText="Всё оборудование"

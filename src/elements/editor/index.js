@@ -119,7 +119,6 @@ const Editor = ({
   return (
     <div className={style.space}>
       <EditorForm>
-        <Title />
         {table}
         {footer}
       </EditorForm>

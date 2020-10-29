@@ -8,18 +8,19 @@ import Format from 'elements/format';
 import Table from 'elements/table';
 import Barchart from 'elements/chart/barchart';
 import Loader from 'elements/loader';
+import Typography from 'elements/typography';
 
 import classes from './downtime.module.scss';
 
 const Values = inject('table')(observer(({ table }) => (
   <div className={classes.values}>
     <div>
-      <div className={classes.value}><Format>{ table.amount }</Format></div>
-      <div className={classes.label}>просроченные события</div>
+      <Typography.Value size="xl" className={classes.value}><Format>{ table.amount }</Format></Typography.Value>
+      <Typography.Caption>просроченные события</Typography.Caption>
     </div>
     <div>
-      <div className={classes.value}><Format>{ table.downtime }</Format></div>
-      <div className={classes.label}>суммарное время простоя</div>
+      <Typography.Value size="xl" className={classes.value}><Format>{ table.downtime }</Format></Typography.Value>
+      <Typography.Caption>суммарное время простоя</Typography.Caption>
     </div>
   </div>
 )));

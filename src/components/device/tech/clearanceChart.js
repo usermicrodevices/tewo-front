@@ -36,8 +36,8 @@ const ClearanceChart = ({ element: { details: { clearancesChart } } }) => (
               width: 1,
             },
           ]}
-          y1={{ text: 'Очисток в день', decimalsInFloat: 0 }}
-          y2={{ text: 'Наливов в день', decimalsInFloat: 0 }}
+          y1={{ text: 'Наливов в день', decimalsInFloat: 0 }}
+          y2={{ text: 'Очисток в день', decimalsInFloat: 0 }}
         />
       )
       : <Loader size="large" /> }

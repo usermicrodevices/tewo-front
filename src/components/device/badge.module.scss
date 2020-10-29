@@ -24,6 +24,10 @@
     .fail {
       fill: #F5222D;
     }
+    .value {
+      display: flex;
+      align-items: baseline;
+    }
   }
 }
 

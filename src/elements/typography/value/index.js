@@ -9,10 +9,11 @@ const { Text } = Typography;
 
 const getClassNameBySize = (size) => {
   switch (size) {
-    case 'xxxl': return style.xxxl;
-    case 'xl': return style.xl;
-    case 'l': return style.l;
-    case 's': return style.s;
+    case 'xxxl':
+    case 'xl':
+    case 'l':
+    case 's':
+      return style[size];
     default: return '';
   }
 };

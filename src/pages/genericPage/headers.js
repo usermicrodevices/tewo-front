@@ -33,13 +33,18 @@ const menuItemKeyFromAction = (menu, a) => {
 };
 
 const GoBack = withRouter(
-  ({ history }) => (
-    <Typography.Link type="secondary" onClick={history.goBack}>
-      <HTMLEntity code="&#x02039;" />
-      {' '}
-      Назад
-    </Typography.Link>
-  ),
+  ({ history }) => {
+    if (history.length === 0) {
+      return null;
+    }
+    return (
+      <Typography.Link type="secondary" onClick={history.goBack}>
+        <HTMLEntity code="&#x02039;" />
+        {' '}
+        Назад
+      </Typography.Link>
+    );
+  },
 );
 
 const ElementHeader = withRouter(inject('element')(observer(({

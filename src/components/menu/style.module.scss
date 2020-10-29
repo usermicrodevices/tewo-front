@@ -44,4 +44,8 @@ $icon-size: 34px;
   :global(.ant-menu-submenu-arrow) {
     display: none;
   }
+
+  :global(.ant-menu-submenu-title) {
+    text-overflow: clip;
+  }
 }

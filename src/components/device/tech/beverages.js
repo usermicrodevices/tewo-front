@@ -17,6 +17,7 @@ const COLUMNS = [
   },
   {
     dataIndex: 'drinkName',
+    render: (drink) => <Format>{ drink }</Format>,
   },
   {
     dataIndex: 'canceled',
@@ -31,7 +32,15 @@ const Beverages = ({ element: { details: { lastBeverages, serviceEvents } } }) =
       Последние наливы
     </div>
     <div className={style.table}>
-      <Table pagination={false} columns={COLUMNS} dataSource={lastBeverages?.map((data) => ({ ...data, key: data.id }))} />
+      <Table
+        pagination={false}
+        columns={COLUMNS}
+        dataSource={lastBeverages?.map(({
+          deviceDate, drinkName, canceled, id,
+        }) => ({
+          deviceDate, drinkName, canceled, key: id,
+        }))}
+      />
     </div>
   </Card>
 );
