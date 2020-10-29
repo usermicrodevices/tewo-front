@@ -50,7 +50,7 @@ const Sales = ({ element: { details } }) => {
         </div>
       </div>
       <div className={styles.sider}>
-        <Typography.Title level={3} className={styles.sidertitle}>
+        <Typography.Title level={4} className={styles.sidertitle}>
           <span className={styles.curency}>₽</span>
           <span>Статистика продаж</span>
         </Typography.Title>

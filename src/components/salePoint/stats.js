@@ -24,7 +24,7 @@ const Stats = ({ element: { details } }) => {
   const isLoaded = typeof devicesServceRequiredAmount === 'number';
   return (
     <Card className={style.root}>
-      <Typography.Title level={3}>
+      <Typography.Title level={4}>
         <Icon name="bar-chart-outline" className={style.icon} />
         Общая статистика
       </Typography.Title>

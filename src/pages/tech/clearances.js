@@ -46,8 +46,10 @@ const Stats = inject('table')(observer(({ table }) => {
   return (
     <AntdCard className={classes.stats}>
       <div className={classes.title}>
-        <Icon size={18} name="bar-chart-outline" />
-        <Typography.Text>Сводная информация</Typography.Text>
+        <Typography.Title level={4}>
+          <Icon size={18} name="bar-chart-outline" />
+          Сводная информация
+        </Typography.Title>
       </div>
       <div>
         <Typography.Value size="xl"><Format>{ table.isLoaded ? table.data.length : undefined }</Format></Typography.Value>
