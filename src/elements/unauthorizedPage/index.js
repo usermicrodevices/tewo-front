@@ -19,7 +19,7 @@ const UnauthorizedPage = ({ auth, children }) => {
         <br />
         <HumanizedPhone>{auth.contacts.phone}</HumanizedPhone>
       </p>
-      <Version />
+      <div className={style.version}><Version /></div>
     </div>
   );
 };

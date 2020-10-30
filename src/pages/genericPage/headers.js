@@ -34,7 +34,7 @@ const menuItemKeyFromAction = (menu, a) => {
 
 const GoBack = withRouter(
   ({ history }) => {
-    if (history.length === 0) {
+    if (history.length <= 2) {
       return null;
     }
     return (

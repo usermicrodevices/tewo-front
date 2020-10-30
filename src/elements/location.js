@@ -8,12 +8,12 @@ import Icon from 'elements/icon';
 const Location = ({ location, address }) => {
   if (!location) {
     if (address) {
-      return <Format>{ address }</Format>;
+      return <Format width={400}>{ address }</Format>;
     }
     return null;
   }
   if (!address) {
-    return <Format>{ location }</Format>;
+    return <Format width={400}>{ location }</Format>;
   }
   return (
     <LocationPopup location={location}>
