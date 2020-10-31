@@ -6,16 +6,6 @@ const DEFAULT_DATE_RANGE = [moment().subtract(1, 'week').startOf('day'), moment(
 
 const SALES_DATA_TYPES = [
   {
-    value: 'beveragesSeriaCur',
-    label: 'Наливы за текущий период',
-    axis: 0,
-  },
-  {
-    value: 'beveragesSeriaPrw',
-    label: 'Наливы за прошлый период',
-    axis: 0,
-  },
-  {
     value: 'salesSeriaCur',
     label: 'Продажи за текущий период',
     axis: 1,
@@ -24,6 +14,16 @@ const SALES_DATA_TYPES = [
     value: 'salesSeriaPrw',
     label: 'Продажи за прошлый период',
     axis: 1,
+  },
+  {
+    value: 'beveragesSeriaCur',
+    label: 'Наливы за текущий период',
+    axis: 0,
+  },
+  {
+    value: 'beveragesSeriaPrw',
+    label: 'Наливы за прошлый период',
+    axis: 0,
   },
 ];
 

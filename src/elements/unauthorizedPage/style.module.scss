@@ -1,8 +1,8 @@
 @import 'src/themes/constants';
 
 .login {
-  background-image: url('./loginbg.png');
-  background-size: calc(100% + 4px);
+  background-image: url('./loginbg.jpeg');
+  background-size: cover;
   background-position: -2px 0px;
   display: flex;
   flex-direction: column;
@@ -44,6 +44,6 @@
     background-position: 50% 50%;
     background-repeat: no-repeat;
     background-size: contain;
-    background-image: url('../../components/header/logo-dark-blue.svg');
+    background-image: url('./logo-white.svg');
   }
 }

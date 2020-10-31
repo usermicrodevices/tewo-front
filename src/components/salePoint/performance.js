@@ -12,7 +12,7 @@ import NoData from 'elements/noData';
 import style from './performance.module.scss';
 
 const convertSeries = (data) => new Array(24).fill(null).map((_, hour) => ({
-  name: `${hour % 12}${hour >= 12 ? 'pm' : 'am'}`,
+  name: `${hour >= 10 ? hour : `0${hour}`}:00`,
   data: new Array(7).fill(null).map((__, day) => data[day][hour]),
 }));
 
@@ -80,7 +80,7 @@ const settings = (data) => ({
       position: 'top',
       categories: new Array(7).fill(null).map((_, id) => moment().subtract(6, 'day').add(id, 'day').format('dd')),
     },
-    yAxis: {
+    yaxis: {
       opposite: true,
     },
   },
