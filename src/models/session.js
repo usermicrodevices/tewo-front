@@ -9,6 +9,7 @@ import Operations from './operations';
 import Drinks from './drinks';
 import Ingredients from './ingredients';
 import DeviceModels from './devices/models';
+import DeviceTypes from './devices/types';
 import BeverageOperations from './beverages/operations';
 import Prices from './price';
 import PriceGroups from './price/groups';
@@ -19,6 +20,8 @@ class Session {
   locations = new Locations();
 
   deviceModels = new DeviceModels();
+
+  deviceTypes = new DeviceTypes();
 
   beverageOperations = new BeverageOperations();
 

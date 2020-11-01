@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'antd';
 import styled from 'styled-components';
 import Format from 'elements/format';
 
@@ -24,17 +25,20 @@ const Cell = styled.div`
   border-radius: 14px;
   display: inline-block;
   padding: 2px 14px;
-  margin-top: -2px;
   &:hover {
     background-color: ${(props) => props.hoverColor};
   }
 `;
 
-const ColorizedCell = ({ children, color: bgColor, width }) => {
+const ColorizedCell = ({
+  children, color: bgColor, width, onClick,
+}) => {
   const color = textColorSelector(bgColor);
   const hoverBG = colorMultiplex(bgColor, 0.9, !!color) || '#fafafa';
   return (
-    <Cell color={bgColor || '#fafafa'} textColor={color} hoverColor={hoverBG}><Format width={width}>{children}</Format></Cell>
+    <Button onClick={onClick} type="text" style={{ marginTop: -9 }}>
+      <Cell color={bgColor || '#fafafa'} textColor={color} hoverColor={hoverBG}><Format width={width}>{children}</Format></Cell>
+    </Button>
   );
 };
 

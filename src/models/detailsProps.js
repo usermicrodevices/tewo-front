@@ -2,6 +2,8 @@ import { computed } from 'mobx';
 import localStorage from 'mobx-localstorage';
 import moment from 'moment';
 
+import { stepToPast } from 'utils/date';
+
 const DEFAULT_DATE_RANGE = [moment().subtract(1, 'week').startOf('day'), moment().endOf('day')];
 
 const SALES_DATA_TYPES = [
@@ -34,6 +36,10 @@ class DetailsProps {
 
   @computed get dateRange() {
     return (localStorage.getItem(`${this.storageKey}_date`) || DEFAULT_DATE_RANGE).map((t) => (moment.isMoment(t) || t === '' ? t : moment(t)));
+  }
+
+  @computed get previousDateRange() {
+    return stepToPast(this.dateRange);
   }
 
   set dateRange(dateRange) {

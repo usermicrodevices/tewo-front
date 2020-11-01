@@ -19,7 +19,6 @@ const declareColumns = () => ({
     title: 'Название',
     grow: 2,
     sortDirections: 'both',
-    transform: (_, data, width) => colorizedCell({ children: data.name, color: data.color, width }),
   },
   reactionTimeText: {
     isVisibleByDefault: true,
@@ -57,7 +56,15 @@ class EventTypes extends Table {
   };
 
   constructor() {
-    super(declareColumns(), getEventTypes, new Filters({}));
+    const columns = declareColumns();
+    columns.name.transform = (_, data, width) => colorizedCell({
+      children:
+      data.name,
+      color: data.color,
+      width,
+      onClick: () => this.actions.onEdit(data),
+    });
+    super(columns, getEventTypes, new Filters({}));
   }
 
   toString() {

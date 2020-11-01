@@ -38,12 +38,6 @@ const declareColumns = (onEditRecipe) => ({
     grow: 2,
     sortDirections: 'both',
   },
-  consept: {
-    isVisibleByDefault: true,
-    title: 'Концепция',
-    grow: 2,
-    sortDirections: 'both',
-  },
   recipe: {
     isVisibleByDefault: true,
     title: 'Рецепт',

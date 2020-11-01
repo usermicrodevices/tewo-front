@@ -117,7 +117,7 @@ const Editor = ({
     );
   }
   return (
-    <div className={style.space}>
+    <div className={style.nomodal}>
       <EditorForm>
         {table}
         {footer}

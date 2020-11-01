@@ -76,7 +76,7 @@ const COLUMNS = {
   downtime: {
     isVisibleByDefault: true,
     title: 'Суммарный простой',
-    transform: (v) => (v ? duration(v, 'seconds').humanize() : '0'),
+    transform: (v) => (v ? duration(v, 'seconds').humanize() : 'Без простоя'),
     grow: 2,
   },
 };

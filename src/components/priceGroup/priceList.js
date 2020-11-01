@@ -38,7 +38,7 @@ const COLUMNS = [
   {
     title: '',
     dataIndex: 'rm',
-    render: (rm) => <Button className={classNames(style.rm)} icon={<Icon size={20} name="trash-2-outline" />} type="text" onClick={rm} />,
+    render: (rm) => <Button disabled className={classNames(style.rm)} icon={<Icon size={20} name="trash-2-outline" />} type="text" onClick={rm} />,
   },
 ];
 

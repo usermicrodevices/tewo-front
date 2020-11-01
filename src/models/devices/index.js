@@ -3,7 +3,7 @@ import Table from 'models/table';
 import Filter from 'models/filters';
 import { computed } from 'mobx';
 
-import { devices as devicesRout } from 'routes';
+import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
 import {
   getDevices, getStats, getSalesChart, applyDevice,
@@ -28,7 +28,7 @@ const COLUMNS = {
     isVisibleByDefault: true,
     title: 'Объект',
     grow: 3,
-    sortDirections: 'both',
+    transform: (_, datum, width) => tableItemLink(datum.salePointName, `${salePointsRout.path}/${datum.salePointId}`, width),
   },
   controller: {
     isVisibleByDefault: true,

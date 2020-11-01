@@ -6,7 +6,7 @@ const DateSelector = ({ onClick }) => (
   <Menu style={{ width: 300 }} onClick={onClick}>
     {
       Object.entries(SemanticRanges).map(([range, { title }]) => (
-        <Menu.Item style={{ height: 'auto' }} key={range}>{ title }</Menu.Item>
+        <Menu.Item key={range}>{ title }</Menu.Item>
       ))
     }
   </Menu>

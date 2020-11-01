@@ -48,10 +48,12 @@ class Grid {
   tick() {
     this.tickNumber += 1;
     for (const storage of this.storages.values()) {
-      const { widgetType } = storage.generic;
-      if (this.tickNumber % WIDGETS_ADDITIONAL_INFORMATION[widgetType].tickDuration === 0) {
-        if (typeof storage.update === 'function') {
-          storage.update();
+      if (storage) {
+        const { widgetType } = storage.generic;
+        if (this.tickNumber % WIDGETS_ADDITIONAL_INFORMATION[widgetType].tickDuration === 0) {
+          if (typeof storage.update === 'function') {
+            storage.update();
+          }
         }
       }
     }

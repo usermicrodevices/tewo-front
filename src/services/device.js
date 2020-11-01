@@ -56,7 +56,6 @@ function converter(json, acceptor) {
   )) {
     console.error(`Неожиданный ответ по адресу ${LOCATION}`, json);
   }
-
   for (const [jsonName, modelName] of Object.entries(RENAMER)) {
     if (modelName.indexOf('Date') >= 0) {
       acceptor[modelName] = moment(json[jsonName]);
@@ -97,7 +96,7 @@ function getDeviceModels(map) {
           name: datum.name,
           mileage: datum.mileage,
           detergent: datum.detergent,
-          deviceTypeId: datum.dedevice_type,
+          deviceTypeId: datum.device_type,
         });
       }
     }
@@ -171,6 +170,20 @@ const applyDevice = (id, changes) => {
   return request.then((response) => converter(response, {}));
 };
 
+const getDeviceTypes = (acceptor) => get('/refs/device_types').then((json) => {
+  if (Array.isArray(json)) {
+    for (const item of json) {
+      if (checkData(item, { id: 'number', name: 'string' })) {
+        acceptor.set(item.id, item.name);
+      } else {
+        console.error('unexpected device_type recponce');
+      }
+    }
+  } else {
+    console.error('unexpected device_type recponce');
+  }
+});
+
 export {
-  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice,
+  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice, getDeviceTypes,
 };
