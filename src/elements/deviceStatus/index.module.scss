@@ -1,0 +1,8 @@
+@import 'src/themes/constants';
+
+.link {
+  :global .anticon {
+    fill: $link-color;
+  }
+  color: $link-color;
+}

@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { Modal, Divider, Table } from 'antd';
 
 import Location from 'elements/location';
+import DeviceStatus from 'elements/deviceStatus';
 
 const columns = [
   {
@@ -20,7 +21,7 @@ const columns = [
     title: 'Статус',
     dataIndex: 'isOn',
     key: 'isOn',
-    render: (value, record, index) => (value ? 'Вкл' : 'Выкл'),
+    render: (value) => <DeviceStatus isOn={value} />,
   },
 ];
 

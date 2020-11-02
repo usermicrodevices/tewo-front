@@ -1,14 +1,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button } from 'antd';
-import classNames from 'classnames';
 
 import Icon from 'elements/icon';
 import Format from 'elements/format';
 
 import List from './list';
-
-import style from './style.module.scss';
+import priceCell from './priceCell';
 
 const COLUMNS = [
   {
@@ -33,12 +31,12 @@ const COLUMNS = [
   {
     title: 'Цена',
     dataIndex: 'value',
-    render: (v) => <Format>{v}</Format>,
+    render: priceCell,
   },
   {
     title: '',
     dataIndex: 'rm',
-    render: (rm) => <Button disabled className={classNames(style.rm)} icon={<Icon size={20} name="trash-2-outline" />} type="text" onClick={rm} />,
+    render: (rm) => <Button disabled icon={<Icon size={20} name="trash-2-outline" />} type="text" onClick={rm} />,
   },
 ];
 
@@ -48,6 +46,7 @@ const toDataSource = (price) => ({
   name: price.name,
   value: price.value,
   rm: () => {},
+  sendValue: () => new Promise((_, reject) => { setTimeout(reject, 1000); }),
 });
 
 const PriceList = ({ element }) => (

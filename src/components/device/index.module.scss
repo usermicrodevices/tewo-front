@@ -1,5 +1,3 @@
-@import 'src/themes/constants';
-
 .actions {
   display: flex;
   flex-direction: column;
@@ -8,13 +6,6 @@
 
   >:first-child {
     margin-bottom: 8px;
-  }
-
-  .link {
-    :global .anticon {
-      fill: $link-color;
-    }
-    color: $link-color;
   }
 }
 

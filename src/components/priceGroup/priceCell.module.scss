@@ -1,0 +1,11 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 130px;
+  transition: background-color 0.3s cubic-bezier(0, 2.13, 1, -1.11);
+}
+
+.warn {
+  background-color: salmon;
+}

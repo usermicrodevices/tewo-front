@@ -3,8 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Button, Space, Modal } from 'antd';
 
+import DeviceStatus from 'elements/deviceStatus';
 import Location from 'elements/location';
-import Icon from 'elements/icon';
 import Calendar from 'elements/calendar';
 
 import Tech from './tech';
@@ -25,11 +25,7 @@ const DeviceTitleAction = withRouter(inject(({ element, session }) => ({ element
   <div className={style.actions}>
     <Space>
       <Location location={salePointLocation} address={salePointAddress} />
-      <Space size={4}>
-        <span className={style.link}><Icon name="power-outline" /></span>
-        Статус
-        <span className={style.link}>{isOn ? 'ВКЛ' : 'ВЫКЛ'}</span>
-      </Space>
+      <DeviceStatus isOn={isOn} announce="Статус" />
     </Space>
     <Space>
       <Button onClick={() => history.push(events.getPathForDevice(id))}>События</Button>
