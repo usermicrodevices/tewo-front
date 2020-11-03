@@ -52,6 +52,7 @@ class ClearancesCalendar {
     this.month = month;
     const dateRange = [date.clone().startOf('month'), date.clone().endOf('month')];
     const externalFilters = this.table.filter.search.replace(/open_date[\w=\-:%]+/, '').replace(/open_date[\w=\-:%]+/, '').replace(/&[&]+/, '&').replace(/^&$/, '');
+    this.setDateFilter(dateRange);
     if (this.loaded.has(externalFilters) && this.loaded.has(month)) {
       return;
     }
@@ -78,7 +79,6 @@ class ClearancesCalendar {
       }
       this.clearance = { ...this.clearance, ...ClearancesCalendar.arrayToMap(destrib, dateRange) };
     });
-    this.setDateFilter([date.clone().startOf('month'), date.clone().endOf('month')]);
   }
 
   constructor(table, session) {
