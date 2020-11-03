@@ -11,7 +11,7 @@ class EventType extends Datum {
 
   @observable reactionTime;
 
-  @observable priority;
+  @observable priorityId;
 
   @observable color;
 
@@ -23,10 +23,10 @@ class EventType extends Datum {
 
   get key() { return this.id; }
 
+  session;
+
   constructor(session) {
-    super(() => new Promise((resolve) => {
-      setTimeout(resolve, 2000);
-    }));
+    super(session.eventTypes.update);
 
     this.session = session;
   }
@@ -35,23 +35,38 @@ class EventType extends Datum {
     return humanizeSeconds(this.reactionTime * 60);
   }
 
-  editable = {
-    name: {
-      type: 'text',
-    },
-    reactionTime: {
-      type: 'number',
-    },
-    priority: {
-      type: 'number',
-    },
-    color: {
-      type: 'color',
-    },
-    description: {
-      type: 'text',
-      rows: 4,
-    },
+  @computed get priority() {
+    if (this.priorityId === null) {
+      return null;
+    }
+    return this.session.eventPriorities.get(this.priorityId);
+  }
+
+  @computed get priorityDescription() {
+    const { priority } = this;
+    return priority ? priority.description : priority;
+  }
+
+  @computed get editable() {
+    return {
+      name: {
+        type: 'text',
+      },
+      reactionTime: {
+        type: 'number',
+      },
+      priorityId: {
+        type: 'selector',
+        selector: this.session.eventPriorities.selector,
+      },
+      color: {
+        type: 'color',
+      },
+      description: {
+        type: 'text',
+        rows: 4,
+      },
+    };
   }
 
   @computed get values() {
@@ -72,9 +87,9 @@ class EventType extends Datum {
         value: this.reactionTime,
       },
       {
-        dataIndex: 'priority',
+        dataIndex: 'priorityId',
         title: 'Приоритет',
-        value: this.priority,
+        value: this.priorityDescription,
       },
       {
         dataIndex: 'color',

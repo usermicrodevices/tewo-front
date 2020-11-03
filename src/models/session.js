@@ -4,6 +4,7 @@ import Points from './salePoints';
 import Locations from './locations';
 import Events from './events';
 import EventTypes from './events/types';
+import EventPriorities from './events/priorities';
 import Devices from './devices';
 import Operations from './operations';
 import Drinks from './drinks';
@@ -25,7 +26,9 @@ class Session {
 
   beverageOperations = new BeverageOperations();
 
-  eventTypes = new EventTypes();
+  eventPriorities = new EventPriorities();
+
+  eventTypes = new EventTypes(this);
 
   priceGroups = new PriceGroups(this);
 

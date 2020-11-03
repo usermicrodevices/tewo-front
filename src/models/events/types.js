@@ -3,7 +3,7 @@ import { observable, computed } from 'mobx';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
-import { getEventTypes } from 'services/events';
+import { getEventTypes, patchEventType } from 'services/events';
 import colorizedCell from 'elements/table/colorizedCell';
 
 const declareColumns = () => ({
@@ -26,7 +26,7 @@ const declareColumns = () => ({
     grow: 1,
     sortDirections: 'both',
   },
-  priority: {
+  priorityDescription: {
     isVisibleByDefault: true,
     title: 'Приоритет',
     grow: 1,
@@ -55,7 +55,7 @@ class EventTypes extends Table {
     },
   };
 
-  constructor() {
+  constructor(session) {
     const columns = declareColumns();
     columns.name.transform = (_, data, width) => colorizedCell({
       children:
@@ -64,7 +64,7 @@ class EventTypes extends Table {
       width,
       onClick: () => this.actions.onEdit(data),
     });
-    super(columns, getEventTypes, new Filters({}));
+    super(columns, getEventTypes(session), new Filters({}));
   }
 
   toString() {
@@ -87,6 +87,8 @@ class EventTypes extends Table {
   get(typeId) {
     return this.rawData.find(({ id }) => id === typeId);
   }
+
+  update = patchEventType;
 }
 
 export default EventTypes;

@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { get } from 'utils/request';
+import { get, patch } from 'utils/request';
 import checkData from 'utils/dataCheck';
 
 import EventType from 'models/events/eventType';
@@ -79,51 +79,67 @@ const getOverdued = (session) => (limit, offset = 0, filter = '') => (
   getEvents(session)(limit, offset, `overdued=1${filter !== '' ? `&${filter}` : filter}`)
 );
 
-const getEventTypes = () => get('/refs/event_references/').then((results) => {
+const TYPES_RENAMER = {
+  id: 'id',
+  cid: 'cid',
+  name: 'name',
+  reaction_time: 'reactionTime',
+  priority: 'priorityId',
+  color: 'color',
+  description: 'description',
+  hidden: 'isHidden',
+};
+
+const TYPES_LOCATION = '/refs/event_references/';
+
+const transform = (json, acceptor) => {
+  const eventType = {
+    ...json,
+    color: json.color || '#FFFFFF',
+  };
+  if (!checkData(
+    eventType,
+    {
+      id: 'number',
+      cid: 'string',
+      name: 'string',
+      reaction_time: 'number',
+      hidden: 'boolean',
+      color: 'color',
+    }, {
+      priority: 'number',
+      description: 'string',
+    },
+  )) {
+    console.error(`Неожиданный ответ по адресу ${TYPES_LOCATION}`, eventType);
+  }
+  for (const [jsonName, dataName] of Object.entries(TYPES_RENAMER)) {
+    // eslint-disable-next-line
+    acceptor[dataName] = eventType[jsonName];
+  }
+  return acceptor;
+};
+
+const form = (data) => {
+  const json = {};
+  const renamer = new Map(Object.entries(TYPES_RENAMER).map(([dataName, jsonName]) => [jsonName, dataName]));
+  for (const [key, value] of Object.entries(data)) {
+    json[renamer.get(key)] = value;
+  }
+  return json;
+};
+
+const getEventTypes = (session) => () => get(TYPES_LOCATION).then((results) => {
   if (!Array.isArray(results)) {
-    console.error(`по /refs/event_references/ ожидается массив, получен ${typeof results}`, results);
+    console.error(`по ${TYPES_LOCATION} ожидается массив, получен ${typeof results}`, results);
   }
   return {
     count: results.length,
-    results: results.map((rawEventType) => {
-      const eventType = {
-        ...rawEventType,
-        color: rawEventType.color || '#FFFFFF',
-      };
-      if (!checkData(
-        eventType,
-        {
-          id: 'number',
-          cid: 'string',
-          name: 'string',
-          reaction_time: 'number',
-          hidden: 'boolean',
-        }, {
-          priority: 'number',
-          color: 'color',
-          description: 'string',
-        },
-      )) {
-        console.error('Неожиданный ответ по адресу /refs/event_references/', eventType);
-      }
-      const rename = {
-        id: 'id',
-        cid: 'cid',
-        name: 'name',
-        reaction_time: 'reactionTime',
-        priority: 'priority',
-        color: 'color',
-        description: 'description',
-        hidden: 'isHidden',
-      };
-      const result = new EventType();
-      for (const [jsonName, dataName] of Object.entries(rename)) {
-        result[dataName] = eventType[jsonName];
-      }
-      return result;
-    }),
+    results: results.map((json) => transform(json, new EventType(session))),
   };
 });
+
+const patchEventType = (id, data) => patch(`${TYPES_LOCATION}${id}`, form(data)).then((josn) => transform(josn, {}));
 
 const getEventsClearancesChart = (deviceId, daterange) => get(
   `/data/events/cleanings/?device__id=${deviceId}${daterangeToArgs(daterange, 'open_date')}`,
@@ -205,6 +221,27 @@ const getDowntimes = (filter) => get(`/data/events/downtime-salepoints/?${filter
   return json;
 });
 
+const getEventPriorities = (acceptor) => get('refs/event_priorities/').then(((data) => {
+  if (!Array.isArray(data)) {
+    console.error('ожидается массив от эндпоинта /refs/event_priorities/');
+    return;
+  }
+  for (const json of data) {
+    if (checkData(json, {
+      critical_time: 'number',
+      description: 'string',
+      id: 'number',
+      value: 'string',
+    })) {
+      acceptor.set(json.id, {
+        criticalTime: json.critical_time,
+        description: json.description,
+        value: json.value,
+      });
+    }
+  }
+}));
+
 export {
-  getEvents, getEventTypes, getEventsClearancesChart, getClearances, getDetergrnts, getOverdued, getDowntimes,
+  getEvents, getEventTypes, getEventsClearancesChart, getClearances, getDetergrnts, getOverdued, getDowntimes, getEventPriorities, patchEventType,
 };
