@@ -222,7 +222,7 @@ class SalePoints extends Table {
   get applyer() {
     return (item, changes) => applySalePoint(item, changes).then((response) => ({
       response,
-      sorageData: this.rawData,
+      storageData: this.rawData,
     }));
   }
 

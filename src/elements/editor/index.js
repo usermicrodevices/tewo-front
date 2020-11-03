@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import {
-  Button, Modal, Space, Form,
+  Button, Modal, Space, Form, message,
 } from 'antd';
 import { observer } from 'mobx-react';
 import Icon from 'elements/icon';
@@ -41,11 +41,18 @@ const Editor = ({
   }
 
   const onSave = (changes) => {
-    data.update(changes).finally(() => {
-      setIsEdditing(false);
-      setIsUpdating(false);
-    });
     setIsUpdating(true);
+    data.update(changes)
+      .then(() => {
+        message.success('Данные успешно обновлены');
+        setIsEdditing(false);
+      })
+      .catch(() => {
+        message.error('При обновлении данных призошли ошибки. Проверьте корректность введённых данных');
+      })
+      .finally(() => {
+        setIsUpdating(false);
+      });
   };
 
   const isHaveErrors = form.getFieldsError().filter(({ errors }) => errors.length).length !== 0;

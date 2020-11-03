@@ -3,7 +3,7 @@ import { observable, computed, action } from 'mobx';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
-import getDrinks from 'services/drinks';
+import { patchDrink, getDrinks } from 'services/drinks';
 import cup from 'elements/cup';
 
 import { drink as drinksRout } from 'routes';
@@ -106,6 +106,8 @@ class Drinks extends Table {
   get(typeId) {
     return this.rawData.find(({ id }) => id === typeId);
   }
+
+  update = patchDrink;
 }
 
 export default Drinks;

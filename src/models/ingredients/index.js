@@ -3,7 +3,7 @@ import { observable, computed } from 'mobx';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
-import getIngridients from 'services/ingredients';
+import { getIngredients, patchIngredient } from 'services/ingredients';
 
 const COLUMNS = {
   id: {
@@ -64,7 +64,7 @@ class Ingridients extends Table {
   };
 
   constructor(session) {
-    super(COLUMNS, getIngridients(session), new Filters(declareFilters(session)));
+    super(COLUMNS, getIngredients(session), new Filters(declareFilters(session)));
   }
 
   toString() {
@@ -81,6 +81,8 @@ class Ingridients extends Table {
   get(typeId) {
     return this.rawData.find(({ id }) => id === typeId);
   }
+
+  update = patchIngredient;
 }
 
 export default Ingridients;

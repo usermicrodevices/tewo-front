@@ -1,46 +1,54 @@
-import moment from 'moment';
-
-import { get } from 'utils/request';
+import { get, patch } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import Drink from 'models/drinks/drink';
 import { getRecipes } from './recipes';
 
-const getDrinksWithoutRecipe = (session) => () => get('/refs/drinks/').then((result) => {
+const LOCATION = '/refs/drinks/';
+
+const RENAMER = {
+  id: 'id',
+  plu: 'plu',
+  name: 'name',
+  company: 'companyId',
+};
+
+const form = (data) => {
+  const json = {};
+  const renamer = new Map(Object.entries(RENAMER).map(([dataName, jsonName]) => [jsonName, dataName]));
+  for (const [key, value] of Object.entries(data)) {
+    json[renamer.get(key)] = value;
+  }
+  return json;
+};
+
+const transform = (json, acceptor) => {
+  if (!checkData(
+    json,
+    {
+      id: 'number',
+      plu: 'number',
+      name: 'string',
+      company: 'number',
+      cooking_time: 'number',
+    },
+  )) {
+    console.error(`Неожиданный ответ по адресу ${LOCATION}`, json);
+  }
+
+  for (const [jsonName, modelName] of Object.entries(RENAMER)) {
+    // eslint-disable-next-line
+    acceptor[modelName] = json[jsonName];
+  }
+  return acceptor;
+};
+
+const getDrinksWithoutRecipe = (session) => () => get(LOCATION).then((result) => {
   if (!Array.isArray(result)) {
-    console.error(`по /refs/drinks/ ожидается массив, получен ${typeof result}`, result);
+    console.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
   }
   return {
     count: result.length,
-    results: result.map((deviceData) => {
-      if (!checkData(
-        deviceData,
-        {
-          id: 'number',
-          plu: 'number',
-          name: 'string',
-          company: 'number',
-          cooking_time: 'number',
-        },
-      )) {
-        console.error('Неожиданный ответ по адресу /refs/drinks/', deviceData);
-      }
-      const device = new Drink(session);
-      const renamer = {
-        id: 'id',
-        plu: 'plu',
-        name: 'name',
-        company: 'companyId',
-      };
-
-      for (const [jsonName, modelName] of Object.entries(renamer)) {
-        if (modelName.indexOf('Date') >= 0) {
-          device[modelName] = moment(deviceData[jsonName]);
-        } else {
-          device[modelName] = deviceData[jsonName];
-        }
-      }
-      return device;
-    }),
+    results: result.map((json) => transform(json, new Drink(session))),
   };
 });
 
@@ -58,4 +66,6 @@ const getDrinks = (session) => () => Promise.all([getDrinksWithoutRecipe(session
   return drinks;
 });
 
-export default getDrinks;
+const patchDrink = (id, data) => patch(`${LOCATION}${id}`, form(data)).then((josn) => transform(josn, {}));
+
+export { getDrinks, patchDrink };

@@ -16,7 +16,7 @@ class Drink extends Datum {
   session;
 
   constructor(session) {
-    super(() => Promise.resolve());
+    super(session.drinks.update);
 
     this.session = session;
   }
@@ -53,7 +53,14 @@ class Drink extends Datum {
     ];
   }
 
-  editable = {};
+  editable = {
+    name: {
+      type: 'text',
+    },
+    plu: {
+      type: 'number',
+    },
+  };
 }
 
 export default Drink;

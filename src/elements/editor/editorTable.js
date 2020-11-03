@@ -1,5 +1,5 @@
 import React from 'react';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { Table, Form } from 'antd';
 
 import Format from 'elements/format';
@@ -58,4 +58,4 @@ const EditorTable = ({
   );
 };
 
-export default inject('session')(EditorTable);
+export default inject('session')(observer(EditorTable));

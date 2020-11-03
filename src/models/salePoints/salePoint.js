@@ -5,13 +5,6 @@ import * as routes from 'routes';
 
 import Details from './details';
 
-function reduce(array, field) {
-  if (!Array.isArray(array)) {
-    return array;
-  }
-  return array.reduce((cur, datum) => cur + datum[field], 0);
-}
-
 class SalePoint extends Datum {
   id = null;
 

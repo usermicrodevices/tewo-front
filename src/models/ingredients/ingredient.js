@@ -19,7 +19,7 @@ class Ingridient extends Datum {
   session;
 
   constructor(session) {
-    super(Promise.resolve);
+    super(session.ingredients.update);
 
     this.session = session;
   }
@@ -36,24 +36,26 @@ class Ingridient extends Datum {
     return company.name;
   }
 
-  editable = {
-    name: {
-      type: 'text',
-    },
-    cost: {
-      type: 'number',
-    },
-    currency: {
-      type: 'text',
-    },
-    dimension: {
-      type: 'text',
-    },
-    companyName: {
-      type: 'selector',
-      selector: this.session.companies.selector,
-    },
-  };
+  get editable() {
+    return {
+      name: {
+        type: 'text',
+      },
+      cost: {
+        type: 'number',
+      },
+      currency: {
+        type: 'text',
+      },
+      dimension: {
+        type: 'text',
+      },
+      companyId: {
+        type: 'selector',
+        selector: this.session.companies.selector,
+      },
+    };
+  }
 
   @computed get values() {
     return [
@@ -83,7 +85,7 @@ class Ingridient extends Datum {
         value: this.dimension,
       },
       {
-        dataIndex: 'companyName',
+        dataIndex: 'companyId',
         title: 'Компания',
         value: this.companyName,
       },
