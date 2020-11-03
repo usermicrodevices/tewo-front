@@ -78,6 +78,7 @@ class ClearancesCalendar {
       }
       this.clearance = { ...this.clearance, ...ClearancesCalendar.arrayToMap(destrib, dateRange) };
     });
+    this.setDateFilter([date.clone().startOf('month'), date.clone().endOf('month')]);
   }
 
   constructor(table, session) {
