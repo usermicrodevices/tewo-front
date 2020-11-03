@@ -20,7 +20,7 @@ const getEvents = (session) => () => get('/refs/ingredients/').then((result) => 
           cost: 'number',
         },
         {
-          currency: 'number',
+          currency: 'string',
           dimension: 'string',
         },
       )) {
@@ -32,6 +32,8 @@ const getEvents = (session) => () => get('/refs/ingredients/').then((result) => 
         name: 'name',
         dimension: 'dimension',
         company: 'companyId',
+        cost: 'cost',
+        currency: 'currency',
       };
 
       for (const [jsonName, modelName] of Object.entries(renamer)) {

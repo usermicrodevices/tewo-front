@@ -25,13 +25,13 @@ const COLUMNS = {
     grow: 3,
     sortDirections: 'both',
   },
-  plu: {
+  currency: {
     isVisibleByDefault: true,
     title: 'Валюта',
     grow: 2,
     sortDirections: 'both',
   },
-  consept: {
+  dimension: {
     isVisibleByDefault: true,
     title: 'Единица измерения',
     grow: 2,

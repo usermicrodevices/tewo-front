@@ -10,6 +10,12 @@ class Ingridient extends Datum {
 
   companyId;
 
+  cost;
+
+  currency;
+
+  dimension;
+
   session;
 
   constructor(session) {
@@ -34,6 +40,19 @@ class Ingridient extends Datum {
     name: {
       type: 'text',
     },
+    cost: {
+      type: 'number',
+    },
+    currency: {
+      type: 'text',
+    },
+    dimension: {
+      type: 'text',
+    },
+    companyName: {
+      type: 'selector',
+      selector: this.session.companies.selector,
+    },
   };
 
   @computed get values() {
@@ -47,6 +66,21 @@ class Ingridient extends Datum {
         dataIndex: 'name',
         title: 'Название',
         value: this.name,
+      },
+      {
+        dataIndex: 'cost',
+        title: 'Цена за единицу',
+        value: this.cost,
+      },
+      {
+        dataIndex: 'currency',
+        title: 'Валюта',
+        value: this.currency,
+      },
+      {
+        dataIndex: 'dimension',
+        title: 'Единица измерения',
+        value: this.dimension,
       },
       {
         dataIndex: 'companyName',
