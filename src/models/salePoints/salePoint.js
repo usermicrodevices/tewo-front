@@ -28,15 +28,15 @@ class SalePoint extends Datum {
 
   @observable isClosed = false;
 
-  isHaveDisabledEquipment = false;
+  isHaveOpenedTasks = false;
 
-  isHaveOverdueTasks = false;
+  @observable isHaveDisabledEquipment;
 
-  isHasOverlocPPM = false;
+  @observable isHasOverlocPPM;
 
-  isNeedTechService = false;
+  @observable isNeedTechService;
 
-  downtime = 0;
+  @observable downtime;
 
   @observable tags = [];
 

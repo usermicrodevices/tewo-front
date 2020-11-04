@@ -71,12 +71,18 @@ class Details {
     if (!Array.isArray(devices)) {
       return undefined;
     }
+    if (this.devices.find(({ isNeedTechService }) => typeof isNeedTechService === 'undefined')) {
+      return undefined;
+    }
     return this.devices.filter(({ isNeedTechService }) => isNeedTechService).length;
   }
 
   @computed get devicesHardWaterAmount() {
     const { devices } = this;
     if (!Array.isArray(devices)) {
+      return undefined;
+    }
+    if (this.devices.find(({ isHasOverlocPPM }) => typeof isHasOverlocPPM === 'undefined')) {
       return undefined;
     }
     return this.devices.filter(({ isHasOverlocPPM }) => isHasOverlocPPM).length;

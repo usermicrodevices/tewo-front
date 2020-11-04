@@ -60,7 +60,7 @@ const Stats = ({ element: { details } }) => {
       </div>
       <div className={classNames(style.sublabel, style.downtime)}>
         <Typography.Caption>Время простоя</Typography.Caption>
-        <Typography.Value strong><Format width={180}>{humanizeSeconds(downtime)}</Format></Typography.Value>
+        <Typography.Value strong><Format width={180}>{downtime ? humanizeSeconds(downtime) : 'Без простоя'}</Format></Typography.Value>
       </div>
     </Card>
   );

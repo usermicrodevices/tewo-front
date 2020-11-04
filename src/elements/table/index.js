@@ -42,7 +42,7 @@ class TableComponent extends React.Component {
     return (
       <div className={style.whole}>
         <div className={style.buttons}>
-          { isShowSearch && <Input prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} /> }
+          { isShowSearch && <Input allowClear prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} /> }
           { process.env.NODE_ENV !== 'production' && <p>{`Доступно ${data.length} записей`}</p> }
         </div>
         <Header columnWidth={columnWidth} />

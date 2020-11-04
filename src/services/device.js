@@ -1,5 +1,6 @@
 /* eslint key-spacing: off, no-param-reassign: off */
 import moment from 'moment';
+import { transaction } from 'mobx';
 
 import { get, patch, post } from 'utils/request';
 import checkData from 'utils/dataCheck';
@@ -8,6 +9,8 @@ import Device from 'models/devices/device';
 import { getBeveragesStats } from './beverage';
 
 const LOCATION = '/refs/devices/';
+
+const LOCATION_EXTERNAL = '/refs/devices/stats-extend/';
 
 const RENAMER = {
   id: 'id',
@@ -20,10 +23,6 @@ const RENAMER = {
   device_model: 'deviceModelId',
   price_group: 'priceGroupId',
   tz: 'timeZone',
-  downtime: 'downtime',
-  has_overloc_ppm: 'hasOverlocPPM',
-  need_tech_service: 'needTechService',
-  opened_tasks: 'isHaveOpenedTasks',
   lastoff: 'stopDate',
   tech: 'isNeedTechService',
 };
@@ -63,19 +62,56 @@ function converter(json, acceptor) {
       acceptor[modelName] = json[jsonName];
     }
   }
-  acceptor.isOn = json.status === 1;
-  acceptor.isInactive = json.status === -1;
   return acceptor;
 }
 
-const getDevices = (session) => () => get(LOCATION).then((result) => {
-  if (!Array.isArray(result)) {
-    console.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
-  }
-  return {
-    count: result.length,
-    results: result.map((deviceData) => converter(deviceData, new Device(session))),
-  };
+const getDevices = (session) => () => new Promise((resolve, reject) => {
+  const general = get(LOCATION).then((result) => {
+    if (!Array.isArray(result)) {
+      console.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
+    }
+    const responce = {
+      count: result.length,
+      results: result.map((deviceData) => converter(deviceData, new Device(session))),
+    };
+    resolve(responce);
+    return responce.results;
+  }).catch(reject);
+  const external = get(LOCATION_EXTERNAL).then((result) => {
+    const addition = new Map();
+    if (Array.isArray(result)) {
+      for (const json of result) {
+        if (checkData(json, {
+          downtime: 'number',
+          has_off_devices: 'boolean',
+          has_overloc_ppm: 'boolean',
+          id: 'number',
+          need_tech_service: 'boolean',
+          opened_tasks: 'boolean',
+        })) {
+          addition.set(json.id, {
+            downtime: json.downtime,
+            isOn: !json.has_off_devices,
+            isHasOverlocPPM: json.has_overloc_ppm,
+            isNeedTechService: json.need_tech_service,
+            isHaveOverdueTasks: json.opened_tasks,
+          });
+        }
+      }
+    } else {
+      console.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
+    }
+    return addition;
+  });
+  Promise.all([general, external]).then(([devices, addition]) => {
+    transaction(() => {
+      for (const device of devices) {
+        for (const [key, value] of Object.entries(addition.get(device.id))) {
+          device[key] = value;
+        }
+      }
+    });
+  });
 });
 
 function getDeviceModels(map) {

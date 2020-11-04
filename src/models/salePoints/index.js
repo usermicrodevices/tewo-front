@@ -11,6 +11,7 @@ import { salePoints as salePointsRout } from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
 import { duration } from 'moment';
 import { daterangeToArgs } from 'utils/date';
+import Format from 'elements/format';
 
 import Point from './salePoint';
 
@@ -76,7 +77,15 @@ const COLUMNS = {
   downtime: {
     isVisibleByDefault: true,
     title: 'Суммарный простой',
-    transform: (v) => (v ? duration(v, 'seconds').humanize() : 'Без простоя'),
+    transform: (v, width) => {
+      if (typeof v !== 'number') {
+        return Format({ children: v, width });
+      }
+      if (v === 0) {
+        return 'Без простоя';
+      }
+      return duration(v, 'seconds').humanize();
+    },
     grow: 2,
   },
 };

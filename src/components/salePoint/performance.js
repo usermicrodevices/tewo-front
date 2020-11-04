@@ -11,10 +11,13 @@ import NoData from 'elements/noData';
 
 import style from './performance.module.scss';
 
-const convertSeries = (data) => new Array(24).fill(null).map((_, hour) => ({
-  name: `${hour >= 10 ? hour : `0${hour}`}:00`,
-  data: new Array(7).fill(null).map((__, day) => data[day][hour]),
-}));
+const convertSeries = (data) => new Array(24).fill(null).map((_, id) => {
+  const hour = 23 - id;
+  return ({
+    name: `${hour >= 10 ? hour : `0${hour}`}:00`,
+    data: new Array(7).fill(null).map((__, day) => data[day][hour]),
+  });
+});
 
 const colorRanges = (scale, data, textScale) => {
   const max = Math.max(...data.map((v) => Math.max(...v)));

@@ -30,7 +30,11 @@ class DiagramTechState {
     if (!Array.isArray(this.generic.devices)) {
       return undefined;
     }
-    return this.generic.devices.filter(({ isHasOverlocPPM }) => isHasOverlocPPM).length;
+    const { devices } = this.generic;
+    if (devices.find(({ isHasOverlocPPM }) => typeof isHasOverlocPPM === 'undefined')) {
+      return undefined;
+    }
+    return devices.filter(({ isHasOverlocPPM }) => isHasOverlocPPM).length;
   }
 
   constructor(settings, session) {

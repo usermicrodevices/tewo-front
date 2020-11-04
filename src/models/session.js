@@ -14,11 +14,14 @@ import DeviceTypes from './devices/types';
 import BeverageOperations from './beverages/operations';
 import Prices from './price';
 import PriceGroups from './price/groups';
+import Currencies from './currencies';
 
 class Session {
   operations = new Operations();
 
   locations = new Locations();
+
+  currencies = new Currencies();
 
   deviceModels = new DeviceModels();
 

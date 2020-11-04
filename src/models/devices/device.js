@@ -26,17 +26,17 @@ class Device {
 
   @observable timeZone;
 
-  isOn;
+  @observable isOn;
 
-  isInactive;
+  isInactive = false;
 
-  downtime;
+  @observable downtime;
 
-  isHasOverlocPPM;
+  @observable isHasOverlocPPM;
 
-  isNeedTechService;
+  @observable isNeedTechService;
 
-  isHaveOverdueTasks;
+  @observable isHaveOverdueTasks;
 
   detailsData = null;
 

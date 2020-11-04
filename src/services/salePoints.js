@@ -1,6 +1,8 @@
 /* eslint no-param-reassign: off */
-import { get, post, patch } from 'utils/request';
+import { transaction } from 'mobx';
 import moment from 'moment';
+
+import { get, post, patch } from 'utils/request';
 import SalePoint from 'models/salePoints/salePoint';
 import checkData from 'utils/dataCheck';
 import { daterangeToArgs, SemanticRanges, SmallSemanticRanges } from 'utils/date';
@@ -18,25 +20,18 @@ const RENAMER = {
   person: 'person',
   phone: 'phone',
   emails: 'email',
-  has_off_devices: 'isHaveDisabledEquipment',
   opened_tasks: 'isHaveOpenedTasks',
-  has_overloc_ppm: 'isHasOverlocPPM',
-  need_tech_service: 'isNeedTechService',
-  downtime: 'downtime',
 };
 
 const LOCATION = '/refs/sale_points/';
+const LOCATION_EXT = '/refs/sale_points/stats-extend/';
 
 const SHUILD_BE = {
   id: 'number',
   name: 'string',
   company: 'number',
   created_date: 'date',
-  has_overloc_ppm: 'boolean',
-  has_off_devices: 'boolean',
-  need_tech_service: 'boolean',
   opened_tasks: 'boolean',
-  downtime: 'number',
 };
 
 const MAY_BE = {
@@ -46,6 +41,10 @@ const MAY_BE = {
   address: 'string',
   city: 'number',
   map_point: 'location',
+  has_overloc_ppm: 'boolean',
+  has_off_devices: 'boolean',
+  need_tech_service: 'boolean',
+  downtime: 'number',
 };
 
 const converter = (data, result) => {
@@ -60,18 +59,53 @@ const converter = (data, result) => {
 };
 
 const getSalePoints = (session) => () => new Promise((resolve, reject) => {
-  get(LOCATION).then((salePoints) => {
+  const getBasic = get(LOCATION).then((salePoints) => {
     if (!Array.isArray(salePoints)) {
-      console.error(`/refs/sale_points ожидаеся в ответ массив, получен ${typeof salePoints}`, salePoints);
+      console.error(`${LOCATION} ожидаеся в ответ массив, получен ${typeof salePoints}`, salePoints);
       reject(salePoints);
-      return;
+      return { count: 0, responce: [] };
     }
 
-    resolve({
+    const responce = {
       count: salePoints.length,
       results: salePoints.map((data) => converter(data, new SalePoint(session))),
-    });
+    };
+    resolve(responce);
+    return responce.results;
   }).catch(reject);
+  const getExtend = get(LOCATION_EXT).then((data) => {
+    const result = new Map();
+    if (Array.isArray(data)) {
+      for (const json of data) {
+        if (checkData(json, {
+          downtime: 'number',
+          has_off_devices: 'boolean',
+          has_overloc_ppm: 'boolean',
+          id: 'number',
+          need_tech_service: 'boolean',
+        })) {
+          result.set(json.id, {
+            downtime: json.downtime,
+            isHaveDisabledEquipment: json.has_off_devices,
+            isHasOverlocPPM: json.has_overloc_ppm,
+            isNeedTechService: json.need_tech_service,
+          });
+        }
+      }
+    } else {
+      console.error(`${LOCATION_EXT} ожидаеся в ответ массив, получен ${typeof data}`, data);
+    }
+    return result;
+  });
+  Promise.all([getBasic, getExtend]).then(([points, addon]) => {
+    transaction(() => {
+      for (const point of points) {
+        for (const [key, value] of Object.entries(addon.get(point.id))) {
+          point[key] = value;
+        }
+      }
+    });
+  });
 });
 
 const applySalePoint = (item, changes) => {

@@ -12,7 +12,7 @@ class Ingridient extends Datum {
 
   cost;
 
-  currency;
+  currencyId;
 
   dimension;
 
@@ -36,6 +36,18 @@ class Ingridient extends Datum {
     return company.name;
   }
 
+  @computed get currency() {
+    if (this.currencyId === null) {
+      return null;
+    }
+    return this.session.currencies.get(this.currencyId);
+  }
+
+  @computed get currencyName() {
+    const { currency } = this;
+    return currency ? currency.name : currency;
+  }
+
   get editable() {
     return {
       name: {
@@ -45,7 +57,8 @@ class Ingridient extends Datum {
         type: 'number',
       },
       currency: {
-        type: 'text',
+        type: 'selector',
+        selector: this.session.currencies.selector,
       },
       dimension: {
         type: 'text',

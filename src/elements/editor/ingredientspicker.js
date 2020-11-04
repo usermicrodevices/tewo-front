@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Form, Input,
+  Form, InputNumber, Input,
 } from 'antd';
 
 import style from './style.module.scss';
@@ -17,7 +17,7 @@ const LocationPicker = ({ getFieldValue, setFieldsValue, name }) => {
             ['Наливы молока', 'Наливы воды', 'Наливы кофе'].map((ingredient, id) => (
               <tr key={ingredient}>
                 <td>{ingredient}</td>
-                <td><Input type="number" onChange={(num) => { val[id] = num; setFieldsValue({ [name]: val }); }} /></td>
+                <td><InputNumber onChange={(num) => { val[id] = num; setFieldsValue({ [name]: val }); }} /></td>
               </tr>
             ))
           }

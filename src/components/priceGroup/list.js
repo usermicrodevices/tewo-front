@@ -16,7 +16,7 @@ const List = ({
   const toSearch = filterValue.toLowerCase();
   const ds = dataSource
     ?.map(toDataSource)
-    ?.filter(({ name }) => typeof name !== 'string' || name.indexOf(toSearch) >= 0);
+    ?.filter(({ name }) => typeof name !== 'string' || name.toLowerCase().indexOf(toSearch) >= 0);
   return (
     <Card className={style.card}>
       <div className={style.title}>
@@ -25,7 +25,13 @@ const List = ({
         </Typography.Title>
         <Button type="text" disabled icon={<Icon size={22} name="plus-circle-outline" />} />
       </div>
-      <Input className={style.filter} prefix={<Icon name="search-outline" />} value={filterValue} onChange={({ target }) => { setFilter(target.value); }} />
+      <Input
+        allowClear
+        className={style.filter}
+        prefix={<Icon name="search-outline" />}
+        value={filterValue}
+        onChange={({ target }) => { setFilter(target.value); }}
+      />
       { dataSource
         ? <Table pagination={false} columns={columns} dataSource={ds} />
         : <Loader size="large" /> }

@@ -25,7 +25,7 @@ const COLUMNS = {
     grow: 3,
     sortDirections: 'both',
   },
-  currency: {
+  currencyName: {
     isVisibleByDefault: true,
     title: 'Валюта',
     grow: 2,
