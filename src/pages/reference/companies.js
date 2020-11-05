@@ -1,6 +1,6 @@
 import React from 'react';
 
-import GenericPage from 'pages/genericPage';
+import GenericPage from 'elements/genericPage';
 
 const Companies = () => (
   <GenericPage storageName="companies" tableTitle="Все компании" allLinkText="Все компании" />

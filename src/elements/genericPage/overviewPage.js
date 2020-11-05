@@ -11,7 +11,7 @@ import Card from 'elements/card';
 import Loader from 'elements/loader';
 import Typography from 'elements/typography';
 
-import { ElementHeader } from './headers';
+import { ElementHeader } from 'elements/headers';
 
 const isContains = (menu, action) => Array.isArray(menu) && menu.findIndex((v) => v === action || isContains(v, action)) >= 0;
 
@@ -23,7 +23,6 @@ const ViewerPage = ({
   match,
   history,
   allLinkText,
-  isEditable,
   isNotEditable,
 }) => {
   if (!storage.isLoaded) {

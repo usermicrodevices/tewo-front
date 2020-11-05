@@ -52,6 +52,8 @@ const Format = ({
         <Format>{ children.format('DD.MM.yy hh:mm') }</Format>
       </div>
     );
+  } else if (Array.isArray(children) && children.length === 2 && typeof children.find((v) => typeof v !== 'number') === 'undefined') {
+    return <Location location={children} />;
   } else {
     console.error('unknown cell data', children);
     txt = `${children}`;

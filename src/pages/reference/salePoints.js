@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 
-import GenericPage from 'pages/genericPage';
+import GenericPage from 'elements/genericPage';
 
 import { SalePointOverview, SalePointTitleAction } from 'components/salePoint';
 

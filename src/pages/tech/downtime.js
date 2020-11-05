@@ -3,7 +3,7 @@ import { inject, Provider, observer } from 'mobx-react';
 import { Card } from 'antd';
 
 import OverdueModel from 'models/events/overdue';
-import { TableHeader } from 'pages/genericPage/headers';
+import { TableHeader } from 'elements/headers';
 import Format from 'elements/format';
 import Table from 'elements/table';
 import Barchart from 'elements/chart/barchart';

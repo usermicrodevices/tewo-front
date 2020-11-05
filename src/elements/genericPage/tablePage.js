@@ -6,7 +6,7 @@ import Table from 'elements/table';
 import Editor from 'elements/editor';
 import Card from 'elements/card';
 
-import { TableHeader } from './headers';
+import { TableHeader } from 'elements/headers';
 
 @withRouter
 @inject('table')

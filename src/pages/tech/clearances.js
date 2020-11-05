@@ -3,7 +3,7 @@ import { Card as AntdCard } from 'antd';
 import { inject, Provider, observer } from 'mobx-react';
 
 import ClearancesModel from 'models/events/clearances';
-import { TableHeader } from 'pages/genericPage/headers';
+import { TableHeader } from 'elements/headers';
 import Table from 'elements/table';
 import Card from 'elements/card';
 import GenericCalendar from 'elements/calendar';

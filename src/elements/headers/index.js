@@ -47,21 +47,22 @@ const GoBack = withRouter(
   },
 );
 
-const ElementHeader = withRouter(inject('element')(observer(({
+const SubpageHeader = withRouter(({
   menu,
   children,
   history,
+  location,
   match,
-  element: { id },
+  sublocation,
   allLinkText,
 }) => {
-  const { params: { action } } = match;
+  const action = 'action' in match.params ? match.params.action : location.pathname.split('/')[2];
   const path = match.path.split('/').slice(0, 2).join('/');
   return (
     <div className={styles.head}>
       <Space size={16} className={styles.actions}>
         <GoBack />
-        <Typography.Link type="secondary" onClick={() => history.push(path)}>{ allLinkText }</Typography.Link>
+        { typeof allLinkText !== 'undefined' && <Typography.Link type="secondary" onClick={() => history.push(path)}>{ allLinkText }</Typography.Link> }
       </Space>
       <div className={styles.titleRow}>
         { children }
@@ -74,7 +75,7 @@ const ElementHeader = withRouter(inject('element')(observer(({
                 icon, text, path: subPath, explains,
               }) => (
                 <Menu.Item key={menuItemKeyFromAction(menu, subPath)} icon={icon} theme="none">
-                  <Link to={`${path}/${id}/${Array.isArray(subPath) ? subPath[0] : subPath}`}>
+                  <Link to={`${path}${sublocation ? `/${sublocation}` : ''}/${Array.isArray(subPath) ? subPath[0] : subPath}`}>
                     {
                       typeof explains === 'string'
                         ? (
@@ -84,7 +85,7 @@ const ElementHeader = withRouter(inject('element')(observer(({
                           </Space>
                         )
                         : text
-                      }
+                    }
                   </Link>
                 </Menu.Item>
               )) }
@@ -93,7 +94,22 @@ const ElementHeader = withRouter(inject('element')(observer(({
       )}
     </div>
   );
-})));
+});
+
+const ElementHeader = inject('element')(({
+  menu,
+  children,
+  element: { id },
+  allLinkText,
+}) => (
+  <SubpageHeader
+    menu={menu}
+    sublocation={id}
+    allLinkText={allLinkText}
+  >
+    {children}
+  </SubpageHeader>
+));
 
 const TableHeader = inject('table')(observer(({ title, table }) => {
   const { filter } = table;
@@ -132,4 +148,4 @@ const TableHeader = inject('table')(observer(({ title, table }) => {
   );
 }));
 
-export { ElementHeader, TableHeader };
+export { ElementHeader, TableHeader, SubpageHeader };
