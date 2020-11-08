@@ -27,6 +27,13 @@ class Company extends Datum {
     return this.session.points.rawData.filter(({ companyId }) => companyId === this.id);
   }
 
+  @computed get drinks() {
+    if (!this.session.drinks.isLoaded) {
+      return undefined;
+    }
+    return this.session.drinks.rawData.filter(({ companyId }) => companyId === this.id);
+  }
+
   @computed get pointsAmount() {
     return this.spoints?.length;
   }

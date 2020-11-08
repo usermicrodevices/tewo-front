@@ -3,13 +3,13 @@ import { computed, observable } from 'mobx';
 import Datum from 'models/datum';
 
 class Drink extends Datum {
-  id;
+  @observable id = null;
 
-  plu;
+  @observable plu = null;
 
-  name;
+  @observable name = '';
 
-  companyId;
+  @observable companyId = null;
 
   @observable recipe = [];
 
@@ -46,6 +46,11 @@ class Drink extends Datum {
         value: this.name,
       },
       {
+        dataIndex: 'companyId',
+        title: 'Компания',
+        value: this.companyName,
+      },
+      {
         dataIndex: 'plu',
         title: 'PLU',
         value: this.plu,
@@ -53,14 +58,35 @@ class Drink extends Datum {
     ];
   }
 
-  editable = {
-    name: {
-      type: 'text',
-    },
-    plu: {
-      type: 'number',
-    },
-  };
+  get editable() {
+    return {
+      name: {
+        type: 'text',
+        isRequired: true,
+      },
+      companyId: {
+        type: 'selector',
+        selector: this.session.companies.selector,
+        isRequired: true,
+      },
+      plu: {
+        type: 'number',
+        isRequired: true,
+      },
+    };
+  }
+
+  validation(data) {
+    const { plu: inputPLU, companyId } = data;
+    const { drinks } = this.session.companies.get(companyId);
+    if (Array.isArray(drinks)) {
+      const problem = drinks.find(({ plu: drinkPLU }) => drinkPLU === inputPLU);
+      if (typeof problem !== 'undefined') {
+        return `${problem.name} имеет значение PLU ${inputPLU}`;
+      }
+    }
+    return true;
+  }
 }
 
 export default Drink;

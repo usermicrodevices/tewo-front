@@ -1,24 +1,25 @@
 import Datum from 'models/datum';
-import { computed } from 'mobx';
+import { computed, observable } from 'mobx';
 
 class Ingridient extends Datum {
-  id;
+  @observable id = null;
 
-  name;
+  @observable name = null;
 
-  dimension;
+  @observable dimension = null;
 
-  companyId;
+  @observable companyId = null;
 
-  cost;
+  @observable cost = null;
 
-  currencyId;
+  @observable currencyId = null;
 
-  dimension;
+  @observable dimension = null;
 
   session;
 
   constructor(session) {
+    console.log(session.ingredients);
     super(session.ingredients.update);
 
     this.session = session;
@@ -52,20 +53,25 @@ class Ingridient extends Datum {
     return {
       name: {
         type: 'text',
+        isRequired: true,
       },
       cost: {
         type: 'number',
+        isRequired: true,
       },
       currency: {
         type: 'selector',
         selector: this.session.currencies.selector,
+        isRequired: true,
       },
       dimension: {
         type: 'text',
+        isRequired: true,
       },
       companyId: {
         type: 'selector',
         selector: this.session.companies.selector,
+        isRequired: true,
       },
     };
   }
