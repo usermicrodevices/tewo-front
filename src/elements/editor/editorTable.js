@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Table, Form } from 'antd';
+import classNames from 'classnames';
 
 import Format from 'elements/format';
 
@@ -20,6 +21,15 @@ const EditorTable = ({
           title: 'Информация',
           dataIndex: 'title',
           width: 300,
+          render: (text, { dataIndex }) => (
+            <span
+              className={classNames({
+                [style.required]: data.editable[dataIndex]?.isRequired,
+              })}
+            >
+              { text }
+            </span>
+          ),
         },
         {
           title: '',

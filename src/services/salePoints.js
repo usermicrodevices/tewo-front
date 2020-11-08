@@ -115,7 +115,7 @@ const applySalePoint = (item, changes) => {
     data[renamer.get(key)] = value;
   }
   const request = item === null ? post(LOCATION, data) : patch(`${LOCATION}${item}`, data);
-  request.then((response) => converter(response, {}));
+  return request.then((response) => converter(response, {}));
 };
 
 const getSalesTop = (filter) => {

@@ -87,7 +87,7 @@ const CellEditor = ({
             <IngredientsPicker getFieldValue={getFieldValue} setFieldsValue={setFieldsValue} name={name} />
           )}
         </Form.Item>
-      )
+      );
     case 'selector': {
       const filterComparator = (inputValue, { children }) => children.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
       return (

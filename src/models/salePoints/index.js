@@ -102,7 +102,6 @@ const declareFilters = (session) => ({
     title: 'Тег',
     apply: (general, data) => general(data.drink),
     selector: () => [
-      [1, 'a'], [2, 'b'],
     ],
     disabled: true,
   },
@@ -197,7 +196,11 @@ class SalePoints extends Table {
   }
 
   @action create() {
-    this.elementForEdit = new Point(this.session);
+    const itm = new Point(this.session);
+    this.elementForEdit = itm;
+    itm.onCreated = () => {
+      this.rawData.push(itm);
+    };
   }
 
   getSalesTop(points, daterange) {
@@ -228,16 +231,15 @@ class SalePoints extends Table {
 
   getSalePointLastDaysBeverages = getSalePointLastDaysBeverages;
 
-  get applyer() {
-    return (item, changes) => applySalePoint(item, changes).then((response) => ({
-      response,
-      storageData: this.rawData,
-    }));
-  }
+  applyer = applySalePoint;
 
   getBeveragesSpeed(salePointsId) {
     const ids = (Array.isArray(salePointsId) ? salePointsId : this.rawData.map(({ id }) => id));
     return getBeveragesSpeed(ids);
+  }
+
+  getPathForPoint(id) {
+    return `${salePointsRout.path}/${id}`;
   }
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Typography, Button, Dropdown, Space,
+  Typography, Button, Dropdown, Menu,
 } from 'antd';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -34,25 +34,31 @@ const devicesCell = (devices, _, width) => {
   return (
     <span>
       {devices.slice(0, forShow).map((device, id) => (
-        <>
+        <React.Fragment key={device.id}>
           {
             tableItemLink(device.name, `${devicesRout.path}/${device.id}`, isNeedDropdown ? APROPRIATE_ELEM_WIDTH : width / forShow)
           }
-          {id < devices.length - 1 ? ', ' : ''}
-        </>
+          {id < devices.length - 1 && !isNeedDropdown ? ', ' : ''}
+        </React.Fragment>
       ))}
       { isNeedDropdown && (
         <Dropdown
           overlay={(
-            <Space>
+            <Menu>
               {
-                devices.slice(forShow).map(({ name, id }) => tableItemLink(name, `${devicesRout.path}/${id}`, width))
+                devices.slice(forShow).map(({ name, id }) => (
+                  <Menu.Item key={id}>
+                    { tableItemLink(name, `${devicesRout.path}/${id}`, width) }
+                  </Menu.Item>
+                ))
               }
-            </Space>
+            </Menu>
           )}
           placement="bottomRight"
         >
-          <span>{`${forShow > 0 ? 'и ещё ' : ''}${devices.length - forShow} ${plural(devices.length - forShow, ['устройство', 'устройств', 'устройства'])}`}</span>
+          <span>
+            {`${forShow > 0 ? ' и ещё ' : ''}${devices.length - forShow} ${plural(devices.length - forShow, ['устройство', 'устройств', 'устройства'])}`}
+          </span>
         </Dropdown>
       )}
     </span>

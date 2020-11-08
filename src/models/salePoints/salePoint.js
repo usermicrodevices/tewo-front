@@ -6,7 +6,7 @@ import * as routes from 'routes';
 import Details from './details';
 
 class SalePoint extends Datum {
-  id = null;
+  @observable id = null;
 
   @observable name = null;
 
@@ -120,6 +120,10 @@ class SalePoint extends Datum {
     return this.session.devices.getPointDevices(this.id);
   }
 
+  @computed get priceGroups() {
+    return this.session.priceGroups.getBySalePoint(this.id);
+  }
+
   @computed get path() {
     return `${routes.salePoints.path}/${this.id}`;
   }
@@ -139,6 +143,7 @@ class SalePoint extends Datum {
     return {
       name: {
         type: 'text',
+        isRequired: true,
       },
       isClosed: {
         type: 'checkbox',
@@ -149,6 +154,7 @@ class SalePoint extends Datum {
       companyId: {
         type: 'selector',
         selector: this.session.companies.selector,
+        isRequired: true,
       },
       mapPoint: {
         type: 'location',
@@ -172,6 +178,17 @@ class SalePoint extends Datum {
         selector: [],
       },
     };
+  }
+
+  validation(data) {
+    const { name: inputName, companyId } = data;
+    const { points, name: companyName } = this.session.companies.get(companyId);
+    if (Array.isArray(points)) {
+      if (points.findIndex(({ name: pointName }) => pointName === inputName) >= 0) {
+        return `Объект с таким именем уже существует в компании ${companyName}`;
+      }
+    }
+    return true;
   }
 
   @computed get state() {

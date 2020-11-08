@@ -47,12 +47,14 @@ class ClearancesCalendar {
     this.table.filter.data.set('open_date', range);
   }
 
-  @action setMonth(date) {
+  @action setMonth(date, passive) {
     const month = date.month() + date.year() * 12;
     this.month = month;
     const dateRange = [date.clone().startOf('month'), date.clone().endOf('month')];
     const externalFilters = this.table.filter.search.replace(/open_date[\w=\-:%]+/, '').replace(/open_date[\w=\-:%]+/, '').replace(/&[&]+/, '&').replace(/^&$/, '');
-    this.setDateFilter(dateRange);
+    if (!passive) {
+      this.setDateFilter(dateRange);
+    }
     if (this.loaded.has(externalFilters) && this.loaded.has(month)) {
       return;
     }
@@ -86,7 +88,7 @@ class ClearancesCalendar {
     this.table = table;
     this.setMonth(moment());
     reaction(() => table.filter.search, () => {
-      this.setMonth(moment().year(Math.floor(this.month / 12)).month(this.month % 12));
+      this.setMonth(moment().year(Math.floor(this.month / 12)).month(this.month % 12), true);
     });
   }
 }

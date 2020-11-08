@@ -74,6 +74,27 @@ class PriceGroups extends Table {
   get(priceId) {
     return this.rawData.find(({ id }) => id === priceId);
   }
+
+  getPathForPriceGroup(id) {
+    return `${priceListRout.path}/${id}`;
+  }
+
+  getBySalePoint(pointId) {
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    const result = [];
+    for (const group of this.rawData) {
+      const { devices } = group;
+      if (typeof devices === 'undefined') {
+        return undefined;
+      }
+      if (typeof devices.find(({ salePointId }) => salePointId === pointId) !== 'undefined') {
+        result.push(group);
+      }
+    }
+    return result;
+  }
 }
 
 export default PriceGroups;
