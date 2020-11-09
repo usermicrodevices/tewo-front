@@ -1,4 +1,6 @@
-import { get, patch, post } from 'utils/request';
+import {
+  get, patch, post, del,
+} from 'utils/request';
 import checkData from 'utils/dataCheck';
 import Drink from 'models/drinks/drink';
 import { getRecipes } from './recipes';
@@ -72,4 +74,6 @@ const applyDrink = (id, changes) => {
   return request.then((response) => transform(response, {}));
 };
 
-export { getDrinks, applyDrink };
+const deleteDrink = (id) => del(`${LOCATION}${id}`);
+
+export { getDrinks, applyDrink, deleteDrink };

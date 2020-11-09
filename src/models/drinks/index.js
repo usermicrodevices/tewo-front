@@ -3,7 +3,7 @@ import { observable, computed, action } from 'mobx';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
-import { applyDrink, getDrinks } from 'services/drinks';
+import { applyDrink, getDrinks, deleteDrink } from 'services/drinks';
 import cup from 'elements/cup';
 
 import { drink as drinksRout } from 'routes';
@@ -78,6 +78,9 @@ class Drinks extends Table {
     isEditable: () => true,
     onEdit: (datum) => {
       this.elementForEdit = datum;
+    },
+    onDelete: (datum) => {
+      deleteDrink(datum.id).then(this.rawData.splice(this.rawData.findIndex((d) => d === datum), 1));
     },
   };
 

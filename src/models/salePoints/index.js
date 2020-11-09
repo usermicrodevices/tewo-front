@@ -1,15 +1,14 @@
 /* eslint class-methods-use-this: off */
 import { observable, computed, action } from 'mobx';
+import { duration } from 'moment';
 
 import Table from 'models/table';
 import {
-  getSalePoints, applySalePoint, getSalesTop, getSalesChart, getOutdatedTasks, getSalePointLastDaysBeverages, getBeveragesSpeed,
+  getSalePoints, applySalePoint, getSalesTop, getSalesChart, getOutdatedTasks, getSalePointLastDaysBeverages, getBeveragesSpeed, deleteSalePoint,
 } from 'services/salePoints';
 import Filters from 'models/filters';
-
 import { salePoints as salePointsRout } from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
-import { duration } from 'moment';
 import { daterangeToArgs } from 'utils/date';
 import Format from 'elements/format';
 
@@ -155,6 +154,9 @@ class SalePoints extends Table {
     isEditable: () => true,
     onEdit: (datum, push) => {
       push(`sale_points/${datum.id}/edit`);
+    },
+    onDelete: (datum) => {
+      deleteSalePoint(datum.id).then(this.rawData.splice(this.rawData.findIndex((d) => d === datum), 1));
     },
   };
 

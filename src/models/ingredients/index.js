@@ -3,7 +3,7 @@ import { observable, computed, action } from 'mobx';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
-import { getIngredients, applyIngredient } from 'services/ingredients';
+import { getIngredients, applyIngredient, deleteIngredient } from 'services/ingredients';
 
 import Ingredient from './ingredient';
 
@@ -62,6 +62,9 @@ class Ingridients extends Table {
     isEditable: () => true,
     onEdit: (datum) => {
       this.elementForEdit = datum;
+    },
+    onDelete: (datum) => {
+      deleteIngredient(datum.id).then(this.rawData.splice(this.rawData.findIndex((d) => d === datum), 1));
     },
   };
 
