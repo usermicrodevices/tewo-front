@@ -1,16 +1,18 @@
 import React from 'react';
+import { Card } from 'antd';
 
 import SubPage from 'elements/subpage';
 import Typography from 'elements/typography';
-import { Card } from 'antd';
+
+import NotificationsList from 'components/notifications/notificationsList';
 
 const Notifications = () => (
   <SubPage
     menu={[
       {
         path: '',
-        text: 'Список объектов',
-        widget: () => <Card>xxx</Card>,
+        text: 'Уведомления по объектам',
+        widget: () => <NotificationsList />,
       },
       {
         path: 'alert_time',

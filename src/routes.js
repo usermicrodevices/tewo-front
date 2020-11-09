@@ -38,7 +38,7 @@ const unauthorizedRoutes = [signup, signin];
 
 const dashboard = new Rout('/', Dashboard, true);
 const account = new Rout('/account', Account);
-const notifications = new Rout('/notofications', Notifications);
+const notifications = new Rout('/notifications', Notifications);
 const usersList = new Rout('/userlist', UsersList);
 const map = new Rout('/map', MapPage);
 const companies = new Rout('/companies', Companies);
