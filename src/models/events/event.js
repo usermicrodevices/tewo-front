@@ -156,6 +156,11 @@ class Event {
     return event;
   }
 
+  @computed get eventPriorityDescription() {
+    const { event } = this;
+    return event ? event.priorityDescription : event;
+  }
+
   @computed get companyName() {
     const { company } = this;
     if (company) {
