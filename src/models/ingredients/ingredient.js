@@ -19,7 +19,6 @@ class Ingridient extends Datum {
   session;
 
   constructor(session) {
-    console.log(session.ingredients);
     super(session.ingredients.update);
 
     this.session = session;
