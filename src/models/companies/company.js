@@ -51,6 +51,7 @@ class Company extends Datum {
   editable = {
     name: {
       type: 'text',
+      isRequired: true,
     },
   }
 

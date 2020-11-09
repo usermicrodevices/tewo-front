@@ -109,13 +109,19 @@ const declareFilters = (session) => ({
     type: 'singleselector',
     title: 'Регион',
     apply: (general, data) => general(data.regionId),
-    selector: () => session.locations.regionsSelector,
+    selector: () => {
+      const regions = new Set(session.points.rawData.map(({ regionId }) => regionId));
+      return session.locations.regionsSelector.filter(([id]) => regions.has(id));
+    },
   },
   cityId: {
     type: 'singleselector',
     title: 'Город',
     apply: (general, data) => general(data.cityId),
-    selector: () => session.locations.citiesSelector,
+    selector: () => {
+      const cities = new Set(session.points.rawData.map(({ cityId }) => cityId));
+      return session.locations.citiesSelector.filter(([id]) => cities.has(id));
+    },
   },
   isHaveOverdueTasks: {
     type: 'checkbox',
