@@ -20,7 +20,7 @@ const DeviceTitleAction = withRouter(inject(({ element, session }) => ({ element
     isOn,
     salePointLocation,
     salePointAddress,
-    salePointId
+    salePointId,
   },
 }) => (
   <div className={style.actions}>

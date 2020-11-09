@@ -44,7 +44,7 @@ const applyRecipe = (drink, recipe) => new Promise((resolve, reject) => {
   Promise.all(recipe.filter(({ recipeNoteId }) => recipeNoteId !== null).map(({ recipeNoteId }) => del(`/refs/recipes/${recipeNoteId}/`))).then(() => {
     Promise.all(recipe.map(({ id: ingredient, amount }) => post('/refs/recipes/', { ingredient, amount, drink: drink.id }))).then((response) => {
       if (!Array.isArray(response)) {
-        console.error('Неожиданный ответ на обновление ингридиентов', response);
+        console.error('Неожиданный ответ на обновление ингредиентов', response);
       }
       resolve(response.map((datum) => convert(datum)).filter((v) => v !== null));
     }).catch(reject);

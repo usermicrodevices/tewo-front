@@ -71,7 +71,7 @@ const RecipeEditroTable = ({ data, isEdditing }) => {
     },
     {
       dataIndex: 'name',
-      title: 'Ингридиент',
+      title: 'Ингредиент',
       render: isEdditing ? selectorRenderer : fotmater,
     },
     {
@@ -103,7 +103,7 @@ const RecipeEditroTable = ({ data, isEdditing }) => {
       )}
       { isEdditing && (
         <Button disabled={ingredientsSelector.length === 0} icon={<PlusOutlined />} onClick={() => { data.add(); }}>
-          {ingredientsSelector.length > 0 ? 'Добавить ингридиент' : 'В рецепте использованы все ингридиенты'}
+          {ingredientsSelector.length > 0 ? 'Добавить ингредиент' : 'В рецепте использованы все ингредиенты'}
         </Button>
       )}
     </>
