@@ -56,7 +56,7 @@ const COLUMNS = {
     isVisibleByDefault: true,
     title: 'Адрес',
     grow: 4,
-    sortDirections: 'descend',
+    sortDirections: 'both',
   },
   person: {
     isVisibleByDefault: false,

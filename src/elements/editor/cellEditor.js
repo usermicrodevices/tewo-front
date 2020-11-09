@@ -14,17 +14,10 @@ const CellEditor = ({
   name,
 }) => {
   switch (type) {
-    case 'text': {
+    case 'text': case 'email': {
       return (
         <Form.Item name={name}>
           { rows ? <Input.TextArea rows={rows} /> : <Input /> }
-        </Form.Item>
-      );
-    }
-    case 'email': {
-      return (
-        <Form.Item name={name} rules={[{ type: 'email' }]}>
-          <Input />
         </Form.Item>
       );
     }

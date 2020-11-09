@@ -12,7 +12,7 @@ const COLUMNS = {
     isVisibleByDefault: true,
     title: 'Название группы',
     grow: 2,
-    sortDirections: 'descend',
+    sortDirections: 'both',
     transform: (name, { id }, width) => tableItemLink(name, `${priceListRout.path}/${id}`, width),
   },
   devices: {

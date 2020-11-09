@@ -14,7 +14,7 @@ const COLUMNS = {
     isVisibleByDefault: true,
     title: 'ID',
     width: 70,
-    sortDirections: 'descend',
+    sortDirections: 'both',
   },
   name: {
     isDefaultSort: true,

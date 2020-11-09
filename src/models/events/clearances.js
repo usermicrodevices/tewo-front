@@ -18,7 +18,7 @@ const declareColumns = () => ({
     width: 100,
     isAsyncorder: true,
     isDefaultSort: true,
-    sortDirections: 'descend',
+    sortDirections: 'both',
   },
   createdDate: {
     isVisibleByDefault: false,

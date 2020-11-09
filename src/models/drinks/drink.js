@@ -80,7 +80,7 @@ class Drink extends Datum {
     const { plu: inputPLU, companyId } = data;
     const { drinks } = this.session.companies.get(companyId);
     if (Array.isArray(drinks)) {
-      const problem = drinks.find(({ plu: drinkPLU }) => drinkPLU === inputPLU);
+      const problem = drinks.find((itm) => itm.plu === inputPLU && itm !== this);
       if (typeof problem !== 'undefined') {
         return `${problem.name} имеет значение PLU ${inputPLU}`;
       }

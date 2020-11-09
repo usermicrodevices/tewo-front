@@ -184,7 +184,8 @@ class SalePoint extends Datum {
     const { name: inputName, companyId } = data;
     const { points, name: companyName } = this.session.companies.get(companyId);
     if (Array.isArray(points)) {
-      if (points.findIndex(({ name: pointName }) => pointName === inputName) >= 0) {
+      const problem = points.findIndex((itm) => itm.name === inputName && itm !== this);
+      if (typeof problem !== 'undefined') {
         return `Объект с таким именем уже существует в компании ${companyName}`;
       }
     }

@@ -35,15 +35,13 @@ class Company extends Datum {
   }
 
   @computed get pointsAmount() {
-    return this.spoints?.length;
+    return this.points?.length;
   }
 
   get key() { return this.id; }
 
   constructor(session) {
-    super(() => new Promise((resolve) => {
-      setTimeout(resolve, 2000);
-    }));
+    super(session.companies.update);
 
     this.session = session;
   }
@@ -52,6 +50,15 @@ class Company extends Datum {
     name: {
       type: 'text',
       isRequired: true,
+    },
+    emails: {
+      type: 'text',
+    },
+    phone: {
+      type: 'phone',
+    },
+    contactPeople: {
+      type: 'text',
     },
   }
 
