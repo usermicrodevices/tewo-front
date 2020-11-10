@@ -158,10 +158,7 @@ class Device {
 
   @computed get priceGroupName() {
     const { priceGroup } = this;
-    if (!priceGroup) {
-      return priceGroup;
-    }
-    return priceGroup.name;
+    return priceGroup ? priceGroup.name : priceGroup;
   }
 
   update(data) {

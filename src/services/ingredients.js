@@ -1,4 +1,6 @@
-import { get, patch } from 'utils/request';
+import {
+  get, patch, post, del,
+} from 'utils/request';
 import checkData from 'utils/dataCheck';
 import Ingredient from 'models/ingredients/ingredient';
 
@@ -59,6 +61,12 @@ const getIngredients = (session) => () => get(LOCATION).then((result) => {
   };
 });
 
-const patchIngredient = (id, data) => patch(`${LOCATION}${id}`, form(data)).then((josn) => transform(josn, {}));
+const applyIngredient = (id, changes) => {
+  const data = form(changes);
+  const request = id === null ? post(LOCATION, data) : patch(`${LOCATION}${id}`, data);
+  return request.then((response) => transform(response, {}));
+};
 
-export { getIngredients, patchIngredient };
+const deleteIngredient = (id) => del(`${LOCATION}${id}`);
+
+export { getIngredients, applyIngredient, deleteIngredient };

@@ -2,7 +2,7 @@
 import { observable, computed } from 'mobx';
 
 import Table from 'models/table';
-import getCompanies from 'services/companies';
+import { getCompanies, patchCompany } from 'services/companies';
 import Filters from 'models/filters';
 import { linkedCell } from 'elements/table/trickyCells';
 
@@ -11,7 +11,7 @@ const COLUMNS_LIST = () => ({
     isVisibleByDefault: true,
     title: 'ID',
     width: 70,
-    sortDirections: 'descend',
+    sortDirections: 'both',
     isAsyncorder: true,
   },
   name: {
@@ -88,6 +88,8 @@ class Companies extends Table {
   get(companyId) {
     return this.rawData.find(({ id }) => companyId === id);
   }
+
+  update = patchCompany;
 }
 
 export default Companies;

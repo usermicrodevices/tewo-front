@@ -12,7 +12,7 @@ import { humanizeSeconds } from 'utils/date';
 
 import style from './stats.module.scss';
 
-const Stats = ({ element: { details } }) => {
+const Stats = ({ session, element: { details, priceGroups } }) => {
   const {
     devicesServceRequiredAmount,
     devicesHardWaterAmount,
@@ -29,8 +29,13 @@ const Stats = ({ element: { details } }) => {
         Общая статистика
       </Typography.Title>
       <div className={style.groups}>
-        <Typography.Link to="/"><Format width={170}>Группа цен 1</Format></Typography.Link>
-        <Typography.Link to="/"><Format width={170}>Группа цен цен цен цен цен 1</Format></Typography.Link>
+        { priceGroups
+          ? priceGroups.slice(0, 2).map(({ name, id }) => (
+            <Typography.Link to={session.priceGroups.getPathForPriceGroup(id)} key={id}>
+              <Format width={priceGroups.length === 1 ? 300 : 150}>{ name }</Format>
+            </Typography.Link>
+          ))
+          : <Loader /> }
       </div>
       <div className={style.outdatedtasks}>
         <Typography.Value size="xl" strong><Format>{ outdatedTasksAmount }</Format></Typography.Value>
@@ -66,4 +71,4 @@ const Stats = ({ element: { details } }) => {
   );
 };
 
-export default inject('element')(observer(Stats));
+export default inject('element', 'session')(observer(Stats));

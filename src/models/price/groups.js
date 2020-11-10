@@ -12,7 +12,7 @@ const COLUMNS = {
     isVisibleByDefault: true,
     title: 'Название группы',
     grow: 2,
-    sortDirections: 'descend',
+    sortDirections: 'both',
     transform: (name, { id }, width) => tableItemLink(name, `${priceListRout.path}/${id}`, width),
   },
   devices: {
@@ -73,6 +73,27 @@ class PriceGroups extends Table {
 
   get(priceId) {
     return this.rawData.find(({ id }) => id === priceId);
+  }
+
+  getPathForPriceGroup(id) {
+    return `${priceListRout.path}/${id}`;
+  }
+
+  getBySalePoint(pointId) {
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    const result = [];
+    for (const group of this.rawData) {
+      const { devices } = group;
+      if (typeof devices === 'undefined') {
+        return undefined;
+      }
+      if (typeof devices.find(({ salePointId }) => salePointId === pointId) !== 'undefined') {
+        result.push(group);
+      }
+    }
+    return result;
   }
 }
 

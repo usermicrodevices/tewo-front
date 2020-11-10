@@ -1,16 +1,18 @@
 /* eslint class-methods-use-this: off */
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
-import { getIngredients, patchIngredient } from 'services/ingredients';
+import { getIngredients, applyIngredient, deleteIngredient } from 'services/ingredients';
+
+import Ingredient from './ingredient';
 
 const COLUMNS = {
   id: {
     isVisibleByDefault: true,
     title: 'ID',
     width: 70,
-    sortDirections: 'descend',
+    sortDirections: 'both',
   },
   name: {
     isDefaultSort: true,
@@ -49,11 +51,11 @@ const declareFilters = (session) => ({
 });
 
 class Ingridients extends Table {
-  chart = null;
-
   @observable elementForEdit;
 
   get isImpossibleToBeAsync() { return true; }
+
+  session;
 
   actions = {
     isVisible: true,
@@ -61,10 +63,14 @@ class Ingridients extends Table {
     onEdit: (datum) => {
       this.elementForEdit = datum;
     },
+    onDelete: (datum) => {
+      deleteIngredient(datum.id).then(this.rawData.splice(this.rawData.findIndex((d) => d === datum), 1));
+    },
   };
 
   constructor(session) {
     super(COLUMNS, getIngredients(session), new Filters(declareFilters(session)));
+    this.session = session;
   }
 
   toString() {
@@ -82,7 +88,15 @@ class Ingridients extends Table {
     return this.rawData.find(({ id }) => id === typeId);
   }
 
-  update = patchIngredient;
+  update = applyIngredient;
+
+  @action create() {
+    const itm = new Ingredient(this.session);
+    this.elementForEdit = itm;
+    itm.onCreated = () => {
+      this.rawData.push(itm);
+    };
+  }
 }
 
 export default Ingridients;

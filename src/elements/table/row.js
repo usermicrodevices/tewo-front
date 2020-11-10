@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Button } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import Loader from 'elements/loader';
 import classNames from 'classnames';
@@ -62,6 +62,9 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions) => withRo
           className={classNames(styles['virtual-table-cell'], styles.lastcolumn, styles.actions)}
         >
           <Button type="link" onClick={() => { actions.onEdit(rowData, push); }} icon={<EditOutlined style={{ transform: 'scale(1.37)' }} />} />
+          { typeof actions.onDelete === 'function' && (
+            <Button type="link" onClick={() => { actions.onDelete(rowData); }} icon={<DeleteOutlined style={{ transform: 'scale(1.37)' }} />} />
+          )}
         </div>
       )}
     </div>

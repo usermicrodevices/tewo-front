@@ -41,6 +41,11 @@
       padding-bottom: 0px;
       display: flex;
       align-items: center;
+
+      >:first-child {
+        margin-left: -5px;
+        margin-right: 5px;
+      }
     }
   }
 

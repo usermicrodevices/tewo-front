@@ -20,25 +20,44 @@ class Company extends Datum {
 
   session;
 
-  @computed get pointsAmount() {
+  @computed get points() {
     if (!this.session.points.isLoaded) {
       return undefined;
     }
-    return this.session.points.rawData.filter(({ companyId }) => companyId === this.id).length;
+    return this.session.points.rawData.filter(({ companyId }) => companyId === this.id);
+  }
+
+  @computed get drinks() {
+    if (!this.session.drinks.isLoaded) {
+      return undefined;
+    }
+    return this.session.drinks.rawData.filter(({ companyId }) => companyId === this.id);
+  }
+
+  @computed get pointsAmount() {
+    return this.points?.length;
   }
 
   get key() { return this.id; }
 
   constructor(session) {
-    super(() => new Promise((resolve) => {
-      setTimeout(resolve, 2000);
-    }));
+    super(session.companies.update);
 
     this.session = session;
   }
 
   editable = {
     name: {
+      type: 'text',
+      isRequired: true,
+    },
+    emails: {
+      type: 'text',
+    },
+    phone: {
+      type: 'phone',
+    },
+    contactPeople: {
       type: 'text',
     },
   }

@@ -1,5 +1,5 @@
 /* eslint class-methods-use-this: off */
-import { reaction } from 'mobx';
+import { observable, reaction } from 'mobx';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
@@ -18,7 +18,7 @@ const declareColumns = () => ({
     width: 100,
     isAsyncorder: true,
     isDefaultSort: true,
-    sortDirections: 'descend',
+    sortDirections: 'both',
   },
   createdDate: {
     isVisibleByDefault: false,
@@ -91,7 +91,7 @@ class Clearances extends Table {
 
   calendar;
 
-  stats;
+  @observable stats;
 
   constructor(session) {
     const filters = new Filters(declareFilters(session));

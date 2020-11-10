@@ -17,7 +17,12 @@ import classes from './clearances.module.scss';
 
 const Calendar = inject('table')(observer(({ table }) => {
   const { calendar } = table;
-  const onSelect = (date) => { calendar.setDateFilter([date.clone().startOf('day'), date.clone().endOf('day')]); };
+  const onSelect = (date) => {
+    calendar.setDateFilter([date.clone().startOf('day'), date.clone().endOf('day')]);
+  };
+  const onPanelChange = (moment) => {
+    calendar.setMonth(moment);
+  };
   return (
     <AntdCard>
       <div className={classes.legend}>
@@ -28,7 +33,7 @@ const Calendar = inject('table')(observer(({ table }) => {
         onSelect={onSelect}
         clearances={calendar.clearance}
         beverages={calendar.beverages}
-        onPanelChange={(moment) => calendar.setMonth(moment)}
+        onPanelChange={onPanelChange}
         isLoading={calendar.isLoading}
       />
     </AntdCard>

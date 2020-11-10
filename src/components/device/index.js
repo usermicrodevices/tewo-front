@@ -14,12 +14,13 @@ import style from './index.module.scss';
 
 const DeviceTitleAction = withRouter(inject(({ element, session }) => ({ element, session }))(observer(({
   history,
-  session: { events, beverages },
+  session: { events, beverages, points },
   element: {
     id,
     isOn,
     salePointLocation,
     salePointAddress,
+    salePointId,
   },
 }) => (
   <div className={style.actions}>
@@ -30,6 +31,7 @@ const DeviceTitleAction = withRouter(inject(({ element, session }) => ({ element
     <Space>
       <Button onClick={() => history.push(events.getPathForDevice(id))}>События</Button>
       <Button onClick={() => history.push(beverages.getPathForDevice(id))}>Наливы</Button>
+      <Button onClick={() => history.push(points.getPathForPoint(salePointId))}>Объект</Button>
     </Space>
   </div>
 ))));

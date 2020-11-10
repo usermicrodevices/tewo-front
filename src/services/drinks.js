@@ -1,4 +1,6 @@
-import { get, patch } from 'utils/request';
+import {
+  get, patch, post, del,
+} from 'utils/request';
 import checkData from 'utils/dataCheck';
 import Drink from 'models/drinks/drink';
 import { getRecipes } from './recipes';
@@ -66,6 +68,12 @@ const getDrinks = (session) => () => Promise.all([getDrinksWithoutRecipe(session
   return drinks;
 });
 
-const patchDrink = (id, data) => patch(`${LOCATION}${id}`, form(data)).then((josn) => transform(josn, {}));
+const applyDrink = (id, changes) => {
+  const data = form(changes);
+  const request = id === null ? post(LOCATION, data) : patch(`${LOCATION}${id}`, data);
+  return request.then((response) => transform(response, {}));
+};
 
-export { getDrinks, patchDrink };
+const deleteDrink = (id) => del(`${LOCATION}${id}`);
+
+export { getDrinks, applyDrink, deleteDrink };

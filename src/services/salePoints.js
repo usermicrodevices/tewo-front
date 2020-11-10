@@ -2,7 +2,9 @@
 import { transaction } from 'mobx';
 import moment from 'moment';
 
-import { get, post, patch } from 'utils/request';
+import {
+  get, post, patch, del,
+} from 'utils/request';
 import SalePoint from 'models/salePoints/salePoint';
 import checkData from 'utils/dataCheck';
 import { daterangeToArgs, SemanticRanges, SmallSemanticRanges } from 'utils/date';
@@ -115,7 +117,7 @@ const applySalePoint = (item, changes) => {
     data[renamer.get(key)] = value;
   }
   const request = item === null ? post(LOCATION, data) : patch(`${LOCATION}${item}`, data);
-  request.then((response) => converter(response, {}));
+  return request.then((response) => converter(response, {}));
 };
 
 const getSalesTop = (filter) => {
@@ -176,6 +178,8 @@ const getBeveragesSpeed = (pointsId) => (
   })
 );
 
+const deleteSalePoint = (id) => del(`${LOCATION}${id}`);
+
 export {
   applySalePoint,
   getSalePoints,
@@ -184,4 +188,5 @@ export {
   getOutdatedTasks,
   getSalePointLastDaysBeverages,
   getBeveragesSpeed,
+  deleteSalePoint,
 };

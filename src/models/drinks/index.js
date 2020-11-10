@@ -3,11 +3,12 @@ import { observable, computed, action } from 'mobx';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
-import { patchDrink, getDrinks } from 'services/drinks';
+import { applyDrink, getDrinks, deleteDrink } from 'services/drinks';
 import cup from 'elements/cup';
 
 import { drink as drinksRout } from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
+import Drink from './drink';
 
 import RecipeEditor from './recipeEditor';
 
@@ -16,7 +17,7 @@ const declareColumns = (onEditRecipe) => ({
     isVisibleByDefault: true,
     title: 'ID',
     width: 70,
-    sortDirections: 'descend',
+    sortDirections: 'both',
   },
   name: {
     isDefaultSort: true,
@@ -78,6 +79,9 @@ class Drinks extends Table {
     onEdit: (datum) => {
       this.elementForEdit = datum;
     },
+    onDelete: (datum) => {
+      deleteDrink(datum.id).then(this.rawData.splice(this.rawData.findIndex((d) => d === datum), 1));
+    },
   };
 
   constructor(session) {
@@ -107,7 +111,15 @@ class Drinks extends Table {
     return this.rawData.find(({ id }) => id === typeId);
   }
 
-  update = patchDrink;
+  update = applyDrink;
+
+  @action create() {
+    const itm = new Drink(this.session);
+    this.elementForEdit = itm;
+    itm.onCreated = () => {
+      this.rawData.push(itm);
+    };
+  }
 }
 
 export default Drinks;

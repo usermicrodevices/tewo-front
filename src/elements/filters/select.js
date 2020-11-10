@@ -23,6 +23,7 @@ const Selector = ({
       showSearch
       filterOption={filterComparator}
       disabled={disabled || !Array.isArray(selector) || selector.length === 0}
+      notFoundContent={<Loader />}
     >
       {
         Array.isArray(selector) && selector.map(([key, text]) => (

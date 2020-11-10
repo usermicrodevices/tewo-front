@@ -1,15 +1,14 @@
 /* eslint class-methods-use-this: off */
 import { observable, computed, action } from 'mobx';
+import { duration } from 'moment';
 
 import Table from 'models/table';
 import {
-  getSalePoints, applySalePoint, getSalesTop, getSalesChart, getOutdatedTasks, getSalePointLastDaysBeverages, getBeveragesSpeed,
+  getSalePoints, applySalePoint, getSalesTop, getSalesChart, getOutdatedTasks, getSalePointLastDaysBeverages, getBeveragesSpeed, deleteSalePoint,
 } from 'services/salePoints';
 import Filters from 'models/filters';
-
 import { salePoints as salePointsRout } from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
-import { duration } from 'moment';
 import { daterangeToArgs } from 'utils/date';
 import Format from 'elements/format';
 
@@ -57,7 +56,7 @@ const COLUMNS = {
     isVisibleByDefault: true,
     title: 'Адрес',
     grow: 4,
-    sortDirections: 'descend',
+    sortDirections: 'both',
   },
   person: {
     isVisibleByDefault: false,
@@ -102,7 +101,6 @@ const declareFilters = (session) => ({
     title: 'Тег',
     apply: (general, data) => general(data.drink),
     selector: () => [
-      [1, 'a'], [2, 'b'],
     ],
     disabled: true,
   },
@@ -110,13 +108,19 @@ const declareFilters = (session) => ({
     type: 'singleselector',
     title: 'Регион',
     apply: (general, data) => general(data.regionId),
-    selector: () => session.locations.regionsSelector,
+    selector: () => {
+      const regions = new Set(session.points.rawData.map(({ regionId }) => regionId));
+      return session.locations.regionsSelector.filter(([id]) => regions.has(id));
+    },
   },
   cityId: {
     type: 'singleselector',
     title: 'Город',
     apply: (general, data) => general(data.cityId),
-    selector: () => session.locations.citiesSelector,
+    selector: () => {
+      const cities = new Set(session.points.rawData.map(({ cityId }) => cityId));
+      return session.locations.citiesSelector.filter(([id]) => cities.has(id));
+    },
   },
   isHaveOverdueTasks: {
     type: 'checkbox',
@@ -150,6 +154,9 @@ class SalePoints extends Table {
     isEditable: () => true,
     onEdit: (datum, push) => {
       push(`sale_points/${datum.id}/edit`);
+    },
+    onDelete: (datum) => {
+      deleteSalePoint(datum.id).then(this.rawData.splice(this.rawData.findIndex((d) => d === datum), 1));
     },
   };
 
@@ -197,7 +204,11 @@ class SalePoints extends Table {
   }
 
   @action create() {
-    this.elementForEdit = new Point(this.session);
+    const itm = new Point(this.session);
+    this.elementForEdit = itm;
+    itm.onCreated = () => {
+      this.rawData.push(itm);
+    };
   }
 
   getSalesTop(points, daterange) {
@@ -228,16 +239,15 @@ class SalePoints extends Table {
 
   getSalePointLastDaysBeverages = getSalePointLastDaysBeverages;
 
-  get applyer() {
-    return (item, changes) => applySalePoint(item, changes).then((response) => ({
-      response,
-      storageData: this.rawData,
-    }));
-  }
+  applyer = applySalePoint;
 
   getBeveragesSpeed(salePointsId) {
     const ids = (Array.isArray(salePointsId) ? salePointsId : this.rawData.map(({ id }) => id));
     return getBeveragesSpeed(ids);
+  }
+
+  getPathForPoint(id) {
+    return `${salePointsRout.path}/${id}`;
   }
 }
 

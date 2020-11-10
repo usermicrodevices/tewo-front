@@ -19,7 +19,7 @@ const declareColumns = () => ({
     width: 100,
     isAsyncorder: true,
     isDefaultSort: true,
-    sortDirections: 'descend',
+    sortDirections: 'both',
   },
   cid: {
     isVisibleByDefault: false,
@@ -52,7 +52,7 @@ const declareColumns = () => ({
     title: 'Описание',
     grow: 2,
   },
-  eventPriority: {
+  eventPriorityDescription: {
     isVisibleByDefault: true,
     title: 'Приоритет события',
     grow: 1,

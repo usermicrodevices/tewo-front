@@ -69,3 +69,8 @@
     padding-bottom: 8px;
   }
 }
+
+.required::after {
+  content: ' *';
+  color: red;
+}

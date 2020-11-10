@@ -31,9 +31,6 @@ const Filter = (
       return <Input allowClear disabled={disabled} placeholder={title} onChange={({ target }) => onChange(target.value)} value={value} />;
     case 'selector': case 'singleselector': {
       const isSingle = type === 'singleselector';
-      if (!Array.isArray(selector) || selector.length <= 1) {
-        return null;
-      }
       return <Select disabled={disabled} title={title} value={value} onChange={onChange} selector={selector} isSingle={isSingle} />;
     }
     case 'checkbox':
