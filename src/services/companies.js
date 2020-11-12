@@ -22,6 +22,7 @@ const transform = (data, company) => {
     group: 'number',
     contact_people: 'string',
     threshold_drinks_cleaning: 'number',
+    currency: 'number',
   };
 
   if (!checkData(data, shouldBe, mayBe)) {
@@ -36,6 +37,7 @@ const transform = (data, company) => {
   company.phone = data.phone;
   company.group = data.group;
   company.contactPeople = data.contact_people;
+  company.currencyId = data.currency;
   company.created = moment(data.created_date);
 
   return company;

@@ -16,6 +16,8 @@ class Company extends Datum {
 
   @observable group;
 
+  @observable currencyId;
+
   created;
 
   session;
@@ -25,6 +27,10 @@ class Company extends Datum {
       return undefined;
     }
     return this.session.points.rawData.filter(({ companyId }) => companyId === this.id);
+  }
+
+  @computed get currency() {
+    return this.session.currencies.get(this.currencyId);
   }
 
   @computed get drinks() {

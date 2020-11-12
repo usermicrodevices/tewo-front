@@ -21,12 +21,12 @@ const COLUMNS = [
   {
     title: 'НДС',
     dataIndex: 'syncDate',
-    render: () => <Format>{null}</Format>,
+    render: (v) => <Format>{v}</Format>,
   },
   {
     title: 'Валюта',
     dataIndex: 'isCynchronized',
-    render: () => <Format>{null}</Format>,
+    render: (v) => <Format>{v}</Format>,
   },
   {
     title: 'Цена',
@@ -36,26 +36,32 @@ const COLUMNS = [
   {
     title: '',
     dataIndex: 'rm',
-    render: (rm) => <Button disabled icon={<Icon size={20} name="trash-2-outline" />} type="text" onClick={rm} />,
+    render: (rm) => <Button icon={<Icon size={20} name="trash-2-outline" />} type="text" onClick={rm} />,
   },
 ];
 
-const toDataSource = (price) => ({
-  plu: price.plu,
-  key: price.id,
-  name: price.name,
-  value: price.value,
-  rm: () => {},
-  sendValue: () => new Promise((_, reject) => { setTimeout(reject, 1000); }),
-});
+const PriceList = ({ element, onAdd, isLoading }) => {
+  const toDataSource = (price) => ({
+    plu: price.plu,
+    key: price.id,
+    name: price.name,
+    value: price.value,
+    isCynchronized: null,
+    syncDate: null,
+    rm: () => element.removePrice(price.id),
+    sendValue: () => new Promise((_, reject) => { setTimeout(reject, 1000); }),
+  });
 
-const PriceList = ({ element }) => (
-  <List
-    dataSource={element.prices}
-    toDataSource={toDataSource}
-    columns={COLUMNS}
-    title={`Список напитков (${element.drinksCount})`}
-  />
-);
+  return (
+    <List
+      isLoading={isLoading}
+      dataSource={element.prices}
+      toDataSource={toDataSource}
+      columns={COLUMNS}
+      onAdd={onAdd}
+      title={`Список напитков (${element.drinksCount})`}
+    />
+  );
+};
 
 export default inject('element')(observer(PriceList));

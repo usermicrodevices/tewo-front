@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { observer } from 'mobx-react';
 import {
   Card, Table, Button, Input,
 } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 import Icon from 'elements/icon';
 import Loader from 'elements/loader';
@@ -9,8 +11,8 @@ import Typography from 'elements/typography';
 
 import style from './style.module.scss';
 
-const List = ({
-  dataSource, toDataSource, columns, title,
+const List = observer(({
+  dataSource, toDataSource, columns, title, onAdd, isLoading,
 }) => {
   const [filterValue, setFilter] = useState('');
   const toSearch = filterValue.toLowerCase();
@@ -23,7 +25,12 @@ const List = ({
         <Typography.Title level={3} className={style.titletext}>
           {title}
         </Typography.Title>
-        <Button type="text" disabled icon={<Icon size={22} name="plus-circle-outline" />} />
+        <Button
+          type="text"
+          disabled={isLoading}
+          onClick={onAdd}
+          icon={isLoading ? <LoadingOutlined /> : <Icon size={22} name="plus-circle-outline" />}
+        />
       </div>
       <Input
         allowClear
@@ -37,6 +44,6 @@ const List = ({
         : <Loader size="large" /> }
     </Card>
   );
-};
+});
 
 export default List;

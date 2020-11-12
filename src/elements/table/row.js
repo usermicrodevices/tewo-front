@@ -35,6 +35,7 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions) => withRo
     <div
       style={style}
       className={classNames(
+        rowData.className,
         styles.row,
         {
           [styles.highlightnew]: freshItems.has(index),

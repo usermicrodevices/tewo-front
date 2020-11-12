@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Input } from 'antd';
 import { withSize } from 'react-sizeme';
+import classnames from 'classnames';
 
 import Icon from 'elements/icon';
 
@@ -34,17 +35,21 @@ class TableComponent extends React.Component {
         data,
         columns,
         actions,
+        isHideTitleRow,
       },
       filter: { searchText, isShowSearch },
       size,
+      className,
     } = this.props;
     const columnWidth = calculateColumnWidth(size.width, columns.map(({ width }) => width), actions);
     return (
-      <div className={style.whole}>
-        <div className={style.buttons}>
-          { isShowSearch && <Input allowClear prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} /> }
-          { process.env.NODE_ENV !== 'production' && <p>{`Доступно ${data.length} записей`}</p> }
-        </div>
+      <div className={classnames(className, style.whole)}>
+        { !isHideTitleRow && (
+          <div className={style.buttons}>
+            { isShowSearch && <Input allowClear prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} /> }
+            { process.env.NODE_ENV !== 'production' && <p>{`Доступно ${data.length} записей`}</p> }
+          </div>
+        )}
         <Header columnWidth={columnWidth} />
         <Content width={size.width} columnWidth={columnWidth} />
       </div>

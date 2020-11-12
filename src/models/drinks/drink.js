@@ -13,6 +13,8 @@ class Drink extends Datum {
 
   @observable recipe = [];
 
+  @observable nds = null;
+
   session;
 
   constructor(session) {
