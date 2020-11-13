@@ -20,12 +20,12 @@ const COLUMNS = [
   },
   {
     title: 'НДС',
-    dataIndex: 'syncDate',
+    dataIndex: 'nds',
     render: (v) => <Format>{v}</Format>,
   },
   {
     title: 'Валюта',
-    dataIndex: 'isCynchronized',
+    dataIndex: 'currency',
     render: (v) => <Format>{v}</Format>,
   },
   {
@@ -46,8 +46,8 @@ const PriceList = ({ element, onAdd, isLoading }) => {
     key: price.id,
     name: price.name,
     value: price.value,
-    isCynchronized: null,
-    syncDate: null,
+    nds: price.nds,
+    currency: price.currency,
     rm: () => element.removePrice(price.id),
     sendValue: (value) => price.setValue(value),
   });

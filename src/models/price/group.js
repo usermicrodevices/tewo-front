@@ -49,6 +49,10 @@ class PriceGroup extends Datum {
     return this.session.companies.get(this.companyId);
   }
 
+  @computed get currency() {
+    return this.company?.currency;
+  }
+
   @computed get companyName() {
     return this.company?.name;
   }

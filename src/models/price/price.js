@@ -48,6 +48,18 @@ class Price extends Datum {
     return this.drink?.name;
   }
 
+  @computed get nds() {
+    return this.drink?.nds;
+  }
+
+  @computed get group() {
+    return this.session.priceGroups.get(this.groupId);
+  }
+
+  @computed get currency() {
+    return this.group?.currency?.name;
+  }
+
   @action setValue(v) {
     return this.update({ value: v });
   }

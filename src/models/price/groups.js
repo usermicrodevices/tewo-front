@@ -79,6 +79,9 @@ class PriceGroups extends Table {
   }
 
   get(priceId) {
+    if (!this.isLoaded) {
+      return undefined;
+    }
     return this.rawData.find(({ id }) => id === priceId);
   }
 

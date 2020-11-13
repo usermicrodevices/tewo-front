@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { observer } from 'mobx-react';
 import { Button, InputNumber, message } from 'antd';
 import { EditOutlined, SendOutlined, LoadingOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
@@ -32,7 +31,7 @@ const PriceCell = (value, { sendValue }) => {
   if (isEdditing) {
     return (
       <div className={classNames(classes.root, { [classes.warn]: isWarn })}>
-        <InputNumber defaultValue={currentValue} onChange={setCurrentValue} />
+        <InputNumber min={0} defaultValue={currentValue} onChange={setCurrentValue} />
         <Button
           icon={<SendOutlined style={{ transform: 'scale(1.37)' }} />}
           type="text"
