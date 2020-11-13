@@ -3,15 +3,14 @@ import {
   action, computed, observable, transaction,
 } from 'mobx';
 
+import { getNotificationSettings } from 'services/notifications';
+
 class SourceNotification {
-  constructor(id, name, types) {
+  constructor(id, name, salePointId, types = {}) {
     this.id = id;
+    this.salePointId = salePointId;
     this.name = name;
-    this.typeValues = observable.map({
-      1: Math.random() > 0.01,
-      2: Math.random() > 0.01,
-      3: Math.random() > 0.01,
-    });
+    this.typeValues = observable.map(types);
   }
 
   @computed get types() {
@@ -35,6 +34,8 @@ class SourceNotification {
   onChange = (evt) => {
     const { name, checked } = evt.target;
 
+    // TODO save to server
+
     this.setType(name, checked);
   }
 }
@@ -42,9 +43,14 @@ class SourceNotification {
 class PointNotification {
   notifications = [];
 
-  constructor(id, name, sourceNotifications) {
+  constructor(id, name, sourceNotifications, config) {
     this.id = id;
     this.name = name;
+    this.config = config;
+
+    if (id === 1) {
+      console.log(sourceNotifications);
+    }
 
     this.setSourceNotifications(sourceNotifications);
   }
@@ -53,7 +59,8 @@ class PointNotification {
     const newSourceNotifications = sourceNotifications.map((sourceNotification) => new SourceNotification(
       sourceNotification.id,
       sourceNotification.name,
-      // sourceNotification.types,
+      this.id,
+      sourceNotification.types,
     ));
 
     this.notifications = newSourceNotifications;
@@ -64,12 +71,27 @@ class PointNotification {
   }
 
   @computed get types() {
+    return this.config.types.reduce((acc, type) => {
+      const isAllEnabled = this.notifications.every((v) => v.types[type.id]);
+      const isSomeEnabled = this.notifications.some((v) => v.types[type.id]);
+
+      if (isAllEnabled) {
+        acc[type.id] = true;
+      } else if (isSomeEnabled) {
+        acc[type.id] = null;
+      } else {
+        acc[type.id] = false;
+      }
+
+      return acc;
+    }, {});
+
     return this.notifications.reduce((acc, notification) => {
-      Object.keys(notification.types).forEach((type) => {
-        if (acc[type] === undefined) {
-          acc[type] = notification.types[type];
+      this.config.types.forEach((type) => {
+        if (acc[type.id] === undefined) {
+          acc[type.id] = notification.types[type.id];
         } else {
-          acc[type] = acc[type] ? notification.types[type] : false;
+          acc[type.id] = acc[type.id] ? notification.types[type.id] : false;
         }
       });
 
@@ -80,6 +102,8 @@ class PointNotification {
   onChange = (evt) => {
     const { name, checked } = evt.target;
 
+    // TODO save to server
+
     transaction(() => {
       this.notifications.forEach((notification) => {
         notification.setType(name, checked);
@@ -89,12 +113,21 @@ class PointNotification {
 }
 
 class PersonalNotifications {
-  @observable settings = [];
-
   @observable notificationSettins = [];
 
   constructor(session) {
     this.session = session;
+    this.settings = observable.object({});
+
+    this.init();
+  }
+
+  init = async () => {
+    const settings = await getNotificationSettings();
+
+    if (settings) {
+      this.settings = settings;
+    }
   }
 
   @computed get types() {
@@ -110,17 +143,28 @@ class PersonalNotifications {
   }
 
   @computed({ keepAlive: true }) get tableData() {
-    console.log('CALCULATE TABLE DATA');
+    console.log(this.settings);
 
-    return this.salePoints.map((point) => new PointNotification(
+    const config = {
+      types: this.types,
+    };
+
+    const getSourcesByPoint = (point) => this.sources.map((source) => ({
+      name: source.name,
+      id: source.id,
+      types: this.settings && this.settings[point.id] && this.settings[point.id][source.id]
+        ? this.settings[point.id][source.id].types
+        : {},
+    }));
+
+    const data = this.salePoints.map((point) => new PointNotification(
       point.id,
       point.name,
-      this.sources.map((source) => ({
-        name: source.name,
-        id: source.id,
-        // TODO get types from NotificationCurrentConfig
-      })),
+      getSourcesByPoint(point),
+      config,
     ));
+
+    return data;
   }
 }
 

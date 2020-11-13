@@ -35,18 +35,33 @@ export const getNotificationSources = (acceptor) => get('/refs/notification_sour
   }
 });
 
-export const getNotificationSettings = () => get('/api/refs/notification_options/current/').then((json) => {
+export const getNotificationSettings = () => get('/refs/notification_options/current/').then((json) => {
   if (Array.isArray(json)) {
+    const result = {}; // {[sale_point_id]: {[source_id]: {types: [1,2,...]}}}
+
     for (const item of json) {
       if (checkData(item, {
-        id: 'number', source: 'number', sale_point: 'number', types: 'array',
+        id: 'number', source: 'number', sale_point: 'number', types: 'array', owner: 'number',
       })) {
-        // todo
+        if (!result[item.sale_point]) {
+          result[item.sale_point] = {};
+        }
+
+        result[item.sale_point][item.source] = {
+          types: item.types.reduce((acc, type) => {
+            acc[type] = true;
+
+            return acc;
+          }, {}),
+        };
       } else {
         console.error('unexpected notification_settings response');
       }
     }
-  } else {
-    console.error('unexpected notification_settings response');
+
+    return result;
   }
+  console.error('unexpected notification_settings response');
 });
+
+// export const updateNotificationSettings = () =>

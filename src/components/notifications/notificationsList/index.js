@@ -9,7 +9,7 @@ import NotificationRow from 'components/notifications/row';
 import styles from './style.module.scss';
 
 const NotificationCheckbox = observer(({ id, notification, label }) => (
-  <Checkbox key={id} checked={notification.types[id]} name={id} onChange={notification.onChange}>
+  <Checkbox key={id} indeterminate={notification.types[id] === null} checked={notification.types[id]} name={id} onChange={notification.onChange}>
     {label}
   </Checkbox>
 ));
