@@ -49,7 +49,7 @@ const PriceList = ({ element, onAdd, isLoading }) => {
     isCynchronized: null,
     syncDate: null,
     rm: () => element.removePrice(price.id),
-    sendValue: () => new Promise((_, reject) => { setTimeout(reject, 1000); }),
+    sendValue: (value) => price.setValue(value),
   });
 
   return (

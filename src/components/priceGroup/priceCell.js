@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { observer } from 'mobx-react';
 import { Button, InputNumber, message } from 'antd';
 import { EditOutlined, SendOutlined, LoadingOutlined } from '@ant-design/icons';
 import classNames from 'classnames';

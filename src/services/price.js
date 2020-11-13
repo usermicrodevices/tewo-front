@@ -10,7 +10,7 @@ import PriceGroup from 'models/price/group';
 
 const PRICES_LOCATION = '/refs/prices/';
 
-const priceFromJSON = (session) => (json) => {
+const priceObjectFromJSON = (json, acceptor) => {
   if (!checkData(
     json,
     {
@@ -22,7 +22,6 @@ const priceFromJSON = (session) => (json) => {
   )) {
     console.error(`Неожиданный ответ по адресу ${PRICES_LOCATION}`, json);
   }
-  const price = new Price(session);
   const renamer = {
     drink: 'drinkId',
     price_group: 'groupId',
@@ -31,10 +30,12 @@ const priceFromJSON = (session) => (json) => {
   };
 
   for (const [jsonName, modelName] of Object.entries(renamer)) {
-    price[modelName] = json[jsonName];
+    acceptor[modelName] = json[jsonName];
   }
-  return price;
+  return acceptor;
 };
+
+const priceFromJSON = (session) => (json) => priceObjectFromJSON(json, new Price(session));
 
 function getPrices(session) {
   return () => get(PRICES_LOCATION).then((result) => {
@@ -48,18 +49,16 @@ function getPrices(session) {
   });
 }
 
-const postPrices = (drinks, priceGroupId, session) => {
-  console.log(drinks);
-  return Promise.all(drinks.map((drinkId) => post(PRICES_LOCATION, {
-    drink: drinkId,
-    price_group: priceGroupId,
-  }))).then((response) => {
-    console.log('r', response);
-    const newPrices = response.map(priceFromJSON(session));
-    session.prices.add(newPrices);
-    return newPrices;
-  });
-};
+const postPrices = (drinks, priceGroupId, session) => Promise.all(drinks.map((drinkId) => post(PRICES_LOCATION, {
+  drink: drinkId,
+  price_group: priceGroupId,
+}))).then((response) => {
+  const newPrices = response.map(priceFromJSON(session));
+  session.prices.add(newPrices);
+  return newPrices;
+});
+
+const patchPrice = (id, data) => patch(`${PRICES_LOCATION}${id}`, data).then((result) => priceObjectFromJSON(result, {}));
 
 const deletePrice = (id) => del(`${PRICES_LOCATION}${id}`);
 
@@ -130,5 +129,5 @@ const applyPriceGroup = (id, changes, aditionlDrinks, session) => {
 const synchronizePriceGroup = (id) => post(`/refs/price_groups/${id}/sync/`, {});
 
 export {
-  getPrices, getPriceGroups, applyPriceGroup, synchronizePriceGroup, deletePrice,
+  getPrices, getPriceGroups, applyPriceGroup, synchronizePriceGroup, deletePrice, patchPrice,
 };
