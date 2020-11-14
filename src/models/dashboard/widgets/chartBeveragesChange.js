@@ -36,7 +36,7 @@ class ChartBeveragesChange {
           data: this.canceled.beveragesSeria,
           name: 'Отменённых наливов',
           width: 4,
-          axis: 0,
+          axis: 1,
         },
       ];
     }
@@ -61,7 +61,7 @@ class ChartBeveragesChange {
         data: [...new Array(this.whole.length - this.canceled.length).fill(0), ...this.canceled.beveragesSeria],
         name: 'Отменённых наливов',
         width: 4,
-        axis: 0,
+        axis: 1,
       },
     ];
   }
