@@ -62,7 +62,7 @@ const declareColumns = () => ({
 
 const declareFilters = (session) => ({
   open_date: {
-    type: 'datetimerange',
+    type: 'daterange',
     title: 'Дата время',
     apply: (general, data) => general(data.openDate),
   },

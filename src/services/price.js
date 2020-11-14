@@ -126,7 +126,7 @@ const applyPriceGroup = (id, changes, aditionlDrinks, session) => {
   });
 };
 
-const synchronizePriceGroup = (id) => post(`/refs/price_groups/${id}/sync/`, {});
+const synchronizePriceGroup = (id, devices) => post(`/refs/price_groups/${id}/sync/`, { devices: [...devices.values()] });
 
 export {
   getPrices, getPriceGroups, applyPriceGroup, synchronizePriceGroup, deletePrice, patchPrice,

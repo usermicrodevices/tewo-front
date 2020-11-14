@@ -39,10 +39,15 @@ const declareColumns = (onEditRecipe) => ({
     grow: 2,
     sortDirections: 'both',
   },
+  nds: {
+    isVisibleByDefault: true,
+    title: 'НДС',
+    width: 70,
+  },
   recipe: {
     isVisibleByDefault: true,
     title: 'Рецепт',
-    width: 70,
+    width: 100,
     transform: (_, datum) => cup(() => { onEditRecipe(datum); }, datum.isHaveRecipe),
   },
 });

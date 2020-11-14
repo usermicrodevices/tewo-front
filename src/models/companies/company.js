@@ -33,6 +33,11 @@ class Company extends Datum {
     return this.session.currencies.get(this.currencyId);
   }
 
+  @computed get currencyName() {
+    const { currency } = this;
+    return currency && currency.name;
+  }
+
   @computed get drinks() {
     if (!this.session.drinks.isLoaded) {
       return undefined;
@@ -52,20 +57,27 @@ class Company extends Datum {
     this.session = session;
   }
 
-  editable = {
-    name: {
-      type: 'text',
-      isRequired: true,
-    },
-    emails: {
-      type: 'text',
-    },
-    phone: {
-      type: 'phone',
-    },
-    contactPeople: {
-      type: 'text',
-    },
+  get editable() {
+    return {
+      name: {
+        type: 'text',
+        isRequired: true,
+      },
+      emails: {
+        type: 'text',
+      },
+      phone: {
+        type: 'phone',
+      },
+      contactPeople: {
+        type: 'text',
+      },
+      currencyId: {
+        type: 'text',
+        selector: this.session.currencies.selector,
+        isRequired: true,
+      },
+    };
   }
 
   @computed get values() {
@@ -99,6 +111,11 @@ class Company extends Datum {
         dataIndex: 'created',
         title: 'Дата внесения в базу',
         value: this.created.format('D MMMM yyyy года'),
+      },
+      {
+        dataIndex: 'currencyId',
+        title: 'Валюта',
+        value: this.currencyName,
       },
     ];
   }

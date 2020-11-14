@@ -17,12 +17,12 @@ const PriceGroupTitleAction = inject('element')(observer(
       setSynchronizing(true);
       element.synchronize().then(() => setSynchronizing(false));
     };
-    const { isSynchronized } = element;
+    const { isSynchronized, selectedSync } = element;
     const notLoadingIcon = isSynchronized ? <CheckCircleOutlined /> : <ReloadOutlined />;
-    const notLoadingMessage = isSynchronized ? 'Синхронизовано' : 'Синхронизировать';
+    const notLoadingMessage = isSynchronized ? 'Синхронизировано' : `Синхронизировать (${selectedSync.size})`;
     return (
       <Button
-        disabled={isSynchronizing || isSynchronized}
+        disabled={isSynchronizing || isSynchronized || selectedSync.size === 0}
         icon={isSynchronizing ? <LoadingOutlined /> : notLoadingIcon}
         onClick={onClick}
       >
@@ -82,12 +82,15 @@ class PriceGroupOverview extends React.Component {
     );
 
     const onSelectPrice = (data) => {
-      console.log(data);
       this.selectedPrices = data;
     };
 
     const onSelectDevice = (data) => {
       this.selectedDevices = data;
+    };
+
+    const onSelectSync = (data) => {
+      element.selectedSync = data;
     };
 
     return (
@@ -98,7 +101,7 @@ class PriceGroupOverview extends React.Component {
         <MyModal mode="price">
           <PricePicker onSelect={onSelectPrice} />
         </MyModal>
-        <DeviceList isLoading={sendingData === 'device'} onAdd={() => this.setOpenedPicker('device')} />
+        <DeviceList isLoading={sendingData === 'device'} onAdd={() => this.setOpenedPicker('device')} onSelect={onSelectSync} selected={element.selectedSync} />
         <PriceList isLoading={sendingData === 'price'} onAdd={() => this.setOpenedPicker('price')} />
       </div>
     );

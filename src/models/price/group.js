@@ -17,6 +17,8 @@ class PriceGroup extends Datum {
 
   @observable id = null;
 
+  @observable selectedSync = new Set();
+
   session;
 
   constructor(session) {
@@ -94,7 +96,9 @@ class PriceGroup extends Datum {
   }
 
   @action synchronize() {
-    return this.session.priceGroups.synchronize(this.id);
+    return this.session.priceGroups.synchronize(this.id, this.selectedSync).then(() => {
+      this.selectedSync = new Set();
+    });
   }
 
   @computed get editable() {

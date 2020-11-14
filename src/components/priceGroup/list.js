@@ -40,7 +40,14 @@ const List = observer(({
         onChange={({ target }) => { setFilter(target.value); }}
       />
       { dataSource
-        ? <Table pagination={false} columns={columns} dataSource={ds} />
+        ? (
+          <Table
+            pagination={false}
+            columns={columns}
+            dataSource={ds}
+            rowClassName={({ className }) => className}
+          />
+        )
         : <Loader size="large" /> }
     </Card>
   );

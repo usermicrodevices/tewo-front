@@ -80,7 +80,7 @@ const declareColumns = (session) => ({
 
 const declareFilters = (session) => ({
   device_date: {
-    type: 'daterange',
+    type: 'datetimerange',
     title: 'Момент налива',
     apply: (general, data) => general(data.deviceDate),
   },

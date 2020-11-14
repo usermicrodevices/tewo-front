@@ -14,6 +14,7 @@ import {
   eventsLog,
   downtimeLog,
   cleansLog,
+  sales,
 } from 'routes';
 
 class MenuItem {
@@ -52,6 +53,7 @@ const items = [
       },
       {
         text: 'Аналитика продаж',
+        act: sales,
       },
       {
         text: 'Отмена напитков',
