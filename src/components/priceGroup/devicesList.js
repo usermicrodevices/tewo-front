@@ -1,6 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Checkbox, Space } from 'antd';
+import {
+  Button, Checkbox, Popconfirm, Space,
+} from 'antd';
 import classNames from 'classnames';
 
 import Icon from 'elements/icon';
@@ -74,12 +76,15 @@ const DevicesList = ({
       title: '',
       dataIndex: 'rm',
       render: (rm) => (
-        <Button
-          onClick={rm}
-          className={style.rm}
-          icon={<Icon size={20} name="trash-2-outline" />}
-          type="text"
-        />
+        <Popconfirm
+          placement="left"
+          title="Отмена операции невозможна. Продолжить удаление?"
+          onConfirm={rm}
+          okText="Да"
+          cancelText="Нет"
+        >
+          <Button icon={<Icon size={20} name="trash-2-outline" />} type="text" />
+        </Popconfirm>
       ),
     },
   ];

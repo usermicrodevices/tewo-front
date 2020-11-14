@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 import Sorter from './sorter';
 import styles from './style.module.scss';
-import { SCROLL_PANE_WIDTH } from './row';
+import { SCROLL_PANE_WIDTH, ACTIONS_COLUMN_WIDT } from './row';
 
 const Header = ({ table, columnWidth }) => {
   const { sort, columns, actions } = table;
@@ -46,8 +46,8 @@ const Header = ({ table, columnWidth }) => {
           { actions.isVisible && (
             <th
               style={{
-                width: 100,
-                maxWidth: 100,
+                width: ACTIONS_COLUMN_WIDT,
+                maxWidth: ACTIONS_COLUMN_WIDT,
               }}
               className="ant-table-cell"
             >

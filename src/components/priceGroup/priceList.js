@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button } from 'antd';
+import { Button, Popconfirm } from 'antd';
 
 import Icon from 'elements/icon';
 import Format from 'elements/format';
@@ -36,7 +36,17 @@ const COLUMNS = [
   {
     title: '',
     dataIndex: 'rm',
-    render: (rm) => <Button icon={<Icon size={20} name="trash-2-outline" />} type="text" onClick={rm} />,
+    render: (rm) => (
+      <Popconfirm
+        placement="left"
+        title="Отмена операции невозможна. Продолжить удаление?"
+        onConfirm={rm}
+        okText="Да"
+        cancelText="Нет"
+      >
+        <Button icon={<Icon size={20} name="trash-2-outline" />} type="text" />
+      </Popconfirm>
+    ),
   },
 ];
 

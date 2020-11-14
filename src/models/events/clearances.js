@@ -4,7 +4,6 @@ import { observable, reaction } from 'mobx';
 import Table from 'models/table';
 import Filters from 'models/filters';
 import { getClearances, getDetergrnts } from 'services/events';
-import colorizedCell from 'elements/table/colorizedCell';
 import { tableItemLink } from 'elements/table/trickyCells';
 import TimeAgo from 'elements/timeago';
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
