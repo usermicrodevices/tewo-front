@@ -4,21 +4,21 @@ import {
 } from 'mobx';
 import { message } from 'antd';
 
-import { getNotificationSettings } from 'services/notifications';
+import { getNotificationSettings, updateNotificationSettings } from 'services/notifications';
 
 class SourceNotification {
-  constructor(id, name, salePointId, types = {}) {
+  constructor(id, name, salePointId, types = []) {
     this.id = id;
     this.salePointId = salePointId;
     this.name = name;
-    this.typeValues = observable.map(types);
+    this.typeValues = observable.set();
   }
 
   @computed get types() {
     const typesDict = {};
 
-    this.typeValues.forEach((value, typeId) => {
-      typesDict[Number(typeId)] = value;
+    this.typeValues.forEach((typeId) => {
+      typesDict[Number(typeId)] = true;
     });
 
     return typesDict;
@@ -29,15 +29,25 @@ class SourceNotification {
   }
 
   @action setType(id, value) {
-    this.typeValues.set(id, Boolean(value));
+    if (value) {
+      this.typeValues.add(id);
+    } else {
+      this.typeValues.delete(id);
+    }
   }
 
   onChange = (evt) => {
     const { name, checked } = evt.target;
 
-    // TODO: API save
-
     this.setType(name, checked);
+
+    updateNotificationSettings({
+      [this.salePointId]: {
+        [this.id]: [...this.typeValues],
+      },
+    }).then((res) => {
+      console.log(res);
+    });
   }
 }
 
@@ -234,6 +244,8 @@ class MultipleNotificationsEditor {
 }
 
 class PersonalNotifications {
+  @observable settings = {};
+
   @observable notificationSettins = [];
 
   @observable multipleEditor = null;
@@ -244,13 +256,12 @@ class PersonalNotifications {
    */
   constructor(session) {
     this.session = session;
-    this.settings = observable.object({});
     this.multipleEditor = new MultipleNotificationsEditor(session, this);
 
-    this.init();
+    this.fetchSettings();
   }
 
-  init = async () => {
+  fetchSettings = async () => {
     const settings = await getNotificationSettings();
 
     if (settings) {

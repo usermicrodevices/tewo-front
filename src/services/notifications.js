@@ -48,11 +48,7 @@ export const getNotificationSettings = () => get('/refs/notification_options/cur
         }
 
         result[item.sale_point][item.source] = {
-          types: item.types.reduce((acc, type) => {
-            acc[type] = true;
-
-            return acc;
-          }, {}),
+          types: item.types,
         };
       } else {
         console.error('unexpected notification_settings response');
@@ -66,4 +62,21 @@ export const getNotificationSettings = () => get('/refs/notification_options/cur
   return undefined;
 });
 
-export const updateNotificationSettings = (settings) => post('/refs/notification_options/sale_points/', settings).then((json) => json);
+export const updateNotificationSettings = (settings) => {
+  const isAllKeysNumbers = Object.keys(settings).every((k) => Number.isInteger(Number(k)));
+  const isAllNestedKeysNumbers = [].concat(...Object.values(settings).map((v) => Object.keys(v))).every((k) => Number.isInteger(Number(k)));
+  const isAllNestedValuesArraysOfNumbers = [].concat(...Object.values(settings).map((v) => Object.values(v)))
+    .every((nestedV) => Array.isArray(nestedV) && nestedV.every((k) => Number.isInteger(Number(k))));
+
+  const isSettingsCorrect = isAllKeysNumbers && isAllNestedKeysNumbers && isAllNestedValuesArraysOfNumbers;
+
+  if (!isSettingsCorrect) {
+    console.error('unexpected settings format', {
+      isAllKeysNumbers, isAllNestedKeysNumbers, isAllNestedValuesArraysOfNumbers,
+    });
+
+    return;
+  }
+
+  post('/refs/notification_options/sale_points/', settings).then((json) => json);
+};

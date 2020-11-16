@@ -43,6 +43,7 @@ const SalePointNotification = observer(({
       <Typography.Title level={4}>{name}</Typography.Title>
       {columns.map((type) => (
         <NotificationCheckbox
+          key={type.id}
           id={type.id}
           notification={salePointNotification}
           label={`Все ${type.value}`}
@@ -57,6 +58,7 @@ const SalePointNotification = observer(({
       <Typography.Text>{row.name}</Typography.Text>
       {columns.map((type) => (
         <NotificationCheckbox
+          key={type.id}
           id={type.id}
           notification={row}
           label={type.value}
@@ -128,7 +130,7 @@ function NotificationsList({ session }) {
     <Card>
       <header className={styles.cardHeader}>
         <Typography.Title level={3}>Список объектов и событий</Typography.Title>
-        <Typography.Caption type="secondary">Выберите объекты по которым вы хотите получать уведомления</Typography.Caption>
+        <Typography.Caption type="secondary">Выберите объекты, типы событий и каналы отправки, по которым вы хотите получать уведомления.</Typography.Caption>
         <div className={styles.headerActions}>
           <Input
             allowClear
@@ -149,8 +151,8 @@ function NotificationsList({ session }) {
           <div className={styles.table}>
             {personalNotifications.tableData.map((salePointNotification) => (
               <SalePointNotification
-                visible={filter(salePointNotification)}
                 key={salePointNotification.id}
+                visible={filter(salePointNotification)}
                 columns={personalNotifications.types}
                 salePointNotification={salePointNotification}
               />
