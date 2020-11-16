@@ -16,6 +16,7 @@ import Downtime from 'pages/tech/downtime';
 import Drinks from 'pages/reference/drink';
 import Ingredients from 'pages/reference/ingredients';
 import PriceList from 'pages/reference/price';
+import Sales from 'pages/comerce/sales';
 
 class Rout {
   path;
@@ -52,8 +53,10 @@ const eventTypes = new Rout('/events', EventTypes);
 const downtimeLog = new Rout('/downtime_log', Downtime);
 const eventsLog = new Rout('/events_log', Events);
 const cleansLog = new Rout('/cleans_log', Clearances);
+const sales = new Rout('/sales', Sales);
 
 const authorizedRoutes = [
+  sales,
   account,
   notifications,
   usersList,
@@ -81,6 +84,7 @@ export {
   signup,
   signin,
   dashboard,
+  sales,
   account,
   notifications,
   usersList,

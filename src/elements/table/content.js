@@ -3,9 +3,9 @@ import { inject, observer } from 'mobx-react';
 import { VariableSizeList as List } from 'react-window';
 
 import Loader from 'elements/loader';
+import NoData from 'elements/noData';
 
 import Row, { MAX_ROWS_AMOUNT } from './row';
-import NoData from 'elements/noData';
 import style from './style.module.scss';
 
 const ROW_HEIGHT = 54;
@@ -36,7 +36,7 @@ class Content extends React.Component {
   rowFunc = (row) => {
     const { table } = this.props;
     if (table.sort.direction === 'ascend') {
-      return table.dataModel.data.length - row - 1;
+      return table.data.length - row - 1;
     }
     return row;
   };

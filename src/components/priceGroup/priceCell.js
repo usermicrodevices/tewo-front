@@ -31,7 +31,7 @@ const PriceCell = (value, { sendValue }) => {
   if (isEdditing) {
     return (
       <div className={classNames(classes.root, { [classes.warn]: isWarn })}>
-        <InputNumber defaultValue={currentValue} onChange={setCurrentValue} />
+        <InputNumber min={0} defaultValue={currentValue} onChange={setCurrentValue} />
         <Button
           icon={<SendOutlined style={{ transform: 'scale(1.37)' }} />}
           type="text"

@@ -1,0 +1,22 @@
+@import 'src/themes/constants';
+
+.inputs {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: $generic-margin;
+
+  &>* {
+    margin-left: $generic-margin;
+  }
+
+  :first-child {
+    max-width: 250px;
+    margin-left: 0;
+  }
+}
+
+.table {
+  max-height: 500px;
+  min-height: 500px;
+  overflow-y: auto;
+}

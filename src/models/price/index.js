@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import { getPrices } from 'services/price';
+import { getPrices, deletePrice, patchPrice } from 'services/price';
 
 class Prices extends Map {
   @observable isLoaded = false;
@@ -17,6 +17,16 @@ class Prices extends Map {
       return undefined;
     }
     return [...this.values()].filter(({ id }) => pricesIdSet.has(id));
+  }
+
+  remove = deletePrice;
+
+  patch = patchPrice;
+
+  add(prices) {
+    for (const price of prices) {
+      this.set(price.id, price);
+    }
   }
 }
 

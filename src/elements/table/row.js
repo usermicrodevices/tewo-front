@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Button } from 'antd';
+import { Button, Popconfirm } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import Loader from 'elements/loader';
@@ -35,6 +35,7 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions) => withRo
     <div
       style={style}
       className={classNames(
+        rowData.className,
         styles.row,
         {
           [styles.highlightnew]: freshItems.has(index),
@@ -63,7 +64,15 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions) => withRo
         >
           <Button type="link" onClick={() => { actions.onEdit(rowData, push); }} icon={<EditOutlined style={{ transform: 'scale(1.37)' }} />} />
           { typeof actions.onDelete === 'function' && (
-            <Button type="link" onClick={() => { actions.onDelete(rowData); }} icon={<DeleteOutlined style={{ transform: 'scale(1.37)' }} />} />
+            <Popconfirm
+              placement="left"
+              title="Отмена операции невозможна. Продолжить удаление?"
+              onConfirm={() => { actions.onDelete(rowData); }}
+              okText="Да"
+              cancelText="Нет"
+            >
+              <Button type="link" icon={<DeleteOutlined style={{ transform: 'scale(1.37)' }} />} />
+            </Popconfirm>
           )}
         </div>
       )}

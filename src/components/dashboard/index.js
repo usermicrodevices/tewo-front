@@ -57,6 +57,7 @@ class Dashboard extends React.Component {
                 visible={isMenuOpen}
                 overlay={<DateSelector onClick={({ key }) => { setMenuOpen(false); storage.setDateRangeGlobal(key); }} />}
                 placement="bottomRight"
+                trigger={['click']}
               >
                 <Button icon={<Icon name="calendar-outline" />}>Диапазон дат</Button>
               </Dropdown>

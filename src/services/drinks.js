@@ -12,6 +12,7 @@ const RENAMER = {
   plu: 'plu',
   name: 'name',
   company: 'companyId',
+  nds: 'nds',
 };
 
 const form = (data) => {
@@ -32,6 +33,8 @@ const transform = (json, acceptor) => {
       name: 'string',
       company: 'number',
       cooking_time: 'number',
+    }, {
+      nds: 'number',
     },
   )) {
     console.error(`Неожиданный ответ по адресу ${LOCATION}`, json);

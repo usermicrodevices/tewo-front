@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button } from 'antd';
+import { Button, Popconfirm } from 'antd';
 
 import Icon from 'elements/icon';
 import Format from 'elements/format';
@@ -20,13 +20,13 @@ const COLUMNS = [
   },
   {
     title: 'НДС',
-    dataIndex: 'syncDate',
-    render: () => <Format>{null}</Format>,
+    dataIndex: 'nds',
+    render: (v) => <Format>{v}</Format>,
   },
   {
     title: 'Валюта',
-    dataIndex: 'isCynchronized',
-    render: () => <Format>{null}</Format>,
+    dataIndex: 'currency',
+    render: (v) => <Format>{v}</Format>,
   },
   {
     title: 'Цена',
@@ -36,26 +36,42 @@ const COLUMNS = [
   {
     title: '',
     dataIndex: 'rm',
-    render: (rm) => <Button disabled icon={<Icon size={20} name="trash-2-outline" />} type="text" onClick={rm} />,
+    render: (rm) => (
+      <Popconfirm
+        placement="left"
+        title="Отмена операции невозможна. Продолжить удаление?"
+        onConfirm={rm}
+        okText="Да"
+        cancelText="Нет"
+      >
+        <Button icon={<Icon size={20} name="trash-2-outline" />} type="text" />
+      </Popconfirm>
+    ),
   },
 ];
 
-const toDataSource = (price) => ({
-  plu: price.plu,
-  key: price.id,
-  name: price.name,
-  value: price.value,
-  rm: () => {},
-  sendValue: () => new Promise((_, reject) => { setTimeout(reject, 1000); }),
-});
+const PriceList = ({ element, onAdd, isLoading }) => {
+  const toDataSource = (price) => ({
+    plu: price.plu,
+    key: price.id,
+    name: price.name,
+    value: price.value,
+    nds: price.nds,
+    currency: price.currency,
+    rm: () => element.removePrice(price.id),
+    sendValue: (value) => price.setValue(value),
+  });
 
-const PriceList = ({ element }) => (
-  <List
-    dataSource={element.prices}
-    toDataSource={toDataSource}
-    columns={COLUMNS}
-    title={`Список напитков (${element.drinksCount})`}
-  />
-);
+  return (
+    <List
+      isLoading={isLoading}
+      dataSource={element.prices}
+      toDataSource={toDataSource}
+      columns={COLUMNS}
+      onAdd={onAdd}
+      title={`Список напитков (${element.drinksCount})`}
+    />
+  );
+};
 
 export default inject('element')(observer(PriceList));

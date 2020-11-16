@@ -1,7 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Checkbox, Input } from 'antd';
-import { ReloadOutlined } from '@ant-design/icons';
+import {
+  Button, Checkbox, Dropdown, Input,
+} from 'antd';
+import { FilterOutlined, ReloadOutlined } from '@ant-design/icons';
 
 import DataRangePicker from 'elements/filters/daterangepicker';
 import CostRangeInput from 'elements/filters/costrangeinput';
@@ -41,7 +43,7 @@ const Filter = (
   }
 };
 
-const Filters = ({ filter }) => (
+const Filters = inject('filter')(observer(({ filter }) => (
   <div className={style['filters-block']}>
     <Button type="text" icon={<ReloadOutlined />} onClick={() => { filter.clear(); }}>Сбросить</Button>
     <div className={style.filters}>
@@ -67,6 +69,17 @@ const Filters = ({ filter }) => (
       }
     </div>
   </div>
-);
+)));
 
-export default inject('filter')(observer(Filters));
+const FiltersButton = inject('filter')(observer(({ filter }) => (
+  <Dropdown overlay={<Filters />} placement="bottomLeft">
+    <Button
+      type={filter.search !== '' ? 'primary' : 'default'}
+      icon={<FilterOutlined />}
+    >
+      Фильтрация
+    </Button>
+  </Dropdown>
+)));
+
+export { Filters as default, FiltersButton };

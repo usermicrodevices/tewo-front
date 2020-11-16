@@ -1,6 +1,6 @@
 import { observable, computed } from 'mobx';
-import Datum from 'models/datum';
 
+import Datum from 'models/datum';
 import * as routes from 'routes';
 
 import Details from './details';

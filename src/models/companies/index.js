@@ -28,6 +28,11 @@ const COLUMNS_LIST = () => ({
     transform: (date) => date.format('D MMMM yyyy'),
     sortDirections: 'both',
   },
+  currencyName: {
+    isVisibleByDefault: false,
+    title: 'Валюта',
+    width: 100,
+  },
   pointsAmount: {
     isVisibleByDefault: true,
     title: 'Кол-во объектов',

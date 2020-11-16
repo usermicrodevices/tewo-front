@@ -20,12 +20,22 @@
     .actions>* {
       opacity: 0;
     }
+    transition: background 0.3s;
 
     &:hover {
       .actions>* {
         opacity: 1;
       }
       background-color: #fafafa;
+    }
+
+    &.selected {
+      background: #edf8fc;
+      border-color: rgba(0, 0, 0, 0.03);
+
+      &:hover {
+        background: #e4f5fb;
+      }
     }
 
     .virtual-table-cell {

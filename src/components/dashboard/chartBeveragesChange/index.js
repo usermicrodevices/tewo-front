@@ -18,6 +18,7 @@ const Chart = inject('storage')(observer(({ storage }) => {
         x={xSeria}
         y={series}
         y1={{ text: 'Наливов в день', decimalsInFloat: 0 }}
+        y2={{ text: 'Отмен в день', decimalsInFloat: 0 }}
       />
     </div>
   );

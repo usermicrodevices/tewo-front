@@ -30,7 +30,7 @@ class Datum {
     return true;
   }
 
-  update(data) {
+  update(data, ...aditionalArgs) {
     console.assert(
       Object.entries(data).filter(([key]) => typeof this[key] === 'undefined').length === 0,
       'not all keys from update data is expected in object',
@@ -51,7 +51,7 @@ class Datum {
     }
 
     if (this.isSomeChanged(data)) {
-      return this.updater(this.id, data).then((newData) => {
+      return this.updater(this.id, data, ...aditionalArgs).then((newData) => {
         const isNew = this.id === null;
         transaction(() => {
           for (const [key, value] of Object.entries(newData)) {

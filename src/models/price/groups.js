@@ -1,11 +1,13 @@
 /* eslint class-methods-use-this: off */
+import { action, computed, observable } from 'mobx';
+
 import Table from 'models/table';
 import Filter from 'models/filters';
-import { getPriceGroups } from 'services/price';
-import { computed } from 'mobx';
+import { getPriceGroups, applyPriceGroup, synchronizePriceGroup } from 'services/price';
 
 import { priceList as priceListRout } from 'routes';
 import { devicesCell, tableItemLink } from 'elements/table/trickyCells';
+import Group from './group';
 
 const COLUMNS = {
   name: {
@@ -54,10 +56,15 @@ const declareFilters = (session) => ({
 });
 
 class PriceGroups extends Table {
+  session;
+
+  @observable elementForEdit;
+
   get isImpossibleToBeAsync() { return true; }
 
   constructor(session) {
     super(COLUMNS, getPriceGroups(session), new Filter(declareFilters(session)));
+    this.session = session;
   }
 
   toString() {
@@ -72,6 +79,9 @@ class PriceGroups extends Table {
   }
 
   get(priceId) {
+    if (!this.isLoaded) {
+      return undefined;
+    }
     return this.rawData.find(({ id }) => id === priceId);
   }
 
@@ -95,6 +105,18 @@ class PriceGroups extends Table {
     }
     return result;
   }
+
+  @action create() {
+    const itm = new Group(this.session);
+    this.elementForEdit = itm;
+    itm.onCreated = () => {
+      this.rawData.push(itm);
+    };
+  }
+
+  update = applyPriceGroup;
+
+  synchronize = synchronizePriceGroup;
 }
 
 export default PriceGroups;

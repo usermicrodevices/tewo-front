@@ -1,24 +1,46 @@
-import { computed } from 'mobx';
+import { action, computed, observable } from 'mobx';
 
-class PriceGroup {
-  name;
+import Datum from 'models/datum';
 
-  companyId;
+class PriceGroup extends Datum {
+  @observable name = null;
 
-  conception;
+  @observable companyId;
 
-  systemKey;
+  @observable conception;
 
-  devicesIdSet;
+  @observable systemKey;
 
-  pricesIdSet;
+  @observable devicesIdSet = observable.set();
 
-  id;
+  @observable pricesIdSet = observable.set();
+
+  @observable id = null;
+
+  @observable selectedSync = new Set();
 
   session;
 
   constructor(session) {
+    super(session.priceGroups.update);
+
     this.session = session;
+  }
+
+  get dump() {
+    return {
+      id: this.id,
+      name: this.name,
+      companyId: this.companyId,
+      conception: this.conception,
+      systemKey: this.systemKey,
+      devicesIdSet: new Set([...this.devicesIdSet.values()]),
+      pricesIdSet: new Set([...this.pricesIdSet.values()]),
+    };
+  }
+
+  @computed get isSynchronized() {
+    return this.devicesIdSet.size === 0;
   }
 
   @computed get devices() {
@@ -27,6 +49,10 @@ class PriceGroup {
 
   @computed get company() {
     return this.session.companies.get(this.companyId);
+  }
+
+  @computed get currency() {
+    return this.company?.currency;
   }
 
   @computed get companyName() {
@@ -43,6 +69,74 @@ class PriceGroup {
 
   @computed get drinksCount() {
     return this.pricesIdSet.size;
+  }
+
+  @action addPrices(aditionlDrinks) {
+    return this.update(this.dump, aditionlDrinks, this.session);
+  }
+
+  @action addDevices(devices) {
+    const { dump } = this;
+    for (const drink of devices) {
+      dump.devicesIdSet.add(drink);
+    }
+    return this.update(dump);
+  }
+
+  @action removePrice(priceId) {
+    return this.session.prices.remove(priceId).then(() => {
+      this.pricesIdSet.delete(priceId);
+    });
+  }
+
+  @action removeDevice(device) {
+    const { dump } = this;
+    dump.devicesIdSet.delete(device);
+    return this.update(dump);
+  }
+
+  @action synchronize() {
+    return this.session.priceGroups.synchronize(this.id, this.selectedSync).then(() => {
+      this.selectedSync = new Set();
+    });
+  }
+
+  @computed get editable() {
+    return {
+      name: {
+        type: 'text',
+        isRequired: true,
+      },
+      companyId: {
+        type: 'selector',
+        selector: this.session.companies.selector,
+        isRequired: true,
+      },
+      conception: {
+        type: 'number',
+        isRequired: true,
+      },
+    };
+  }
+
+  @computed get values() {
+    return [
+      {
+        dataIndex: 'name',
+        title: 'Название',
+        value: this.name,
+      },
+      {
+        dataIndex: 'companyId',
+        title: 'Компания',
+        value: this.companyName,
+      },
+      {
+        dataIndex: 'conception',
+        title: 'Концепция',
+        value: this.conception,
+      },
+    ];
   }
 }
 

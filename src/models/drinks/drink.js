@@ -13,6 +13,8 @@ class Drink extends Datum {
 
   @observable recipe = [];
 
+  @observable nds = null;
+
   session;
 
   constructor(session) {
@@ -55,6 +57,11 @@ class Drink extends Datum {
         title: 'PLU',
         value: this.plu,
       },
+      {
+        dataIndex: 'nds',
+        title: 'НДС',
+        value: this.nds,
+      },
     ];
   }
 
@@ -72,6 +79,9 @@ class Drink extends Datum {
       plu: {
         type: 'number',
         isRequired: true,
+      },
+      nds: {
+        type: 'number',
       },
     };
   }
