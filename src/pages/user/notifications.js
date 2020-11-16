@@ -17,7 +17,7 @@ const Notifications = () => (
       {
         path: 'alert_time',
         text: 'Время оповещения',
-        widget: () => <Card>yyy</Card>,
+        widget: () => <Card>Время оповещения</Card>,
       },
     ]}
     title={(
@@ -25,7 +25,6 @@ const Notifications = () => (
         <Typography.Title level={1}>
           Персональные уведомления
         </Typography.Title>
-        <div>Для работы push-уведомлений требуется Предоставить разрешение</div>
       </>
     )}
   />

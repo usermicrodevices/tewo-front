@@ -61,7 +61,9 @@ export const getNotificationSettings = () => get('/refs/notification_options/cur
 
     return result;
   }
+
   console.error('unexpected notification_settings response');
+  return undefined;
 });
 
-// export const updateNotificationSettings = () =>
+export const updateNotificationSettings = (settings) => post('/refs/notification_options/sale_points/', settings).then((json) => json);
