@@ -14,18 +14,21 @@ import NotificationRow from 'components/notifications/row';
 
 import styles from './style.module.scss';
 
-const NotificationCheckbox = observer(({ id, notification, label }) => (
-  <Checkbox
-    key={id}
-    name={id}
-    checked={notification.types[id]}
-    indeterminate={notification.types[id] === null}
-    onClick={(e) => e.stopPropagation()}
-    onChange={notification.onChange}
-  >
-    {label}
-  </Checkbox>
-));
+const NotificationCheckbox = observer(({ id, notification, label }) => {
+  console.log(`CHECKBOX ${notification.id} RENDER ${notification && notification.typeValues && notification.typeValues.size}`);
+  return (
+    <Checkbox
+      key={id}
+      name={id}
+      checked={notification.types[id]}
+      indeterminate={notification.types[id] === null}
+      onClick={(e) => e.stopPropagation()}
+      onChange={notification.onChange}
+    >
+      {label}
+    </Checkbox>
+  );
+});
 
 const CollapseIcon = ({ opened = false }) => (opened ? <UpOutlined size={32} /> : <DownOutlined size={32} />);
 
@@ -54,7 +57,7 @@ const SalePointNotification = observer(({
   );
 
   const contentElement = opened ? notifications.map((row) => (
-    <NotificationRow className={styles.row} style={{ gridTemplateColumns }}>
+    <NotificationRow key={row.id} className={styles.row} style={{ gridTemplateColumns }}>
       <Typography.Text>{row.name}</Typography.Text>
       {columns.map((type) => (
         <NotificationCheckbox
@@ -125,6 +128,8 @@ function NotificationsList({ session }) {
   const onSearchChange = (e) => {
     setSearch(e.target.value);
   };
+
+  console.log('NOTIFICATION LIST RENDER');
 
   return (
     <Card>

@@ -1,4 +1,4 @@
-import { get, patch, post } from 'utils/request';
+import { get, post } from 'utils/request';
 import checkData from 'utils/dataCheck';
 
 export const getNotificationTypes = (acceptor) => get('/refs/notification_types/').then((json) => {
@@ -75,8 +75,8 @@ export const updateNotificationSettings = (settings) => {
       isAllKeysNumbers, isAllNestedKeysNumbers, isAllNestedValuesArraysOfNumbers,
     });
 
-    return;
+    return Promise.reject();
   }
 
-  post('/refs/notification_options/sale_points/', settings).then((json) => json);
+  return post('/refs/notification_options/sale_points/', settings).then((json) => json);
 };

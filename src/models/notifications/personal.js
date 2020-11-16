@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import {
-  action, computed, observable, transaction,
+  action, computed, observable, transaction, reaction,
 } from 'mobx';
 import { message } from 'antd';
 
@@ -11,7 +11,7 @@ class SourceNotification {
     this.id = id;
     this.salePointId = salePointId;
     this.name = name;
-    this.typeValues = observable.set();
+    this.typeValues = observable.set(types);
   }
 
   @computed get types() {
@@ -46,7 +46,9 @@ class SourceNotification {
         [this.id]: [...this.typeValues],
       },
     }).then((res) => {
-      console.log(res);
+      message.success(`Уведомление ${this.name} успешно обновлено!`);
+    }).catch((err) => {
+      message.error(`Произошла ошибка при обновлении уведомления ${this.name}!`);
     });
   }
 }
@@ -77,7 +79,7 @@ class PointNotification {
     return this.id;
   }
 
-  @computed get types() {
+  @computed({ keepAlive: true }) get types() {
     return this.config.types.reduce((acc, type) => {
       const isAllEnabled = this.notifications.every((v) => v.types[type.id]);
       const isSomeEnabled = this.notifications.some((v) => v.types[type.id]);
@@ -97,11 +99,21 @@ class PointNotification {
   onChange = (evt) => {
     const { name, checked } = evt.target;
 
-    // TODO: API save
-
     transaction(() => {
       this.notifications.forEach((notification) => {
         notification.setType(name, checked);
+      });
+
+      updateNotificationSettings({
+        [this.id]: this.notifications.reduce((acc, notification) => {
+          acc[notification.id] = [...notification.typeValues];
+
+          return acc;
+        }, {}),
+      }).then((res) => {
+        message.success(`Уведомления для объекта ${this.name} успешно обновлено!`);
+      }).catch((err) => {
+        message.error(`Произошла ошибка при обновлении уведомлений для объекта ${this.name}!`);
       });
     });
   }
@@ -223,13 +235,26 @@ class MultipleNotificationsEditor {
 
   @action.bound save() {
     this.loading = true;
-    console.log([...this.selectedSalePoints], [...this.selectedSources], [...this.selectedTypes]);
 
-    // TODO: API save
-    setTimeout(() => {
-      message.success('Уведомления успешно сохранены!');
+    const typesSettings = [...this.selectedTypes];
+    const sourcesSettings = [...this.selectedSources].reduce((acc, sourceId) => {
+      acc[sourceId] = typesSettings;
+
+      return acc;
+    }, {});
+    const newNotificationSettings = [...this.selectedSalePoints].reduce((acc, pointId) => {
+      acc[pointId] = sourcesSettings;
+
+      return acc;
+    }, {});
+
+    updateNotificationSettings(newNotificationSettings).then((res) => {
+      message.success('Массовое обновление уведомлений пршло успешно!');
       this.reset();
-    }, 1200);
+    }).catch((err) => {
+      message.error('Произошла ошибка при массовом обновлении уведомлений!');
+      this.reset();
+    });
   }
 
   @action.bound reset() {
@@ -244,11 +269,11 @@ class MultipleNotificationsEditor {
 }
 
 class PersonalNotifications {
-  @observable settings = {};
-
-  @observable notificationSettins = [];
+  @observable settings = null;
 
   @observable multipleEditor = null;
+
+  @observable tableData = [];
 
   /**
    *
@@ -259,6 +284,30 @@ class PersonalNotifications {
     this.multipleEditor = new MultipleNotificationsEditor(session, this);
 
     this.fetchSettings();
+
+    reaction(() => Boolean(this.settings && this.types.length && this.sources.length && this.salePoints.length), () => {
+      const config = {
+        types: this.types,
+      };
+
+      const getSourcesByPoint = (point) => this.sources.map((source) => ({
+        name: source.name,
+        id: source.id,
+        types: this.settings && this.settings[point.id] && this.settings[point.id][source.id]
+          ? [...this.settings[point.id][source.id].types]
+          : [],
+      }));
+
+      const data = this.salePoints
+        .map((point) => new PointNotification(
+          point.id,
+          point.name,
+          getSourcesByPoint(point),
+          config,
+        ));
+
+      this.tableData = data;
+    });
   }
 
   fetchSettings = async () => {
@@ -279,30 +328,6 @@ class PersonalNotifications {
 
   @computed get salePoints() {
     return this.session.points ? this.session.points.rawData : [];
-  }
-
-  @computed({ keepAlive: true }) get tableData() {
-    const config = {
-      types: this.types,
-    };
-
-    const getSourcesByPoint = (point) => this.sources.map((source) => ({
-      name: source.name,
-      id: source.id,
-      types: this.settings && this.settings[point.id] && this.settings[point.id][source.id]
-        ? this.settings[point.id][source.id].types
-        : {},
-    }));
-
-    const data = this.salePoints
-      .map((point) => new PointNotification(
-        point.id,
-        point.name,
-        getSourcesByPoint(point),
-        config,
-      ));
-
-    return data;
   }
 }
 
