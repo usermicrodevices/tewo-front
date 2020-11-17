@@ -8,12 +8,31 @@ import SourceNotification from './sourceNotification';
 class PointNotification {
   notifications = [];
 
-  constructor(id, name, sourceNotifications, config) {
-    this.id = id;
-    this.name = name;
+  config = { types: [], sources: [], settings: {} }
+
+  point = null;
+
+  /**
+   *
+   * @param {Object} point SalePoint instance
+   * @param {Object} config base notifications config
+   * @param {Number[]} config.types available types
+   * @param {Number[]} config.sources available sources
+   * @param {Object} config.settings user types configurations
+   */
+  constructor(point, config) {
+    this.point = point;
     this.config = config;
 
-    this.setSourceNotifications(sourceNotifications);
+    const sources = config.sources.map((source) => ({
+      name: source.name,
+      id: source.id,
+      types: config.settings && config.settings[point.id] && config.settings[point.id][source.id]
+        ? config.settings[point.id][source.id].types
+        : [],
+    }));
+
+    this.setSourceNotifications(sources);
   }
 
   setSourceNotifications(sourceNotifications = []) {
@@ -25,6 +44,14 @@ class PointNotification {
     ));
 
     this.notifications = newSourceNotifications;
+  }
+
+  @computed get name() {
+    return this.point.name;
+  }
+
+  @computed get id() {
+    return this.point.id;
   }
 
   @computed get key() {
@@ -46,6 +73,16 @@ class PointNotification {
 
       return acc;
     }, {});
+  }
+
+  setChildTypes = (notificationsTypes) => {
+    transaction(() => {
+      this.notifications.forEach((notification) => {
+        if (notificationsTypes[notification.id]) {
+          notification.setTypes(notificationsTypes[notification.id]);
+        }
+      });
+    });
   }
 
   onChange = (evt) => {

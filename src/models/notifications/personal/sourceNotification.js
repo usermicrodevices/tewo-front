@@ -4,6 +4,13 @@ import { message } from 'antd';
 import { updateNotificationSettings } from 'services/notifications';
 
 class SourceNotification {
+  /**
+   *
+   * @param {Number} id source ID
+   * @param {String} name source Name
+   * @param {Number} salePointId sale point ID
+   * @param {Number[]} types default types
+   */
   constructor(id, name, salePointId, types = []) {
     this.id = id;
     this.salePointId = salePointId;
@@ -31,6 +38,10 @@ class SourceNotification {
     } else {
       this.typeValues.delete(id);
     }
+  }
+
+  @action setTypes(types = []) {
+    this.typeValues.replace(new Set(types));
   }
 
   onChange = (evt) => {

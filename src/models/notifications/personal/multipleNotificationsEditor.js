@@ -5,7 +5,18 @@ import { message } from 'antd';
 
 import { updateNotificationSettings } from 'services/notifications';
 
+import Filters from 'models/filters';
+
 const STEPS_COUNT = 3;
+
+const declareSalePointsFilters = (session) => ({
+  companyId: {
+    type: 'selector',
+    title: 'Компания',
+    apply: (general, data) => general(data.companyId),
+    selector: () => session.companies.selector,
+  },
+});
 
 class MultipleNotificationsEditor {
   @observable selectedSalePoints = new Set();
@@ -20,6 +31,8 @@ class MultipleNotificationsEditor {
 
   @observable loading = false;
 
+  salePointsFilters = null;
+
   /**
    *
    * @param {Session} session
@@ -28,6 +41,8 @@ class MultipleNotificationsEditor {
   constructor(session, personalNotifications) {
     this.session = session;
     this.personalNotifications = personalNotifications;
+
+    this.salePointsFilters = new Filters(declareSalePointsFilters(session));
   }
 
   @computed get tableConfig() {
@@ -61,6 +76,7 @@ class MultipleNotificationsEditor {
           action: 'Далее',
           description: 'Выберитие объекты, по которым требуется настроить уведомления',
         },
+        filters: this.salePointsFilters,
       };
       case 1: return {
         columns: [{
@@ -104,7 +120,7 @@ class MultipleNotificationsEditor {
   }
 
   @computed get salePoints() {
-    return this.personalNotifications.salePoints.map((sp) => ({ ...sp, key: sp.id }));
+    return this.personalNotifications.salePoints.filter(this.salePointsFilters.predicate).map((sp) => ({ ...sp, key: sp.id }));
   }
 
   @action.bound next() {
@@ -138,9 +154,13 @@ class MultipleNotificationsEditor {
 
     updateNotificationSettings(newNotificationSettings).then((res) => {
       message.success('Массовое обновление уведомлений прошло успешно!');
+
+      this.personalNotifications.updateSettings(newNotificationSettings);
+
       this.reset();
     }).catch((err) => {
       message.error('Произошла ошибка при массовом обновлении уведомлений!');
+      console.error(err);
       this.reset();
     });
   }

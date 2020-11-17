@@ -1,84 +1,17 @@
-import React, { useState } from 'react';
-import { inject, observer } from 'mobx-react';
+import React from 'react';
+import { inject, observer, Provider } from 'mobx-react';
 import {
-  Card, Checkbox, Input, Button, Modal, Table,
+  Card, Input, Button, Modal, Table, Dropdown,
 } from 'antd';
-import {
-  DownOutlined, UpOutlined, SearchOutlined, ProfileOutlined,
-} from '@ant-design/icons';
+import { SearchOutlined, ProfileOutlined, FilterOutlined } from '@ant-design/icons';
 
 import Typography from 'elements/typography';
 import Loader from 'elements/loader';
+import Filters from 'elements/filters';
 
-import NotificationRow from 'components/notifications/row';
+import SalePointNotification from './pointNotification';
 
 import styles from './style.module.scss';
-
-const NotificationCheckbox = observer(({ id, notification, label }) => {
-  console.log(`CHECKBOX ${notification.id} RENDER ${notification && notification.typeValues && notification.typeValues.size}`);
-  return (
-    <Checkbox
-      key={id}
-      name={id}
-      checked={notification.types[id]}
-      indeterminate={notification.types[id] === null}
-      onClick={(e) => e.stopPropagation()}
-      onChange={notification.onChange}
-    >
-      {label}
-    </Checkbox>
-  );
-});
-
-const CollapseIcon = ({ opened = false }) => (opened ? <UpOutlined size={32} /> : <DownOutlined size={32} />);
-
-const SalePointNotification = observer(({
-  columns, salePointNotification, visible,
-}) => {
-  const [opened, setOpened] = useState(false);
-  const { name, notifications } = salePointNotification;
-
-  const gridTemplateColumns = `4fr ${columns.map((_) => '1fr').join(' ')} 50px`;
-  const style = visible ? {} : { display: 'none' };
-
-  const headerElement = (
-    <NotificationRow className={styles.header} style={{ gridTemplateColumns }} onClick={() => setOpened(!opened)}>
-      <Typography.Title level={4}>{name}</Typography.Title>
-      {columns.map((type) => (
-        <NotificationCheckbox
-          key={type.id}
-          id={type.id}
-          notification={salePointNotification}
-          label={`Все ${type.value}`}
-        />
-      ))}
-      <CollapseIcon opened={opened} />
-    </NotificationRow>
-  );
-
-  const contentElement = opened ? notifications.map((row) => (
-    <NotificationRow key={row.id} className={styles.row} style={{ gridTemplateColumns }}>
-      <Typography.Text>{row.name}</Typography.Text>
-      {columns.map((type) => (
-        <NotificationCheckbox
-          key={type.id}
-          id={type.id}
-          notification={row}
-          label={type.value}
-        />
-      ))}
-    </NotificationRow>
-  )) : null;
-
-  return (
-    <div className={styles.collapse} style={style}>
-      {headerElement}
-      <div className={styles.content}>
-        {contentElement}
-      </div>
-    </div>
-  );
-});
 
 const MassiveNotificationEditModal = observer(({ multipleEditor }) => (
   <Modal
@@ -91,82 +24,81 @@ const MassiveNotificationEditModal = observer(({ multipleEditor }) => (
     onOk={multipleEditor.next}
     confirmLoading={multipleEditor.loading}
   >
-    <div>
+    <div className={styles.modalDescription}>
       <Typography.Text type="secondary">
         {multipleEditor.tableConfig.text.description}
       </Typography.Text>
     </div>
-    <div>
-      <Table
-        rowSelection={multipleEditor.tableConfig.rowSelection}
-        columns={multipleEditor.tableConfig.columns}
-        dataSource={multipleEditor.tableConfig.data}
-        pagination={false}
-        scroll={{ y: 500 }}
-      />
-    </div>
+
+    {multipleEditor.tableConfig.filters ? (
+      <Provider filter={multipleEditor.tableConfig.filters}>
+        <Filters />
+      </Provider>
+    ) : null}
+
+    <Table
+      rowSelection={multipleEditor.tableConfig.rowSelection}
+      columns={multipleEditor.tableConfig.columns}
+      dataSource={multipleEditor.tableConfig.data}
+      pagination={false}
+      scroll={{ y: 450 }}
+    />
   </Modal>
 ));
 
-const useSearch = (initial, getSearchField) => {
-  const [search, setSearch] = useState(initial);
-
-  const regExp = new RegExp(search, 'i');
-  const filter = (v) => !search || regExp.test(getSearchField(v));
-
-  return {
-    setSearch,
-    search,
-    filter,
-  };
-};
-
 function NotificationsList({ session }) {
-  const { setSearch, search, filter } = useSearch('', (v) => v.name);
   const { personalNotifications } = session;
+  const { setSearch, search, filters } = personalNotifications;
 
   const onSearchChange = (e) => {
     setSearch(e.target.value);
   };
 
-  console.log('NOTIFICATION LIST RENDER');
-
   return (
-    <Card>
-      <header className={styles.cardHeader}>
-        <Typography.Title level={3}>Список объектов и событий</Typography.Title>
-        <Typography.Caption type="secondary">Выберите объекты, типы событий и каналы отправки, по которым вы хотите получать уведомления.</Typography.Caption>
-        <div className={styles.headerActions}>
-          <Input
-            allowClear
-            placeholder="Поиск.."
-            value={search}
-            className={styles.search}
-            onChange={onSearchChange}
-            prefix={<SearchOutlined />}
-          />
-          <Button icon={<ProfileOutlined />} onClick={personalNotifications.multipleEditor.show}>
-            Массовое редактирование
-          </Button>
-        </div>
-      </header>
-
-      {personalNotifications.tableData.length
-        ? (
-          <div className={styles.table}>
-            {personalNotifications.tableData.map((salePointNotification) => (
-              <SalePointNotification
-                key={salePointNotification.id}
-                visible={filter(salePointNotification)}
-                columns={personalNotifications.types}
-                salePointNotification={salePointNotification}
+    <Provider filter={filters}>
+      <Card>
+        <header className={styles.cardHeader}>
+          <Typography.Title level={3}>Список объектов и событий</Typography.Title>
+          <Typography.Caption type="secondary">Выберите объекты, типы событий и каналы отправки, по которым вы хотите получать уведомления.</Typography.Caption>
+          <div className={styles.headerActions}>
+            <div>
+              <Input
+                allowClear
+                placeholder="Поиск.."
+                value={search}
+                className={styles.search}
+                onChange={onSearchChange}
+                prefix={<SearchOutlined />}
               />
-            ))}
+              <Dropdown overlay={<Filters />} trigger={['click', 'hover']} placement="bottomRight">
+                <Button
+                  type={filters.search !== '' ? 'primary' : 'default'}
+                  icon={<FilterOutlined />}
+                />
+              </Dropdown>
+            </div>
+            <Button icon={<ProfileOutlined />} onClick={personalNotifications.multipleEditor.show}>
+              Массовое редактирование
+            </Button>
           </div>
-        ) : <Loader />}
+        </header>
 
-      <MassiveNotificationEditModal multipleEditor={personalNotifications.multipleEditor} />
-    </Card>
+        {personalNotifications.tableData.length
+          ? (
+            <div className={styles.table}>
+              {personalNotifications.tableData.map((salePointNotification) => (
+                <SalePointNotification
+                  key={salePointNotification.id}
+                  salePointNotification={salePointNotification}
+                />
+              ))}
+            </div>
+          ) : <Loader />}
+
+        <MassiveNotificationEditModal multipleEditor={personalNotifications.multipleEditor} />
+      </Card>
+    </Provider>
+
   );
 }
 
