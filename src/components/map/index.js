@@ -80,7 +80,7 @@ const useMapState = (points) => {
 const YMapContainer = inject('storage', 'filter')(observer(({ storage, filter, size }) => {
   const { points } = storage;
   const {
-    zoom, center, zoomIn, zoomOut, isFullscreen, onZoom, mapRef,
+    zoom, center, zoomIn, zoomOut, isFullscreen, onZoom, toggleFullscreen, mapRef,
   } = useMapState(points);
 
   const onShowInfo = useCallback(({ id }) => {
@@ -103,7 +103,7 @@ const YMapContainer = inject('storage', 'filter')(observer(({ storage, filter, s
           <Button onClick={zoomOut} icon={<MinusOutlined />} />
         </ActionsContainer.Group>
         <ActionsContainer.Group>
-          <Button icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />} />
+          <Button icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />} onClick={toggleFullscreen} />
         </ActionsContainer.Group>
       </ActionsContainer>
 
