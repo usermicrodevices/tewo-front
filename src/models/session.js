@@ -9,6 +9,9 @@ import Devices from './devices';
 import Operations from './operations';
 import Drinks from './drinks';
 import Ingredients from './ingredients';
+import PersonalNotifications from './notifications/personal';
+import NotificationTypes from './notifications/types';
+import NotificationSources from './notifications/sources';
 import DeviceModels from './devices/models';
 import DeviceTypes from './devices/types';
 import BeverageOperations from './beverages/operations';
@@ -50,6 +53,12 @@ class Session {
   drinks = new Drinks(this);
 
   ingredients = new Ingredients(this);
+
+  notificationSources = new NotificationSources(this);
+
+  notificationTypes = new NotificationTypes(this);
+
+  personalNotifications = new PersonalNotifications(this);
 }
 
 export default Session;
