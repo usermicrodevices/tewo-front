@@ -1,13 +1,15 @@
+/* eslint-disable max-classes-per-file */
 import {
   computed, observable, reaction, action,
 } from 'mobx';
 
-import { getNotificationSettings } from 'services/notifications';
+import { getNotificationSettings, getNotificationDelays } from 'services/notifications';
 
 import Filters from 'models/filters';
 
 import MultipleNotificationsEditor from './multipleNotificationsEditor';
 import PointNotification from './pointNotification';
+import NotificationDelay from './notificationDelay';
 
 const declareFilters = (session) => ({
   companyId: {
@@ -19,13 +21,17 @@ const declareFilters = (session) => ({
 });
 
 class PersonalNotifications {
-  @observable settings = null;
+  @observable notificationSettings = null;
+
+  @observable notificationDelaysCurrent = null;
 
   @observable multipleEditor = null;
 
-  @observable data = [];
+  @observable pointNotifications = [];
 
-  filters = null;
+  @observable notificationDelays = [];
+
+  notificationFilters = null;
 
   /**
    *
@@ -34,35 +40,61 @@ class PersonalNotifications {
   constructor(session) {
     this.session = session;
     this.multipleEditor = new MultipleNotificationsEditor(session, this);
-    this.filters = new Filters(declareFilters(session));
+    this.notificationFilters = new Filters(declareFilters(session));
 
     this.fetchSettings();
+    this.fetchDelaySettings();
 
-    reaction(() => Boolean(this.settings && this.types.length && this.sources.length && this.salePoints.length), this.initializeTableData);
+    reaction(() => Boolean(this.notificationSettings && this.types.length && this.sources.length && this.salePoints.length), this.initializePointNotifications);
+    reaction(() => Boolean(this.notificationDelaysCurrent && this.sources.length), this.initializeNotificationDelays);
   }
 
-  initializeTableData = () => {
+  initializePointNotifications = () => {
     const config = {
       types: this.types,
       sources: this.sources,
-      settings: this.settings,
+      settings: this.notificationSettings,
     };
 
-    const data = this.salePoints.map((point) => new PointNotification(point, config));
+    this.pointNotifications = this.salePoints.map((point) => new PointNotification(point, config));
+  }
 
-    this.data = data;
+  initializeNotificationDelays = () => {
+    const currentDelayBySourceId = {};
+
+    this.notificationDelaysCurrent.forEach((delay) => {
+      currentDelayBySourceId[delay.source] = delay;
+    });
+
+    this.notificationDelays = this.sources.map((source) => {
+      const delay = currentDelayBySourceId[source.id];
+
+      if (delay) {
+        return new NotificationDelay(delay.id, source, delay.interval);
+      }
+
+      return new NotificationDelay(null, source, null);
+    });
   }
 
   fetchSettings = async () => {
     const settings = await getNotificationSettings();
 
     if (settings) {
-      this.settings = settings;
+      this.notificationSettings = settings;
+    }
+  }
+
+  fetchDelaySettings = async () => {
+    const delays = await getNotificationDelays();
+
+    if (delays) {
+      this.notificationDelaysCurrent = delays;
     }
   }
 
   @action.bound updateSettings(settings) {
-    this.data.forEach((point) => {
+    this.pointNotifications.forEach((point) => {
       if (settings[point.id]) {
         point.setChildTypes(settings[point.id]);
       }
@@ -70,11 +102,11 @@ class PersonalNotifications {
   }
 
   @action.bound setSearch(search) {
-    this.filters.searchText = search;
+    this.notificationFilters.searchText = search;
   }
 
   @computed get search() {
-    return this.filters.searchText;
+    return this.notificationFilters.searchText;
   }
 
   @computed get types() {
@@ -90,7 +122,7 @@ class PersonalNotifications {
   }
 
   @computed get tableData() {
-    return this.data.filter(this.filters.predicate);
+    return this.pointNotifications.filter(this.notificationFilters.predicate);
   }
 }
 

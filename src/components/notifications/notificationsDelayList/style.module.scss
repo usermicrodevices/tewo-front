@@ -1,0 +1,50 @@
+@import "src/themes/constants";
+
+.row {
+    display: grid;
+}
+
+.interval {
+    display: flex;
+    align-items: center;
+
+    .actions {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.table {
+    margin-top: 20px;
+    border-top: 1px solid #e8e8e8;
+}
+
+.clock {
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    width: 175px;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 10px;
+    background: #f3f5f7;
+    white-space: nowrap;
+    transition: background 0.25s ease-in-out;
+    cursor: pointer;
+
+    .clockicon {
+        margin-right: 8px;
+        fill: $link-color;
+    }
+
+    &:hover {
+        background: #e3e5e7;
+    }
+
+    .input {
+        height: 30px;
+        background: transparent;
+        margin-right: 8px;
+        width: 100%;
+    }
+}

@@ -48,14 +48,14 @@ const MassiveNotificationEditModal = observer(({ multipleEditor }) => (
 
 function NotificationsList({ session }) {
   const { personalNotifications } = session;
-  const { setSearch, search, filters } = personalNotifications;
+  const { setSearch, search, notificationFilters } = personalNotifications;
 
   const onSearchChange = (e) => {
     setSearch(e.target.value);
   };
 
   return (
-    <Provider filter={filters}>
+    <Provider filter={notificationFilters}>
       <Card>
         <header className={styles.cardHeader}>
           <Typography.Title level={3}>Список объектов и событий</Typography.Title>
@@ -72,7 +72,7 @@ function NotificationsList({ session }) {
               />
               <Dropdown overlay={<Filters />} trigger={['click', 'hover']} placement="bottomRight">
                 <Button
-                  type={filters.search !== '' ? 'primary' : 'default'}
+                  type={notificationFilters.search !== '' ? 'primary' : 'default'}
                   icon={<FilterOutlined />}
                 />
               </Dropdown>
