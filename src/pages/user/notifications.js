@@ -2,20 +2,22 @@ import React from 'react';
 
 import SubPage from 'elements/subpage';
 import Typography from 'elements/typography';
-import { Card } from 'antd';
+
+import NotificationsList from 'components/notifications/notificationsList';
+import NotificationsDelayList from 'components/notifications/notificationsDelayList';
 
 const Notifications = () => (
   <SubPage
     menu={[
       {
         path: '',
-        text: 'Список объектов',
-        widget: () => <Card>xxx</Card>,
+        text: 'Уведомления по объектам',
+        widget: () => <NotificationsList />,
       },
       {
         path: 'alert_time',
         text: 'Время оповещения',
-        widget: () => <Card>yyy</Card>,
+        widget: () => <NotificationsDelayList />,
       },
     ]}
     title={(
@@ -23,7 +25,6 @@ const Notifications = () => (
         <Typography.Title level={1}>
           Персональные уведомления
         </Typography.Title>
-        <div>Для работы push-уведомлений требуется Предоставить разрешение</div>
       </>
     )}
   />
