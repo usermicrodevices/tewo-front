@@ -1,4 +1,8 @@
-import { get, post } from 'utils/request';
+import { transaction } from 'mobx';
+
+import {
+  get, post, patch, del,
+} from 'utils/request';
 import checkData from 'utils/dataCheck';
 
 export const getNotificationTypes = (acceptor) => get('/refs/notification_types/').then((json) => {
@@ -17,19 +21,21 @@ export const getNotificationTypes = (acceptor) => get('/refs/notification_types/
 
 export const getNotificationSources = (acceptor) => get('/refs/notification_sources/').then((json) => {
   if (Array.isArray(json)) {
-    for (const item of json) {
-      if (checkData(item, {
-        id: 'number', name: 'string', value: 'string', description: 'string', group: 'number',
-      })) {
-        acceptor.set(item.id, {
-          name: item.name,
-          value: item.value,
-          description: item.description,
-        });
-      } else {
-        console.error('unexpected notification_source response');
+    transaction(() => {
+      for (const item of json) {
+        if (checkData(item, {
+          id: 'number', name: 'string', value: 'string', description: 'string', group: 'number',
+        })) {
+          acceptor.set(item.id, {
+            name: item.name,
+            value: item.value,
+            description: item.description,
+          });
+        } else {
+          console.error('unexpected notification_source response');
+        }
       }
-    }
+    });
   } else {
     console.error('unexpected notification_source response');
   }
@@ -80,3 +86,30 @@ export const updateNotificationSettings = (settings) => {
 
   return post('/refs/notification_options/sale_points/', settings).then((json) => json);
 };
+
+export const getNotificationDelays = () => get('/refs/notification_delays/current/').then((json) => {
+  if (Array.isArray(json)) {
+    const result = []; // {id: Number, inerval: Number, source: Number}[]
+
+    for (const item of json) {
+      if (checkData(item, {
+        id: 'number', source: 'number', interval: 'number', owner: 'number',
+      })) {
+        result.push(item);
+      } else {
+        console.error('unexpected notification_delay response');
+      }
+    }
+
+    return result;
+  }
+
+  console.error('unexpected notification_delay response');
+  return undefined;
+});
+
+export const createNotificationDelay = ({ interval, source }) => post('/refs/notification_delays/', { interval, source }).then((json) => json);
+
+export const updateNotificationDelay = ({ id, interval, source }) => patch(`/refs/notification_delays/${id}/`, { interval, source }).then((json) => json);
+
+export const deleteNotificationDelay = ({ id }) => del(`/refs/notification_delays/${id}/`).then((json) => json);
