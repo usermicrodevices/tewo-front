@@ -22,7 +22,7 @@ class Device {
 
   @observable deviceModelId;
 
-  priceGroupId;
+  @observable priceGroupId;
 
   @observable timeZone;
 
@@ -38,7 +38,7 @@ class Device {
 
   @observable isHaveOverdueTasks;
 
-  @observable priceSyncDate
+  @observable priceSyncDate;
 
   detailsData = null;
 
@@ -132,14 +132,6 @@ class Device {
   @computed get deviceModelType() {
     const { deviceModel } = this;
     return deviceModel && deviceModel.deviceTypeId && this.session.deviceTypes.get(deviceModel.deviceTypeId);
-  }
-
-  @computed get companyId() {
-    const { salePoint } = this;
-    if (!salePoint) {
-      return undefined;
-    }
-    return salePoint.companyId;
   }
 
   @computed get salePointName() {
