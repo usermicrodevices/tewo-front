@@ -25,6 +25,7 @@ const RENAMER = {
   tz: 'timeZone',
   lastoff: 'stopDate',
   tech: 'isNeedTechService',
+  sync_date: 'priceSyncDate',
 };
 
 function converter(json, acceptor) {
@@ -51,6 +52,7 @@ function converter(json, acceptor) {
       price_group: 'number',
       maintenance: 'date',
       lastoff: 'date',
+      sync_date: 'date',
     },
   )) {
     console.error(`Неожиданный ответ по адресу ${LOCATION}`, json);
@@ -155,6 +157,7 @@ const getStats = (id) => get(`${LOCATION}${id}/stats/`).then((json) => {
     remain_iterations_to: 'number',
     sum: 'number',
     sum_prev: 'number',
+    sync_date: 'date',
   };
 
   if (!checkData(json, mustBe)) {

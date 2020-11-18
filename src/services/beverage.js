@@ -114,9 +114,18 @@ const getBeveragesStats = (daterange, filters, step) => {
   });
 };
 
+const BEVERAGES_SALE_POINTS_STATS = {
+  mustBe: {
+    moment: 'date',
+    total: 'number',
+    sum: 'number',
+  },
+  link: '/data/beverages/sale_points_stats/',
+};
+
 const getBeveragesSalePointsStats = (dateRange, step, salePoints) => {
   const rangeArg = daterangeToArgs(dateRange, 'device_date');
-  let lnk = `/data/beverages/sale_points_stats/?step=${step}${rangeArg}`;
+  let lnk = `${BEVERAGES_SALE_POINTS_STATS.link}?step=${step}${rangeArg}`;
   if (Array.isArray(salePoints)) {
     if (salePoints.length === 1) {
       lnk = `${lnk}&device__sale_point__id=${salePoints[0]}`;
@@ -126,11 +135,6 @@ const getBeveragesSalePointsStats = (dateRange, step, salePoints) => {
     }
   }
   return get(lnk).then((json) => {
-    const mustBe = {
-      moment: 'date',
-      total: 'number',
-      sum: 'number',
-    };
     const result = {};
     for (const [salePointId, arr] of Object.entries(json)) {
       if (!Array.isArray(arr)) {
@@ -138,7 +142,7 @@ const getBeveragesSalePointsStats = (dateRange, step, salePoints) => {
       } else {
         result[salePointId] = [];
         for (const datum of arr) {
-          checkData(datum, mustBe);
+          checkData(datum, BEVERAGES_SALE_POINTS_STATS.mustBe);
         }
         result[salePointId] = [...alineDates(
           dateRange,
@@ -162,4 +166,5 @@ export {
   getBeverageOperations,
   getBeveragesStats,
   getBeveragesSalePointsStats,
+  BEVERAGES_SALE_POINTS_STATS,
 };

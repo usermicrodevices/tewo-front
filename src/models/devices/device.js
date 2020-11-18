@@ -38,6 +38,8 @@ class Device {
 
   @observable isHaveOverdueTasks;
 
+  @observable priceSyncDate
+
   detailsData = null;
 
   stopDate;
@@ -105,6 +107,14 @@ class Device {
       return undefined;
     }
     return salePoint.company;
+  }
+
+  @computed get companyId() {
+    const { salePoint } = this;
+    if (!salePoint) {
+      return undefined;
+    }
+    return salePoint.companyId;
   }
 
   @computed get deviceModel() {

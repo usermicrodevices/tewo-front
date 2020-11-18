@@ -13,6 +13,7 @@ const RENAMER = {
   name: 'name',
   company: 'companyId',
   nds: 'nds',
+  code_ext: 'codeExt',
 };
 
 const form = (data) => {
@@ -33,6 +34,7 @@ const transform = (json, acceptor) => {
       name: 'string',
       company: 'number',
       cooking_time: 'number',
+      code_ext: 'string',
     }, {
       nds: 'number',
     },

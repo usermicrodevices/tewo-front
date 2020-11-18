@@ -18,12 +18,13 @@ const DevicePicker = ({ element, session, onSelect }) => {
   const skipSet = new Set(element.devices.map(({ id }) => id));
   const ds = session.devices.isLoaded ? session.devices.rawData
     .filter(({
-      id, salePointId, salePoint, name,
+      id, salePointId, salePoint, name, companyId,
     }) => (
       name.toLowerCase().indexOf(search) >= 0
       && !skipSet.has(id)
       && (!salePoint || companiesSet.has(salePoint.companyId))
       && pointsSet.has(salePointId)
+      && companyId === element.companyId
     ))
     .map(({ id, name, salePointName }) => ({
       key: id, name, salePointName,

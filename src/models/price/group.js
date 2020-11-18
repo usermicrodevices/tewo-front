@@ -1,4 +1,5 @@
 import { action, computed, observable } from 'mobx';
+import moment from 'moment';
 
 import Datum from 'models/datum';
 
@@ -18,6 +19,8 @@ class PriceGroup extends Datum {
   @observable id = null;
 
   @observable selectedSync = new Set();
+
+  @observable lastUpdate = moment();
 
   session;
 

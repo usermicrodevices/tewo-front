@@ -1,5 +1,6 @@
 /* eslint no-param-reassign: off */
 import { observable } from 'mobx';
+import moment from 'moment';
 
 import {
   get, patch, post, del,
@@ -74,6 +75,7 @@ const transform = (json, group) => {
   }, {
     system_key: 'string',
     conception: 'number',
+    last_update: 'date',
   })) {
     console.error(`Неожиданные данные для групп цен ${LOCATION}`, json);
   }
@@ -84,6 +86,7 @@ const transform = (json, group) => {
   group.systemKey = json.system_key;
   group.devicesIdSet = observable.set(json.device_set);
   group.pricesIdSet = observable.set(json.price_set);
+  group.lastUpdate = moment(json.last_update);
   return group;
 };
 

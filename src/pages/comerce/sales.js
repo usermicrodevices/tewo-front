@@ -24,7 +24,7 @@ class Sales extends React.Component {
       return null;
     }
     return (
-      <Provider analynic={model} filter={model.filters}>
+      <Provider analynic={model} filter={model.filter}>
         <SubPage
           menu={[
             {

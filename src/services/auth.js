@@ -15,7 +15,7 @@ function login(data) {
 }
 
 function contacts() {
-  const path = '/tech/contacts/';
+  const path = '/tech/contacts/?limit=1';
   const defaultContacts = { phone: '+78007003942', email: 'support@service-pb.ru' };
   return new Promise((resolve) => {
     get(path).then((data) => {
