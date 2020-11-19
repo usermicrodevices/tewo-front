@@ -47,13 +47,8 @@ class GenericTablePage extends React.Component {
   }
 
   render() {
-    const { table, title, location } = this.props;
+    const { table, title } = this.props;
     const { elementForEdit } = table;
-    if (table.isLoaded && table.rawData.length === 1 && location.search === '') {
-      const [element] = table.rawData;
-      const path = location.pathname.split('/').slice(0, 2).join('/');
-      return <Redirect to={`${path}/${element.id}`} />;
-    }
     return (
       <>
         <TableHeader title={title} />
