@@ -75,7 +75,7 @@ class PriceGroupOverview extends React.Component {
         cancelText="Закрыть"
         onCancel={this.onCancel}
         onOk={onOk}
-        width={600}
+        width={800}
       >
         { children }
       </Modal>

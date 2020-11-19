@@ -26,8 +26,10 @@ const DevicePicker = ({ element, session, onSelect }) => {
       && pointsSet.has(salePointId)
       && companyId === element.companyId
     ))
-    .map(({ id, name, salePointName }) => ({
-      key: id, name, salePointName,
+    .map(({
+      id, name, salePointName, priceGroupName,
+    }) => ({
+      key: id, name, salePointName, priceGroupName,
     })) : undefined;
   return (
     <div>
@@ -47,6 +49,10 @@ const DevicePicker = ({ element, session, onSelect }) => {
           salePointName: {
             title: 'Объект',
             grow: 2,
+          },
+          priceGroupName: {
+            title: 'Уже назначенная группа цен',
+            grow: 3,
           },
         }}
         dataSource={ds}
