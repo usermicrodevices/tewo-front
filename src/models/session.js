@@ -9,6 +9,7 @@ import Devices from './devices';
 import Operations from './operations';
 import Drinks from './drinks';
 import Ingredients from './ingredients';
+import Mailings from './mailings';
 import PersonalNotifications from './notifications/personal';
 import NotificationTypes from './notifications/types';
 import NotificationSources from './notifications/sources';
@@ -53,6 +54,8 @@ class Session {
   drinks = new Drinks(this);
 
   ingredients = new Ingredients(this);
+
+  mailings = new Mailings(this);
 
   notificationSources = new NotificationSources(this);
 
