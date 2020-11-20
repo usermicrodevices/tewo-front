@@ -70,9 +70,9 @@ class SalesRow {
     this.session = session;
     this.deviceId = deviceId;
     this.curBeverages = curDatum.beverages;
-    this.curSales = curDatum.beverages;
+    this.curSales = curDatum.sales;
     this.prwBeverages = prwDatum.beverages;
-    this.prwSales = prwDatum.beverages;
+    this.prwSales = prwDatum.sales;
   }
 }
 

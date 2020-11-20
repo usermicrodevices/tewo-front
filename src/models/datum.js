@@ -51,7 +51,7 @@ class Datum {
     }
 
     if (this.isSomeChanged(data)) {
-      return this.updater(this.id, data, ...aditionalArgs).then((newData) => {
+      return this.updater(this.id, data, this.session, ...aditionalArgs).then((newData) => {
         const isNew = this.id === null;
         transaction(() => {
           for (const [key, value] of Object.entries(newData)) {

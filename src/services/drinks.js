@@ -73,10 +73,10 @@ const getDrinks = (session) => () => Promise.all([getDrinksWithoutRecipe(session
   return drinks;
 });
 
-const applyDrink = (id, changes) => {
+const applyDrink = (id, changes, session) => {
   const data = form(changes);
   const request = id === null ? post(LOCATION, data) : patch(`${LOCATION}${id}`, data);
-  return request.then((response) => transform(response, {}));
+  return request.then((response) => transform(response, id === null ? new Drink(session) : {}));
 };
 
 const deleteDrink = (id) => del(`${LOCATION}${id}`);

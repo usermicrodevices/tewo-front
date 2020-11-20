@@ -23,6 +23,7 @@ class Login extends React.Component {
     }
     this.setState({ isAuthChecking: true });
     auth.login(values).catch((err) => {
+      console.log(err);
       this.setState({ isAuthChecking: false });
       const reason = err.response ? err.response.data : '';
       if (JSON.stringify(reason) === JSON.stringify({ non_field_errors: ['Unable to log in with provided credentials.'] })) {

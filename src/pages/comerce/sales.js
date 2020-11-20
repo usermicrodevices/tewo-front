@@ -1,12 +1,14 @@
 import React from 'react';
 import { observer, inject, Provider } from 'mobx-react';
-import { Card, Button, Space } from 'antd';
+import { Button, Space } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 
 import SubPage from 'elements/subpage';
 import Typography from 'elements/typography';
 import SalesModel from 'models/comerce/sales';
 import { FiltersButton } from 'elements/filters';
+import SalesDistribution from 'components/comerce/salesDistribution';
+import SalesDynamic from 'components/comerce/salesDynamic';
 
 @inject('session')
 @observer
@@ -24,18 +26,18 @@ class Sales extends React.Component {
       return null;
     }
     return (
-      <Provider analynic={model} filter={model.filter}>
+      <Provider table={model} filter={model.filter}>
         <SubPage
           menu={[
             {
               path: '',
               text: 'Динамика продаж',
-              widget: () => <Card>xxx</Card>,
+              widget: SalesDynamic,
             },
             {
-              path: 'alert_time',
+              path: 'distribution',
               text: 'Структура продаж',
-              widget: () => <Card>yyy</Card>,
+              widget: SalesDistribution,
             },
           ]}
           title={(

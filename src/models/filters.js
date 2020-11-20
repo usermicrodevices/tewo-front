@@ -254,7 +254,11 @@ class Filters {
   }
 
   @computed get search() {
-    return [...this.data.entries()].map(([key, value]) => {
+    return this.searchSkip(new Set());
+  }
+
+  searchSkip(set) {
+    return [...this.data.entries()].filter(([key]) => !set.has(key)).map(([key, value]) => {
       const type = this.filterType(key);
       const { operators, convertor } = FILTER_TYPES[type];
       const adaptedValue = convertor(value);
