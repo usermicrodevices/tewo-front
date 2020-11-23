@@ -1,17 +1,21 @@
-import { computed } from 'mobx';
+import { computed, observable } from 'mobx';
 
-class Mailing {
-  id;
+import Datum from 'models/datum';
 
-  name;
+class Mailing extends Datum {
+  @observable id = null;
 
-  companyId;
+  @observable name = '';
 
-  notifications = [];
+  @observable companyId = null;
 
-  emails = [];
+  @observable notifications = [];
+
+  @observable emails = [];
 
   constructor(session) {
+    super(session.mailings.update);
+
     this.session = session;
   }
 
@@ -24,9 +28,51 @@ class Mailing {
   }
 
   @computed get companyName() {
-    const { company } = this;
+    return this.company?.name;
+  }
 
-    return company ? company.name : undefined;
+  @computed get values() {
+    return [
+      {
+        dataIndex: 'id',
+        title: 'ID',
+        value: this.id,
+      },
+      {
+        dataIndex: 'name',
+        title: 'Название',
+        value: this.name,
+      },
+      {
+        dataIndex: 'companyId',
+        title: 'Компания',
+        value: this.companyName,
+      },
+      {
+        dataIndex: 'emails',
+        title: 'Адреса',
+        value: this.emails,
+      },
+    ];
+  }
+
+  get editable() {
+    return {
+      name: {
+        type: 'text',
+        isRequired: true,
+      },
+      companyId: {
+        type: 'selector',
+        selector: this.session.companies.selector,
+        isRequired: true,
+      },
+      emails: {
+        type: 'tags',
+        selector: this.emails,
+        isRequired: true,
+      },
+    };
   }
 }
 

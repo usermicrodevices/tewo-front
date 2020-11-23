@@ -1,12 +1,20 @@
 /* eslint no-param-reassign: off */
-import moment from 'moment';
-
-import { get, patch } from 'utils/request';
+import { get, patch, post, del } from 'utils/request';
 import checkData from 'utils/dataCheck';
 
 import Mailing from 'models/mailings/mailing';
 
 const LOCATION = '/refs/notification_bulk_emails/';
+const EMAIL_SEPARATOR = ';';
+const RENAMER = {
+  companyId: 'company',
+};
+const formaters = {
+  company: (data) => data.companyId,
+  name: (data) => data.name,
+  notifications: (data) => (Array.isArray(data.notifications) ? data.notifications : []),
+  emails: (data) => (Array.isArray(data.emails) ? data.emails.join(EMAIL_SEPARATOR) : ''),
+};
 
 const transform = (data, mailing) => {
   const shouldBe = {
@@ -43,11 +51,27 @@ const transform = (data, mailing) => {
 
   mailing.id = data.id;
   mailing.name = data.name;
-  mailing.emails = data.emails.split(';');
+  mailing.emails = data.emails.split(EMAIL_SEPARATOR);
   mailing.notifications = data.notifications;
   mailing.companyId = data.company;
 
   return mailing;
+};
+
+const form = (data) => {
+  const json = {};
+
+  const getKey = (key, renamer) => renamer[key] || key;
+
+  for (const [key, value] of Object.entries(data)) {
+    if (formaters[key]) {
+      json[getKey(key, RENAMER)] = formaters[key](data);
+    } else {
+      json[getKey(key, RENAMER)] = value;
+    }
+  }
+
+  return json;
 };
 
 const getMailings = (session) => () => new Promise((resolve, reject) => {
@@ -65,10 +89,22 @@ const getMailings = (session) => () => new Promise((resolve, reject) => {
   }).catch(reject);
 });
 
-const patchMailing = (id, data) => patch(`${LOCATION}${id}`, {
-  name: data.name,
-  emails: data.emails,
-  notifications: data.notifications,
-}).then((result) => transform(result, {}));
+const applyMailing = async (id, changes) => {
+  const data = form(changes);
 
-export { getMailings, patchMailing };
+  // Reuired fields when create
+  if (!id) {
+    data.emails = data.emails || '';
+    data.notifications = data.notifications || [];
+  }
+
+  const request = id === null ? post(LOCATION, data) : patch(`${LOCATION}${id}`, data);
+
+  const response = await request;
+
+  return transform(response, {});
+};
+
+const deleteMailing = (id) => del(`${LOCATION}${id}`);
+
+export { getMailings, deleteMailing, applyMailing };

@@ -48,7 +48,7 @@ const Editor = ({
         setIsEdditing(false);
       })
       .catch((err) => {
-        message.error(err.isAxiosError ? 'При обновлении данных призошли ошибки. Проверьте корректность введённых данных' : err.message);
+        message.error(err.isAxiosError ? 'При обновлении данных призошла ошибка. Проверьте корректность введённых данных' : err.message);
       })
       .finally(() => {
         setIsUpdating(false);

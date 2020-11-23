@@ -6,7 +6,7 @@ import { message } from 'antd';
 function login(data) {
   return new Promise((resolve, reject) => {
     post('login', data).then((response) => {
-      if (Object.keys(response).length !== 1 || typeof response.token !== 'string') {
+      if (typeof response.token !== 'string') {
         reject(new Error(response));
       }
       resolve(response.token);
