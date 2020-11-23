@@ -1,0 +1,13 @@
+@import 'src/themes/constants';
+
+.root {
+    display: grid;
+    column-gap: $generic-margin;
+    row-gap: $generic-margin;
+
+    grid-template-columns: auto 228px;
+
+    .table {
+        grid-column-end: span 2;
+    }
+}

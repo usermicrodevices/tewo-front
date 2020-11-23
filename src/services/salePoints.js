@@ -110,14 +110,14 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
   });
 });
 
-const applySalePoint = (item, changes) => {
+const applySalePoint = (item, changes, session) => {
   const data = {};
   const renamer = new Map(Object.entries(RENAMER).map(([a, b]) => [b, a]));
   for (const [key, value] of Object.entries(changes)) {
     data[renamer.get(key)] = value;
   }
   const request = item === null ? post(LOCATION, data) : patch(`${LOCATION}${item}`, data);
-  return request.then((response) => converter(response, {}));
+  return request.then((response) => converter(response, item === null ? new SalePoint(session) : {}));
 };
 
 const getSalesTop = (filter) => {

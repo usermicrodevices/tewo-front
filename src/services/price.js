@@ -112,7 +112,7 @@ const FORM = {
   pricesIdSet: 'price_set',
 };
 
-const applyPriceGroup = (id, changes, aditionlDrinks, session) => {
+const applyPriceGroup = (id, changes, session, aditionlDrinks) => {
   const data = {};
   for (const [key, value] of Object.entries(changes)) {
     data[FORM[key]] = key.includes('Set') ? [...value.values()] : value;
@@ -124,7 +124,7 @@ const applyPriceGroup = (id, changes, aditionlDrinks, session) => {
     aditionalPrices.then((prices) => {
       data.price_set = data.price_set.concat(prices.map(({ id: priceId }) => priceId));
       const request = id === null ? post(LOCATION, data) : patch(`${LOCATION}${id}`, data);
-      request.then((response) => transform(response, {})).then(resolve).catch(reject);
+      request.then((response) => transform(response, id === null ? new PriceGroup(session) : {})).then(resolve).catch(reject);
     });
   });
 };

@@ -196,7 +196,7 @@ const getStats = (id) => get(`${LOCATION}${id}/stats/`).then((json) => {
 
 const getSalesChart = (deviceId, daterange) => getBeveragesStats(daterange, `device__id=${deviceId}`, 86400);
 
-const applyDevice = (id, changes) => {
+const applyDevice = (id, changes, session) => {
   const data = {};
   const renamer = new Map(Object.entries(RENAMER).map(([a, b]) => [b, a]));
   for (const [key, value] of Object.entries(changes)) {
@@ -206,7 +206,7 @@ const applyDevice = (id, changes) => {
     }
   }
   const request = id === null ? post(LOCATION, data) : patch(`${LOCATION}${id}`, data);
-  return request.then((response) => converter(response, {}));
+  return request.then((response) => converter(response, id === null ? new Device(session) : {}));
 };
 
 const getDeviceTypes = (acceptor) => get('/refs/device_types').then((json) => {
