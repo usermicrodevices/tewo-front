@@ -3,6 +3,7 @@ import Signup from 'pages/signup';
 import Dashboard from 'pages/dashboard';
 import Account from 'pages/user/account';
 import Notifications from 'pages/user/notifications';
+import Mailings from 'pages/user/mailings';
 import UsersList from 'pages/user/usersList';
 import MapPage from 'pages/map';
 import Companies from 'pages/reference/companies';
@@ -40,6 +41,7 @@ const unauthorizedRoutes = [signup, signin];
 const dashboard = new Rout('/', Dashboard, true);
 const account = new Rout('/account', Account);
 const notifications = new Rout('/notifications', Notifications);
+const mailings = new Rout('/mailings', Mailings);
 const usersList = new Rout('/userlist', UsersList);
 const map = new Rout('/map', MapPage);
 const companies = new Rout('/companies', Companies);
@@ -59,6 +61,7 @@ const authorizedRoutes = [
   sales,
   account,
   notifications,
+  mailings,
   usersList,
   map,
   cleansLog,
@@ -87,6 +90,7 @@ export {
   sales,
   account,
   notifications,
+  mailings,
   usersList,
   map,
   cleansLog,

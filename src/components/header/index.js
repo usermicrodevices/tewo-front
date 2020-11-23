@@ -9,6 +9,7 @@ import Icon from 'elements/icon';
 import {
   account,
   notifications,
+  mailings,
   usersList,
   defaultAuthorizedRout,
 } from 'routes';
@@ -45,8 +46,9 @@ class Header extends React.Component {
           </Space>
         </Menu.Item>
         <Menu.Item><Link to={account.path}>Личный кабинет</Link></Menu.Item>
-        <Menu.Item><Link to={notifications.path}>Настройки уведомлений</Link></Menu.Item>
+        <Menu.Item><Link to={notifications.path}>Настройка уведомлений</Link></Menu.Item>
         <Menu.Item><Link to={usersList.path}>Список пользователей</Link></Menu.Item>
+        <Menu.Item><Link to={mailings.path}>Email рассылки</Link></Menu.Item>
         <Menu.Item onClick={this.onLogout}>Выйти</Menu.Item>
       </Menu>
     );
