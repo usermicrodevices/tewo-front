@@ -9,7 +9,7 @@ import ColorPicker from './colorpicker';
 
 const CellEditor = ({
   editor: {
-    type, selector, isMultiple, rows,
+    type, selector, isMultiple, rows, placeholder,
   },
   name,
 }) => {
@@ -101,6 +101,21 @@ const CellEditor = ({
                 </Select.Option>
               ))
             }
+          </Select>
+        </Form.Item>
+      );
+    }
+    case 'tags': {
+      return (
+        <Form.Item name={name} shouldUpdate>
+          <Select mode="tags" style={{ width: '100%' }} placeholder={placeholder || 'Значение не задано'}>
+            {
+                Array.isArray(selector) && selector.map(([key, text]) => (
+                  <Select.Option key={key} value={key}>
+                    {text}
+                  </Select.Option>
+                ))
+              }
           </Select>
         </Form.Item>
       );
