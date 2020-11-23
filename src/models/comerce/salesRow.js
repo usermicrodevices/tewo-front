@@ -28,7 +28,7 @@ class SalesRow {
   }
 
   @computed get device() {
-    return this.devices.get(this.deviceId);
+    return this.session.devices.get(this.deviceId);
   }
 
   @computed get salePoint() {

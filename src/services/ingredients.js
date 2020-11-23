@@ -34,7 +34,6 @@ const transform = (json, acceptor) => {
       cost: 'number',
     },
     {
-      currency: 'number',
       dimension: 'string',
     },
   )) {
