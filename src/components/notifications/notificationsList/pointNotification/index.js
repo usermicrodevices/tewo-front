@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 import { Checkbox } from 'antd';
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
 
 import Typography from 'elements/typography';
 
@@ -22,16 +21,35 @@ const NotificationCheckbox = observer(({ id, notification, label }) => (
   </Checkbox>
 ));
 
-const CollapseIcon = ({ opened = false }) => (opened ? <UpOutlined size={32} /> : <DownOutlined size={32} />);
+export const PointNotificationContent = observer(({ salePointNotification }) => {
+  const { notifications, config: { types } } = salePointNotification;
+  const gridTemplateColumns = `4fr ${types.map((_) => '1fr').join(' ')}`;
 
-const SalePointNotification = observer(({ salePointNotification }) => {
-  const [opened, setOpened] = useState(false);
-  const { name, notifications, config: { types } } = salePointNotification;
+  return (
+    <div className={styles.content}>
+      {notifications.map((row) => (
+        <NotificationRow key={row.id} className={styles.row} style={{ gridTemplateColumns }}>
+          <Typography.Text>{row.name}</Typography.Text>
+          {types.map((type) => (
+            <NotificationCheckbox
+              key={type.id}
+              id={type.id}
+              notification={row}
+              label={type.value}
+            />
+          ))}
+        </NotificationRow>
+      ))}
+    </div>
+  );
+});
 
-  const gridTemplateColumns = `4fr ${types.map((_) => '1fr').join(' ')} 50px`;
+export const PointNotificationHeader = observer(({ salePointNotification }) => {
+  const { name, config: { types } } = salePointNotification;
+  const gridTemplateColumns = `4fr ${types.map((_) => '1fr').join(' ')}`;
 
-  const headerElement = (
-    <NotificationRow className={styles.header} style={{ gridTemplateColumns }} onClick={() => setOpened(!opened)}>
+  return (
+    <div style={{ gridTemplateColumns }} className={styles.header}>
       <Typography.Title level={4}>{name}</Typography.Title>
       {types.map((type) => (
         <NotificationCheckbox
@@ -41,32 +59,6 @@ const SalePointNotification = observer(({ salePointNotification }) => {
           label={`Все ${type.value}`}
         />
       ))}
-      <CollapseIcon opened={opened} />
-    </NotificationRow>
-  );
-
-  const contentElement = opened ? notifications.map((row) => (
-    <NotificationRow key={row.id} className={styles.row} style={{ gridTemplateColumns }}>
-      <Typography.Text>{row.name}</Typography.Text>
-      {types.map((type) => (
-        <NotificationCheckbox
-          key={type.id}
-          id={type.id}
-          notification={row}
-          label={type.value}
-        />
-      ))}
-    </NotificationRow>
-  )) : null;
-
-  return (
-    <div className={styles.collapse}>
-      {headerElement}
-      <div className={styles.content}>
-        {contentElement}
-      </div>
     </div>
   );
 });
-
-export default SalePointNotification;
