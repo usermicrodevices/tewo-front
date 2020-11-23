@@ -3,8 +3,7 @@ import { observer } from 'mobx-react';
 import { Checkbox } from 'antd';
 
 import Typography from 'elements/typography';
-
-import NotificationRow from 'components/notifications/row';
+import { Row } from 'elements/collapse';
 
 import styles from './style.module.scss';
 
@@ -28,7 +27,7 @@ export const PointNotificationContent = observer(({ salePointNotification }) => 
   return (
     <div className={styles.content}>
       {notifications.map((row) => (
-        <NotificationRow key={row.id} className={styles.row} style={{ gridTemplateColumns }}>
+        <Row key={row.id} className={styles.row} style={{ gridTemplateColumns }}>
           <Typography.Text>{row.name}</Typography.Text>
           {types.map((type) => (
             <NotificationCheckbox
@@ -38,7 +37,7 @@ export const PointNotificationContent = observer(({ salePointNotification }) => 
               label={type.value}
             />
           ))}
-        </NotificationRow>
+        </Row>
       ))}
     </div>
   );

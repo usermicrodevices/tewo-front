@@ -1,16 +1,17 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { Collapse as AntCollapse } from 'antd';
+import cx from 'classnames';
 
 import styles from './styles.module.scss';
 
-export function Collapse({ children, ...rest }) {
+export function Collapse({ children, className, ...rest }) {
   return (
     <AntCollapse
       destroyInactivePanel
       expandIconPosition="right"
       bordered={false}
-      className={styles.table}
+      className={cx([styles.container, className])}
       {...rest}
     >
       {children}
@@ -25,5 +26,17 @@ Collapse.Panel = function CollasePanel({ children, ...rest }) {
     </AntCollapse.Panel>
   );
 };
+
+export function Row({
+  children, className, style = {}, ...rest
+}) {
+  const customStyle = { ...style };
+
+  return (
+    <div style={customStyle} className={cx([styles.row, className])} {...rest}>
+      {children}
+    </div>
+  );
+}
 
 export default Collapse;
