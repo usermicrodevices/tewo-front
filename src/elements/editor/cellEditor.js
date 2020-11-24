@@ -40,6 +40,16 @@ const CellEditor = ({
         </Form.Item>
       );
     }
+    case 'minutes': {
+      return (
+        <>
+          <Form.Item>
+            <InputNumber />
+          </Form.Item>
+          {' минут'}
+        </>
+      );
+    }
     case 'phone': {
       const phoneSelector = (
         <Select defaultValue="ru" style={{ width: 70 }} disabled>

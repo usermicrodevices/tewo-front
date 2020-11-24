@@ -13,18 +13,24 @@ import style from './index.module.scss';
 const Statistic = inject(({ session, storage }) => ({ session, storage }))(observer(({ session, storage }) => (
   <div className={style.layout}>
     <div className={style.beverages}>
-      <Typography.Value size="xxxl"><Format>{storage.value}</Format></Typography.Value>
-      <Typography.Caption>
-        {plural(storage.value, ['Налив', 'Наливов', 'Налива'])}
-        <br />
-        за 30 минут
-      </Typography.Caption>
+      {
+        typeof storage.value !== 'undefined' && (
+          <>
+            <Typography.Value size="xxxl"><Format>{storage.value}</Format></Typography.Value>
+            <Typography.Caption>
+              {plural(storage.value, ['Налив', 'Наливов', 'Налива'])}
+              <br />
+              за 30 минут
+            </Typography.Caption>
+          </>
+        )
+      }
     </div>
     <div className={style.top}>
       {(() => {
         const namesMap = {};
         if (typeof storage.top === 'undefined') {
-          return <Loader />;
+          return null;
         }
         const items = Object.entries(storage.top)
           .sort(([_, b1], [__, b2]) => Math.sign(b2.beverages - b1.beverages))

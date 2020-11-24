@@ -35,6 +35,10 @@ class Drink extends Datum {
     return this.company?.name;
   }
 
+  @computed get ndsName() {
+    return this.nds && this.session.nds.get(this.nds);
+  }
+
   @computed get values() {
     return [
       {
@@ -60,7 +64,7 @@ class Drink extends Datum {
       {
         dataIndex: 'nds',
         title: 'НДС',
-        value: this.nds,
+        value: this.ndsName,
       },
     ];
   }
@@ -81,7 +85,9 @@ class Drink extends Datum {
         isRequired: true,
       },
       nds: {
-        type: 'number',
+        type: 'selector',
+        selector: this.session.nds.selector,
+        isRequired: true,
       },
     };
   }

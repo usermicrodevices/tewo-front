@@ -19,6 +19,7 @@ import BeverageOperations from './beverages/operations';
 import Prices from './price';
 import PriceGroups from './price/groups';
 import Currencies from './currencies';
+import NDS from './nds';
 
 class Session {
   operations = new Operations();
@@ -30,6 +31,8 @@ class Session {
   deviceModels = new DeviceModels();
 
   deviceTypes = new DeviceTypes();
+
+  nds = new NDS();
 
   beverageOperations = new BeverageOperations();
 

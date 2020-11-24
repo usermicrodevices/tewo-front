@@ -1,5 +1,7 @@
 /* eslint no-param-reassign: off */
-import { get, patch, post, del } from 'utils/request';
+import {
+  get, patch, post, del,
+} from 'utils/request';
 import checkData from 'utils/dataCheck';
 
 import Mailing from 'models/mailings/mailing';

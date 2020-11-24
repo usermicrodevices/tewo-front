@@ -25,24 +25,27 @@ const COLUMNS = [
   },
 ];
 
-const Beverages = ({ element: { details: { lastBeverages, serviceEvents } } }) => (
-  <Card className={classnames(style.beverages, { [style.onlybeverages]: !Array.isArray(serviceEvents) || serviceEvents.length === 0 })}>
-    <div className={classnames(genericStyle.title, style.title)}>
-      <Icon size={18} name="droplet-outline" />
-      Последние наливы
-    </div>
-    <div className={style.table}>
-      <Table
-        pagination={false}
-        columns={COLUMNS}
-        dataSource={lastBeverages?.map(({
-          deviceDate, drinkName, canceled, id,
-        }) => ({
-          deviceDate, drinkName, canceled, key: id,
-        }))}
-      />
-    </div>
-  </Card>
-);
+const Beverages = ({ element: { details: { lastBeverages, serviceEvents } } }) => {
+  const ds = lastBeverages?.map(({
+    deviceDate, drinkName, canceled, id,
+  }) => ({
+    deviceDate, drinkName, canceled, key: id,
+  }));
+  return (
+    <Card className={classnames(style.beverages, { [style.onlybeverages]: !Array.isArray(serviceEvents) || serviceEvents.length === 0 })}>
+      <div className={classnames(genericStyle.title, style.title)}>
+        <Icon size={18} name="droplet-outline" />
+        Последние наливы
+      </div>
+      <div className={style.table}>
+        <Table
+          pagination={false}
+          columns={COLUMNS}
+          dataSource={ds}
+        />
+      </div>
+    </Card>
+  );
+};
 
 export default inject('element')(observer(Beverages));
