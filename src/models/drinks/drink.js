@@ -70,6 +70,12 @@ class Drink extends Datum {
   }
 
   get editable() {
+    const plu = this.id === null ? {
+      plu: {
+        type: 'number',
+        isRequired: true,
+      },
+    } : {};
     return {
       name: {
         type: 'text',
@@ -80,15 +86,12 @@ class Drink extends Datum {
         selector: this.session.companies.selector,
         isRequired: true,
       },
-      plu: {
-        type: 'number',
-        isRequired: true,
-      },
       nds: {
         type: 'selector',
         selector: this.session.nds.selector,
         isRequired: true,
       },
+      ...plu,
     };
   }
 
