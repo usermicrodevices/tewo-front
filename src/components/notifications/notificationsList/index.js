@@ -8,8 +8,9 @@ import { SearchOutlined, ProfileOutlined, FilterOutlined } from '@ant-design/ico
 import Typography from 'elements/typography';
 import Loader from 'elements/loader';
 import Filters from 'elements/filters';
+import { Collapse } from 'elements/collapse';
 
-import SalePointNotification from './pointNotification';
+import { PointNotificationContent, PointNotificationHeader } from './pointNotification';
 
 import styles from './style.module.scss';
 
@@ -85,14 +86,16 @@ function NotificationsList({ session }) {
 
         {personalNotifications.tableData.length
           ? (
-            <div className={styles.table}>
+            <Collapse className={styles.table}>
               {personalNotifications.tableData.map((salePointNotification) => (
-                <SalePointNotification
+                <Collapse.Panel
                   key={salePointNotification.id}
-                  salePointNotification={salePointNotification}
-                />
+                  header={<PointNotificationHeader salePointNotification={salePointNotification} />}
+                >
+                  <PointNotificationContent salePointNotification={salePointNotification} />
+                </Collapse.Panel>
               ))}
-            </div>
+            </Collapse>
           ) : <Loader />}
 
         <MassiveNotificationEditModal multipleEditor={personalNotifications.multipleEditor} />

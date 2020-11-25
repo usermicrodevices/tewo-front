@@ -1,4 +1,7 @@
-import { computed, observable } from 'mobx';
+import { computed, observable, action } from 'mobx';
+import { message } from 'antd';
+
+import { applyMailing } from 'services/mailings';
 
 import Datum from 'models/datum';
 
@@ -9,7 +12,8 @@ class Mailing extends Datum {
 
   @observable companyId = null;
 
-  @observable notifications = [];
+  /** {[pointId]: {sources: Set, id: Number}} */
+  @observable notifications = new Map();
 
   @observable emails = [];
 
@@ -17,6 +21,77 @@ class Mailing extends Datum {
     super(session.mailings.update);
 
     this.session = session;
+  }
+
+  @action.bound saveNotifications() {
+    return applyMailing(this.id, { notifications: this.notifications }, this.session, this)
+      .then(() => {
+        message.success('Обновление уведомлений по рассылке прошло успешно!');
+      })
+      .catch(() => {
+        message.error('Произошла ошибка при обновлении уведомлений по рассылке!');
+      });
+  }
+
+  @action.bound saveEmails() {
+    return applyMailing(this.id, { emails: this.emails }, this.session, this)
+      .then(() => {
+        message.success('Обновление списка почт по рассылке прошло успешно!');
+      })
+      .catch(() => {
+        message.error('Произошла ошибка при обновлении списка почт по рассылке!');
+      });
+  }
+
+  @action.bound setNotification(pointId, notificationId, enabled) {
+    const notification = this.notifications.get(pointId);
+    const newNotification = notification ? {
+      id: notification.id,
+      sources: notification.sources,
+    } : {
+      sources: new Set(),
+    };
+
+    if (enabled) {
+      newNotification.sources.add(notificationId);
+    } else {
+      newNotification.sources.delete(notificationId);
+    }
+
+    this.notifications.set(pointId, newNotification);
+
+    this.saveNotifications();
+  }
+
+  @action.bound setEmails(emails = []) {
+    this.emails.replace(emails);
+
+    this.saveEmails();
+  }
+
+  @computed get pointsNotifications() {
+    const { notificationSources, points } = this.session;
+    const companyPoints = points.getByCompanyIdSet(new Set([this.companyId]));
+
+    if (companyPoints === undefined) {
+      return undefined;
+    }
+
+    return companyPoints.map((point) => {
+      const notifications = notificationSources.list.map((source) => ({
+        id: source.id,
+        name: source.name,
+        enabled: this.notifications.has(point.id) && this.notifications.get(point.id).sources.has(source.id),
+      }));
+
+      return {
+        id: point.id,
+        name: point.name,
+        enabledCount: notifications.filter((e) => e.enabled).length,
+        allCount: notifications.length,
+        notifications,
+      };
+    });
   }
 
   @computed get company() {

@@ -1,24 +1,18 @@
-.collapse {
-    .header {
+.header {
+    width: 100%;
+    display: grid;
+    position: sticky;
+    top: -30px;
+    background-color: white;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.content {
+    background-color: #fafafa;
+
+    .row {
         width: 100%;
         display: grid;
-        position: sticky;
-        top: -30px;
-        background-color: white;
-        z-index: 1;
-        cursor: pointer;
-
-        &:hover {
-            background-color: #fafafa;
-        }
-    }
-
-    .content {
-        background-color: #fafafa;
-
-        .row {
-            width: 100%;
-            display: grid;
-        }
     }
 }

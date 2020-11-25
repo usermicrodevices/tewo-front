@@ -14,4 +14,5 @@ module.exports = {
   'card-head-font-size': '@heading-3-size',
   'typography-title-margin-bottom': 0,
   'typography-title-font-weight': 700,
+  'collapse-header-bg': 'transparent',
 };
