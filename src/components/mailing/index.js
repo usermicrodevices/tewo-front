@@ -30,10 +30,10 @@ function MailingOverview({ element }) {
         <section>
           <Select
             mode="tags"
-            style={{ width: '320px', marginTop: '16px' }}
-            onChange={element.setEmails}
             placeholder="Введите список почт для рассылки"
             value={element.emails}
+            className={styles.emails}
+            onChange={element.setEmails}
           >
             {element.emails.map((email) => <Select.Option key={email} value={email}>{email}</Select.Option>)}
           </Select>
