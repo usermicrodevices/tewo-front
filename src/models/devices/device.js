@@ -2,10 +2,11 @@ import { computed, observable } from 'mobx';
 import { zones } from 'utils/timezone';
 
 import * as routes from 'routes';
+import Datum from 'models/datum';
 
 import Details from './details';
 
-class Device {
+class Device extends Datum {
   id;
 
   @observable name;
@@ -47,6 +48,8 @@ class Device {
   session;
 
   constructor(session) {
+    super(session.devices.applyDevice);
+
     this.session = session;
 
     this.editable = {
@@ -161,10 +164,6 @@ class Device {
   @computed get priceGroupName() {
     const { priceGroup } = this;
     return priceGroup && priceGroup.name;
-  }
-
-  update(data) {
-    return this.session.devices.applyDevice(this.id, data);
   }
 
   @computed get values() {
