@@ -16,6 +16,9 @@ const PriceCell = (value, { sendValue }) => {
   const commit = () => {
     if (currentValue !== value) {
       sendValue(currentValue)
+        .then(() => {
+          message.success('Цена успешно обновлена');
+        })
         .catch(() => {
           message.error('Не удалось обновить цену');
           setWarn(true);

@@ -8,7 +8,6 @@ const declareColumns = (session) => ({
   salePointCityName: {
     isVisibleByDefault: true,
     title: 'Город',
-    width: 110,
     grow: 1,
   },
   salePointName: {
@@ -85,6 +84,8 @@ class Sales extends Table {
 
     super(declareColumns(session), salesLoader(session, filters), filters);
   }
+
+  get isImpossibleToBeSync() { return true; }
 
   toString() {
     return 'ComerceSales';

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import {
   Table, Button, InputNumber, Select,
@@ -93,6 +94,11 @@ const RecipeEditroTable = ({ data, isEdditing }) => {
 
   return (
     <>
+      <div>
+        Для добавления нового ингредиента перейдите в раздел
+        {' '}
+        <Link to="/ingredients">Ингредиенты</Link>
+      </div>
       { ds.length > 0 && (
         <Table
           className={style.viewer}

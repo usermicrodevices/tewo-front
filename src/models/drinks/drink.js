@@ -35,6 +35,10 @@ class Drink extends Datum {
     return this.company?.name;
   }
 
+  @computed get ndsName() {
+    return this.nds && this.session.nds.get(this.nds);
+  }
+
   @computed get values() {
     return [
       {
@@ -60,12 +64,18 @@ class Drink extends Datum {
       {
         dataIndex: 'nds',
         title: 'НДС',
-        value: this.nds,
+        value: this.ndsName,
       },
     ];
   }
 
   get editable() {
+    const plu = this.id === null ? {
+      plu: {
+        type: 'number',
+        isRequired: true,
+      },
+    } : {};
     return {
       name: {
         type: 'text',
@@ -76,13 +86,12 @@ class Drink extends Datum {
         selector: this.session.companies.selector,
         isRequired: true,
       },
-      plu: {
-        type: 'number',
+      nds: {
+        type: 'selector',
+        selector: this.session.nds.selector,
         isRequired: true,
       },
-      nds: {
-        type: 'number',
-      },
+      ...plu,
     };
   }
 

@@ -12,7 +12,6 @@ const RENAMER = {
   dimension: 'dimension',
   company: 'companyId',
   cost: 'cost',
-  currency: 'currencyId',
 };
 
 const form = (data) => {
@@ -34,7 +33,6 @@ const transform = (json, acceptor) => {
       cost: 'number',
     },
     {
-      currency: 'number',
       dimension: 'string',
     },
   )) {

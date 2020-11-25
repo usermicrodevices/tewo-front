@@ -49,7 +49,7 @@ const Format = ({
     return (
       <div className={style.clock}>
         <Icon size={16} name="clock-outline" className={style.clockicon} />
-        <Format>{ children.format('DD.MM.yy hh:mm') }</Format>
+        <Format>{ children.format('DD.MM.YY hh:mm') }</Format>
       </div>
     );
   } else if (Array.isArray(children) && children.length === 2 && typeof children.find((v) => typeof v !== 'number') === 'undefined') {

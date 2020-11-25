@@ -39,10 +39,10 @@ const declareColumns = (onEditRecipe) => ({
     grow: 2,
     sortDirections: 'both',
   },
-  nds: {
+  ndsName: {
     isVisibleByDefault: true,
     title: 'НДС',
-    width: 70,
+    width: 150,
   },
   recipe: {
     isVisibleByDefault: true,

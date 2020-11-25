@@ -12,8 +12,6 @@ class Ingridient extends Datum {
 
   @observable cost = null;
 
-  @observable currencyId = null;
-
   @observable dimension = null;
 
   session;
@@ -37,10 +35,8 @@ class Ingridient extends Datum {
   }
 
   @computed get currency() {
-    if (this.currencyId === null) {
-      return null;
-    }
-    return this.session.currencies.get(this.currencyId);
+    const { company } = this;
+    return company && company.currency;
   }
 
   @computed get currencyName() {

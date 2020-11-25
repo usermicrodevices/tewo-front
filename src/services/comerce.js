@@ -28,7 +28,6 @@ const salesLoader = (session, filter) => () => {
     [curRange, prwRange].map((dateRange) => {
       const rangeArg = daterangeToArgs(dateRange, 'device_date');
       const lnk = `${BEVERAGES_SALE_POINTS_STATS.link}?step=86400${search ? `&${search}` : ''}${rangeArg}`;
-      console.log('lnk', lnk, filter.data);
       return get(lnk);
     }),
   ).then(([cur, prw]) => {
@@ -39,7 +38,7 @@ const salesLoader = (session, filter) => () => {
         if (!Array.isArray(json)) {
           console.error(`ожидается массив в качестве значения для девайса в эндпоинте ${BEVERAGES_SALE_POINTS_STATS.link}`);
         }
-        return new SalesRow(session, deviceId, sumRow(json), prw[deviceId]);
+        return new SalesRow(session, deviceId, sumRow(json), sumRow(prw[deviceId]));
       }),
     };
   });

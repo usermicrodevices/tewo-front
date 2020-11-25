@@ -1,6 +1,7 @@
 import { computed, observable } from 'mobx';
 import Datum from 'models/datum';
 import { humanizeSeconds } from 'utils/date';
+import plural from 'utils/plural';
 
 class EventType extends Datum {
   id;
@@ -32,7 +33,7 @@ class EventType extends Datum {
   }
 
   @computed get reactionTimeText() {
-    return humanizeSeconds(this.reactionTime * 60);
+    return humanizeSeconds(this.reactionTime);
   }
 
   @computed get priority() {
@@ -47,27 +48,14 @@ class EventType extends Datum {
     return priority ? priority.description : priority;
   }
 
-  @computed get editable() {
-    return {
-      name: {
-        type: 'text',
-      },
-      reactionTime: {
-        type: 'number',
-      },
-      priorityId: {
-        type: 'selector',
-        selector: this.session.eventPriorities.selector,
-      },
-      color: {
-        type: 'color',
-      },
-      description: {
-        type: 'text',
-        rows: 4,
-      },
-    };
-  }
+  editable = {
+    reactionTime: {
+      type: 'minutes',
+    },
+    color: {
+      type: 'color',
+    },
+  };
 
   @computed get values() {
     return [
@@ -84,7 +72,7 @@ class EventType extends Datum {
       {
         dataIndex: 'reactionTime',
         title: 'Время для отчета "просроченные задачи"',
-        value: this.reactionTime,
+        value: this.reactionTimeText,
       },
       {
         dataIndex: 'priorityId',
