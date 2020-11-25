@@ -1,10 +1,9 @@
 import React from 'react';
-import { Card } from 'antd';
+import { Card, Select } from 'antd';
 import { observer, inject } from 'mobx-react';
 
 import Typography from 'elements/typography';
 import { Collapse } from 'elements/collapse';
-import NoData from 'elements/noData';
 import Loader from 'elements/loader';
 
 import { PointNotificationContent, PointNotificationHeader } from './pointNotification';
@@ -29,7 +28,15 @@ function MailingOverview({ element }) {
         <Typography.Title level={3}>Список объектов и уведомлений</Typography.Title>
         <Typography.Caption type="secondary">Выберите объекты и уведомления, по которым вы хотите проводить расслыку</Typography.Caption>
         <section>
-          Emails block
+          <Select
+            mode="tags"
+            style={{ width: '320px', marginTop: '16px' }}
+            onChange={element.setEmails}
+            placeholder="Введите список почт для рассылки"
+            value={element.emails}
+          >
+            {element.emails.map((email) => <Select.Option key={email} value={email}>{email}</Select.Option>)}
+          </Select>
         </section>
       </header>
 

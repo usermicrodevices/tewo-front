@@ -17,8 +17,6 @@ class Mailing extends Datum {
 
   @observable emails = [];
 
-  pointNotificationIds = new Map();
-
   constructor(session) {
     super(session.mailings.update);
 
@@ -32,6 +30,16 @@ class Mailing extends Datum {
       })
       .catch(() => {
         message.error('Произошла ошибка при обновлении уведомлений по рассылке!');
+      });
+  }
+
+  @action.bound saveEmails() {
+    return applyMailing(this.id, { emails: this.emails }, this.session, this)
+      .then(() => {
+        message.success('Обновление списка почт по рассылке прошло успешно!');
+      })
+      .catch(() => {
+        message.error('Произошла ошибка при обновлении списка почт по рассылке!');
       });
   }
 
@@ -53,6 +61,12 @@ class Mailing extends Datum {
     this.notifications.set(pointId, newNotification);
 
     this.saveNotifications();
+  }
+
+  @action.bound setEmails(emails = []) {
+    this.emails.replace(emails);
+
+    this.saveEmails();
   }
 
   @computed get pointsNotifications() {
