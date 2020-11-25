@@ -11,6 +11,7 @@ const getNDS = (acceptor) => get('/refs/ndses/').then((json) => {
       id: 'number',
       name: 'string',
       alias: 'string',
+    }, {
       value: 'number',
     });
     acceptor.set(elem.id, elem.name);

@@ -20,7 +20,9 @@ const Values = inject('table')(observer(({ table }) => (
       <Typography.Caption>просроченные события</Typography.Caption>
     </div>
     <div>
-      <Typography.Value size="xl" className={classes.value}><Format>{ table.downtime && moment.duration(table.downtime, 'second').humanize() }</Format></Typography.Value>
+      <Typography.Value size="xl" className={classes.value}>
+        <Format>{ table.downtime && moment.duration(table.downtime, 'second').humanize() }</Format>
+      </Typography.Value>
       <Typography.Caption>суммарное время простоя</Typography.Caption>
     </div>
   </div>

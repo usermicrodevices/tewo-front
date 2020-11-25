@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { Provider } from 'mobx-react';
+import { inject, Provider, observer } from 'mobx-react';
 
 import Session from 'models/session';
 import AuthorizedPage from 'components/authorizedPage';
@@ -8,10 +8,18 @@ import EroorPage from 'pages/eroor';
 
 import { authorizedRoutes as routes } from './routes';
 
+@inject('auth')
+@observer
 class AuthorizedRouter extends React.Component {
   session = new Session();
 
   state = { error: null };
+
+  constructor(props) {
+    super(props);
+    const { user } = props.auth;
+    user.session = this.session;
+  }
 
   static getDerivedStateFromError(error) {
     // Обновить состояние с тем, чтобы следующий рендер показал запасной UI.
