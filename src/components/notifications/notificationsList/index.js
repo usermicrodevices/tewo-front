@@ -8,7 +8,7 @@ import { SearchOutlined, ProfileOutlined, FilterOutlined } from '@ant-design/ico
 import Typography from 'elements/typography';
 import Loader from 'elements/loader';
 import Filters from 'elements/filters';
-import Collapse from 'elements/collapse';
+import { Collapse } from 'elements/collapse';
 
 import { PointNotificationContent, PointNotificationHeader } from './pointNotification';
 

@@ -8,8 +8,7 @@ import { SendOutlined, StopOutlined, DeleteOutlined } from '@ant-design/icons';
 import Typography from 'elements/typography';
 import Icon from 'elements/icon';
 import Loader from 'elements/loader';
-import {Row as NotificationRow} from 'elements/collapse';
-
+import { Row as NotificationRow } from 'elements/collapse';
 
 import styles from './style.module.scss';
 
