@@ -14,7 +14,25 @@ const RENAMER = {
 const formaters = {
   company: (data) => data.companyId,
   name: (data) => data.name,
-  notifications: (data) => (Array.isArray(data.notifications) ? data.notifications : []),
+  notifications: (data) => {
+    const notifications = [];
+
+    for (const [pointId, { sources, id }] of data.notifications.entries()) {
+      const notification = {
+        sources: [...sources],
+      };
+
+      if (id) {
+        notification.id = id;
+      } else {
+        notification.sale_point = pointId;
+      }
+
+      notifications.push(notification);
+    }
+
+    return notifications;
+  },
   emails: (data) => (Array.isArray(data.emails) ? data.emails.join(EMAIL_SEPARATOR) : ''),
 };
 
@@ -37,7 +55,6 @@ const transform = (data, mailing) => {
     console.error(`обнаружены ошибки при обработке эндпоинта ${LOCATION}`);
   }
 
-  const notifications = [];
   for (let i = 0; i < data.notifications.length; i += 1) {
     if (!checkData(data.notifications[i], notificationShouldBe)) {
       console.error(`обнаружены ошибки при обработке эндпоинта ${LOCATION} для поля notifications`, data.notifications[i]);
@@ -45,16 +62,17 @@ const transform = (data, mailing) => {
       return mailing;
     }
 
-    notifications.push({
-      salePoint: data.notifications[i].sale_point,
-      sources: data.notifications[i].sources,
+    const { sources, sale_point: salePointId, id } = data.notifications[i];
+
+    mailing.notifications.set(salePointId, {
+      sources: new Set(sources),
+      id,
     });
   }
 
   mailing.id = data.id;
   mailing.name = data.name;
   mailing.emails = data.emails.split(EMAIL_SEPARATOR);
-  mailing.notifications = data.notifications;
   mailing.companyId = data.company;
 
   return mailing;
@@ -91,7 +109,7 @@ const getMailings = (session) => () => new Promise((resolve, reject) => {
   }).catch(reject);
 });
 
-const applyMailing = async (id, changes) => {
+const applyMailing = async (id, changes, session, currentMailing) => {
   const data = form(changes);
 
   // Reuired fields when create
@@ -100,11 +118,11 @@ const applyMailing = async (id, changes) => {
     data.notifications = data.notifications || [];
   }
 
-  const request = id === null ? post(LOCATION, data) : patch(`${LOCATION}${id}`, data);
+  const request = id === null ? post(LOCATION, data) : patch(`${LOCATION}${id}/`, data);
 
   const response = await request;
 
-  return transform(response, {});
+  return transform(response, currentMailing || new Mailing(session));
 };
 
 const deleteMailing = (id) => del(`${LOCATION}${id}`);
