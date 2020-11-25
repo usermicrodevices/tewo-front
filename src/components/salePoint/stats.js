@@ -39,7 +39,7 @@ const Stats = ({ session, element: { details, priceGroups } }) => {
       </div>
       <div className={style.outdatedtasks}>
         <Typography.Value size="xl" strong><Format>{ outdatedTasksAmount }</Format></Typography.Value>
-        <Typography.Caption>проссроченные задачи за 24 часа</Typography.Caption>
+        <Typography.Caption>просроченные задачи за 24 часа</Typography.Caption>
       </div>
       <Divider />
       <div className={style.equipment}>

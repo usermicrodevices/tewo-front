@@ -71,7 +71,7 @@ class EventType extends Datum {
       },
       {
         dataIndex: 'reactionTime',
-        title: 'Время для отчета "просроченные задачи"',
+        title: 'Время реакции',
         value: this.reactionTimeText,
       },
       {

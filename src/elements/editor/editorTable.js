@@ -12,7 +12,6 @@ import style from './style.module.scss';
 const EditorTable = ({
   isEdditing, data, session,
 }) => {
-  console.log('rerender table');
   const tableDataSource = data.values.map((datum) => ({ key: datum.dataIndex, ...datum }));
   return (
     <Table
