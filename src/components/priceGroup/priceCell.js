@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Button, InputNumber, message } from 'antd';
-import { EditOutlined, SendOutlined, LoadingOutlined } from '@ant-design/icons';
+import {
+  EditOutlined, SendOutlined, LoadingOutlined, StopOutlined,
+} from '@ant-design/icons';
 import classNames from 'classnames';
 
 import Format from 'elements/format';
@@ -39,6 +41,11 @@ const PriceCell = (value, { sendValue }) => {
           icon={<SendOutlined style={{ transform: 'scale(1.37)' }} />}
           type="text"
           onClick={commit}
+        />
+        <Button
+          icon={<StopOutlined />}
+          type="text"
+          onClick={() => { setEdditing(false); }}
         />
       </div>
     );

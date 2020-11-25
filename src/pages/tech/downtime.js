@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, Provider, observer } from 'mobx-react';
 import { Card } from 'antd';
+import moment from 'moment';
 
 import OverdueModel from 'models/events/overdue';
 import { TableHeader } from 'elements/headers';
@@ -19,7 +20,7 @@ const Values = inject('table')(observer(({ table }) => (
       <Typography.Caption>просроченные события</Typography.Caption>
     </div>
     <div>
-      <Typography.Value size="xl" className={classes.value}><Format>{ table.downtime }</Format></Typography.Value>
+      <Typography.Value size="xl" className={classes.value}><Format>{ table.downtime && moment.duration(table.downtime, 'second').humanize() }</Format></Typography.Value>
       <Typography.Caption>суммарное время простоя</Typography.Caption>
     </div>
   </div>
