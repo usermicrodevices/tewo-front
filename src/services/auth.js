@@ -74,7 +74,11 @@ function me(deep) {
       sale_points: 'array',
       companies: 'array',
     };
-    if (!checkData(data, shouldBe, { contract_finished: 'date' }, {
+    const mayBe = {
+      contract_finished: 'date',
+      avatar: 'string',
+    };
+    if (!checkData(data, shouldBe, mayBe, {
       username: (name) => name.length > 0,
     })) {
       console.error(`обнаружены ошибки при обработке эндпоинта ${location}`);
@@ -94,10 +98,11 @@ function me(deep) {
       user_permissions: 'permissions',
       sale_points: 'salePoints',
       companies: 'companies',
+      avatar: 'avatar',
     };
 
     for (const [jsonName, objectName] of Object.entries(rename)) {
-      if (jsonName in shouldBe) {
+      if (jsonName in shouldBe || jsonName in mayBe) {
         user[objectName] = data[jsonName];
       } else {
         console.error(`Попытка извлечь непроверенные данные пользователя ${jsonName}`, shouldBe);

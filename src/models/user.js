@@ -1,3 +1,5 @@
+import { observable } from 'mobx';
+
 class User {
   id;
 
@@ -20,6 +22,10 @@ class User {
   companies;
 
   salePoints;
+
+  avatar;
+
+  @observable session = null;
 
   get name() {
     const name = `${this.firstName} ${this.lastName}`;
