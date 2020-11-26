@@ -8,6 +8,7 @@ import moment from 'moment';
 import { devices as devicesRout } from 'routes';
 import Format from 'elements/format';
 import plural from 'utils/plural';
+import ChangesLabel from 'elements/changesLabel';
 
 const { Text } = Typography;
 
@@ -77,6 +78,42 @@ const durationCell = ({ openDate, closeDate }) => {
   return <Format>{null}</Format>;
 };
 
+const rangeMetricCompareCell = ({ cur, prw }) => {
+  if (typeof cur !== 'number') {
+    return <Format>{ cur }</Format>;
+  }
+  const render = (a, b, c) => (
+    <Text>
+      <div style={{ display: 'flex', alignItems: 'baseline' }}>
+        <Format>{ a }</Format>
+        {' / '}
+        <Format>{ b }</Format>
+        { ' / '}
+        <Format>{ c }</Format>
+      </div>
+    </Text>
+  );
+  if (typeof prw !== 'number') {
+    return render(cur, null, null);
+  }
+  if (prw === 0) {
+    return render(cur, 0, null);
+  }
+  return render(
+    cur,
+    prw,
+    <ChangesLabel typographySize="m" value={(cur - prw) / prw * 100} />,
+  );
+};
+
+const explainedTitleCell = (title, explains) => (
+  <>
+    <Text>{ title }</Text>
+    {' '}
+    <Text type="secondary">{ explains }</Text>
+  </>
+);
+
 export {
-  tableItemLink, linkedCell, devicesCell, durationCell,
+  tableItemLink, linkedCell, devicesCell, durationCell, rangeMetricCompareCell, explainedTitleCell,
 };

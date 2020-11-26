@@ -1,3 +1,4 @@
+import React from 'react';
 import checkData from 'utils/dataCheck';
 import { FILTER_TYPES } from 'models/filters';
 
@@ -24,7 +25,7 @@ class Column {
 
   constructor(key, data) {
     const mustBe = {
-      title: 'string',
+      title: 'any',
     };
     const mayBe = {
       width: 'number',
@@ -38,6 +39,7 @@ class Column {
       isDefaultSort: 'boolean',
     };
     const additionalCheck = {
+      title: (d) => typeof d === 'string' || React.isValidElement(d),
       sortDirections: (d) => {
         if (['both', 'descend', 'ascend'].findIndex((v) => v === d.toLowerCase()) < 0) {
           console.error(`Для колонки ${data.title} задан некорректный тип сортировки ${d}`);

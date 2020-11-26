@@ -24,6 +24,15 @@ const salesLoader = (session, filter) => () => {
   const curRange = filter.data.get('device_date');
   const prwRange = isDateRange(curRange) ? stepToPast(curRange) : [];
   const search = filter.searchSkip(new Set(['device_date']));
+  return Promise.resolve({
+    count: 10,
+    results: new Array(10).fill(null).map((_, id) => new SalesRow(
+      session,
+      id,
+      { beverages: Math.random() * 1000, sales: Math.random() * 100 },
+      { beverages: Math.random() * 1000, sales: Math.random() * 100 },
+    )),
+  });
   return Promise.all(
     [curRange, prwRange].map((dateRange) => {
       const rangeArg = daterangeToArgs(dateRange, 'device_date');
@@ -38,7 +47,7 @@ const salesLoader = (session, filter) => () => {
         if (!Array.isArray(json)) {
           console.error(`ожидается массив в качестве значения для девайса в эндпоинте ${BEVERAGES_SALE_POINTS_STATS.link}`);
         }
-        return new SalesRow(session, deviceId, sumRow(json), sumRow(prw[deviceId]));
+        return new SalesRow(session, parseInt(deviceId, 10), sumRow(json), sumRow(prw[deviceId]));
       }),
     };
   });
