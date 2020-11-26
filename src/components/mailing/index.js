@@ -10,39 +10,49 @@ import { PointNotificationContent, PointNotificationHeader } from './pointNotifi
 
 import styles from './style.module.scss';
 
-function MailingOverview({ element }) {
-  const contentElement = element.pointsNotifications === undefined ? <Loader /> : (
-    element.pointsNotifications.map((point) => (
-      <Collapse.Panel
-        key={point.id}
-        header={<PointNotificationHeader point={point} />}
-      >
-        <PointNotificationContent point={point} onChange={(notificationId, checked) => element.setNotification(point.id, notificationId, checked)} />
-      </Collapse.Panel>
-    ))
-  );
+const MailingsList = observer(({ mailings, setNotification }) => (
+  <Collapse className={styles.content}>
+    {
+        mailings === undefined
+          ? <Loader />
+          : mailings.map((point) => (
+            <Collapse.Panel
+              key={point.id}
+              header={<PointNotificationHeader point={point} />}
+            >
+              <PointNotificationContent point={point} onChange={(notificationId, checked) => setNotification(point.id, notificationId, checked)} />
+            </Collapse.Panel>
+          ))
+      }
+  </Collapse>
+));
 
+const MailingsHeader = observer(({ element }) => (
+  <header>
+    <Typography.Title level={3}>Список объектов и уведомлений</Typography.Title>
+    <Typography.Caption type="secondary">Выберите объекты и уведомления, по которым вы хотите проводить расслыку</Typography.Caption>
+    <section>
+      <Select
+        mode="tags"
+        placeholder="Введите список почт для рассылки"
+        value={element.emails}
+        className={styles.emails}
+        onChange={element.setEmails}
+      >
+        {element.emails.map((email) => <Select.Option key={email} value={email}>{email}</Select.Option>)}
+      </Select>
+    </section>
+  </header>
+));
+
+function MailingOverview({ element }) {
   return (
     <Card>
-      <header>
-        <Typography.Title level={3}>Список объектов и уведомлений</Typography.Title>
-        <Typography.Caption type="secondary">Выберите объекты и уведомления, по которым вы хотите проводить расслыку</Typography.Caption>
-        <section>
-          <Select
-            mode="tags"
-            placeholder="Введите список почт для рассылки"
-            value={element.emails}
-            className={styles.emails}
-            onChange={element.setEmails}
-          >
-            {element.emails.map((email) => <Select.Option key={email} value={email}>{email}</Select.Option>)}
-          </Select>
-        </section>
-      </header>
-
-      <Collapse className={styles.content}>
-        {contentElement}
-      </Collapse>
+      <MailingsHeader element={element} />
+      <MailingsList
+        mailings={element.pointsNotifications}
+        setNotification={element.setNotification}
+      />
     </Card>
   );
 }
