@@ -68,6 +68,10 @@
     height: 300px;
   }
 
+  .collapseicon {
+    transition: transform 0.24s;
+  }
+
   table {
     table-layout: fixed;
     th.sortable {

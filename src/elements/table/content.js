@@ -49,6 +49,7 @@ class Content extends React.Component {
       newElements,
       actions,
       isLoaded,
+      openedRows,
     } = table;
     if (!isLoaded) {
       return <Loader className={style.loader} size="large" />;
@@ -61,6 +62,10 @@ class Content extends React.Component {
         />
       );
     }
+    const onRowClick = actions.detailsWidget ? (index) => {
+      table.triggerOpenedRow(index);
+      this.forceUpdate();
+    } : () => {};
     return (
       <List
         onScroll={this.onScroll}
@@ -69,12 +74,21 @@ class Content extends React.Component {
         height={DEFAULT_PRESCROLL_HEIGHT}
         itemCount={Math.min(MAX_ROWS_AMOUNT, data.length)}
         estimatedItemSize={ROW_HEIGHT}
-        itemSize={(row) => (row === MAX_ROWS_AMOUNT - 1 ? 400 : ROW_HEIGHT)}
+        itemSize={(row) => {
+          if (row === MAX_ROWS_AMOUNT - 1) {
+            return 400;
+          }
+          const index = this.rowFunc(row);
+          if (openedRows.has(index)) {
+            return ROW_HEIGHT + 333;
+          }
+          return ROW_HEIGHT;
+        }}
         width={width}
         data={data}
       >
         {
-          Row(data, columns, newElements, this.rowFunc, columnWidth, actions)
+          Row(data, columns, newElements, this.rowFunc, columnWidth, actions, onRowClick, openedRows)
         }
       </List>
     );

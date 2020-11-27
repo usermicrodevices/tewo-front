@@ -28,7 +28,7 @@ class Keeper {
 
   @observable manager;
 
-  constructor(filter, loader, isImpossibleToBeAsync) {
+  constructor(filter, loader, isImpossibleToBeAsync, isImpossibleToBeSync) {
     this.loader = loader;
     this.filter = filter;
     this.consideredFilter = filter.clone();
@@ -38,7 +38,7 @@ class Keeper {
       if (isImpossibleToBeAsync) {
         return;
       }
-      if (!this.isAsync && this.isLoaded) {
+      if (!this.isAsync && (this.isLoaded && !isImpossibleToBeSync)) {
         const isGreater = this.filter.isGreater(this.consideredFilter);
         if (!isGreater) {
           // Если данных мало и фильтр был ужесточен то ничего

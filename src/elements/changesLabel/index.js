@@ -6,7 +6,7 @@ import Typography from 'elements/typography';
 
 import styles from './index.module.scss';
 
-const ChangesLabel = ({ value }) => {
+const ChangesLabel = ({ value, typographySize }) => {
   if (typeof value !== 'number') {
     return <div className={styles.growth}><Loader /></div>;
   }
@@ -14,10 +14,10 @@ const ChangesLabel = ({ value }) => {
     return null;
   }
   return (
-    <Typography.Value size="l" className={styles.growth}>
+    <Typography.Value size={typographySize || 'l'} className={styles.growth}>
       <Icon name={value > 0 ? 'arrow-upward-outline' : 'arrow-downward-outline'} className={value > 0 ? styles.rise : styles.fail} />
       {`${Math.round(Math.abs(value))}%`}
-    </Typography.Value >
+    </Typography.Value>
   );
 };
 

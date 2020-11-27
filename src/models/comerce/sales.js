@@ -3,8 +3,10 @@ import Filters from 'models/filters';
 import Table from 'models/table';
 import salesLoader from 'services/comerce';
 import { SemanticRanges } from 'utils/date';
+import { rangeMetricCompareCell, explainedTitleCell } from 'elements/table/trickyCells';
+import Details from 'components/comerce/salesDynamic/details';
 
-const declareColumns = (session) => ({
+const declareColumns = () => ({
   salePointCityName: {
     isVisibleByDefault: true,
     title: 'Город',
@@ -16,19 +18,20 @@ const declareColumns = (session) => ({
     isAsyncorder: true,
     isDefaultSort: true,
     grow: 1,
-  },
-  sales: {
-    isVisibleByDefault: true,
-    title: 'Продажи',
-    grow: 2,
-    transform: (data) => null,
     sortDirections: 'both',
   },
-  beverages: {
+  deltaSales: {
     isVisibleByDefault: true,
-    title: 'Наливы',
+    title: explainedTitleCell('Продажи', '(текущий / предыдущий / %)'),
     grow: 2,
-    transform: (data) => null,
+    transform: (_, row) => rangeMetricCompareCell(row.sales),
+    sortDirections: 'both',
+  },
+  deltaBeverages: {
+    isVisibleByDefault: true,
+    title: explainedTitleCell('Наливы', '(текущий / предыдущий / %)'),
+    grow: 2,
+    transform: (_, row) => rangeMetricCompareCell(row.beverages),
     sortDirections: 'both',
   },
 });
@@ -82,10 +85,17 @@ class Sales extends Table {
     });
     filters.set('device_date', SemanticRanges.curMonth.resolver());
 
+    filters.isShowSearch = false;
+
     super(declareColumns(session), salesLoader(session, filters), filters);
   }
 
   get isImpossibleToBeSync() { return true; }
+
+  actions = {
+    isVisible: true,
+    detailsWidget: Details,
+  };
 
   toString() {
     return 'ComerceSales';

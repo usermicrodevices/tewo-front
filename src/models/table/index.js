@@ -34,6 +34,8 @@ class Table {
 
   @observable allColumns;
 
+  openedRows = observable.set();
+
   // Верхняя строчка скролла
   @observable currentRow;
 
@@ -54,7 +56,7 @@ class Table {
       this.allColumns.filter(({ isDefaultSort }) => isDefaultSort).length === 1,
       `Таблица ${this.toString()} не получила ключа сортировки по умолчанию`,
     );
-    this.dataModel = new Keeper(filter, loader, this.isImpossibleToBeAsync);
+    this.dataModel = new Keeper(filter, loader, this.isImpossibleToBeAsync, this.isImpossibleToBeSync);
 
     reaction(() => this.currentRow, (scrollEventMomentRow) => {
       setTimeout(() => {
@@ -111,6 +113,10 @@ class Table {
     console.assert(Array.isArray(order), 'columns order implementation error');
     order.splice(id, 2, order[id + 1], order[id]);
     this.columnsOrder = order;
+  }
+
+  triggerOpenedRow(index) {
+    this.openedRows[this.openedRows.has(index) ? 'delete' : 'add'](index);
   }
 
   // visibleColumns - ключи колонок, которые видны в данный момент

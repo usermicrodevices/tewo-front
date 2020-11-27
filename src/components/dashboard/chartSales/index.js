@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import SimpleCurve from 'elements/chart/simpleCurve';
 import Format from 'elements/format';
 import Loader from 'elements/loader';
-import ChnagesLabel from 'elements/changesLabel';
+import ChangesLabel from 'elements/changesLabel';
 
 import classnames from './index.module.scss';
 
@@ -13,7 +13,7 @@ const ChartSalesHeader = ({ diff, current }) => (
     <h2>
       <Format>{current}</Format>
     </h2>
-    <ChnagesLabel value={diff} />
+    <ChangesLabel value={diff} />
   </div>
 );
 

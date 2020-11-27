@@ -1,5 +1,7 @@
 import { computed } from 'mobx';
 
+import Details from './salesRowDetails';
+
 class SalesRow {
   curBeverages;
 
@@ -12,6 +14,19 @@ class SalesRow {
   deviceId;
 
   session;
+
+  detailsData;
+
+  get details() {
+    if (typeof this.detailsData === 'undefined') {
+      this.detailsData = new Details(this);
+    }
+    return this.detailsData;
+  }
+
+  @computed get isDetailsLoaded() {
+    return this.details.isLoaded;
+  }
 
   @computed get deltaSales() {
     if (this.prwSales === 0) {
@@ -54,15 +69,13 @@ class SalesRow {
     return {
       cur: this.curBeverages,
       prw: this.prwBeverages,
-      delta: this.deltaBeverages,
     };
   }
 
   @computed get sales() {
     return {
-      cur: this.curSales,
-      prw: this.prwSales,
-      delta: this.deltaSales,
+      cur: this.curSales / 100,
+      prw: this.prwSales / 100,
     };
   }
 
