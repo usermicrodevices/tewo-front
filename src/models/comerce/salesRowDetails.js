@@ -11,7 +11,10 @@ class Details {
 
   constructor(salesRow) {
     this.session = salesRow.session;
-    console.log('create details');
+
+    salesRow.filter.salesDetails(salesRow.salePointId).then((result) => {
+      console.log(result);
+    });
   }
 }
 

@@ -1,8 +1,8 @@
 /* eslint class-methods-use-this: off */
 import Filters from 'models/filters';
 import Table from 'models/table';
-import salesLoader from 'services/comerce';
-import { SemanticRanges } from 'utils/date';
+import { salesDetails, salesLoader } from 'services/comerce';
+import { isDateRange, SemanticRanges, stepToPast } from 'utils/date';
 import { rangeMetricCompareCell, explainedTitleCell } from 'elements/table/trickyCells';
 import Details from 'components/comerce/salesDynamic/details';
 
@@ -86,6 +86,10 @@ class Sales extends Table {
     filters.set('device_date', SemanticRanges.curMonth.resolver());
 
     filters.isShowSearch = false;
+
+    filters.salesDetails = (pointId) => {
+      salesDetails(pointId, filters);
+    };
 
     super(declareColumns(session), salesLoader(session, filters), filters);
   }
