@@ -9,7 +9,7 @@ import ColorPicker from './colorpicker';
 
 const CellEditor = ({
   editor: {
-    type, selector, isMultiple, rows, placeholder,
+    type, selector, isMultiple, rows, placeholder, rules,
   },
   name,
 }) => {
@@ -18,6 +18,13 @@ const CellEditor = ({
       return (
         <Form.Item name={name}>
           { rows ? <Input.TextArea rows={rows} /> : <Input /> }
+        </Form.Item>
+      );
+    }
+    case 'password': {
+      return (
+        <Form.Item name={name} rules={rules}>
+          <Input.Password />
         </Form.Item>
       );
     }

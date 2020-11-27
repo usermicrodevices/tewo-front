@@ -108,7 +108,7 @@ const YMapContainer = inject('storage', 'filter')(observer(({ storage, filter, s
       </ActionsContainer>
 
       <ActionsContainer position="topRight">
-        <Dropdown overlay={<Filters />} trigger={['click', 'hover']} placement="bottomRight">
+        <Dropdown overlay={<Filters />} trigger={['click']} placement="bottomRight">
           <Button
             type={filter.search !== '' ? 'primary' : 'default'}
             icon={<FilterOutlined />}
