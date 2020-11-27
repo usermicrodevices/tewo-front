@@ -46,28 +46,33 @@ const transform = (data, mailing) => {
   };
 
   const notificationShouldBe = {
-    id: 'number',
     sale_point: 'number',
     sources: 'array',
+  };
+
+  const notificationMayBe= {
+    id: 'number',
   };
 
   if (!checkData(data, shouldBe)) {
     console.error(`обнаружены ошибки при обработке эндпоинта ${LOCATION}`);
   }
 
-  for (let i = 0; i < data.notifications.length; i += 1) {
-    if (!checkData(data.notifications[i], notificationShouldBe)) {
-      console.error(`обнаружены ошибки при обработке эндпоинта ${LOCATION} для поля notifications`, data.notifications[i]);
+  if (Array.isArray(data.notifications)) {
+    for (let i = 0; i < data.notifications.length; i += 1) {
+      if (!checkData(data.notifications[i], notificationShouldBe, notificationMayBe)) {
+        console.error(`обнаружены ошибки при обработке эндпоинта ${LOCATION} для поля notifications`, data.notifications[i]);
 
-      return mailing;
+        return mailing;
+      }
+
+      const { sources, sale_point: salePointId, id } = data.notifications[i];
+
+      mailing.notifications.set(salePointId, {
+        sources: new Set(sources),
+        id,
+      });
     }
-
-    const { sources, sale_point: salePointId, id } = data.notifications[i];
-
-    mailing.notifications.set(salePointId, {
-      sources: new Set(sources),
-      id,
-    });
   }
 
   mailing.id = data.id;
