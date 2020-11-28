@@ -2,6 +2,9 @@ import { get } from 'utils/request';
 import { isDateRange, stepToPast, daterangeToArgs } from 'utils/date';
 import checkData from 'utils/dataCheck';
 import SalesRow from 'models/comerce/salesRow';
+import momentJS from 'moment';
+
+import BeveragesStats from 'models/beverages/stats';
 
 import { getSalesTop } from './salePoints';
 import { BEVERAGES_SALE_POINTS_STATS } from './beverage';
@@ -21,11 +24,41 @@ const sumRow = (arr) => {
   return result;
 };
 
-const salesLoader = (session, filter) => () => {
+const joinToChart = (data) => {
+  const result = new Map();
+  for (const arr of Object.values(data)) {
+    if (Array.isArray(arr)) {
+      for (const { moment, total, sum } of arr) {
+        if (!result.has(moment)) {
+          result.set(moment, {
+            moment,
+            beverages: 0,
+            sales: 0,
+          });
+        }
+        const itm = result.get(moment);
+        itm.beverages += total;
+        itm.sales += sum;
+      }
+    }
+  }
+  return new BeveragesStats([...result.values()].sort((a, b) => {
+    if (a === b) {
+      return 0;
+    }
+    return a.moment > b.moment ? 1 : -1;
+  }).map((itm) => ({
+    ...itm,
+    moment: momentJS(itm.moment),
+  })));
+};
+
+const salesLoader = (session, filter, commitChartData) => () => {
   const curRange = filter.data.get('device_date');
   const prwRange = isDateRange(curRange) ? stepToPast(curRange) : [];
   const search = filter.searchSkip(new Set(['device_date']));
-  /*return Promise.resolve({
+  /*
+  return Promise.resolve({
     count: 10,
     results: new Array(10).fill(null).map((_, id) => new SalesRow(
       session,
@@ -34,7 +67,8 @@ const salesLoader = (session, filter) => () => {
       { beverages: Math.random() * 100000, sales: Math.random() * 100000 },
       { beverages: Math.random() * 100000, sales: Math.random() * 100000 },
     )),
-  });*/
+  });
+  // */
   return Promise.all(
     [curRange, prwRange].map((dateRange) => {
       const rangeArg = daterangeToArgs(dateRange, 'device_date');
@@ -43,6 +77,7 @@ const salesLoader = (session, filter) => () => {
     }),
   ).then(([cur, prw]) => {
     const elements = Object.entries(cur);
+    commitChartData(joinToChart(cur), joinToChart(prw));
     return {
       count: elements.length,
       results: elements.map(([salePointId, json]) => {

@@ -1,10 +1,13 @@
 /* eslint class-methods-use-this: off */
+import { computed, observable } from 'mobx';
+
 import Filters from 'models/filters';
 import Table from 'models/table';
 import { salesDetails, salesLoader } from 'services/comerce';
-import { isDateRange, SemanticRanges, stepToPast } from 'utils/date';
+import { SemanticRanges } from 'utils/date';
 import { rangeMetricCompareCell, explainedTitleCell } from 'elements/table/trickyCells';
 import Details from 'components/comerce/salesDynamic/details';
+import { SALES_DATA_TYPES } from 'models/detailsProps';
 
 const declareColumns = () => ({
   salePointCityName: {
@@ -37,6 +40,42 @@ const declareColumns = () => ({
 });
 
 class Sales extends Table {
+  @observable chart;
+
+  @observable properties = {};
+
+  @computed get beveragesSeriaPrw() {
+    return this.chart.prw.beveragesSeria;
+  }
+
+  @computed get salesSeriaPrw() {
+    return this.chart.prw.salesSeria;
+  }
+
+  @computed get beveragesSeriaCur() {
+    return this.chart.cur.beveragesSeria;
+  }
+
+  @computed get salesSeriaCur() {
+    return this.chart.cur.salesSeria;
+  }
+
+  @computed get series() {
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    const visibleCurves = new Set(this.properties.visibleCurves);
+    const series = SALES_DATA_TYPES.filter(({ value }) => visibleCurves.has(value) && typeof this[value] !== 'undefined');
+    return series.map(({ label, value, axis }) => ({ data: this[value], name: label, axis }));
+  }
+
+  @computed get xSeria() {
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    return this.chart.cur.xSeria;
+  }
+
   constructor(session) {
     const filters = new Filters({
       device_date: {
@@ -87,11 +126,11 @@ class Sales extends Table {
 
     filters.isShowSearch = false;
 
-    filters.salesDetails = (pointId) => {
-      salesDetails(pointId, filters);
-    };
+    filters.salesDetails = (pointId) => salesDetails(pointId, filters);
 
-    super(declareColumns(session), salesLoader(session, filters), filters);
+    super(declareColumns(session), salesLoader(session, filters, (prw, cur) => {
+      this.chart = { prw, cur };
+    }), filters);
   }
 
   get isImpossibleToBeSync() { return true; }
