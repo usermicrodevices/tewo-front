@@ -102,7 +102,7 @@ const rangeMetricCompareCell = ({ cur, prw }) => {
   return render(
     cur,
     prw,
-    <ChangesLabel typographySize="m" value={(cur - prw) / prw * 100} />,
+    cur === prw ? 0 : <ChangesLabel typographySize="m" value={(cur - prw) / prw * 100} />,
   );
 };
 

@@ -11,8 +11,8 @@ import Format from 'elements/format';
 import Typography from 'elements/typography';
 import ChangesLabel from 'elements/changesLabel';
 import ScalebleChart from 'elements/chart/scaleble';
-
 import CurvesPicker from 'elements/curvePicker';
+import { SALES_CHART_LABELS } from 'models/detailsProps';
 
 import styles from './sales.module.scss';
 
@@ -53,7 +53,7 @@ const Sales = ({ element: { details } }) => {
                   y={series}
                   x={xSeria}
                   height={335}
-                  y1={[{ text: 'Наливов в день', decimalsInFloat: 0 }, { text: 'Динамика продаж, ₽', decimalsInFloat: 2 }][series[0].axis]}
+                  y1={SALES_CHART_LABELS[series[0].axis]}
                 />
               )
               : <Loader size="large" />

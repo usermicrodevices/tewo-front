@@ -17,16 +17,18 @@
 
   .row {
     display: flex;
-    .actions>* {
-      opacity: 0;
-    }
     transition: background 0.3s;
+    border-bottom: 1px solid #e8e8e8;
 
     &:hover {
-      .actions>* {
+      .hidehover>* {
         opacity: 1;
       }
       background-color: #fafafa;
+    }
+
+    .hidehover>* {
+      opacity: 0;
     }
 
     &.selected {
@@ -41,7 +43,6 @@
     .virtual-table-cell {
       box-sizing: border-box;
       padding: 16px;
-      border-bottom: 1px solid #e8e8e8;
       transition: background-color 1s linear;
     }
 

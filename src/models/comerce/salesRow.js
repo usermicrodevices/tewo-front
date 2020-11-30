@@ -30,7 +30,7 @@ class SalesRow {
     if (!this.isDetailsLoaded) {
       return undefined;
     }
-    return this.details.rows.length;
+    return this.details.rows.length || 3;
   }
 
   @computed get isDetailsLoaded() {

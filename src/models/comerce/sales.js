@@ -42,10 +42,25 @@ const declareColumns = () => ({
 class Sales extends Table {
   @observable chart;
 
-  @observable properties = {};
+  @observable properties = {
+    visibleCurves: SALES_DATA_TYPES.slice(0, 2).map(({ value }) => value),
+  };
 
   @computed get beveragesSeriaPrw() {
     return this.chart.prw.beveragesSeria;
+  }
+
+  @computed get wholeSales() {
+    if (!this.isLoaded) {
+      return {
+        cur: undefined,
+        prw: undefined,
+      };
+    }
+    return {
+      cur: this.chart?.cur.sales / 100,
+      prw: this.chart?.prw.sales / 100,
+    };
   }
 
   @computed get salesSeriaPrw() {

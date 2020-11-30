@@ -42,15 +42,14 @@ const joinToChart = (data) => {
       }
     }
   }
-  return new BeveragesStats([...result.values()].sort((a, b) => {
-    if (a === b) {
-      return 0;
-    }
-    return a.moment > b.moment ? 1 : -1;
-  }).map((itm) => ({
-    ...itm,
-    moment: momentJS(itm.moment),
-  })));
+  return new BeveragesStats(
+    [...result.values()]
+      .sort((a, b) => (a.moment > b.moment ? 1 : -1))
+      .map((itm) => ({
+        ...itm,
+        moment: momentJS(itm.moment),
+      })),
+  );
 };
 
 const salesLoader = (session, filter, commitChartData) => () => {
@@ -58,17 +57,19 @@ const salesLoader = (session, filter, commitChartData) => () => {
   const prwRange = isDateRange(curRange) ? stepToPast(curRange) : [];
   const search = filter.searchSkip(new Set(['device_date']));
   /*
-  return Promise.resolve({
-    count: 10,
-    results: new Array(10).fill(null).map((_, id) => new SalesRow(
-      session,
-      filter,
-      id,
-      { beverages: Math.random() * 100000, sales: Math.random() * 100000 },
-      { beverages: Math.random() * 100000, sales: Math.random() * 100000 },
-    )),
-  });
-  // */
+  if (process.env.NODE_ENV !== 'production') {
+    const count = 110;
+    return Promise.resolve({
+      count,
+      results: new Array(count).fill(null).map((_, id) => new SalesRow(
+        session,
+        filter,
+        id,
+        { beverages: Math.random() * 100000, sales: Math.random() * 100000 },
+        { beverages: Math.random() * 100000, sales: Math.random() * 100000 },
+      )),
+    });
+  }// */
   return Promise.all(
     [curRange, prwRange].map((dateRange) => {
       const rangeArg = daterangeToArgs(dateRange, 'device_date');
