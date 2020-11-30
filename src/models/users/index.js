@@ -1,6 +1,10 @@
 /* eslint-disable class-methods-use-this */
 import { action, observable } from 'mobx';
 
+import { usersList as usersListRout } from 'routes';
+
+import { tableItemLink } from 'elements/table/trickyCells';
+
 import Table from 'models/table';
 import Filter from 'models/filters';
 import User from 'models/user';
@@ -20,6 +24,7 @@ const COLUMNS = {
     title: 'Логин',
     grow: 3,
     sortDirections: 'both',
+    transform: (_, datum, width) => tableItemLink(datum.username, `${usersListRout.path}/${datum.id}`, width),
   },
   firstName: {
     isVisibleByDefault: true,
@@ -114,6 +119,10 @@ class Users extends Table {
 
   toString() {
     return 'users';
+  }
+
+  get(userId) {
+    return this.rawData.find(({ id }) => userId === id);
   }
 
   @action create() {

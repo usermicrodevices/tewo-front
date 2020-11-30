@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 
 import Datum from 'models/datum';
 
@@ -43,6 +43,20 @@ class User extends Datum {
     this.session = session;
   }
 
+  @action.bound setPoint(id, checked) {
+    if (checked && this.salePoints.indexOf(id) === -1) {
+      this.salePoints.push(id);
+    }
+
+    if (!checked && this.salePoints.indexOf(id) > -1) {
+      this.salePoints.splice(this.salePoints.indexOf(id), 1);
+    }
+  }
+
+  @action.bound enableAllPoints() {
+    this.salePoints.replace([]);
+  }
+
   @computed get role() {
     if (this.session?.roles) {
       return this.session?.roles.get(this.roleId);
@@ -59,12 +73,46 @@ class User extends Datum {
     return this.session?.points.getSubset(new Set(this.salePoints))?.map((sp) => sp.name) || undefined;
   }
 
-  get name() {
+  @computed get name() {
     const name = `${this.firstName} ${this.lastName}`;
     if (name.length > 1) {
       return name;
     }
     return this.username;
+  }
+
+  @computed get availableSalePoints() {
+    return this.session?.points.getByCompanyIdSet(new Set(this.companies)) || undefined;
+  }
+
+  @computed get enabledSalePoints() {
+    if (Array.isArray(this.salePoints) && this.salePoints.length > 0) {
+      return this.session?.points.getSubset(new Set(this.salePoints));
+    }
+
+    return [];
+  }
+
+  @computed get salePointsTableData() {
+    if (this.availableSalePoints === undefined) {
+      return undefined;
+    }
+
+    const enabledSet = new Set(this.enabledSalePoints.map((sp) => sp.id));
+
+    return this.availableSalePoints.map((sp) => ({
+      id: sp.id,
+      name: sp.name,
+      checked: enabledSet.has(sp.id),
+    }));
+  }
+
+  @computed get isAllEnabled() {
+    if (this.enabledSalePoints === undefined) {
+      return undefined;
+    }
+
+    return this.enabledSalePoints.length === 0;
   }
 
   get avatarSymbols() {
