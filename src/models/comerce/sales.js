@@ -123,19 +123,6 @@ class Sales extends Table {
         selector: () => session.drinks.selector,
         disabled: (filter) => !filter.data.has('device__id'),
       },
-      operation__id: {
-        type: 'selector',
-        title: 'Тип оплаты',
-        apply: (general, data) => general(data.sale_sum),
-        selector: () => session.beverageOperations.selector,
-        disabled: true,
-      },
-      canceled: {
-        type: 'checkbox',
-        title: 'Отмемённые',
-        apply: (_, data) => data.canceled,
-        passiveValue: false,
-      },
     });
     filters.set('device_date', SemanticRanges.curMonth.resolver());
 

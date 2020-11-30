@@ -9,19 +9,20 @@ import SalesModel from 'models/comerce/sales';
 import { FiltersButton } from 'elements/filters';
 import SalesDistribution from 'components/comerce/salesDistribution';
 import SalesDynamic from 'components/comerce/salesDynamic';
+import SalesStructModel from 'models/comerce/salesStruct';
 
 @inject('session')
 @observer
 class Sales extends React.Component {
-  state = { model: null };
+  state = { model: null, distributionModel: null };
 
   componentDidMount() {
     const { session } = this.props;
-    this.setState({ model: new SalesModel(session) });
+    this.setState({ model: new SalesModel(session), distributionModel: new SalesStructModel(session) });
   }
 
   render() {
-    const { model } = this.state;
+    const { model, distributionModel } = this.state;
     if (model === null) {
       return null;
     }
@@ -32,12 +33,20 @@ class Sales extends React.Component {
             {
               path: '',
               text: 'Динамика продаж',
-              widget: SalesDynamic,
+              widget: () => (
+                <Provider table={model} filter={model.filter}>
+                  <SalesDynamic />
+                </Provider>
+              ),
             },
             {
               path: 'distribution',
               text: 'Структура продаж',
-              widget: SalesDistribution,
+              widget: () => (
+                <Provider table={distributionModel} filter={distributionModel.filter}>
+                  <SalesDistribution />
+                </Provider>
+              ),
             },
           ]}
           title={(

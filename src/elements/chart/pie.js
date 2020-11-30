@@ -9,7 +9,13 @@ const PIE_COLORS = [
   '#CCCCCC',
   '#EBCFC0',
   '#B5EE93',
-  '#B5CFD0',
+  '#94D0FB',
+  '#37F391',
+  '#B1F444',
+  '#F33791',
+  '#CFEBC0',
+  '#93B5EE',
+  '#CFD0B5',
 ];
 
 const Pie = ({ series, labels, width }) => (

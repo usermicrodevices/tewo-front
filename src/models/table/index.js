@@ -226,7 +226,12 @@ class Table {
 
   @computed get data() {
     if (this.isImpossibleToBeSync) {
-      return this.rawData.slice().sort(this.sortPredicate);
+      const isReverse = this.sort.direction === 'ascend' && false;
+      const result = this.rawData.slice().sort(this.sortPredicate);
+      if (isReverse) {
+        return result.reverse();
+      }
+      return result;
     }
     if (this.isAsync) {
       return this.dataModel.data;

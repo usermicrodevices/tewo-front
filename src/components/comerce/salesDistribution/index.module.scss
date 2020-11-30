@@ -1,0 +1,50 @@
+@import 'src/themes/constants';
+
+.chart {
+  margin-bottom: $generic-margin;
+
+  .toplabels {
+    display: flex;
+    justify-content: flex-end;
+
+    >div {
+      display: flex;
+      align-items: center;
+      >span {
+        max-width: 131px;
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .kernel {
+    margin-top: $generic-margin;
+    display: flex;
+    justify-content: space-between;
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex-grow: 1;
+      margin-left: 100px;
+
+      >div {
+        display: flex;
+        border-bottom: 1px solid #E8E8E8;
+
+        .dot {
+          width: 15px;
+          height: 15px;
+          border-radius: 7.5px;
+          margin-left: -8px;
+          margin-right: 10px;
+        }
+
+        :nth-child(2) {
+          flex-grow: 1;
+        }
+      }
+    }
+  }
+}
