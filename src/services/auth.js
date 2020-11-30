@@ -1,7 +1,10 @@
+import { message } from 'antd';
 import { post, get } from 'utils/request';
 import checkData, { checkEmail } from 'utils/dataCheck';
+
+import { transformUser } from 'services/users';
+
 import User from 'models/user';
-import { message } from 'antd';
 
 function login(data) {
   return new Promise((resolve, reject) => {
@@ -56,61 +59,13 @@ function contacts() {
 function me(deep) {
   const location = 'user';
   return new Promise((resolve, reject) => get(location).then((data) => {
-    const shouldBe = {
-      id: 'number',
-      date_joined: 'date',
-      domain: 'string',
-      email: 'string',
-      first_name: 'string',
-      groups: 'array',
-      is_active: 'boolean',
-      is_staff: 'boolean',
-      is_superuser: 'boolean',
-      last_login: 'date',
-      last_name: 'string',
-      role: 'any',
-      username: 'string',
-      user_permissions: 'array',
-      sale_points: 'array',
-      companies: 'array',
-    };
-    const mayBe = {
-      contract_finished: 'date',
-      avatar: 'string',
-    };
-    if (!checkData(data, shouldBe, mayBe, {
-      username: (name) => name.length > 0,
-    })) {
-      console.error(`обнаружены ошибки при обработке эндпоинта ${location}`);
-    }
+    const user = transformUser(data, new User());
 
-    const user = new User();
-
-    const rename = {
-      id: 'id',
-      email: 'email',
-      username: 'username',
-      first_name: 'firstName',
-      last_name: 'lastName',
-      is_active: 'isActive',
-      is_staff: 'isStaff',
-      is_superuser: 'isSuperuser',
-      user_permissions: 'permissions',
-      sale_points: 'salePoints',
-      companies: 'companies',
-      avatar: 'avatar',
-    };
-
-    for (const [jsonName, objectName] of Object.entries(rename)) {
-      if (jsonName in shouldBe || jsonName in mayBe) {
-        user[objectName] = data[jsonName];
-      } else {
-        console.error(`Попытка извлечь непроверенные данные пользователя ${jsonName}`, shouldBe);
-      }
-    }
     return user;
   }).then(resolve).catch((err) => {
-    if (err.response.status >= 500 && deep < 10) {
+    console.log(err);
+
+    if (err.response && err.response.status >= 500 && deep < 10) {
       const newDeep = deep ? 1 : deep + 1;
       message(`Произошла ошибка при подготовке ответа сервером. Повторяем попытку (${newDeep} из 10)`);
       me(newDeep).then(resolve).catch(reject);
