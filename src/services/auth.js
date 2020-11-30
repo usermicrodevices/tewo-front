@@ -64,7 +64,7 @@ function me(deep) {
 
     return user;
   }).then(resolve).catch((err) => {
-    apiCheckConsole.log(err);
+    apiCheckConsole.warn(err);
 
     if (err.response && err.response.status >= 500 && deep < 10) {
       const newDeep = deep ? 1 : deep + 1;

@@ -35,7 +35,6 @@ class Keeper {
     this.manager = new DataManager(this.partialLoader);
 
     reaction(() => this.filter.search, () => {
-      console.log('detected');
       if (isImpossibleToBeAsync) {
         return;
       }
