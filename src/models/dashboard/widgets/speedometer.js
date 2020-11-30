@@ -19,12 +19,9 @@ class Speedometr {
     reaction(() => this.generic.salePointsId, this.updateValue);
   }
 
-  @computed({ keepAlive: true }) get maxSpeed() {
-    if (!this.generic.devices) {
-      return AVERAGE_DEVICE_SPEED;
-    }
-
-    const enabledDevices = this.generic.devices.filter((d) => d.isOn);
+  @computed get maxSpeed() {
+    const selectedDevices = this.generic.devices || this.session.devices.rawData;
+    const enabledDevices = selectedDevices.filter((d) => d.isOn);
 
     return enabledDevices.length * AVERAGE_DEVICE_SPEED;
   }
