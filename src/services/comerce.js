@@ -5,6 +5,7 @@ import SalesRow from 'models/comerce/salesRow';
 import momentJS from 'moment';
 
 import BeveragesStats from 'models/beverages/stats';
+import apiCheckConsole from 'utils/console';
 
 import { getSalesTop } from './salePoints';
 import { BEVERAGES_SALE_POINTS_STATS } from './beverage';
@@ -83,7 +84,7 @@ const salesLoader = (session, filter, commitChartData) => () => {
       count: elements.length,
       results: elements.map(([salePointId, json]) => {
         if (!Array.isArray(json)) {
-          console.error(`ожидается массив в качестве значения для девайса в эндпоинте ${BEVERAGES_SALE_POINTS_STATS.link}`);
+          apiCheckConsole.error(`ожидается массив в качестве значения для девайса в эндпоинте ${BEVERAGES_SALE_POINTS_STATS.link}`);
         }
         return new SalesRow(session, filter, parseInt(salePointId, 10), sumRow(json), sumRow(prw[salePointId]));
       }),

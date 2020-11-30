@@ -4,6 +4,7 @@ import moment from 'moment';
 import { get, patch } from 'utils/request';
 import Company from 'models/companies/company';
 import checkData from 'utils/dataCheck';
+import apiCheckConsole from 'utils/console';
 
 const LOCATION = '/refs/companies/';
 
@@ -26,7 +27,7 @@ const transform = (data, company) => {
   };
 
   if (!checkData(data, shouldBe, mayBe)) {
-    console.error(`обнаружены ошибки при обработке эндпоинта ${LOCATION}`);
+    apiCheckConsole.error(`обнаружены ошибки при обработке эндпоинта ${LOCATION}`);
   }
 
   company.id = data.id;
@@ -46,7 +47,7 @@ const transform = (data, company) => {
 const getCompanies = (session) => () => new Promise((resolve, reject) => {
   get(LOCATION).then((companies) => {
     if (!Array.isArray(companies)) {
-      console.error(`${LOCATION} ожидаеся в ответ массив, получен ${typeof companies}`, companies);
+      apiCheckConsole.error(`${LOCATION} ожидаеся в ответ массив, получен ${typeof companies}`, companies);
     }
 
     resolve({

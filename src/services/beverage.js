@@ -7,9 +7,10 @@ import {
 } from 'utils/date';
 import Beverage from 'models/beverages/beverage';
 import BeveragesStats from 'models/beverages/stats';
+import apiCheckConsole from 'utils/console';
 
 const getBeverages = (session) => (limit, offset = 0, filter = '') => new Promise((resolve, reject) => {
-  console.assert(limit >= 0 && offset >= 0, `Неверные параметры запроса наливов "${limit}" "${offset}"`);
+  apiCheckConsole.assert(limit >= 0 && offset >= 0, `Неверные параметры запроса наливов "${limit}" "${offset}"`);
   get(`/data/beverages/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
     const beverageMustBe = {
       id: 'number',
@@ -36,7 +37,7 @@ const getBeverages = (session) => (limit, offset = 0, filter = '') => new Promis
       results: (beverages) => {
         for (const beverage of beverages) {
           if (!checkData(beverage, beverageMustBe, mayBe)) {
-            console.error('провален тест для объекта', beverage, beverages);
+            apiCheckConsole.error('провален тест для объекта', beverage, beverages);
             return false;
           }
         }
@@ -67,7 +68,7 @@ const getBeverageOperations = (map) => get('refs/operations/').then((data) => {
   if (Array.isArray(data)) {
     for (const datum of data) {
       if (!checkData(datum, { id: 'number', value: 'string', description: 'string' })) {
-        console.error('Неожиданные данные для операций refs/operations/', datum);
+        apiCheckConsole.error('Неожиданные данные для операций refs/operations/', datum);
       }
       map.set(datum.id, datum.description);
     }
@@ -85,12 +86,12 @@ const getBeveragesStats = (daterange, filters, step) => {
   };
   return get(location).then((result) => {
     if (!Array.isArray(result)) {
-      console.error(`can not get data from ${location}`, result);
+      apiCheckConsole.error(`can not get data from ${location}`, result);
       return new BeveragesStats([]);
     }
     for (const d of result) {
       if (!checkData(d, mustBe)) {
-        console.error(`Неожиданные данные для эндпоинта ${location}`, d);
+        apiCheckConsole.error(`Неожиданные данные для эндпоинта ${location}`, d);
       }
     }
     const isRangeGiven = isDateRange(daterange);
@@ -138,7 +139,7 @@ const getBeveragesSalePointsStats = (dateRange, step, salePoints) => {
     const result = {};
     for (const [salePointId, arr] of Object.entries(json)) {
       if (!Array.isArray(arr)) {
-        console.error(`${lnk} ожидается массив, получен`, arr);
+        apiCheckConsole.error(`${lnk} ожидается массив, получен`, arr);
       } else {
         result[salePointId] = [];
         for (const datum of arr) {

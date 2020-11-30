@@ -1,5 +1,6 @@
 import { get } from 'utils/request';
 import checkData from 'utils/dataCheck';
+import apiCheckConsole from 'utils/console';
 
 import SpeedometerWidget from 'components/dashboard/spidometr';
 import SpeedometerModel from 'models/dashboard/widgets/speedometer';
@@ -210,7 +211,7 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
 
 const getDashboardWidgetsInfo = () => get('/refs/widget_references/').then((result) => {
   if (!Array.isArray(result)) {
-    console.error('unexpected respounce from /refs/widget_references/', result);
+    apiCheckConsole.error('unexpected respounce from /refs/widget_references/', result);
   }
   const mustBe = {
     id: 'number',
@@ -222,7 +223,7 @@ const getDashboardWidgetsInfo = () => get('/refs/widget_references/').then((resu
   for (const json of result) {
     checkData(json, mustBe);
     if (!(json.uid in WIDGETS_ADDITIONAL_INFORMATION)) {
-      console.warn('не реализован виджет', `${json.uid}: ${json.name}`);
+      apiCheckConsole.warn('не реализован виджет', `${json.uid}: ${json.name}`);
     }
     types[json.uid] = {
       title: json.name,
@@ -231,7 +232,7 @@ const getDashboardWidgetsInfo = () => get('/refs/widget_references/').then((resu
   }
   for (const key of Object.keys(WIDGETS_ADDITIONAL_INFORMATION)) {
     if (!(key in types)) {
-      console.error(`виджет типа ${key} не описан в справочнике виджетов /refs/widget_references/`);
+      apiCheckConsole.error(`виджет типа ${key} не описан в справочнике виджетов /refs/widget_references/`);
     }
   }
   return types;

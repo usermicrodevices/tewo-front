@@ -1,9 +1,10 @@
 import { get } from 'utils/request';
 import checkData from 'utils/dataCheck';
+import apiCheckConsole from 'utils/console';
 
 const getOperations = (map) => get('/refs/operations/').then((data) => {
   if (!Array.isArray(data)) {
-    console.error('/refs/operations/ ожидается массив, получено', data);
+    apiCheckConsole.error('/refs/operations/ ожидается массив, получено', data);
   }
   const result = map;
   for (const op of data) {
@@ -12,7 +13,7 @@ const getOperations = (map) => get('/refs/operations/').then((data) => {
       value: 'string',
       description: 'string',
     })) {
-      console.error('не пройдена проверка данный для операции (/refs/operations/)');
+      apiCheckConsole.error('не пройдена проверка данный для операции (/refs/operations/)');
     }
     const { id, value, description } = op;
     result.set(id, { value, description });

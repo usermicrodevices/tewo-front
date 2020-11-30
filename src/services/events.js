@@ -2,6 +2,7 @@ import moment from 'moment';
 
 import { get, patch } from 'utils/request';
 import checkData from 'utils/dataCheck';
+import apiCheckConsole from 'utils/console';
 
 import EventType from 'models/events/eventType';
 import Event from 'models/events/event';
@@ -10,7 +11,7 @@ import { daterangeToArgs, alineDates, isDateRange } from 'utils/date';
 const TECH_CLEARANCE_EVENT_ID = 8;
 
 const getEvents = (session) => (limit, offset = 0, filter = '') => {
-  console.assert(limit > 0 && offset >= 0, `Неверные параметры запроса событий "${limit}" "${offset}"`);
+  apiCheckConsole.assert(limit > 0 && offset >= 0, `Неверные параметры запроса событий "${limit}" "${offset}"`);
   return get(`/data/events/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
     const mustBe = {
       id: 'number',
@@ -36,7 +37,7 @@ const getEvents = (session) => (limit, offset = 0, filter = '') => {
       results: (events) => {
         for (const event of events) {
           if (!checkData(event, mustBe, mayBe)) {
-            console.error('провален тест для события', event);
+            apiCheckConsole.error('провален тест для события', event);
             return false;
           }
         }
@@ -111,7 +112,7 @@ const transform = (json, acceptor) => {
       description: 'string',
     },
   )) {
-    console.error(`Неожиданный ответ по адресу ${TYPES_LOCATION}`, eventType);
+    apiCheckConsole.error(`Неожиданный ответ по адресу ${TYPES_LOCATION}`, eventType);
   }
   for (const [jsonName, dataName] of Object.entries(TYPES_RENAMER)) {
     // eslint-disable-next-line
@@ -131,7 +132,7 @@ const form = (data) => {
 
 const getEventTypes = (session) => () => get(TYPES_LOCATION).then((results) => {
   if (!Array.isArray(results)) {
-    console.error(`по ${TYPES_LOCATION} ожидается массив, получен ${typeof results}`, results);
+    apiCheckConsole.error(`по ${TYPES_LOCATION} ожидается массив, получен ${typeof results}`, results);
   }
   return {
     count: results.length,
@@ -145,7 +146,7 @@ const getEventsClearancesChart = (deviceId, daterange) => get(
   `/data/events/cleanings/?device__id=${deviceId}${daterangeToArgs(daterange, 'open_date')}`,
 ).then((result) => {
   if (!Array.isArray(result)) {
-    console.error('can not ger data from /data/events/cleanings/', result);
+    apiCheckConsole.error('can not ger data from /data/events/cleanings/', result);
     return [];
   }
   const mustBe = {
@@ -155,12 +156,12 @@ const getEventsClearancesChart = (deviceId, daterange) => get(
     beverages: 'number',
   };
   if (!Array.isArray(result)) {
-    console.error('can not ger data from /data/events/cleanings/', result);
+    apiCheckConsole.error('can not ger data from /data/events/cleanings/', result);
     return [];
   }
   for (const d of result) {
     if (!checkData(d, mustBe)) {
-      console.error('Неожиданные данные для эндпоинта /data/events/cleanings/', d);
+      apiCheckConsole.error('Неожиданные данные для эндпоинта /data/events/cleanings/', d);
     }
   }
   const isRangeGiven = isDateRange(daterange);
@@ -195,7 +196,7 @@ const getDetergrnts = (filter) => get(`/data/events/detergent/?${filter}`).then(
     tablets: 0,
   };
   if (typeof json !== 'object') {
-    console.error(`/data/events/detergent/?${filter} result not an object`);
+    apiCheckConsole.error(`/data/events/detergent/?${filter} result not an object`);
     return errorResponse;
   }
   if (!checkData(json, {
@@ -210,7 +211,7 @@ const getDetergrnts = (filter) => get(`/data/events/detergent/?${filter}`).then(
 
 const getDowntimes = (filter) => get(`/data/events/downtime-salepoints/?${filter}`).then((json) => {
   if (!Array.isArray(json)) {
-    console.error(`/data/events/downtime-salepoints/?${filter} isn't array`);
+    apiCheckConsole.error(`/data/events/downtime-salepoints/?${filter} isn't array`);
   }
   for (const datum of json) {
     checkData(datum, {
@@ -223,7 +224,7 @@ const getDowntimes = (filter) => get(`/data/events/downtime-salepoints/?${filter
 
 const getEventPriorities = (acceptor) => get('refs/event_priorities/').then(((data) => {
   if (!Array.isArray(data)) {
-    console.error('ожидается массив от эндпоинта /refs/event_priorities/');
+    apiCheckConsole.error('ожидается массив от эндпоинта /refs/event_priorities/');
     return;
   }
   for (const json of data) {

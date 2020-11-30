@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { get, patch, post } from 'utils/request';
 import checkData from 'utils/dataCheck';
+import apiCheckConsole from 'utils/console';
 
 import User from 'models/user';
 
@@ -37,7 +38,6 @@ export const transformUser = (data, user) => {
     first_name: 'string',
     groups: 'array',
     is_active: 'boolean',
-    last_login: 'date',
     last_name: 'string',
     role: 'any',
     username: 'string',
@@ -45,6 +45,7 @@ export const transformUser = (data, user) => {
     companies: 'array',
   };
   const mayBe = {
+    last_login: 'date',
     contract_finished: 'date',
     avatar: 'string',
     user_permissions: 'any',
@@ -53,14 +54,14 @@ export const transformUser = (data, user) => {
   };
 
   if (!checkData(data, shouldBe, mayBe)) {
-    console.error('обнаружены ошибки при обработке эндпоинта полей пользователя');
+    apiCheckConsole.error('обнаружены ошибки при обработке эндпоинта полей пользователя');
   }
 
   for (const [jsonName, objectName] of Object.entries(FIELDS_ALIASES)) {
     if (jsonName in shouldBe || jsonName in mayBe) {
       user[objectName] = data[jsonName];
     } else {
-      console.error(`Попытка извлечь непроверенные данные пользователя ${jsonName}`, shouldBe);
+      apiCheckConsole.error(`Попытка извлечь непроверенные данные пользователя ${jsonName}`, shouldBe);
     }
   }
 
@@ -89,7 +90,7 @@ export function getRoles(map) {
           value: 'string',
           description: 'string',
         }, { mobile: 'string', group: 'number' })) {
-          console.error(`Неожиданные данные для ролей ${ROLES_LOCATION}`, datum);
+          apiCheckConsole.error(`Неожиданные данные для ролей ${ROLES_LOCATION}`, datum);
         }
 
         map.set(datum.id, datum.description);
@@ -103,7 +104,7 @@ export function createGetUsers(session) {
   return () => new Promise((resolve, reject) => {
     get(USERS_LOCATION).then((users) => {
       if (!Array.isArray(users)) {
-        console.error(`${USERS_LOCATION} ожидаеся в ответ массив, получен ${typeof users}`, users);
+        apiCheckConsole.error(`${USERS_LOCATION} ожидаеся в ответ массив, получен ${typeof users}`, users);
       }
 
       resolve({

@@ -1,5 +1,6 @@
 import { post, get, del } from 'utils/request';
 import checkData from 'utils/dataCheck';
+import apiCheckConsole from 'utils/console';
 
 const RECIPES_LOCATION = 'refs/recipes';
 
@@ -12,7 +13,7 @@ const MUST_BE = {
 
 function convert(datum) {
   if (!checkData(datum, MUST_BE)) {
-    console.error(`ошиюка при проверке данных ${RECIPES_LOCATION}, данные проигнорированы`, datum);
+    apiCheckConsole.error(`ошиюка при проверке данных ${RECIPES_LOCATION}, данные проигнорированы`, datum);
     return null;
   }
   const {
@@ -23,7 +24,7 @@ function convert(datum) {
 
 const getRecipes = () => get(RECIPES_LOCATION).then((data) => {
   if (!Array.isArray(data)) {
-    console.error(` ожидается массив, получен ${typeof data}`, data);
+    apiCheckConsole.error(`${RECIPES_LOCATION} ожидается массив, получен ${typeof data}`, data);
     return [];
   }
   const result = new Map();
@@ -44,7 +45,7 @@ const applyRecipe = (drink, recipe) => new Promise((resolve, reject) => {
   Promise.all(recipe.filter(({ recipeNoteId }) => recipeNoteId !== null).map(({ recipeNoteId }) => del(`/refs/recipes/${recipeNoteId}/`))).then(() => {
     Promise.all(recipe.map(({ id: ingredient, amount }) => post('/refs/recipes/', { ingredient, amount, drink: drink.id }))).then((response) => {
       if (!Array.isArray(response)) {
-        console.error('Неожиданный ответ на обновление ингредиентов', response);
+        apiCheckConsole.error('Неожиданный ответ на обновление ингредиентов', response);
       }
       resolve(response.map((datum) => convert(datum)).filter((v) => v !== null));
     }).catch(reject);

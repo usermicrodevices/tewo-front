@@ -1,6 +1,7 @@
 import { message } from 'antd';
 import { post, get } from 'utils/request';
 import checkData, { checkEmail } from 'utils/dataCheck';
+import apiCheckConsole from 'utils/console';
 
 import { transformUser } from 'services/users';
 
@@ -23,7 +24,7 @@ function contacts() {
   return new Promise((resolve) => {
     get(path).then(({ results: data }) => {
       if (!Array.isArray(data)) {
-        console.error(`${path} ожидается массив, получен ${typeof data}`);
+        apiCheckConsole.error(`${path} ожидается массив, получен ${typeof data}`);
         return defaultContacts;
       }
 
@@ -33,26 +34,26 @@ function contacts() {
         info: 'string',
         privacy: 'string',
       })) {
-        console.error(`${path} получил некорректные данные`);
+        apiCheckConsole.error(`${path} получил некорректные данные`);
         return defaultContacts;
       }
       const { info } = item;
       const items = info.split(' ');
       if (items.length !== 2) {
-        console.error(`неожиданные данные для ${path}, ожидается "<phone> <email>", получено`, info);
+        apiCheckConsole.error(`неожиданные данные для ${path}, ожидается "<phone> <email>", получено`, info);
         return defaultContacts;
       }
       const [phone, email] = items;
       if (phone.length !== 11 || phone.slice(0, 1) !== '8') {
-        console.error(`${path}, телефон должен быть в формате 88007003942, получен`, phone, phone.length, phone.slice(0, 1));
+        apiCheckConsole.error(`${path}, телефон должен быть в формате 88007003942, получен`, phone, phone.length, phone.slice(0, 1));
         return defaultContacts;
       }
       if (!checkEmail(email)) {
-        console.error(`${email} имеет не корректный формат email`);
+        apiCheckConsole.error(`${email} имеет не корректный формат email`);
         return defaultContacts;
       }
       return { phone: `+7${phone.slice(1)}`, email };
-    }).then(resolve).catch(() => { console.error(`can't get ${path}`); resolve(defaultContacts); });
+    }).then(resolve).catch(() => { apiCheckConsole.error(`can't get ${path}`); resolve(defaultContacts); });
   });
 }
 
@@ -63,7 +64,7 @@ function me(deep) {
 
     return user;
   }).then(resolve).catch((err) => {
-    console.log(err);
+    apiCheckConsole.log(err);
 
     if (err.response && err.response.status >= 500 && deep < 10) {
       const newDeep = deep ? 1 : deep + 1;
