@@ -2,6 +2,8 @@ import { observable, computed } from 'mobx';
 
 import Datum from 'models/datum';
 
+import { applyUser } from 'services/users';
+
 class User extends Datum {
   @observable id = null;
 
@@ -36,7 +38,7 @@ class User extends Datum {
   @observable session = null;
 
   constructor(session) {
-    super(() => {});
+    super(applyUser);
 
     this.session = session;
   }
@@ -95,9 +97,9 @@ class User extends Datum {
           value: this.username,
         },
         {
-          dataIndex: 'role',
+          dataIndex: 'roleId',
           title: 'Роль',
-          value: this.roleId,
+          value: this.role,
         },
         {
           dataIndex: 'firstName',
@@ -110,9 +112,14 @@ class User extends Datum {
           value: this.lastName,
         },
         {
+          dataIndex: 'email',
+          title: 'Почта',
+          value: this.email,
+        },
+        {
           dataIndex: 'companies',
           title: 'Компании',
-          value: this.companies,
+          value: this.companiesNamesList,
         },
       ];
     }
@@ -133,9 +140,9 @@ class User extends Datum {
         title: 'Пароль',
       },
       {
-        dataIndex: 'role',
+        dataIndex: 'roleId',
         title: 'Роль',
-        value: this.roleId,
+        value: this.role,
       },
       {
         dataIndex: 'firstName',
@@ -148,23 +155,27 @@ class User extends Datum {
         value: this.lastName,
       },
       {
+        dataIndex: 'email',
+        title: 'Почта',
+        value: this.email,
+      },
+      {
         dataIndex: 'companies',
         title: 'Компании',
-        value: this.companies,
+        value: this.companiesNamesList,
       },
     ];
   }
 
   get editable() {
     const defaultFileds = {
-      username: {
-        type: 'text',
-        isRequired: true,
-      },
       firstName: {
         type: 'text',
       },
       lastName: {
+        type: 'text',
+      },
+      email: {
         type: 'text',
       },
       companies: {
@@ -172,13 +183,18 @@ class User extends Datum {
         selector: this.session.companies.selector,
         isMultiple: true,
       },
-      role: {
+      roleId: {
         type: 'selector',
         selector: this.session.roles.selector,
+        isRequired: true,
       },
     };
 
     const newFields = {
+      username: {
+        type: 'text',
+        isRequired: true,
+      },
       password: {
         type: 'password',
         isRequired: true,

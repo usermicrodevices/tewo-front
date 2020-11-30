@@ -5,7 +5,7 @@ import Table from 'models/table';
 import Filter from 'models/filters';
 import User from 'models/user';
 
-import { createGetUsers } from 'services/users';
+import { createGetUsers, applyUser } from 'services/users';
 
 const COLUMNS = {
   id: {
@@ -123,6 +123,8 @@ class Users extends Table {
       this.rawData.push(itm);
     };
   }
+
+  update = applyUser
 }
 
 export default Users;

@@ -7,6 +7,22 @@ import User from 'models/user';
 const ROLES_LOCATION = '/refs/roles/';
 const USERS_LOCATION = '/refs/users/';
 
+const FIELDS_ALIASES = {
+  id: 'id',
+  email: 'email',
+  username: 'username',
+  first_name: 'firstName',
+  last_name: 'lastName',
+  is_active: 'isActive',
+  role: 'roleId',
+  user_permissions: 'permissions',
+  sale_points: 'salePoints',
+  companies: 'companies',
+  avatar: 'avatar',
+  contract_finished: 'contractFinished',
+  last_login: 'lastLogin',
+};
+
 /**
  *
  * @param {*} data
@@ -40,23 +56,7 @@ export const transformUser = (data, user) => {
     console.error('обнаружены ошибки при обработке эндпоинта полей пользователя');
   }
 
-  const rename = {
-    id: 'id',
-    email: 'email',
-    username: 'username',
-    first_name: 'firstName',
-    last_name: 'lastName',
-    is_active: 'isActive',
-    role: 'roleId',
-    user_permissions: 'permissions',
-    sale_points: 'salePoints',
-    companies: 'companies',
-    avatar: 'avatar',
-    contract_finished: 'contractFinished',
-    last_login: 'lastLogin',
-  };
-
-  for (const [jsonName, objectName] of Object.entries(rename)) {
+  for (const [jsonName, objectName] of Object.entries(FIELDS_ALIASES)) {
     if (jsonName in shouldBe || jsonName in mayBe) {
       user[objectName] = data[jsonName];
     } else {
@@ -65,6 +65,19 @@ export const transformUser = (data, user) => {
   }
 
   return user;
+};
+
+const form = (data) => {
+  const json = {};
+  const renamer = new Map(Object.entries(FIELDS_ALIASES).map(([a, b]) => [b, a]));
+
+  const getKey = (key, getter) => getter.get(key) || key;
+
+  for (const [key, value] of Object.entries(data)) {
+    json[getKey(key, renamer)] = value;
+  }
+
+  return json;
 };
 
 export function getRoles(map) {
@@ -101,6 +114,12 @@ export function createGetUsers(session) {
   });
 }
 
-export function applyUser() {
+export async function applyUser(id, changes, session) {
+  const data = form(changes);
 
+  const request = id === null ? post(USERS_LOCATION, data) : patch(`${USERS_LOCATION}${id}/`, data);
+
+  const response = await request;
+
+  return transformUser(response, new User(session));
 }

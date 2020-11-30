@@ -8,9 +8,11 @@ import Mailing from 'models/mailings/mailing';
 
 const LOCATION = '/refs/notification_bulk_emails/';
 const EMAIL_SEPARATOR = ';';
+
 const RENAMER = {
   companyId: 'company',
 };
+
 const formaters = {
   company: (data) => data.companyId,
   name: (data) => data.name,
@@ -50,7 +52,7 @@ const transform = (data, mailing) => {
     sources: 'array',
   };
 
-  const notificationMayBe= {
+  const notificationMayBe = {
     id: 'number',
   };
 
