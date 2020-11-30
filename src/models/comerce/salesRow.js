@@ -11,9 +11,11 @@ class SalesRow {
 
   prwSales;
 
-  deviceId;
+  salePointId;
 
   session;
+
+  filter;
 
   detailsData;
 
@@ -22,6 +24,13 @@ class SalesRow {
       this.detailsData = new Details(this);
     }
     return this.detailsData;
+  }
+
+  @computed get detailsRowsCount() {
+    if (!this.isDetailsLoaded) {
+      return undefined;
+    }
+    return this.details.rows.length;
   }
 
   @computed get isDetailsLoaded() {
@@ -42,13 +51,8 @@ class SalesRow {
     return this.curBeverages / this.prwBeverages;
   }
 
-  @computed get device() {
-    return this.session.devices.get(this.deviceId);
-  }
-
   @computed get salePoint() {
-    const { device } = this;
-    return device && device.salePoint;
+    return this.session.points.get(this.salePointId);
   }
 
   @computed get salePointName() {
@@ -79,9 +83,10 @@ class SalesRow {
     };
   }
 
-  constructor(session, deviceId, curDatum, prwDatum) {
+  constructor(session, filter, salePointId, curDatum, prwDatum) {
+    this.filter = filter;
     this.session = session;
-    this.deviceId = deviceId;
+    this.salePointId = salePointId;
     this.curBeverages = curDatum.beverages;
     this.curSales = curDatum.sales;
     this.prwBeverages = prwDatum.beverages;

@@ -66,6 +66,7 @@ class Content extends React.Component {
       table.triggerOpenedRow(index);
       this.forceUpdate();
     } : () => {};
+    const heights = new Map([...openedRows.keys()].map((idx) => [idx, data[idx].detailsRowsCount + 1]));
     return (
       <List
         onScroll={this.onScroll}
@@ -80,7 +81,7 @@ class Content extends React.Component {
           }
           const index = this.rowFunc(row);
           if (openedRows.has(index)) {
-            return ROW_HEIGHT + 333;
+            return ROW_HEIGHT + 51.3578 * ((heights.get(row)) || 5);
           }
           return ROW_HEIGHT;
         }}

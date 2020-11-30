@@ -108,12 +108,15 @@ class Drinks extends Table {
     return this.rawData.map(({ id, name }) => [id, name]);
   }
 
-  @action editRecipe(drink) {
-
-  }
-
   get(typeId) {
     return this.rawData.find(({ id }) => id === typeId);
+  }
+
+  getSubset(set) {
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    return this.rawData.filter(({ id }) => set.has(id));
   }
 
   update = applyDrink;

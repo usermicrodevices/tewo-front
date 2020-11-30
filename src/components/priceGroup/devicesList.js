@@ -22,7 +22,7 @@ const DevicesList = ({
   const toDataSource = (device) => ({
     key: device.id,
     name: device.name,
-    syncDate: null,
+    syncDate: device.priceSyncDate,
     isCynchronized: false,
     salePointName: device.salePointName,
     rm: () => element.removeDevice(device.id),

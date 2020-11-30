@@ -226,7 +226,7 @@ class Table {
 
   @computed get data() {
     if (this.isImpossibleToBeSync) {
-      return this.rawData.sort(this.sortPredicate);
+      return this.rawData.slice().sort(this.sortPredicate);
     }
     if (this.isAsync) {
       return this.dataModel.data;
