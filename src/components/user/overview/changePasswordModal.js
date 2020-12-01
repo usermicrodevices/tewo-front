@@ -29,10 +29,7 @@ const ChangePasswordModal = observer(({ user }) => {
             message: 'Минимальная длина пароля – 8 символов',
           }]}
         >
-          <Input.Password
-            name="password"
-
-          />
+          <Input.Password name="password" />
         </Form.Item>
         <Form.Item
           name="repeat"
@@ -52,10 +49,7 @@ const ChangePasswordModal = observer(({ user }) => {
             },
           })]}
         >
-          <Input.Password
-            name="repeat"
-
-          />
+          <Input.Password name="repeat" />
         </Form.Item>
       </Form>
     </Modal>
