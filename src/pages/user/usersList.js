@@ -2,7 +2,7 @@ import React from 'react';
 
 import GenericPage from 'elements/genericPage';
 
-import UserOverview from 'components/user';
+import { UserOverview, UserOverviewActions } from 'components/user/overview';
 
 const UsersList = () => (
   <GenericPage
@@ -10,6 +10,7 @@ const UsersList = () => (
     tableTitle="Пользователи"
     allLinkText="Список пользователей"
     overview={UserOverview}
+    overviewActions={UserOverviewActions}
     overviewSubmenu={[
       {
         path: '',

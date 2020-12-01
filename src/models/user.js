@@ -1,5 +1,7 @@
 import { observable, computed, action } from 'mobx';
 
+import { usersList as usersRout } from 'routes';
+
 import Datum from 'models/datum';
 
 import { applyUser } from 'services/users';
@@ -15,7 +17,7 @@ class User extends Datum {
 
   @observable lastName = '';
 
-  @observable isActive = false;
+  @observable isActive = true;
 
   @observable isStaff = false;
 
@@ -34,6 +36,8 @@ class User extends Datum {
   @observable lastLogin = '';
 
   @observable roleId = null;
+
+  @observable changePasswordShown = false;
 
   @observable session = null;
 
@@ -55,6 +59,27 @@ class User extends Datum {
 
   @action.bound enableAllPoints() {
     this.salePoints.replace([]);
+  }
+
+  @action.bound showChangePassword() {
+    this.changePasswordShown = true;
+  }
+
+  @action.bound hideChangePassword() {
+    this.changePasswordShown = false;
+  }
+
+  @action.bound changePassword(password) {
+    applyUser(this.id, { password })
+      .then(() => {
+        this.changePasswordShown = false;
+      }).catch((err) => {
+        console.error(err);
+      });
+  }
+
+  @computed get viewPath() {
+    return `${usersRout.path}/${this.id}/view`;
   }
 
   @computed get role() {
@@ -145,6 +170,11 @@ class User extends Datum {
           value: this.username,
         },
         {
+          dataIndex: 'isActive',
+          title: 'Активен',
+          value: this.isActive,
+        },
+        {
           dataIndex: 'roleId',
           title: 'Роль',
           value: this.role,
@@ -193,6 +223,11 @@ class User extends Datum {
         value: this.role,
       },
       {
+        dataIndex: 'isActive',
+        title: 'Активен',
+        value: this.isActive,
+      },
+      {
         dataIndex: 'firstName',
         title: 'Имя',
         value: this.firstName,
@@ -225,6 +260,9 @@ class User extends Datum {
       },
       email: {
         type: 'text',
+      },
+      isActive: {
+        type: 'checkbox',
       },
       companies: {
         type: 'selector',

@@ -1,5 +1,7 @@
 /* eslint-disable no-param-reassign */
-import { get, patch, post } from 'utils/request';
+import {
+  get, patch, post, del,
+} from 'utils/request';
 import checkData from 'utils/dataCheck';
 
 import User from 'models/user';
@@ -122,4 +124,8 @@ export async function applyUser(id, changes, session) {
   const response = await request;
 
   return transformUser(response, new User(session));
+}
+
+export async function deleteUser(id) {
+  return del(`${USERS_LOCATION}${id}`);
 }

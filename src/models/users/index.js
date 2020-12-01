@@ -9,7 +9,7 @@ import Table from 'models/table';
 import Filter from 'models/filters';
 import User from 'models/user';
 
-import { createGetUsers, applyUser } from 'services/users';
+import { createGetUsers, applyUser, deleteUser } from 'services/users';
 
 const COLUMNS = {
   id: {
@@ -36,6 +36,12 @@ const COLUMNS = {
     isVisibleByDefault: true,
     title: 'Фамилия',
     grow: 3,
+    sortDirections: 'both',
+  },
+  isActive: {
+    isVisibleByDefault: true,
+    title: 'Активен',
+    grow: 2,
     sortDirections: 'both',
   },
   role: {
@@ -107,7 +113,7 @@ class Users extends Table {
       this.elementForEdit = datum;
     },
     onDelete: (datum) => {
-
+      deleteUser(datum.id).then(this.rawData.splice(this.rawData.findIndex((d) => d === datum), 1));
     },
   };
 
