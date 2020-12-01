@@ -73,7 +73,7 @@ class Company extends Datum {
         type: 'text',
       },
       currencyId: {
-        type: 'text',
+        type: 'selector',
         selector: this.session.currencies.selector,
         isRequired: true,
       },
@@ -125,7 +125,7 @@ class Company extends Datum {
       {
         icon: 'people-outline',
         text: 'Пользователи',
-        link: `/users?company=${this.id}`,
+        link: `/users?companyId__in=${this.id}`,
       },
       {
         icon: 'briefcase-outline',
