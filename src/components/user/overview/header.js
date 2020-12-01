@@ -1,10 +1,11 @@
 import React from 'react';
 import { Button } from 'antd';
 import { observer } from 'mobx-react';
+import cx from 'classnames';
 
 import Typography from 'elements/typography';
 
-const UserOverviewHeader = observer(({ user }) => {
+const UserOverviewHeader = observer(({ user, className }) => {
   const { isAllEnabled, companiesNamesList, enableAllPoints } = user;
 
   const companiesDescriptionElement = isAllEnabled ? (
@@ -25,7 +26,7 @@ const UserOverviewHeader = observer(({ user }) => {
   ) : companiesDescriptionElement;
 
   return (
-    <header>
+    <header className={cx([className])}>
       <Typography.Title level={3}>Доступные объекты пользователя</Typography.Title>
       <Typography.Paragraph>Выберите объекты, к которым у пользователя должен быть доступ. По умолчанию доступны все объекты.</Typography.Paragraph>
       {descriptionElement}

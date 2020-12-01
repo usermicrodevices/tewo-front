@@ -71,6 +71,12 @@ const COLUMNS = {
 };
 
 const declareFilters = (session) => ({
+  role: {
+    type: 'selector',
+    title: 'Роль',
+    apply: (general, data) => general(data.roleId),
+    selector: () => session.roles.selector,
+  },
   companyId: {
     type: 'selector',
     title: 'Компания',
@@ -92,12 +98,6 @@ const declareFilters = (session) => ({
       return false;
     },
     selector: () => session.points.selector,
-  },
-  role: {
-    type: 'selector',
-    title: 'Роль',
-    apply: (general, data) => general(data.roleId),
-    selector: () => session.roles.selector,
   },
 });
 

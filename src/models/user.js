@@ -1,4 +1,5 @@
 import { observable, computed, action } from 'mobx';
+import { message } from 'antd';
 
 import { usersList as usersRout } from 'routes';
 
@@ -48,17 +49,31 @@ class User extends Datum {
   }
 
   @action.bound setPoint(id, checked) {
-    if (checked && this.salePoints.indexOf(id) === -1) {
-      this.salePoints.push(id);
+    const pointsSet = new Set(this.salePoints);
+
+    if (checked) {
+      pointsSet.add(id);
+    } else {
+      pointsSet.delete(id);
     }
 
-    if (!checked && this.salePoints.indexOf(id) > -1) {
-      this.salePoints.splice(this.salePoints.indexOf(id), 1);
-    }
+    applyUser(this.id, { salePoints: Array.from(pointsSet) })
+      .then((user) => {
+        this.salePoints = user.salePoints;
+      })
+      .then(() => {
+        message.success('Обновлен доступ к объекту!');
+      });
   }
 
   @action.bound enableAllPoints() {
-    this.salePoints.replace([]);
+    applyUser(this.id, { salePoints: [] })
+      .then((user) => {
+        this.salePoints = user.salePoints;
+      })
+      .then(() => {
+        message.success('Теперь пользователю доступны все объекты!');
+      });
   }
 
   @action.bound showChangePassword() {
@@ -73,8 +88,12 @@ class User extends Datum {
     applyUser(this.id, { password })
       .then(() => {
         this.changePasswordShown = false;
-      }).catch((err) => {
-        console.error(err);
+      })
+      .then(() => {
+        message.success('Пароль успешно обновлен!');
+      })
+      .catch((err) => {
+        message.success('Произошла ошибка при обновлении пароля!');
       });
   }
 

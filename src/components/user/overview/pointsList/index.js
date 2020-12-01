@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { Checkbox } from 'antd';
 import { observer } from 'mobx-react';
+import cx from 'classnames';
 
 import { Row } from 'elements/collapse';
 
@@ -16,7 +17,7 @@ const UserPointCheckbox = observer(({ point, onChange }) => (
   </Checkbox>
 ));
 
-const UserPointsList = observer(({ user }) => {
+const UserPointsList = observer(({ user, className }) => {
   const points = user.salePointsTableData;
   const loading = points === undefined;
 
@@ -27,7 +28,7 @@ const UserPointsList = observer(({ user }) => {
   }, [user]);
 
   return (
-    <div className={styles.content}>
+    <div className={cx([styles.content, className])}>
       {loading ? null : points.map((sp) => (
         <Row key={sp.id}>
           <UserPointCheckbox point={sp} onChange={onChangePoint} />

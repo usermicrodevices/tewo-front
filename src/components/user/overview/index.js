@@ -6,6 +6,8 @@ import ChangePasswordModal from './changePasswordModal';
 import UserOverviewHeader from './header';
 import UserPointsList from './pointsList';
 
+import styles from './styles.module.scss';
+
 export const UserOverviewActions = inject('element')(observer(({ element }) => (
   <Space>
     <Button onClick={element.showChangePassword}>Сменить пароль</Button>
@@ -15,7 +17,7 @@ export const UserOverviewActions = inject('element')(observer(({ element }) => (
 export const UserOverview = inject('element')(observer(({ element }) => (
   <Card>
     <UserOverviewHeader user={element} />
-    <UserPointsList user={element} />
+    <UserPointsList user={element} className={styles.pointsList} />
     <ChangePasswordModal user={element} />
   </Card>
 )));
