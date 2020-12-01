@@ -109,7 +109,7 @@ const declareFilters = (session) => ({
     type: 'selector',
     title: 'Приоритет',
     apply: (general, data) => general(data.priority),
-    selector: () => session.eventTypes.prioritySelector,
+    selector: () => session.eventPriorities.selector,
   },
   device__sale_point__company__id: {
     type: 'selector',

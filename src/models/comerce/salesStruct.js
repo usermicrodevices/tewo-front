@@ -20,14 +20,14 @@ const declareColumns = () => ({
     title: 'Количество',
     grow: 1,
     sortDirections: 'both',
+    isDefaultSort: true,
+    isAsyncorder: true,
   },
   sales: {
     isVisibleByDefault: true,
     title: 'Сумма продаж',
     grow: 1,
     sortDirections: 'both',
-    isDefaultSort: true,
-    isAsyncorder: true,
   },
   partOfAll: {
     isVisibleByDefault: true,
