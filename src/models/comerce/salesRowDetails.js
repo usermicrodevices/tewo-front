@@ -33,7 +33,7 @@ class Details {
         prw: pewValue ? pewValue.beverages : null,
       };
       const sales = {
-        cur: curSales / 100,
+        cur: curSales,
         prw: pewValue ? pewValue.sales : null,
       };
       return {

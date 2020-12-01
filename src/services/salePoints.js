@@ -1,6 +1,7 @@
 /* eslint no-param-reassign: off */
 import { transaction } from 'mobx';
 import moment from 'moment';
+import apiCheckConsole from 'utils/console';
 
 import {
   get, post, patch, del,
@@ -51,7 +52,7 @@ const MAY_BE = {
 
 const converter = (data, result) => {
   if (!checkData(data, SHUILD_BE, MAY_BE)) {
-    console.error(`обнаружены ошибки при обработке эндпоинта ${LOCATION}`);
+    apiCheckConsole.error(`обнаружены ошибки при обработке эндпоинта ${LOCATION}`);
   }
 
   for (const [jsonName, objectName] of Object.entries(RENAMER)) {
@@ -63,7 +64,7 @@ const converter = (data, result) => {
 const getSalePoints = (session) => () => new Promise((resolve, reject) => {
   const getBasic = get(LOCATION).then((salePoints) => {
     if (!Array.isArray(salePoints)) {
-      console.error(`${LOCATION} ожидаеся в ответ массив, получен ${typeof salePoints}`, salePoints);
+      apiCheckConsole.error(`${LOCATION} ожидаеся в ответ массив, получен ${typeof salePoints}`, salePoints);
       reject(salePoints);
       return { count: 0, responce: [] };
     }
@@ -95,7 +96,7 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
         }
       }
     } else {
-      console.error(`${LOCATION_EXT} ожидаеся в ответ массив, получен ${typeof data}`, data);
+      apiCheckConsole.error(`${LOCATION_EXT} ожидаеся в ответ массив, получен ${typeof data}`, data);
     }
     return result;
   });
@@ -130,12 +131,12 @@ const getSalesTop = (filter) => {
   return get(location)
     .then((result) => {
       if (!Array.isArray(result)) {
-        console.error(`can not ger data from ${location}`, result);
+        apiCheckConsole.error(`can not ger data from ${location}`, result);
         return [];
       }
       return result.map((d) => {
         if (!checkData(d, mustBe)) {
-          console.error(`unexpected data from ${location}`, d);
+          apiCheckConsole.error(`unexpected data from ${location}`, d);
         }
         return {
           drinkId: d.drink_id,

@@ -3,6 +3,7 @@ import { transaction } from 'mobx';
 import {
   get, post, patch, del,
 } from 'utils/request';
+import apiCheckConsole from 'utils/console';
 import checkData from 'utils/dataCheck';
 
 export const getNotificationTypes = (acceptor) => get('/refs/notification_types/').then((json) => {
@@ -11,11 +12,11 @@ export const getNotificationTypes = (acceptor) => get('/refs/notification_types/
       if (checkData(item, { id: 'number', name: 'string', value: 'string' })) {
         acceptor.set(item.id, { name: item.name, value: item.value });
       } else {
-        console.error('unexpected notification_type response');
+        apiCheckConsole.error('unexpected notification_type response');
       }
     }
   } else {
-    console.error('unexpected notification_type response');
+    apiCheckConsole.error('unexpected notification_type response');
   }
 });
 
@@ -32,12 +33,12 @@ export const getNotificationSources = (acceptor) => get('/refs/notification_sour
             description: item.description,
           });
         } else {
-          console.error('unexpected notification_source response');
+          apiCheckConsole.error('unexpected notification_source response');
         }
       }
     });
   } else {
-    console.error('unexpected notification_source response');
+    apiCheckConsole.error('unexpected notification_source response');
   }
 });
 
@@ -57,14 +58,14 @@ export const getNotificationSettings = () => get('/refs/notification_options/cur
           types: item.types,
         };
       } else {
-        console.error('unexpected notification_settings response');
+        apiCheckConsole.error('unexpected notification_settings response');
       }
     }
 
     return result;
   }
 
-  console.error('unexpected notification_settings response');
+  apiCheckConsole.error('unexpected notification_settings response');
   return undefined;
 });
 
@@ -77,7 +78,7 @@ export const updateNotificationSettings = (settings) => {
   const isSettingsCorrect = isAllKeysNumbers && isAllNestedKeysNumbers && isAllNestedValuesArraysOfNumbers;
 
   if (!isSettingsCorrect) {
-    console.error('unexpected settings format', {
+    apiCheckConsole.error('unexpected settings format', {
       isAllKeysNumbers, isAllNestedKeysNumbers, isAllNestedValuesArraysOfNumbers,
     });
 
@@ -97,14 +98,14 @@ export const getNotificationDelays = () => get('/refs/notification_delays/curren
       })) {
         result.push(item);
       } else {
-        console.error('unexpected notification_delay response');
+        apiCheckConsole.error('unexpected notification_delay response');
       }
     }
 
     return result;
   }
 
-  console.error('unexpected notification_delay response');
+  apiCheckConsole.error('unexpected notification_delay response');
   return undefined;
 });
 

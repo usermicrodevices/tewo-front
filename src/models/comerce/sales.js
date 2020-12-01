@@ -42,10 +42,25 @@ const declareColumns = () => ({
 class Sales extends Table {
   @observable chart;
 
-  @observable properties = {};
+  @observable properties = {
+    visibleCurves: SALES_DATA_TYPES.slice(0, 2).map(({ value }) => value),
+  };
 
   @computed get beveragesSeriaPrw() {
     return this.chart.prw.beveragesSeria;
+  }
+
+  @computed get wholeSales() {
+    if (!this.isLoaded) {
+      return {
+        cur: undefined,
+        prw: undefined,
+      };
+    }
+    return {
+      cur: this.chart?.cur.sales / 100,
+      prw: this.chart?.prw.sales / 100,
+    };
   }
 
   @computed get salesSeriaPrw() {
@@ -107,19 +122,6 @@ class Sales extends Table {
         apply: (general, data) => general(data.drink),
         selector: () => session.drinks.selector,
         disabled: (filter) => !filter.data.has('device__id'),
-      },
-      operation__id: {
-        type: 'selector',
-        title: 'Тип оплаты',
-        apply: (general, data) => general(data.sale_sum),
-        selector: () => session.beverageOperations.selector,
-        disabled: true,
-      },
-      canceled: {
-        type: 'checkbox',
-        title: 'Отмемённые',
-        apply: (_, data) => data.canceled,
-        passiveValue: false,
       },
     });
     filters.set('device_date', SemanticRanges.curMonth.resolver());

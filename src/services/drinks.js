@@ -3,6 +3,7 @@ import {
 } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import Drink from 'models/drinks/drink';
+import apiCheckConsole from 'utils/console';
 import { getRecipes } from './recipes';
 
 const LOCATION = '/refs/drinks/';
@@ -39,7 +40,7 @@ const transform = (json, acceptor) => {
       nds: 'number',
     },
   )) {
-    console.error(`Неожиданный ответ по адресу ${LOCATION}`, json);
+    apiCheckConsole.error(`Неожиданный ответ по адресу ${LOCATION}`, json);
   }
 
   for (const [jsonName, modelName] of Object.entries(RENAMER)) {
@@ -51,7 +52,7 @@ const transform = (json, acceptor) => {
 
 const getDrinksWithoutRecipe = (session) => () => get(LOCATION).then((result) => {
   if (!Array.isArray(result)) {
-    console.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
+    apiCheckConsole.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
   }
   return {
     count: result.length,
@@ -68,7 +69,7 @@ const getDrinks = (session) => () => Promise.all([getDrinksWithoutRecipe(session
     }
   }
   if (recipes.size !== 0) {
-    console.error('Обнаружены рецепты, не связанные с напитком', recipes);
+    apiCheckConsole.error('Обнаружены рецепты, не связанные с напитком', recipes);
   }
   return drinks;
 });

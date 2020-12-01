@@ -1,5 +1,6 @@
 import { get } from 'utils/request';
 import checkData from 'utils/dataCheck';
+import apiCheckConsole from 'utils/console';
 
 const getCurrencies = (map) => get('/refs/currencies/').then((data) => {
   if (Array.isArray(data)) {
@@ -11,11 +12,11 @@ const getCurrencies = (map) => get('/refs/currencies/').then((data) => {
       })) {
         map.set(json.id, { name: json.name, alias: json.alias });
       } else {
-        console.error('неожиданный ответ от словаря валют', json);
+        apiCheckConsole.error('неожиданный ответ от словаря валют', json);
       }
     }
   } else {
-    console.error('Словарь валют - не массив', data);
+    apiCheckConsole.error('Словарь валют - не массив', data);
   }
 });
 

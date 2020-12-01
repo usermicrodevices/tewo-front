@@ -5,6 +5,7 @@ import moment from 'moment';
 import {
   get, patch, post, del,
 } from 'utils/request';
+import apiCheckConsole from 'utils/console';
 import checkData from 'utils/dataCheck';
 import Price from 'models/price/price';
 import PriceGroup from 'models/price/group';
@@ -21,7 +22,7 @@ const priceObjectFromJSON = (json, acceptor) => {
       id: 'number',
     },
   )) {
-    console.error(`Неожиданный ответ по адресу ${PRICES_LOCATION}`, json);
+    apiCheckConsole.error(`Неожиданный ответ по адресу ${PRICES_LOCATION}`, json);
   }
   const renamer = {
     drink: 'drinkId',
@@ -41,7 +42,7 @@ const priceFromJSON = (session) => (json) => priceObjectFromJSON(json, new Price
 function getPrices(session) {
   return () => get(PRICES_LOCATION).then((result) => {
     if (!Array.isArray(result)) {
-      console.error(`по ${PRICES_LOCATION} ожидается массив, получен ${typeof result}`, result);
+      apiCheckConsole.error(`по ${PRICES_LOCATION} ожидается массив, получен ${typeof result}`, result);
     }
     return {
       count: result.length,
@@ -77,7 +78,7 @@ const transform = (json, group) => {
     conception: 'number',
     last_update: 'date',
   })) {
-    console.error(`Неожиданные данные для групп цен ${LOCATION}`, json);
+    apiCheckConsole.error(`Неожиданные данные для групп цен ${LOCATION}`, json);
   }
   group.id = json.id;
   group.name = json.name;
@@ -93,7 +94,7 @@ const transform = (json, group) => {
 function getPriceGroups(session) {
   return () => get(LOCATION).then((result) => {
     if (!Array.isArray(result)) {
-      console.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
+      apiCheckConsole.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
     }
     return {
       count: result.length,

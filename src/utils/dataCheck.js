@@ -1,11 +1,12 @@
 /* eslint valid-typeof: "off", max-len: off */
+import apiCheckConsole from './console';
 import { isColor } from './color';
 
 function checkData(data, shouldBe, mayBe, tests) {
   const keysSet = Object.keys(data).reduce((set, datum) => ({ [datum]: datum, ...set }), {});
   for (const [key, type] of Object.entries(shouldBe)) {
     if (!(key in data)) {
-      console.error(`Обязательное поле ${key} не получено`);
+      apiCheckConsole.error(`Обязательное поле ${key} не получено`);
       return false;
     }
     if (!typecheck(data[key], key, type)) {
@@ -26,21 +27,21 @@ function checkData(data, shouldBe, mayBe, tests) {
   const unexpectedKeys = Object.keys(keysSet);
   if (unexpectedKeys.length > 0) {
     if (unexpectedKeys.length > 1) {
-      console.error(`Обнаружены неизвестные поля: [${unexpectedKeys.join(', ')}]`);
+      apiCheckConsole.error(`Обнаружены неизвестные поля: [${unexpectedKeys.join(', ')}]`);
       return false;
     }
-    console.error(`Обнаружено неизвестное поле: ${unexpectedKeys[0]}`, data);
+    apiCheckConsole.error(`Обнаружено неизвестное поле: ${unexpectedKeys[0]}`, data);
     return false;
   }
   if (typeof tests !== 'undefined') {
     for (const [key, func] of Object.entries(tests)) {
       if (key in data) {
         if (!func(data[key])) {
-          console.error(`Не пройдена проверка данных для поля ${key}`, data);
+          apiCheckConsole.error(`Не пройдена проверка данных для поля ${key}`, data);
           return false;
         }
       } else if (!(key in mayBe)) {
-        console.error(`Обнаружена неконсистентность проверочных данных для поля ${key}`, data, shouldBe, mayBe, tests);
+        apiCheckConsole.error(`Обнаружена неконсистентность проверочных данных для поля ${key}`, data, shouldBe, mayBe, tests);
         return false;
       }
     }
@@ -54,11 +55,11 @@ function typecheck(datum, key, type) {
   }
   if (type === 'date') {
     if (typeof datum !== 'string') {
-      console.error(`Для поля ${key} ожидается тип date, представленный в виде строки, получен ${typeof datum}`, datum);
+      apiCheckConsole.error(`Для поля ${key} ожидается тип date, представленный в виде строки, получен ${typeof datum}`, datum);
       return false;
     }
     if (isNaN(Date.parse(datum))) {
-      console.error(`Для поля ${key} ожидается тип date, переданная строка не являющаяся датой`, datum);
+      apiCheckConsole.error(`Для поля ${key} ожидается тип date, переданная строка не являющаяся датой`, datum);
       return false;
     }
     return true;
@@ -67,16 +68,16 @@ function typecheck(datum, key, type) {
     if (Array.isArray(datum)) {
       return true;
     }
-    console.error(`Для поля ${key} ожидается тип array, полученные данные не являются массивом`, datum, typeof datum);
+    apiCheckConsole.error(`Для поля ${key} ожидается тип array, полученные данные не являются массивом`, datum, typeof datum);
     return false;
   }
   if (type === 'color') {
     if (typeof datum !== 'string') {
-      console.error(`Для поля ${key} ожидается тип color, представленный в виде строки, получен ${typeof datum}`, datum);
+      apiCheckConsole.error(`Для поля ${key} ожидается тип color, представленный в виде строки, получен ${typeof datum}`, datum);
       return false;
     }
     if (!isColor(datum)) {
-      console.error(`Для поля ${key} ожидается тип color, переданная строка не
+      apiCheckConsole.error(`Для поля ${key} ожидается тип color, переданная строка не
       являющаяся цветом в формате #[a-fA-F0-9]{6}, другие форматы цвета не поддерживаются`, datum);
       return false;
     }
@@ -88,14 +89,14 @@ function typecheck(datum, key, type) {
       if (location.length === 2 && location.filter(isFinite).length === 2) {
         return true;
       }
-      console.error(`Для поля ${key} ожидается тип location, полученные данные содержат не два числа (${location.length})`, datum);
+      apiCheckConsole.error(`Для поля ${key} ожидается тип location, полученные данные содержат не два числа (${location.length})`, datum);
       return false;
     }
-    console.error(`Для поля ${key} ожидается тип location, полученные данные не являются строкой`, datum);
+    apiCheckConsole.error(`Для поля ${key} ожидается тип location, полученные данные не являются строкой`, datum);
     return false;
   }
   if (typeof datum !== type) {
-    console.error(`Для поля ${key} ожидается тип ${type}, обнаружен ${typeof datum}`);
+    apiCheckConsole.error(`Для поля ${key} ожидается тип ${type}, обнаружен ${typeof datum}`);
     return false;
   }
   return true;

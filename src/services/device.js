@@ -5,6 +5,7 @@ import { transaction } from 'mobx';
 import { get, patch, post } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import Device from 'models/devices/device';
+import apiCheckConsole from 'utils/console';
 
 import { getBeveragesStats } from './beverage';
 
@@ -55,7 +56,7 @@ function converter(json, acceptor) {
       sync_date: 'date',
     },
   )) {
-    console.error(`Неожиданный ответ по адресу ${LOCATION}`, json);
+    apiCheckConsole.error(`Неожиданный ответ по адресу ${LOCATION}`, json);
   }
   for (const [jsonName, modelName] of Object.entries(RENAMER)) {
     if (modelName.indexOf('Date') >= 0) {
@@ -70,7 +71,7 @@ function converter(json, acceptor) {
 const getDevices = (session) => () => new Promise((resolve, reject) => {
   const general = get(LOCATION).then((result) => {
     if (!Array.isArray(result)) {
-      console.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
+      apiCheckConsole.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
     }
     const responce = {
       count: result.length,
@@ -101,7 +102,7 @@ const getDevices = (session) => () => new Promise((resolve, reject) => {
         }
       }
     } else {
-      console.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
+      apiCheckConsole.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
     }
     return addition;
   });
@@ -128,7 +129,7 @@ function getDeviceModels(map) {
           decalcents: 'number',
           threshold_drinks_cleaning: 'number',
         }, { device_type: 'number' })) {
-          console.error('Неожиданные данные для моделей устройств /refs/device_models', datum);
+          apiCheckConsole.error('Неожиданные данные для моделей устройств /refs/device_models', datum);
         }
         map.set(datum.id, {
           name: datum.name,
@@ -161,11 +162,11 @@ const getStats = (id) => get(`${LOCATION}${id}/stats/`).then((json) => {
   };
 
   if (!checkData(json, mustBe)) {
-    console.error(`undexpected responce for ${id} device details`);
+    apiCheckConsole.error(`undexpected responce for ${id} device details`);
   }
 
   if (json.iterations !== json.iterations_to + json.remain_iterations_to) {
-    console.error(`device dtail consistency error: ${json.iterations_to} + ${json.remain_iterations_to} !== ${json.iterations}
+    apiCheckConsole.error(`device dtail consistency error: ${json.iterations_to} + ${json.remain_iterations_to} !== ${json.iterations}
       (${json.iterations_to + json.remain_iterations_to} found)`);
   }
 
@@ -215,11 +216,11 @@ const getDeviceTypes = (acceptor) => get('/refs/device_types').then((json) => {
       if (checkData(item, { id: 'number', name: 'string' })) {
         acceptor.set(item.id, item.name);
       } else {
-        console.error('unexpected device_type recponce');
+        apiCheckConsole.error('unexpected device_type recponce');
       }
     }
   } else {
-    console.error('unexpected device_type recponce');
+    apiCheckConsole.error('unexpected device_type recponce');
   }
 });
 

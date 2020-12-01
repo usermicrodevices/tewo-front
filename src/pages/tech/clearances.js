@@ -98,7 +98,7 @@ class Clearances extends React.Component {
         <div className={classes.grid}>
           <Calendar />
           <Stats />
-          <Card>
+          <Card className={classes.table}>
             <Table />
           </Card>
         </div>

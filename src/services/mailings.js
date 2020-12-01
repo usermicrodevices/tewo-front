@@ -5,6 +5,7 @@ import {
 import checkData from 'utils/dataCheck';
 
 import Mailing from 'models/mailings/mailing';
+import apiCheckConsole from 'utils/console';
 
 const LOCATION = '/refs/notification_bulk_emails/';
 const EMAIL_SEPARATOR = ';';
@@ -57,13 +58,13 @@ const transform = (data, mailing) => {
   };
 
   if (!checkData(data, shouldBe)) {
-    console.error(`обнаружены ошибки при обработке эндпоинта ${LOCATION}`);
+    apiCheckConsole.error(`обнаружены ошибки при обработке эндпоинта ${LOCATION}`);
   }
 
   if (Array.isArray(data.notifications)) {
     for (let i = 0; i < data.notifications.length; i += 1) {
       if (!checkData(data.notifications[i], notificationShouldBe, notificationMayBe)) {
-        console.error(`обнаружены ошибки при обработке эндпоинта ${LOCATION} для поля notifications`, data.notifications[i]);
+        apiCheckConsole.error(`обнаружены ошибки при обработке эндпоинта ${LOCATION} для поля notifications`, data.notifications[i]);
 
         return mailing;
       }
@@ -104,7 +105,7 @@ const form = (data) => {
 const getMailings = (session) => () => new Promise((resolve, reject) => {
   get(LOCATION).then((mailings) => {
     if (!Array.isArray(mailings)) {
-      console.error(`${LOCATION} ожидаеся в ответ массив, получен ${typeof mailings}`, mailings);
+      apiCheckConsole.error(`${LOCATION} ожидаеся в ответ массив, получен ${typeof mailings}`, mailings);
     }
 
     const results = mailings.map((mailing) => transform(mailing, new Mailing(session)));

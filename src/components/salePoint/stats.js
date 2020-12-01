@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card, Divider } from 'antd';
-import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
 

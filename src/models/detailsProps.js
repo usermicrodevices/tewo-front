@@ -29,6 +29,8 @@ const SALES_DATA_TYPES = [
   },
 ];
 
+const SALES_CHART_LABELS = [{ text: 'Наливов в день', decimalsInFloat: 0 }, { text: 'Динамика продаж, ₽', decimalsInFloat: 2 }];
+
 const DEFAUL_CURVES = SALES_DATA_TYPES.filter(({ axis }) => axis).map(({ value }) => value);
 
 class DetailsProps {
@@ -67,4 +69,4 @@ class DetailsProps {
   }
 }
 
-export { DetailsProps as default, SALES_DATA_TYPES };
+export { DetailsProps as default, SALES_DATA_TYPES, SALES_CHART_LABELS };

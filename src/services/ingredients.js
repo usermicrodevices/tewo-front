@@ -3,6 +3,7 @@ import {
 } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import Ingredient from 'models/ingredients/ingredient';
+import apiCheckConsole from 'utils/console';
 
 const LOCATION = '/refs/ingredients/';
 
@@ -36,7 +37,7 @@ const transform = (json, acceptor) => {
       dimension: 'string',
     },
   )) {
-    console.error(`Неожиданный ответ по адресу ${LOCATION}`, json);
+    apiCheckConsole.error(`Неожиданный ответ по адресу ${LOCATION}`, json);
   }
 
   for (const [jsonName, modelName] of Object.entries(RENAMER)) {
@@ -48,7 +49,7 @@ const transform = (json, acceptor) => {
 
 const getIngredients = (session) => () => get(LOCATION).then((result) => {
   if (!Array.isArray(result)) {
-    console.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
+    apiCheckConsole.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
   }
   return {
     count: result.length,

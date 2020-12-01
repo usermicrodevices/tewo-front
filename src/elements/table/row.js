@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Button, Popconfirm } from 'antd';
-import { EditOutlined, DeleteOutlined, RightOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, DownOutlined } from '@ant-design/icons';
 
 import Loader from 'elements/loader';
 import classNames from 'classnames';
@@ -63,11 +63,11 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions, onRowClic
         { actions.isVisible && (
           <div
             style={{ width: ACTIONS_COLUMN_WIDT - SCROLL_PANE_WIDTH }}
-            className={classNames(styles['virtual-table-cell'], styles.lastcolumn, styles.actions)}
+            className={classNames(styles['virtual-table-cell'], styles.lastcolumn, styles.actions, { [styles.hidehover]: !actions.detailsWidget })}
           >
             { actions.detailsWidget && (
-              <div className={styles.collapseicon} style={{ transform: `rotate(${openedRows.has(index) ? 90 : 0}deg)` }}>
-                <RightOutlined />
+              <div className={styles.collapseicon} style={{ transform: `rotate(${openedRows?.has(index) ? 180 : 0}deg)` }}>
+                <DownOutlined />
               </div>
             )}
             { typeof actions.onEdit === 'function' && (
@@ -87,7 +87,7 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions, onRowClic
           </div>
         )}
       </div>
-      {openedRows.has(index) && (
+      {openedRows?.has(index) && (
         <actions.detailsWidget columnWidth={columnWidth} index={index} item={rowData} />
       )}
     </div>

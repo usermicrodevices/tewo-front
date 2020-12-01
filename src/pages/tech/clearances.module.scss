@@ -5,13 +5,13 @@
   grid-template-columns: auto 228px;
   column-gap: $generic-margin;
   row-gap: $generic-margin;
-  max-height: calc(100vh - 210px);
+  max-height: calc(100vh - 180px);
   min-height: 1000px;
 
-  >div:last-child {
+  .table {
+    overflow: hidden;
     grid-column: span 2;
   }
-
 
   .legend {
     display: flex;
