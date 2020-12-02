@@ -7,6 +7,7 @@ import Table from 'elements/table';
 import Format from 'elements/format';
 import { Pie, PIE_COLORS } from 'elements/chart/pie';
 import Typography from 'elements/typography';
+import Badge from 'elements/badged';
 
 import classes from './index.module.scss';
 
@@ -21,8 +22,9 @@ const Label = ({ value, caption }) => (
 
 const toLabel = (offset) => (({ drinkName, drinkId, beverages }, id) => (
   <div key={drinkId}>
-    <div className={classes.dot} style={{ backgroundColor: PIE_COLORS[id + offset] }} />
-    <Typography.Text><Format>{drinkName}</Format></Typography.Text>
+    <Badge size={11} stateColor={PIE_COLORS[id + offset]}>
+      <Typography.Text><Format>{drinkName}</Format></Typography.Text>
+    </Badge>
     <Typography.Value><Format>{beverages}</Format></Typography.Value>
   </div>
 ));

@@ -9,9 +9,9 @@ import Card from 'elements/card';
 import GenericCalendar from 'elements/calendar';
 import colors from 'themes/calendar';
 import Badge from 'elements/badged';
-import Icon from 'elements/icon';
 import Format from 'elements/format';
 import Typography from 'elements/typography';
+import SummaryCard from 'elements/card/summary';
 
 import classes from './clearances.module.scss';
 
@@ -49,13 +49,7 @@ const Stats = inject('table')(observer(({ table }) => {
     detergent /= 1e3;
   }
   return (
-    <AntdCard className={classes.stats}>
-      <div className={classes.title}>
-        <Typography.Title level={4}>
-          <Icon size={18} name="bar-chart-outline" />
-          Сводная информация
-        </Typography.Title>
-      </div>
+    <SummaryCard>
       <div>
         <Typography.Value size="xl"><Format>{ table.isLoaded ? table.data.length : undefined }</Format></Typography.Value>
         <Typography.Caption>очисток за период</Typography.Caption>
@@ -71,7 +65,7 @@ const Stats = inject('table')(observer(({ table }) => {
         </div>
         <Typography.Caption>потрачено жидкости</Typography.Caption>
       </div>
-    </AntdCard>
+    </SummaryCard>
   );
 }));
 

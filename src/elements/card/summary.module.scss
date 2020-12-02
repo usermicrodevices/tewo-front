@@ -1,0 +1,25 @@
+@import 'src/themes/constants';
+
+.stats > div {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 100%;
+  &:before, &:after {
+    display: none;
+  }
+
+  >div>div {
+    display: flex;
+    align-items: baseline;
+  }
+
+  .title {
+    svg {
+    fill: $link-color;
+    margin-right: 8px;
+    font-size: 14px;
+    line-height: 22px;
+    }
+  }
+}

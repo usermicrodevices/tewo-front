@@ -1,22 +1,13 @@
 import React from 'react';
-import { Card as AntdCard } from 'antd';
 import { inject, observer } from 'mobx-react';
 
-import Icon from 'elements/icon';
 import Format from 'elements/format';
 import Typography from 'elements/typography';
 import ChangesLabel from 'elements/changesLabel';
-
-import classes from './index.module.scss';
+import SummaryCard from 'elements/card/summary';
 
 const Stats = ({ table: { wholeSales: { cur, prw } } }) => (
-  <AntdCard className={classes.stats}>
-    <div className={classes.title}>
-      <Typography.Title level={4}>
-        <Icon size={18} name="bar-chart-outline" />
-        Сводная информация
-      </Typography.Title>
-    </div>
+  <SummaryCard>
     <div>
       <Typography.Value size="xl"><Format>{ cur }</Format></Typography.Value>
       <Typography.Caption>сумма продаж за текущий период</Typography.Caption>
@@ -31,7 +22,7 @@ const Stats = ({ table: { wholeSales: { cur, prw } } }) => (
       <Typography.Value size="xl"><Format>{ prw }</Format></Typography.Value>
       <Typography.Caption>сумма продаж за предыдущий период</Typography.Caption>
     </div>
-  </AntdCard>
+  </SummaryCard>
 );
 
 export default inject('table')(observer(Stats));

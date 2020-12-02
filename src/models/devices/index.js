@@ -196,4 +196,4 @@ class Devices extends Table {
   applyDevice = applyDevice;
 }
 
-export default Devices;
+export { Devices as default, declareFilters as DECLARE_DEVICE_FILTERS };

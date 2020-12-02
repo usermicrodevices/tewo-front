@@ -124,7 +124,7 @@ class Sales extends Table {
         disabled: (filter) => !filter.data.has('device__id'),
       },
     });
-    filters.set('device_date', SemanticRanges.curMonth.resolver());
+    filters.set('device_date', SemanticRanges.prw30Days.resolver());
 
     filters.isShowSearch = false;
 

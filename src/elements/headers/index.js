@@ -5,9 +5,8 @@ import { inject, observer } from 'mobx-react';
 import {
   Button, Space, Menu, Dropdown, Tooltip,
 } from 'antd';
-import { FilterOutlined } from '@ant-design/icons';
 
-import Filters from 'elements/filters';
+import { FiltersButton } from 'elements/filters';
 import Icon from 'elements/icon';
 import Typography from 'elements/typography';
 import HTMLEntity from 'elements/htmlEntity';
@@ -111,7 +110,7 @@ const ElementHeader = inject('element')(({
   </SubpageHeader>
 ));
 
-const TableHeader = inject('table')(observer(({ title, table }) => {
+const TableHeader = inject('table')(observer(({ title, table, customButtons }) => {
   const { filter } = table;
   const { filters } = filter;
   const isHaveFilters = Object.keys(filters).length !== 0;
@@ -129,18 +128,13 @@ const TableHeader = inject('table')(observer(({ title, table }) => {
             && <Button onClick={() => { table.create(); }} icon={<Icon size={22} name="plus-circle-outline" />} type="text" /> }
         </Space>
         <Space>
-          <Dropdown overlay={<ColumnsPicker onReorder={onReorder} onChange={onColumnsPicked} visibleColumns={table.visibleColumns} />} placement="bottomLeft">
-            <Button icon={<Icon name="more-vertical-outline" />}>Колонки</Button>
-          </Dropdown>
-          { isHaveFilters && (
-            <Dropdown overlay={<Filters />} placement="bottomLeft">
-              <Button
-                type={filter.search !== '' ? 'primary' : 'default'}
-                icon={<FilterOutlined />}
-              >
-                Фильтрация
-              </Button>
-            </Dropdown>
+          { customButtons || (
+            <>
+              <Dropdown overlay={<ColumnsPicker onReorder={onReorder} onChange={onColumnsPicked} visibleColumns={table.visibleColumns} />} placement="bottomLeft">
+                <Button icon={<Icon name="more-vertical-outline" />}>Колонки</Button>
+              </Dropdown>
+              { isHaveFilters && <FiltersButton />}
+            </>
           )}
         </Space>
       </div>

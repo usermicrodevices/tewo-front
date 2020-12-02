@@ -18,6 +18,8 @@ import Drinks from 'pages/reference/drink';
 import Ingredients from 'pages/reference/ingredients';
 import PriceList from 'pages/reference/price';
 import Sales from 'pages/comerce/sales';
+import Cleans from 'pages/comerce/cleans';
+import Cancellations from 'pages/comerce/cancelations';
 
 class Rout {
   path;
@@ -56,9 +58,13 @@ const downtimeLog = new Rout('/downtime_log', Downtime);
 const eventsLog = new Rout('/events_log', Events);
 const cleansLog = new Rout('/cleans_log', Clearances);
 const sales = new Rout('/sales', Sales);
+const cleans = new Rout('/cleans', Cleans);
+const cancellations = new Rout('/cancellations', Cancellations);
 
 const authorizedRoutes = [
+  cancellations,
   sales,
+  cleans,
   account,
   notifications,
   mailings,
@@ -84,6 +90,8 @@ const defaultAuthorizedRout = dashboard;
 const defaultUnauthorizedRout = signin;
 
 export {
+  cancellations,
+  cleans,
   signup,
   signin,
   dashboard,

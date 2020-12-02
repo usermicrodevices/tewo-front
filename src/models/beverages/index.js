@@ -151,4 +151,4 @@ class Beverages extends Table {
   }
 }
 
-export default Beverages;
+export { Beverages as default, declareFilters as DECLARE_BEVERAGES_FILTERS };

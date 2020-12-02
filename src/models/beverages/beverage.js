@@ -66,6 +66,12 @@ class Beverage {
     return device && device.salePointName;
   }
 
+  @computed get companyName() {
+    const { device } = this;
+    const company = device && this.device.company;
+    return company && company.name;
+  }
+
   @computed get salePointId() {
     const { device } = this;
     return device && device.salePointId;

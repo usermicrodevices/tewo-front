@@ -142,72 +142,93 @@ const getEventTypes = (session) => () => get(TYPES_LOCATION).then((results) => {
 
 const patchEventType = (id, data) => patch(`${TYPES_LOCATION}${id}`, form(data)).then((josn) => transform(josn, {}));
 
-const getEventsClearancesChart = (deviceId, daterange) => get(
-  `/data/events/cleanings/?device__id=${deviceId}${daterangeToArgs(daterange, 'open_date')}`,
-).then((result) => {
-  if (!Array.isArray(result)) {
-    apiCheckConsole.error('can not ger data from /data/events/cleanings/', result);
-    return [];
-  }
-  const mustBe = {
-    day: 'date',
-    actual: 'number',
-    expected: 'number',
-    beverages: 'number',
-  };
-  if (!Array.isArray(result)) {
-    apiCheckConsole.error('can not ger data from /data/events/cleanings/', result);
-    return [];
-  }
-  for (const d of result) {
-    if (!checkData(d, mustBe)) {
-      apiCheckConsole.error('Неожиданные данные для эндпоинта /data/events/cleanings/', d);
+const getEventsClearancesChart = (deviceId, daterange) => {
+  const args = (() => {
+    if (!Array.isArray(deviceId)) {
+      return `?device__id=${deviceId}${daterangeToArgs(daterange, 'open_date')}`;
     }
-  }
-  const isRangeGiven = isDateRange(daterange);
-  if (!isRangeGiven && result.length === 0) {
-    return [];
-  }
-  const finalDateRange = isRangeGiven
-    ? daterange
-    : [moment(result[0].day), moment(result[result.length - 1].day)];
-  return [...alineDates(
-    finalDateRange,
-    86400,
-    result.map(({ day, ...other }) => ({ moment: day, ...other })),
-    (item) => (
-      item ? {
-        fact: item.actual,
-        expect: item.expected,
-        beverages: item.beverages,
-      } : {
-        fact: 0,
-        expect: 0,
-        beverages: 0,
+    if (deviceId.length === 1) {
+      return `?device__id=${deviceId[0]}${daterangeToArgs(daterange, 'open_date')}`;
+    }
+    if (deviceId.length > 1) {
+      return `?device__id__in=${deviceId}${daterangeToArgs(daterange, 'open_date')}`;
+    }
+    const range = daterangeToArgs(daterange, 'open_date');
+    if (range) {
+      return `?${daterangeToArgs(daterange, 'open_date').slice(1)}`;
+    }
+    return '';
+  })();
+  return get(
+    `/data/events/cleanings/${args}`,
+  ).then((result) => {
+    if (!Array.isArray(result)) {
+      apiCheckConsole.error('can not ger data from /data/events/cleanings/', result);
+      return [];
+    }
+    const mustBe = {
+      day: 'date',
+      actual: 'number',
+      expected: 'number',
+      beverages: 'number',
+    };
+    if (!Array.isArray(result)) {
+      apiCheckConsole.error('can not ger data from /data/events/cleanings/', result);
+      return [];
+    }
+    for (const d of result) {
+      if (!checkData(d, mustBe)) {
+        apiCheckConsole.error('Неожиданные данные для эндпоинта /data/events/cleanings/', d);
       }
-    ),
-  )];
-});
+    }
+    const isRangeGiven = isDateRange(daterange);
+    if (!isRangeGiven && result.length === 0) {
+      return [];
+    }
+    const finalDateRange = isRangeGiven
+      ? daterange
+      : [moment(result[0].day), moment(result[result.length - 1].day)];
+    return [...alineDates(
+      finalDateRange,
+      86400,
+      result.map(({ day, ...other }) => ({ moment: day, ...other })),
+      (item) => (
+        item ? {
+          fact: item.actual,
+          expect: item.expected,
+          beverages: typeof item.beverages === 'number' ? item.beverages : 0,
+        } : {
+          fact: 0,
+          expect: 0,
+          beverages: 0,
+        }
+      ),
+    )];
+  });
+};
 
-const getDetergrnts = (filter) => get(`/data/events/detergent/?${filter}`).then((json) => {
-  const errorResponse = {
-    decalcents: 0,
-    detergent: 0,
-    tablets: 0,
-  };
-  if (typeof json !== 'object') {
-    apiCheckConsole.error(`/data/events/detergent/?${filter} result not an object`);
-    return errorResponse;
-  }
-  if (!checkData(json, {
-    decalcents: 'number',
-    detergent: 'number',
-    tablets: 'number',
-  })) {
-    return errorResponse;
-  }
-  return json;
-});
+const getDetergrnts = (filter) => {
+  const location = `/data/events/detergent/${filter ? `?${filter}` : ''}`;
+  return get(location).then((json) => {
+    const errorResponse = {
+      decalcents: 0,
+      detergent: 0,
+      tablets: 0,
+    };
+    if (typeof json !== 'object') {
+      apiCheckConsole.error(`${location} result not an object`);
+      return errorResponse;
+    }
+    if (!checkData(json, {
+      decalcents: 'number',
+      detergent: 'number',
+      tablets: 'number',
+    })) {
+      return errorResponse;
+    }
+    return json;
+  });
+};
 
 const getDowntimes = (filter) => get(`/data/events/downtime-salepoints/?${filter}`).then((json) => {
   if (!Array.isArray(json)) {
