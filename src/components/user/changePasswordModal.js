@@ -15,7 +15,7 @@ const ChangePasswordModal = observer(({ user }) => {
   };
 
   return (
-    <Modal visible={changePasswordShown} onCancel={hideChangePassword} title="Изменение пароля" onOk={onOk} okText="Изменить">
+    <Modal visible={changePasswordShown} onCancel={hideChangePassword} title={`Изменение пароля для ${user.username}`} onOk={onOk} okText="Изменить">
       <Form form={form} name="changePasswordForm" onFinish={onFinish}>
         <Form.Item
           name="password"
