@@ -7,7 +7,7 @@ import {
 import Icon from 'elements/icon';
 
 import {
-  account,
+  profile,
   notifications,
   mailings,
   usersList,
@@ -15,6 +15,14 @@ import {
 } from 'routes';
 
 import style from './style.module.scss';
+
+const ProfileAvatar = observer(({ user }) => {
+  const symbolAvatar = user.avatarSymbols.length > 0
+    ? <Avatar>{ user.avatarSymbols }</Avatar>
+    : <Avatar icon={<Icon name="person-outline" size="30px" />} />;
+
+  return user.avatar ? <Avatar src={user.avatar} /> : symbolAvatar;
+});
 
 @inject(({ menu, auth }) => ({ menu, auth }))
 @observer
@@ -34,18 +42,16 @@ class Header extends React.Component {
     if (auth.user === null) {
       return null;
     }
-    const userAvatar = auth.user.avatarSymbols.length > 0
-      ? <Avatar>{ auth.user.avatarSymbols }</Avatar>
-      : <Avatar icon={<Icon name="person-outline" size="30px" />} />;
+
     return (
       <Menu className={style.menu}>
         <Menu.Item>
           <Space>
-            { userAvatar }
+            <ProfileAvatar user={auth.user} />
             { auth.user.name }
           </Space>
         </Menu.Item>
-        <Menu.Item><Link to={account.path}>Личный кабинет</Link></Menu.Item>
+        <Menu.Item><Link to={profile.path}>Личный кабинет</Link></Menu.Item>
         <Menu.Item><Link to={notifications.path}>Настройка уведомлений</Link></Menu.Item>
         <Menu.Item><Link to={usersList.path}>Список пользователей</Link></Menu.Item>
         <Menu.Item><Link to={mailings.path}>Email рассылки</Link></Menu.Item>

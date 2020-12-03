@@ -1,14 +1,27 @@
+import { observable } from 'mobx';
 import { getRoles } from 'services/users';
 
-class UserRoles extends Map {
+class UserRoles {
   constructor() {
-    super();
+    this.map = observable.map();
 
-    getRoles(this);
+    getRoles({
+      set: (key, value) => {
+        this.map.set(key, value);
+      },
+    });
   }
 
   get selector() {
-    return [...this.entries()].map(([id, name]) => [id, name]);
+    return [...this.map.entries()];
+  }
+
+  get(key) {
+    return this.map.get(key);
+  }
+
+  set(key, value) {
+    this.map.set(key, value);
   }
 }
 

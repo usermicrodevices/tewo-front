@@ -97,16 +97,27 @@ class User extends Datum {
       });
   }
 
+  @action.bound changeAvatar(base64) {
+    const oldAvatar = this.avatar;
+
+    this.avatar = base64;
+
+    applyUser(this.id, { avatar: base64 })
+      .then((user) => {
+        message.success('Аватар успешно обновлен!');
+      })
+      .catch((err) => {
+        message.success('Произошла ошибка при обновлении аватара!');
+        this.avatar = oldAvatar;
+      });
+  }
+
   @computed get viewPath() {
     return `${usersRout.path}/${this.id}/view`;
   }
 
   @computed get role() {
-    if (this.session?.roles) {
-      return this.session?.roles.get(this.roleId);
-    }
-
-    return undefined;
+    return this.session?.roles.get(this.roleId);
   }
 
   @computed get companiesNamesList() {
@@ -157,22 +168,6 @@ class User extends Datum {
     }
 
     return this.enabledSalePoints.length === 0;
-  }
-
-  get avatarSymbols() {
-    const avatarContent = () => {
-      if (this.firstName.length > 0) {
-        if (this.lastName.length > 0) {
-          return `${this.firstName.slice(0, 1)}${this.lastName.slice(0, 1)}`;
-        }
-        return this.firstName.slice(0, 2);
-      }
-      if (this.lastName.length > 0) {
-        return this.lastName.slice(0, 2);
-      }
-      return this.username.slice(0, 2);
-    };
-    return avatarContent().toUpperCase();
   }
 
   @computed get values() {

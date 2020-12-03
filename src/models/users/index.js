@@ -7,7 +7,7 @@ import { tableItemLink } from 'elements/table/trickyCells';
 
 import Table from 'models/table';
 import Filter from 'models/filters';
-import User from 'models/user';
+import User from 'models/users/user';
 
 import { createGetUsers, applyUser, deleteUser } from 'services/users';
 
