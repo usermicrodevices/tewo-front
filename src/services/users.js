@@ -5,7 +5,7 @@ import {
 import checkData from 'utils/dataCheck';
 import apiCheckConsole from 'utils/console';
 
-import User from 'models/user';
+import User from 'models/users/user';
 
 const ROLES_LOCATION = '/refs/roles/';
 const USERS_LOCATION = '/refs/users/';

@@ -1,7 +1,7 @@
 import Signin from 'pages/login';
 import Signup from 'pages/signup';
 import Dashboard from 'pages/dashboard';
-import Account from 'pages/user/account';
+import Profile from 'pages/user/profile';
 import Notifications from 'pages/user/notifications';
 import Mailings from 'pages/user/mailings';
 import UsersList from 'pages/user/usersList';
@@ -41,7 +41,7 @@ const signin = new Rout('/signin', Signin);
 const unauthorizedRoutes = [signup, signin];
 
 const dashboard = new Rout('/', Dashboard, true);
-const account = new Rout('/account', Account);
+const profile = new Rout('/profile', Profile);
 const notifications = new Rout('/notifications', Notifications);
 const mailings = new Rout('/mailings', Mailings);
 const usersList = new Rout('/users', UsersList);
@@ -65,7 +65,7 @@ const authorizedRoutes = [
   cancellations,
   sales,
   cleans,
-  account,
+  profile,
   notifications,
   mailings,
   usersList,
@@ -96,7 +96,7 @@ export {
   signin,
   dashboard,
   sales,
-  account,
+  profile,
   notifications,
   mailings,
   usersList,

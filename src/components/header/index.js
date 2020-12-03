@@ -7,7 +7,7 @@ import {
 import Icon from 'elements/icon';
 
 import {
-  account,
+  profile,
   notifications,
   mailings,
   usersList,
@@ -45,7 +45,7 @@ class Header extends React.Component {
             { auth.user.name }
           </Space>
         </Menu.Item>
-        <Menu.Item><Link to={account.path}>Личный кабинет</Link></Menu.Item>
+        <Menu.Item><Link to={profile.path}>Личный кабинет</Link></Menu.Item>
         <Menu.Item><Link to={notifications.path}>Настройка уведомлений</Link></Menu.Item>
         <Menu.Item><Link to={usersList.path}>Список пользователей</Link></Menu.Item>
         <Menu.Item><Link to={mailings.path}>Email рассылки</Link></Menu.Item>

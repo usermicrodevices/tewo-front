@@ -5,7 +5,7 @@ import apiCheckConsole from 'utils/console';
 
 import { transformUser } from 'services/users';
 
-import User from 'models/user';
+import Profile from 'models/profile';
 
 function login(data) {
   return new Promise((resolve, reject) => {
@@ -60,7 +60,7 @@ function contacts() {
 function me(deep) {
   const location = 'user';
   return new Promise((resolve, reject) => get(location).then((data) => {
-    const user = transformUser(data, new User());
+    const user = transformUser(data, new Profile());
 
     return user;
   }).then(resolve).catch((err) => {
