@@ -16,6 +16,14 @@ import {
 
 import style from './style.module.scss';
 
+const ProfileAvatar = observer(({ user }) => {
+  const symbolAvatar = user.avatarSymbols.length > 0
+    ? <Avatar>{ user.avatarSymbols }</Avatar>
+    : <Avatar icon={<Icon name="person-outline" size="30px" />} />;
+
+  return user.avatar ? <Avatar src={user.avatar} /> : symbolAvatar;
+});
+
 @inject(({ menu, auth }) => ({ menu, auth }))
 @observer
 class Header extends React.Component {
@@ -34,14 +42,12 @@ class Header extends React.Component {
     if (auth.user === null) {
       return null;
     }
-    const userAvatar = auth.user.avatarSymbols.length > 0
-      ? <Avatar>{ auth.user.avatarSymbols }</Avatar>
-      : <Avatar icon={<Icon name="person-outline" size="30px" />} />;
+
     return (
       <Menu className={style.menu}>
         <Menu.Item>
           <Space>
-            { userAvatar }
+            <ProfileAvatar user={auth.user} />
             { auth.user.name }
           </Space>
         </Menu.Item>
