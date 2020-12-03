@@ -1,4 +1,7 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
+import { message } from 'antd';
+
+import { usersList as usersRout } from 'routes';
 
 import Datum from 'models/datum';
 
@@ -15,7 +18,7 @@ class User extends Datum {
 
   @observable lastName = '';
 
-  @observable isActive = false;
+  @observable isActive = true;
 
   @observable isStaff = false;
 
@@ -35,12 +38,67 @@ class User extends Datum {
 
   @observable roleId = null;
 
+  @observable changePasswordShown = false;
+
   @observable session = null;
 
   constructor(session) {
     super(applyUser);
 
     this.session = session;
+  }
+
+  @action.bound setPoint(id, checked) {
+    const pointsSet = new Set(this.salePoints);
+
+    if (checked) {
+      pointsSet.add(id);
+    } else {
+      pointsSet.delete(id);
+    }
+
+    applyUser(this.id, { salePoints: Array.from(pointsSet) })
+      .then((user) => {
+        this.salePoints = user.salePoints;
+      })
+      .then(() => {
+        message.success('Обновлен доступ к объекту!');
+      });
+  }
+
+  @action.bound enableAllPoints() {
+    applyUser(this.id, { salePoints: [] })
+      .then((user) => {
+        this.salePoints = user.salePoints;
+      })
+      .then(() => {
+        message.success('Теперь пользователю доступны все объекты!');
+      });
+  }
+
+  @action.bound showChangePassword() {
+    this.changePasswordShown = true;
+  }
+
+  @action.bound hideChangePassword() {
+    this.changePasswordShown = false;
+  }
+
+  @action.bound changePassword(password) {
+    applyUser(this.id, { password })
+      .then(() => {
+        this.changePasswordShown = false;
+      })
+      .then(() => {
+        message.success('Пароль успешно обновлен!');
+      })
+      .catch((err) => {
+        message.success('Произошла ошибка при обновлении пароля!');
+      });
+  }
+
+  @computed get viewPath() {
+    return `${usersRout.path}/${this.id}/view`;
   }
 
   @computed get role() {
@@ -59,12 +117,46 @@ class User extends Datum {
     return this.session?.points.getSubset(new Set(this.salePoints))?.map((sp) => sp.name) || undefined;
   }
 
-  get name() {
+  @computed get name() {
     const name = `${this.firstName} ${this.lastName}`;
     if (name.length > 1) {
       return name;
     }
     return this.username;
+  }
+
+  @computed get availableSalePoints() {
+    return this.session?.points.getByCompanyIdSet(new Set(this.companies)) || undefined;
+  }
+
+  @computed get enabledSalePoints() {
+    if (Array.isArray(this.salePoints) && this.salePoints.length > 0) {
+      return this.session?.points.getSubset(new Set(this.salePoints));
+    }
+
+    return [];
+  }
+
+  @computed get salePointsTableData() {
+    if (this.availableSalePoints === undefined) {
+      return undefined;
+    }
+
+    const enabledSet = new Set(this.enabledSalePoints.map((sp) => sp.id));
+
+    return this.availableSalePoints.map((sp) => ({
+      id: sp.id,
+      name: sp.name,
+      checked: enabledSet.has(sp.id),
+    }));
+  }
+
+  @computed get isAllEnabled() {
+    if (this.enabledSalePoints === undefined) {
+      return undefined;
+    }
+
+    return this.enabledSalePoints.length === 0;
   }
 
   get avatarSymbols() {
@@ -95,6 +187,11 @@ class User extends Datum {
           dataIndex: 'username',
           title: 'Логин',
           value: this.username,
+        },
+        {
+          dataIndex: 'isActive',
+          title: 'Активен',
+          value: this.isActive,
         },
         {
           dataIndex: 'roleId',
@@ -145,6 +242,11 @@ class User extends Datum {
         value: this.role,
       },
       {
+        dataIndex: 'isActive',
+        title: 'Активен',
+        value: this.isActive,
+      },
+      {
         dataIndex: 'firstName',
         title: 'Имя',
         value: this.firstName,
@@ -177,6 +279,9 @@ class User extends Datum {
       },
       email: {
         type: 'text',
+      },
+      isActive: {
+        type: 'checkbox',
       },
       companies: {
         type: 'selector',

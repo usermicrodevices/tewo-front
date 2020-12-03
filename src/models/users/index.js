@@ -1,11 +1,15 @@
 /* eslint-disable class-methods-use-this */
 import { action, observable } from 'mobx';
 
+import { usersList as usersListRout } from 'routes';
+
+import { tableItemLink } from 'elements/table/trickyCells';
+
 import Table from 'models/table';
 import Filter from 'models/filters';
 import User from 'models/user';
 
-import { createGetUsers, applyUser } from 'services/users';
+import { createGetUsers, applyUser, deleteUser } from 'services/users';
 
 const COLUMNS = {
   id: {
@@ -20,6 +24,7 @@ const COLUMNS = {
     title: 'Логин',
     grow: 3,
     sortDirections: 'both',
+    transform: (_, datum, width) => tableItemLink(datum.username, `${usersListRout.path}/${datum.id}`, width),
   },
   firstName: {
     isVisibleByDefault: true,
@@ -31,6 +36,12 @@ const COLUMNS = {
     isVisibleByDefault: true,
     title: 'Фамилия',
     grow: 3,
+    sortDirections: 'both',
+  },
+  isActive: {
+    isVisibleByDefault: true,
+    title: 'Активен',
+    grow: 2,
     sortDirections: 'both',
   },
   role: {
@@ -60,6 +71,12 @@ const COLUMNS = {
 };
 
 const declareFilters = (session) => ({
+  role: {
+    type: 'selector',
+    title: 'Роль',
+    apply: (general, data) => general(data.roleId),
+    selector: () => session.roles.selector,
+  },
   companyId: {
     type: 'selector',
     title: 'Компания',
@@ -82,12 +99,6 @@ const declareFilters = (session) => ({
     },
     selector: () => session.points.selector,
   },
-  role: {
-    type: 'selector',
-    title: 'Роль',
-    apply: (general, data) => general(data.roleId),
-    selector: () => session.roles.selector,
-  },
 });
 
 class Users extends Table {
@@ -102,7 +113,7 @@ class Users extends Table {
       this.elementForEdit = datum;
     },
     onDelete: (datum) => {
-
+      deleteUser(datum.id).then(this.rawData.splice(this.rawData.findIndex((d) => d === datum), 1));
     },
   };
 
@@ -114,6 +125,10 @@ class Users extends Table {
 
   toString() {
     return 'users';
+  }
+
+  get(userId) {
+    return this.rawData.find(({ id }) => userId === id);
   }
 
   @action create() {

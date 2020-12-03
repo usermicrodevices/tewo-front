@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 function CustomLink({ children, to, ...props }) {
   if (to) {
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <Link to={to} component={Typography.Link} {...props}>{children}</Link>;
+    return <Link to={to} {...props}>{children}</Link>;
   }
 
   // eslint-disable-next-line react/jsx-props-no-spreading
