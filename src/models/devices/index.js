@@ -112,19 +112,17 @@ const declareFilters = (session) => ({
     title: 'Дата монтажа',
     apply: (general, data) => general(data.setupDate),
   },
-  isNeedOverhaul: {
+  isNeedTechService: {
     type: 'checkbox',
     title: 'Требуется тех. обслуживание',
-    apply: (_, data) => data.isNeedOverhaul,
+    apply: (_, data) => data.isNeedTechService,
     passiveValue: false,
-    disabled: true,
   },
-  isHaveDisabledEquipment: {
+  isOn: {
     type: 'checkbox',
-    title: 'С выключенным оборудованием',
-    apply: (_, data) => data.isHaveDisabledEquipment,
+    title: 'Исключить выключенное оборудование',
+    apply: (_, data) => data.isOn !== false,
     passiveValue: false,
-    disabled: true,
   },
 });
 
@@ -132,7 +130,10 @@ class Devices extends Table {
   get isImpossibleToBeAsync() { return true; }
 
   constructor(session) {
-    super(COLUMNS, getDevices(session), new Filter(declareFilters(session)));
+    const filter = new Filter(declareFilters(session));
+    filter.set('isOn', true);
+    console.log('set is on', filter.search);
+    super(COLUMNS, getDevices(session), filter);
   }
 
   toString() {

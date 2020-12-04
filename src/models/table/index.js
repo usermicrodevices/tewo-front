@@ -255,10 +255,6 @@ class Table {
     return this.dataModel.isAsync;
   }
 
-  @action updateFilters(search) {
-    this.dataModel.search = search;
-  }
-
   @action validate() {
     return this.dataModel.validate();
   }
