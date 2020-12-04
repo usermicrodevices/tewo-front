@@ -24,6 +24,10 @@ const Devices = () => (
         path: ['view', 'edit'],
         text: 'Справочная информация',
       },
+      {
+        path: 'voltage',
+        text: 'Статистика напряжения',
+      },
     ]}
   />
 );

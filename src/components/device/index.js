@@ -9,6 +9,7 @@ import Calendar from 'elements/calendar';
 
 import Tech from './tech';
 import Commerce from './commerce';
+import Voltage from './voltage';
 
 import style from './index.module.scss';
 
@@ -44,6 +45,8 @@ const DeviceOverview = withRouter(inject('element')(observer(({
   switch (action) {
     case 'commerce':
       return <Commerce />;
+    case 'voltage':
+      return <Voltage />;
     default:
       return (
         <>

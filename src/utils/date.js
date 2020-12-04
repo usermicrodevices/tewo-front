@@ -46,9 +46,9 @@ const humanizeSeconds = (wholeSeconds) => {
 
 const intoComparationNumber = (m, step) => Math.floor(m / 1000 / step);
 
-function* alineDates([firstDay, lastDay], step, data, transform) {
+function* alineDates([firstDay, lastDay], step, data, transform, dateKey = 'moment') {
   const dataMap = new Map(data.map((datum) => {
-    const m = moment(datum.moment);
+    const m = moment(datum[dateKey]);
     return [intoComparationNumber(+m, step), datum];
   }));
   const curDay = firstDay.clone();

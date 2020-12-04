@@ -6,7 +6,7 @@ import { computed } from 'mobx';
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
 import {
-  getDevices, getStats, getSalesChart, applyDevice,
+  getDevices, getStats, getSalesChart, applyDevice, getVoltage,
 } from 'services/device';
 
 const COLUMNS = {
@@ -188,6 +188,8 @@ class Devices extends Table {
   count(predicate) {
     return this.rawData.filter(predicate).length;
   }
+
+  getVoltage = getVoltage;
 
   getStats = getStats;
 

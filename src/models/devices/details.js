@@ -24,6 +24,35 @@ class Details {
 
   @observable clearancesChart;
 
+  @observable voltage;
+
+  @computed get voltageSeries() {
+    const { minPower, maxPower } = { minPower: 220, maxPower: 240 };
+    return [
+      {
+        data: this.voltage.map(({ voltage }) => voltage),
+        name: 'Напряжение',
+        axis: 0,
+      },
+      {
+        name: `Мин. (${minPower})`,
+        type: 'line',
+        data: new Array(this.voltage.length).fill(minPower),
+        axis: 0,
+      },
+      {
+        name: `Макс. (${maxPower})`,
+        type: 'line',
+        data: new Array(this.voltage.length).fill(maxPower),
+        axis: 0,
+      },
+    ];
+  }
+
+  @computed get voltageXSeria() {
+    return this.voltage.map(({ moment: m }) => m);
+  }
+
   imputsManager = new DetailsProps(STORAGE_KEY);
 
   @computed get xaxis() {
@@ -67,6 +96,10 @@ class Details {
           series.actualSum += fact;
         }
         this.clearancesChart = series;
+      });
+
+      me.session.devices.getVoltage(this.me.id, this.imputsManager.dateRange).then((result) => {
+        this.voltage = result;
       });
     };
     reaction(() => this.imputsManager.dateRange, updateDateRelatedData);

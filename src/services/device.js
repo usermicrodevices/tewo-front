@@ -6,6 +6,7 @@ import { get, patch, post } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import Device from 'models/devices/device';
 import apiCheckConsole from 'utils/console';
+import { alineDates, daterangeToArgs, isDateRange } from 'utils/date';
 
 import { getBeveragesStats } from './beverage';
 
@@ -162,7 +163,7 @@ const getStats = (id) => get(`${LOCATION}${id}/stats/`).then((json) => {
   };
 
   if (!checkData(json, mustBe)) {
-    apiCheckConsole.error(`undexpected responce for ${id} device details`);
+    apiCheckConsole.error(`${LOCATION}${id}/stats/ unexpected responce for ${id} device details`, json);
   }
 
   if (json.iterations !== json.iterations_to + json.remain_iterations_to) {
@@ -224,6 +225,36 @@ const getDeviceTypes = (acceptor) => get('/refs/device_types').then((json) => {
   }
 });
 
+const getVoltage = (deviceId, daterange) => {
+  const dateRangeArg = daterangeToArgs(daterange, 'device_date');
+  const step = dateRangeArg === '' ? 86400 : Math.max(...[60, 3600, 86400].filter((s) => (daterange[1] - daterange[0]) / s / 1000 > 10));
+  return get(`/data/counters/pcb_tds/?step=${step}&device=${deviceId}${dateRangeArg}`)
+    .then((result) => {
+      const mustBe = {
+        device_date: 'date',
+        device_id: 'number',
+        pcb_tds1: 'number',
+      };
+      for (const json of result) {
+        checkData(json, mustBe);
+      }
+      const isRangeGiven = isDateRange(daterange);
+      if (!isRangeGiven && result.length === 0) {
+        return [];
+      }
+      const finalDateRange = isRangeGiven
+        ? daterange
+        : [moment(result[0].device_date), moment(result[result.length - 1].device_date)];
+      return [...alineDates(
+        finalDateRange,
+        step,
+        result,
+        (item) => ({ voltage: item ? item.pcb_tds1 : 0 }),
+        'device_date',
+      )];
+    });
+};
+
 export {
-  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice, getDeviceTypes,
+  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice, getDeviceTypes, getVoltage,
 };
