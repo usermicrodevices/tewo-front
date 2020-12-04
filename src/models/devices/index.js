@@ -120,7 +120,7 @@ const declareFilters = (session) => ({
   },
   isOn: {
     type: 'checkbox',
-    title: 'Исключить выключенное оборудование',
+    title: 'Только включенное оборудование',
     apply: (_, data) => data.isOn !== false,
     passiveValue: false,
   },
@@ -131,8 +131,6 @@ class Devices extends Table {
 
   constructor(session) {
     const filter = new Filter(declareFilters(session));
-    filter.set('isOn', true);
-    console.log('set is on', filter.search);
     super(COLUMNS, getDevices(session), filter);
   }
 
