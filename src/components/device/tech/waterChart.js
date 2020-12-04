@@ -8,12 +8,14 @@ import Typography from 'elements/typography';
 
 const COLORS = ['#228148'];
 
-const WaterChart = ({ size, element: { details: { waterQuality, xaxis } } }) => {
+const WaterChart = ({ size, element: { details } }) => {
   const series = [{
     name: 'Жесткость воды',
     type: 'line',
-    data: waterQuality.map((v) => Math.round(v * 1000) / 1000),
+    data: details.waterQuality.map(({ quality }) => quality),
   }];
+  const dates = details.waterQualityXSeria;
+
   const data = {
     colors: COLORS,
     chart: {
@@ -28,7 +30,7 @@ const WaterChart = ({ size, element: { details: { waterQuality, xaxis } } }) => 
       curve: 'smooth',
     },
     xaxis: {
-      categories: xaxis,
+      categories: dates.map((d) => d.format('D MMM hh:mm')),
     },
     yaxis: {
       axisTicks: {
@@ -45,8 +47,6 @@ const WaterChart = ({ size, element: { details: { waterQuality, xaxis } } }) => 
         step: 0.1,
         formatter: (v) => Math.round(v * 1000) / 1000,
       },
-      min: 0,
-      max: 1,
     },
   };
   return (

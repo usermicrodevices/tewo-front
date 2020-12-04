@@ -53,6 +53,10 @@ class Details {
     return this.voltage.map(({ moment: m }) => m);
   }
 
+  @computed get waterQualityXSeria() {
+    return this.waterQuality.map(({ moment: m }) => m);
+  }
+
   imputsManager = new DetailsProps(STORAGE_KEY);
 
   @computed get xaxis() {
@@ -100,6 +104,10 @@ class Details {
 
       me.session.devices.getVoltage(this.me.id, this.imputsManager.dateRange).then((result) => {
         this.voltage = result;
+      });
+
+      me.session.devices.getWaterQuality(this.me.id, this.imputsManager.dateRange).then((result) => {
+        this.waterQuality = result;
       });
     };
     reaction(() => this.imputsManager.dateRange, updateDateRelatedData);
