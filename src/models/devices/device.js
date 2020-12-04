@@ -112,6 +112,16 @@ class Device extends Datum {
     return salePoint.company;
   }
 
+  @computed get cityName() {
+    const { salePoint } = this;
+    return salePoint && salePoint.cityName;
+  }
+
+  @computed get companyName() {
+    const { company } = this;
+    return company && company.name;
+  }
+
   @computed get companyId() {
     const { salePoint } = this;
     if (!salePoint) {

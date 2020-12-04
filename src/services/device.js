@@ -227,7 +227,7 @@ const getDeviceTypes = (acceptor) => get('/refs/device_types').then((json) => {
 
 const getVoltage = (deviceId, daterange) => {
   const dateRangeArg = daterangeToArgs(daterange, 'device_date');
-  const step = dateRangeArg === '' ? 86400 : Math.max(...[60, 3600, 86400].filter((s) => (daterange[1] - daterange[0]) / s / 1000 > 10));
+  const step = dateRangeArg === '' ? 86400 : Math.max(60, ...[3600, 86400].filter((s) => (daterange[1] - daterange[0]) / s / 1000 > 10));
   return get(`/data/counters/pcb_tds/?step=${step}&device=${deviceId}${dateRangeArg}`)
     .then((result) => {
       const mustBe = {

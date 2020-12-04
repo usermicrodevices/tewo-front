@@ -5,6 +5,7 @@ import Filters from 'models/filters';
 import Table from 'models/table';
 import { getEventsClearancesChart, getDetergrnts } from 'services/events';
 import { DECLARE_DEVICE_FILTERS } from 'models/devices';
+import { daterangeToArgs, SemanticRanges } from 'utils/date';
 
 const declareColumns = () => ({
   companyName: {
@@ -27,7 +28,7 @@ const declareColumns = () => ({
     title: 'Объект',
     grow: 1,
   },
-  deviceName: {
+  name: {
     isVisibleByDefault: true,
     title: 'Оборудование',
     grow: 1,
@@ -48,7 +49,16 @@ class Sales extends Table {
   @observable stats = {};
 
   constructor(session) {
-    const filters = new Filters(DECLARE_DEVICE_FILTERS(session));
+    const filters = new Filters({
+      ...DECLARE_DEVICE_FILTERS(session),
+      clearanceDate: {
+        type: 'daterange',
+        title: 'Время очистки',
+        apply: () => true,
+      },
+    });
+
+    filters.set('clearanceDate', SemanticRanges.prw30Days.resolver());
 
     filters.isShowSearch = false;
 
@@ -59,7 +69,8 @@ class Sales extends Table {
         const { rawData: devices } = session.devices;
         const results = devices.filter(filters.predicate);
         const devicesFilter = results.length === devices.length ? [] : results.map(({ id }) => id);
-        getEventsClearancesChart(devicesFilter)
+        const daterange = filters.get('clearanceDate');
+        getEventsClearancesChart(devicesFilter, daterange)
           .then((result) => {
             const series = {
               x: [],
@@ -82,7 +93,9 @@ class Sales extends Table {
             this.cleans = series;
           });
 
-        getDetergrnts(devicesFilter.length > 0 ? `device__id${devicesFilter.length > 1 ? '__in' : ''}=${devicesFilter}` : '')
+        const deviceFilter = devicesFilter.length > 0 ? `device__id${devicesFilter.length > 1 ? '__in' : ''}=${devicesFilter}` : '';
+        const dateFilter = daterangeToArgs(daterange);
+        getDetergrnts(deviceFilter ? `${deviceFilter}${dateFilter}` : dateFilter.slice(1))
           .then((stats) => { this.stats = stats; });
         return {
           count: results.length,
