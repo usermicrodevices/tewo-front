@@ -17,6 +17,7 @@ import {
   sales,
   cleans,
   cancellations,
+  ingredientsConsumption,
 } from 'routes';
 
 class MenuItem {
@@ -52,6 +53,7 @@ const items = [
       },
       {
         text: 'Расходы ингредиентов',
+        act: ingredientsConsumption,
       },
       {
         text: 'Аналитика продаж',

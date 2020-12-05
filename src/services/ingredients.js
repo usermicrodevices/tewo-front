@@ -4,6 +4,7 @@ import {
 import checkData from 'utils/dataCheck';
 import Ingredient from 'models/ingredients/ingredient';
 import apiCheckConsole from 'utils/console';
+import IngredientsRow from 'models/comerce/ingredients';
 
 const LOCATION = '/refs/ingredients/';
 
@@ -68,4 +69,14 @@ const applyIngredient = (id, changes, session) => {
 
 const deleteIngredient = (id) => del(`${LOCATION}${id}`);
 
-export { getIngredients, applyIngredient, deleteIngredient };
+const getIngredientsConsumption = (session) => (_, __, search) => get(`/data/beverages/salepoints_ingredients/${search ? `?${search}` : ''}`).then((response) => {
+  const results = Object.keys(response).map(([id, details]) => new IngredientsRow(id, details, session));
+  return {
+    count: result.length,
+    results,
+  };
+});
+
+export {
+  getIngredients, applyIngredient, deleteIngredient, getIngredientsConsumption,
+};
