@@ -72,7 +72,7 @@ const deleteIngredient = (id) => del(`${LOCATION}${id}`);
 const getIngredientsConsumption = (session) => (_, __, search) => get(`/data/beverages/salepoints_ingredients/${search ? `?${search}` : ''}`).then((response) => {
   const results = Object.keys(response).map(([id, details]) => new IngredientsRow(id, details, session));
   return {
-    count: result.length,
+    count: results.length,
     results,
   };
 });
