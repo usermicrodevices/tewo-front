@@ -4,7 +4,7 @@ import {
 import checkData from 'utils/dataCheck';
 import Ingredient from 'models/ingredients/ingredient';
 import apiCheckConsole from 'utils/console';
-import IngredientsRow from 'models/comerce/ingredients';
+import IngredientsRow from 'models/comerce/ingredientsRow';
 
 const LOCATION = '/refs/ingredients/';
 
@@ -69,13 +69,57 @@ const applyIngredient = (id, changes, session) => {
 
 const deleteIngredient = (id) => del(`${LOCATION}${id}`);
 
-const getIngredientsConsumption = (session) => (_, __, search) => get(`/data/beverages/salepoints_ingredients/${search ? `?${search}` : ''}`).then((response) => {
-  const results = Object.keys(response).map(([id, details]) => new IngredientsRow(id, details, session));
-  return {
-    count: results.length,
-    results,
-  };
-});
+const getIngredientsConsumption = (session) => (_, __, search) => {
+  const location = `/data/beverages/salepoints_ingredients/${search ? `?${search}` : ''}`;
+  return get(location).then((response) => {
+    const ingredients = {};
+    const mustBe = {
+      cost: 'number',
+      drinks_count: 'number',
+      earn: 'number',
+      ingredients_count: 'number',
+    };
+    if (typeof response !== 'object' || response === null) {
+      apiCheckConsole.error(`Неожиданный ответ по адресу ${location}`, response);
+    }
+    for (const point of Object.values(response)) {
+      if (typeof point !== 'object' || point === null) {
+        apiCheckConsole.error(`Неожиданный ответ по адресу ${location} (ождается объект описания точки продажи)`, point, response);
+      }
+      for (const [ingredientId, ingredientJSON] of Object.entries(point)) {
+        if (!(ingredientId in ingredients)) {
+          ingredients[ingredientId] = {};
+        }
+        if (typeof ingredientJSON !== 'object' || ingredientJSON === null) {
+          apiCheckConsole.error(`Неожиданный ответ по адресу ${location} (ождается объект описания ингредиента)`, ingredientJSON, response);
+        }
+        const ingredient = ingredients[ingredientId];
+        for (const [drinkId, drinkJSON] of Object.entries(ingredientJSON)) {
+          if (!(drinkId in ingredient)) {
+            ingredient[drinkId] = {
+              cost: 0,
+              drinksCount: 0,
+              earn: 0,
+              ingredientsCount: 0,
+            };
+          }
+          const drink = ingredient[drinkId];
+          checkData(drinkJSON, mustBe, {}, {
+            cost: (cost) => cost === drink.cost,
+          });
+          drink.drinksCount += drinkJSON.drinks_count;
+          drink.earn += drinkJSON.earn;
+          drink.ingredientsCount += drinkJSON.ingredients_count;
+        }
+      }
+    }
+    const results = Object.entries(ingredients).map(([id, ingredient]) => new IngredientsRow(parseInt(id, 10), ingredient, session));
+    return {
+      count: results.length,
+      results,
+    };
+  });
+};
 
 export {
   getIngredients, applyIngredient, deleteIngredient, getIngredientsConsumption,

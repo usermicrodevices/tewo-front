@@ -1,16 +1,52 @@
 import { computed } from 'mobx';
 
 class IngredientsRow {
-  id;
+  ingredientId;
 
   details;
 
   session;
 
-  constructor(id, details, session) {
-    this.id = id;
+  @computed get ingredient() {
+    return this.session.ingredients.get(this.ingredientId);
+  }
+
+  constructor(ingredientId, details, session) {
+    this.ingredientId = ingredientId;
     this.details = details;
     this.session = session;
+  }
+
+  @computed get ingredientName() {
+    return this.ingredient?.name;
+  }
+
+  @computed get measure() {
+    return this.ingredient?.dimension;
+  }
+
+  @computed get count() {
+    let sum = 0;
+    if (typeof this.details === 'object' && this.details !== null) {
+      for (const { earn } of Object.values(this.details)) {
+        sum += earn;
+      }
+    }
+    return sum;
+  }
+
+  @computed get cost() {
+    return this.ingredient?.cost;
+  }
+
+  @computed get amount() {
+    let sum = 0;
+    if (typeof this.details === 'object' && this.details !== null) {
+      for (const { drinksCount } of Object.values(this.details)) {
+        sum += drinksCount;
+      }
+    }
+    return sum;
   }
 }
 
