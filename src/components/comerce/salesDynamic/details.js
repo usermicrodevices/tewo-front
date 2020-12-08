@@ -8,6 +8,16 @@ import Format from 'elements/format';
 
 import classNames from './index.module.scss';
 
+const comparator = (a, b) => {
+  const getProgress = ({ cur, prw }) => {
+    if (typeof prw !== 'number' || prw === 0) {
+      return Infinity;
+    }
+    return (cur - prw) / prw;
+  };
+  return getProgress(b) - getProgress(a);
+};
+
 const columns = (width) => [
   {
     title: 'Напиток',
@@ -20,12 +30,14 @@ const columns = (width) => [
     dataIndex: 'deltaSales',
     render: (_, row) => rangeMetricCompareCell(row.sales),
     width: width[2],
+    sorter: (a, b) => comparator(a.sales, b.sales),
   },
   {
     title: explainedTitleCell('Наливы', '(текущий / предыдущий / %)'),
     dataIndex: 'deltaBeverages',
     render: (_, row) => rangeMetricCompareCell(row.beverages),
     width: width[3],
+    sorter: (a, b) => comparator(a.beverages, b.beverages),
   },
 ];
 

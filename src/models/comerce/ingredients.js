@@ -5,6 +5,7 @@ import Filters from 'models/filters';
 import Table from 'models/table';
 import { getIngredientsConsumption } from 'services/ingredients';
 import { DECLARE_BEVERAGES_FILTERS } from 'models/beverages';
+import Details from 'components/comerce/consumptionDetails';
 
 const declareColumns = () => ({
   ingredientName: {
@@ -57,6 +58,11 @@ class Ingredients extends Table {
   }
 
   get isImpossibleToBeSync() { return true; }
+
+  actions = {
+    isVisible: true,
+    detailsWidget: Details,
+  };
 }
 
 export default Ingredients;

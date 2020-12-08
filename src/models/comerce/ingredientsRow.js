@@ -28,8 +28,8 @@ class IngredientsRow {
   @computed get count() {
     let sum = 0;
     if (typeof this.details === 'object' && this.details !== null) {
-      for (const { earn } of Object.values(this.details)) {
-        sum += earn;
+      for (const { drinksCount } of Object.values(this.details)) {
+        sum += drinksCount;
       }
     }
     return sum;
@@ -42,11 +42,24 @@ class IngredientsRow {
   @computed get amount() {
     let sum = 0;
     if (typeof this.details === 'object' && this.details !== null) {
-      for (const { drinksCount } of Object.values(this.details)) {
-        sum += drinksCount;
+      for (const { earn } of Object.values(this.details)) {
+        sum += earn;
       }
     }
-    return sum;
+    return sum / 100;
+  }
+
+  @computed get detailsRowsCount() {
+    return Object.keys(this.details).length;
+  }
+
+  @computed get detailsRows() {
+    return Object.entries(this.details).map(([drinkId, detail]) => ({
+      key: drinkId,
+      name: this.session.drinks.get(parseInt(drinkId, 10))?.name,
+      ...detail,
+      earn: detail.earn / 100,
+    }));
   }
 }
 
