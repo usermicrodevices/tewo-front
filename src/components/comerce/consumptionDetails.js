@@ -8,7 +8,7 @@ const columns = (width) => [
   {
     title: 'Напиток',
     dataIndex: 'name',
-    render: (name) => <Format>{name}</Format>,
+    render: (name) => <Format width={width[0]}>{name}</Format>,
     width: width[0],
   },
   {

@@ -47,9 +47,6 @@ const COLUMNS = {
   },
 };
 
-const declareFilters = (session) => ({
-});
-
 class Ingridients extends Table {
   @observable elementForEdit;
 
@@ -69,7 +66,7 @@ class Ingridients extends Table {
   };
 
   constructor(session) {
-    super(COLUMNS, getIngredients(session), new Filters(declareFilters(session)));
+    super(COLUMNS, getIngredients(session), new Filters({}));
     this.session = session;
   }
 
@@ -85,6 +82,7 @@ class Ingridients extends Table {
   }
 
   get(typeId) {
+    console.log(typeId);
     return this.rawData.find(({ id }) => id === typeId);
   }
 

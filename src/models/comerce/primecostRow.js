@@ -1,4 +1,4 @@
-import { computed } from 'mobx';
+import { action, computed, observable } from 'mobx';
 
 class PrimeCostRow {
   session;
@@ -6,6 +6,12 @@ class PrimeCostRow {
   cityId;
 
   data;
+
+  @observable expanded;
+
+  @action setExpanded(expanded) {
+    this.expanded = expanded;
+  }
 
   constructor(cityId, data, session) {
     this.session = session;
@@ -27,31 +33,37 @@ class PrimeCostRow {
   }
 
   @computed get earn() {
-    let sum = 0;
-    for (const ingredients of Object.values(this.data)) {
-      for (const drinks of Object.values(ingredients)) {
-        for (const { earn } of Object.values(drinks)) {
-          sum += earn;
-        }
-      }
-    }
-    return sum;
+    return this.data.earn;
   }
 
   @computed get cost() {
-    let sum = 0;
-    for (const ingredients of Object.values(this.data)) {
-      for (const drinks of Object.values(ingredients)) {
-        for (const { cost } of Object.values(drinks)) {
-          sum += cost;
-        }
-      }
-    }
-    return sum;
+    return this.data.cost;
   }
 
   @computed get margin() {
-    return this.earn - this.cost;
+    return this.data.margin;
+  }
+
+  @computed get rows() {
+    return Object.values(this.data.details).map((point) => ({
+      key: point.id,
+      name: this.session.points.get(point.id)?.name,
+      ...point,
+      details: Object.values(point.details).map((drink) => ({
+        key: drink.id,
+        name: this.session.drinks.get(drink.id)?.name,
+        ...drink,
+        details: Object.values(drink.details).map((ingredient) => ({
+          key: ingredient.id,
+          name: this.session.ingredients.get(ingredient.id)?.name,
+          ...ingredient,
+        })),
+      })),
+    }));
+  }
+
+  @computed get detailsRowsCount() {
+    return Object.keys(this.data.details).length;
   }
 }
 

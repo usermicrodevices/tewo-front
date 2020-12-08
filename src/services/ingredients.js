@@ -69,16 +69,17 @@ const applyIngredient = (id, changes, session) => {
 
 const deleteIngredient = (id) => del(`${LOCATION}${id}`);
 
+const CONSUMPTION_MUST_BE = {
+  cost: 'number',
+  drinks_count: 'number',
+  earn: 'number',
+  ingredients_count: 'number',
+};
+
 const getIngredientsConsumption = (session) => (_, __, search) => {
   const location = `/data/beverages/salepoints_ingredients/${search ? `?${search}` : ''}`;
   return get(location).then((response) => {
     const ingredients = {};
-    const mustBe = {
-      cost: 'number',
-      drinks_count: 'number',
-      earn: 'number',
-      ingredients_count: 'number',
-    };
     if (typeof response !== 'object' || response === null) {
       apiCheckConsole.error(`Неожиданный ответ по адресу ${location}`, response);
     }
@@ -104,7 +105,7 @@ const getIngredientsConsumption = (session) => (_, __, search) => {
             };
           }
           const drink = ingredient[drinkId];
-          checkData(drinkJSON, mustBe);
+          checkData(drinkJSON, CONSUMPTION_MUST_BE);
           drink.cost += drinkJSON.cost;
           drink.drinksCount += drinkJSON.drinks_count;
           drink.earn += drinkJSON.earn;
@@ -121,5 +122,5 @@ const getIngredientsConsumption = (session) => (_, __, search) => {
 };
 
 export {
-  getIngredients, applyIngredient, deleteIngredient, getIngredientsConsumption,
+  getIngredients, applyIngredient, deleteIngredient, getIngredientsConsumption, CONSUMPTION_MUST_BE,
 };
