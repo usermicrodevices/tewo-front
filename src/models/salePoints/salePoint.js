@@ -224,10 +224,7 @@ class SalePoint extends Datum {
 
   @computed get cityName() {
     const { city } = this;
-    if (city === null || (typeof city === 'undefined')) {
-      return city;
-    }
-    return city.name;
+    return city && city.name;
   }
 
   @computed get region() {

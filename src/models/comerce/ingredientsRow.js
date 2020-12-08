@@ -28,8 +28,8 @@ class IngredientsRow {
   @computed get count() {
     let sum = 0;
     if (typeof this.details === 'object' && this.details !== null) {
-      for (const { drinksCount } of Object.values(this.details)) {
-        sum += drinksCount;
+      for (const { ingredientsCount } of Object.values(this.details)) {
+        sum += ingredientsCount;
       }
     }
     return sum;

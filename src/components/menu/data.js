@@ -18,6 +18,7 @@ import {
   cleans,
   cancellations,
   ingredientsConsumption,
+  primecost,
 } from 'routes';
 
 class MenuItem {
@@ -50,6 +51,7 @@ const items = [
     [
       {
         text: 'Себестоимость / выручка',
+        act: primecost,
       },
       {
         text: 'Расходы ингредиентов',

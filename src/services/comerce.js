@@ -1,11 +1,13 @@
+import { when } from 'mobx';
+import momentJS from 'moment';
+
 import { get } from 'utils/request';
 import { isDateRange, stepToPast, daterangeToArgs } from 'utils/date';
 import checkData from 'utils/dataCheck';
 import SalesRow from 'models/comerce/salesRow';
-import momentJS from 'moment';
-
 import BeveragesStats from 'models/beverages/stats';
 import apiCheckConsole from 'utils/console';
+import PrimeCostRow from 'models/comerce/primecostRow';
 
 import { getSalesTop } from './salePoints';
 import { BEVERAGES_SALE_POINTS_STATS } from './beverage';
@@ -104,4 +106,25 @@ const salesDetails = (salePointId, filter) => {
   );
 };
 
-export { salesLoader, salesDetails };
+const getPrimecost = (session) => (_, __, search) => {
+  const location = `/data/beverages/salepoints_ingredients/${search ? `?${search}` : ''}`;
+  return Promise.all([
+    when(() => session.points.isLoaded).then(() => session.points.rawData),
+    get(location),
+  ]).then(([salePoints, response]) => {
+    const map = {};
+    for (const { id: pointId, cityId } of salePoints.filter(({ id }) => id in response)) {
+      if (!(cityId in map)) {
+        map[cityId] = {};
+      }
+      map[cityId][pointId] = response[pointId];
+    }
+    const results = Object.entries(map).map(([cityId, data]) => new PrimeCostRow(parseInt(cityId, 10), data, session));
+    return {
+      count: results.length,
+      results,
+    };
+  });
+};
+
+export { salesLoader, salesDetails, getPrimecost };

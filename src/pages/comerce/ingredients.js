@@ -24,7 +24,7 @@ class Ingredients extends React.Component {
 
     return (
       <Provider table={model} filter={model.filter}>
-        <TableHeader />
+        <TableHeader title="Расход ингредиентов" />
         <Card><Table /></Card>
       </Provider>
     );

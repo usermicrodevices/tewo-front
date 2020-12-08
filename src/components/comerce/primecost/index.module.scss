@@ -1,0 +1,22 @@
+@import 'src/themes/constants';
+
+.root {
+  display: grid;
+  column-gap: $generic-margin;
+  row-gap: $generic-margin;
+  grid-template-columns: 676fr 440fr;
+  height: 100%;
+
+  min-height: 1000px;
+  overflow: hidden;
+
+  .table {
+    grid-column-end: span 2;
+    overflow-x: hidden;
+    min-height: 0px;
+    &>div {
+      height: 100%;
+    }
+    margin-bottom: $generic-margin;
+  }
+}

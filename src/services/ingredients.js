@@ -104,9 +104,8 @@ const getIngredientsConsumption = (session) => (_, __, search) => {
             };
           }
           const drink = ingredient[drinkId];
-          checkData(drinkJSON, mustBe, {}, {
-            cost: (cost) => cost === drink.cost,
-          });
+          checkData(drinkJSON, mustBe);
+          drink.cost += drinkJSON.cost;
           drink.drinksCount += drinkJSON.drinks_count;
           drink.earn += drinkJSON.earn;
           drink.ingredientsCount += drinkJSON.ingredients_count;
