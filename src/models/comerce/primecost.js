@@ -18,13 +18,11 @@ const declareColumns = () => ({
     title: 'Выручка',
     grow: 1,
     sortDirections: 'both',
-    isDefaultSort: true,
-    isAsyncorder: true,
   },
-  margin: { // earn - cost
+  margin: {
     isVisibleByDefault: true,
     title: 'Маржа',
-    grow: 1,
+    grow: 3,
     sortDirections: 'both',
     isDefaultSort: true,
     isAsyncorder: true,

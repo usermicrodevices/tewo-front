@@ -42,8 +42,8 @@ class PrimeCostRow {
     let sum = 0;
     for (const ingredients of Object.values(this.data)) {
       for (const drinks of Object.values(ingredients)) {
-        for (const { earn } of Object.values(drinks)) {
-          sum += earn;
+        for (const { cost } of Object.values(drinks)) {
+          sum += cost;
         }
       }
     }
