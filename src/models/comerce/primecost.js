@@ -1,11 +1,12 @@
 /* eslint class-methods-use-this: off */
-import { computed, observable } from 'mobx';
+import { computed } from 'mobx';
 
 import Filters from 'models/filters';
 import Table from 'models/table';
 import { getPrimecost } from 'services/comerce';
 import { DECLARE_BEVERAGES_FILTERS } from 'models/beverages';
 import Details from 'components/comerce/primecost/details';
+import { SemanticRanges } from 'utils/date';
 
 const declareColumns = () => ({
   cityName: {
@@ -87,10 +88,6 @@ class PrimeCost extends Table {
             };
           }
           const datum = result[drink.id];
-          /**
-           * Получается, что мы у игридиентов складываем себестоимость и
-           * дополняем маржой
-           */
           for (const { id, cost } of Object.values(drink.details)) {
             datum.data[id] += cost;
           }
@@ -136,6 +133,7 @@ class PrimeCost extends Table {
     const filters = new Filters(DECLARE_BEVERAGES_FILTERS(session));
 
     filters.isShowSearch = false;
+    filters.set('device_date', SemanticRanges.prw30Days.resolver());
 
     super(declareColumns(session), getPrimecost(session), filters);
 
