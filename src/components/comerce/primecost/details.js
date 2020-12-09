@@ -4,6 +4,7 @@ import { Table } from 'antd';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 
 import Format from 'elements/format';
+import classes from './index.module.scss';
 
 const columns = (width) => [
   {
@@ -70,45 +71,47 @@ const ingredientColumns = (width) => [
     title: 'Ингредиент',
     dataIndex: 'name',
     render: (name) => <Format width={width[0]}>{name}</Format>,
-    width: width[0],
   },
   {
-    title: 'Количество',
+    title: 'Ед. изм.',
+    dataIndex: 'measure',
+    render: (measure) => <Format>{measure}</Format>,
+  },
+  {
+    title: 'Кол-во на 1 порцию',
+    dataIndex: 'ingredientAmount',
+    render: (ingredientAmount) => <Format>{ingredientAmount}</Format>,
+  },
+  {
+    title: 'Общее Кол-во',
     dataIndex: 'ingredientsCount',
     render: (ingredientsCount) => <Format>{ingredientsCount}</Format>,
-    width: width[1],
     sorter: (a, b) => a.ingredientsCount - b.ingredientsCount,
   },
   {
-    title: 'Цена',
+    title: 'Цена ингредиента',
+    dataIndex: 'ingredientCost',
+    render: (ingredientCost) => <Format>{ingredientCost}</Format>,
+    sorter: (a, b) => a.ingredientCost - b.ingredientCost,
+  },
+  {
+    title: 'Стоимость на порцию',
+    dataIndex: 'drinkCost',
+    render: (drinkCost) => <Format>{drinkCost}</Format>,
+    sorter: (a, b) => a.drinkCost - b.drinkCost,
+  },
+  {
+    title: 'Стоимость суммарно',
     dataIndex: 'cost',
     render: (cost) => <Format>{cost}</Format>,
-    width: width[2] / 3,
     sorter: (a, b) => a.cost - b.cost,
-  },
-  {
-    title: 'Выручка',
-    dataIndex: 'earn',
-    render: (earn) => <Format>{earn}</Format>,
-    width: width[2] / 3,
-    sorter: (a, b) => a.earn - b.earn,
-  },
-  {
-    title: 'Маржа',
-    dataIndex: 'margin',
-    render: (margin) => <Format>{margin}</Format>,
-    width: width[2] / 3,
-    sorter: (a, b) => a.margin - b.margin,
   },
 ];
 
-const expandable = (expandedRowRender, onExpandedRowsChange, expandIconColumnIndex) => ({
-  expandedRowRender,
+const GENERIC_EXPANDABLE = {
   rowExpandable: () => true,
-  expandIconColumnIndex,
   expandRowByClick: true,
-  indentSize: 0,
-  onExpandedRowsChange,
+  expandedRowClassName: (record, index, indent) => classes.detailschild,
   expandIcon: ({ expanded, onExpand, record }) => (
     expanded ? (
       <UpOutlined onClick={(e) => onExpand(record, e)} />
@@ -116,35 +119,39 @@ const expandable = (expandedRowRender, onExpandedRowsChange, expandIconColumnInd
       <DownOutlined onClick={(e) => onExpand(record, e)} />
     )
   ),
-});
+};
 
 const Details = ({ columnWidth, _, item }) => (
   <Table
     columns={columns(columnWidth)}
     dataSource={item.rows}
     pagination={false}
-    expandable={expandable(
-      ({ details: drinks }) => (
+    expandable={{
+      expandedRowRender: ({ details: drinks, key }) => (
         <Table
           columns={drinkColumns(columnWidth)}
           dataSource={drinks}
           pagination={false}
-          expandable={expandable(
-            ({ details: ingredients }) => (
+          expandable={{
+            expandedRowRender: ({ details: ingredients }) => (
               <Table
                 columns={ingredientColumns(columnWidth)}
                 dataSource={ingredients}
                 pagination={false}
               />
             ),
-            (expanded) => item.setExpanded(expanded, 1),
-            5,
-          )}
+            onExpandedRowsChange: (expanded) => item.setExpanded(expanded, key),
+            expandIconColumnIndex: 5,
+            expandedRowKeys: item.expanded.get(key) || [],
+            ...GENERIC_EXPANDABLE,
+          }}
         />
       ),
-      (expanded) => item.setExpanded(expanded, 0),
-      3,
-    )}
+      onExpandedRowsChange: (expanded) => item.setExpanded(expanded),
+      expandIconColumnIndex: 3,
+      expandedRowKeys: item.expanded.get() || [],
+      ...GENERIC_EXPANDABLE,
+    }}
   />
 );
 

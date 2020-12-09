@@ -7,10 +7,10 @@ class PrimeCostRow {
 
   data;
 
-  @observable expanded;
+  expanded = observable.map();
 
-  @action setExpanded(expanded) {
-    this.expanded = expanded;
+  @action setExpanded(expanded, parent) {
+    this.expanded.set(parent, expanded);
   }
 
   constructor(cityId, data, session) {
@@ -45,25 +45,52 @@ class PrimeCostRow {
   }
 
   @computed get rows() {
-    return Object.values(this.data.details).map((point) => ({
-      key: point.id,
-      name: this.session.points.get(point.id)?.name,
-      ...point,
-      details: Object.values(point.details).map((drink) => ({
-        key: drink.id,
-        name: this.session.drinks.get(drink.id)?.name,
-        ...drink,
-        details: Object.values(drink.details).map((ingredient) => ({
-          key: ingredient.id,
-          name: this.session.ingredients.get(ingredient.id)?.name,
-          ...ingredient,
-        })),
-      })),
+    return Object.values(this.data.details).map((pointData) => ({
+      key: pointData.id,
+      name: this.session.points.get(pointData.id)?.name,
+      ...pointData,
+      details: Object.values(pointData.details).map((drinkData) => {
+        const drink = this.session.drinks.get(drinkData.id);
+        return {
+          key: drinkData.id,
+          name: drink?.name,
+          ...drinkData,
+          details: Object.values(drinkData.details).map((ingredientData) => {
+            const key = ingredientData.id;
+            const ingredient = this.session.ingredients.get(key);
+            const ingredientAmount = drink && drink.recipe.find(({ id }) => id === key)?.amount;
+            const drinkCost = ingredientAmount * ingredient?.cost;
+            return {
+              key,
+              name: ingredient?.name,
+              ingredientAmount,
+              ingredientCost: ingredient?.cost,
+              drinkCost: isFinite(drinkCost) ? drinkCost : undefined,
+              measure: ingredient.dimension,
+              ...ingredientData,
+            };
+          }),
+        };
+      }),
     }));
   }
 
   @computed get detailsRowsCount() {
-    return Object.keys(this.data.details).length;
+    let result = Object.keys(this.data.details).length;
+    const rootExpander = new Set(this.expanded.get());
+    for (const [parent, keys] of this.expanded.entries()) {
+      if (typeof parent === 'undefined' || rootExpander.has(parent)) {
+        const father = (
+          typeof parent === 'undefined'
+            ? this.data
+            : this.data.details[parent]
+        ).details;
+        for (const key of keys) {
+          result += Object.entries(father[key].details).length + 1;
+        }
+      }
+    }
+    return result;
   }
 }
 

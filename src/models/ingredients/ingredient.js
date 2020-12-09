@@ -12,8 +12,6 @@ class Ingridient extends Datum {
 
   @observable cost = null;
 
-  @observable dimension = null;
-
   session;
 
   constructor(session) {

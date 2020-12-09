@@ -20,3 +20,9 @@
     margin-bottom: $generic-margin;
   }
 }
+
+.detailschild>td {
+  :global .ant-table-wrapper:only-child .ant-table {
+    margin-left: 0px;
+  }
+}

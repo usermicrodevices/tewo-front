@@ -82,7 +82,6 @@ class Ingridients extends Table {
   }
 
   get(typeId) {
-    console.log(typeId);
     return this.rawData.find(({ id }) => id === typeId);
   }
 
