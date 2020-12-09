@@ -1,5 +1,5 @@
 /* eslint class-methods-use-this: off */
-import { observable } from 'mobx';
+import { computed, observable } from 'mobx';
 
 import Filters from 'models/filters';
 import Table from 'models/table';
@@ -30,9 +30,43 @@ const declareColumns = () => ({
 });
 
 class PrimeCost extends Table {
-  @observable cleans;
+  @computed get summary() {
+    const result = {
+      earn: 0,
+      cost: 0,
+      margin: 0,
+    };
+    for (const { earn, cost, margin } of this.rawData) {
+      result.earn += earn;
+      result.cost += cost;
+      result.margin += margin;
+    }
+    return result;
+  }
 
-  @observable stats = {};
+  @computed get top() {
+    const result = {};
+    for (const { data, session } of this.rawData) {
+      for (const point of Object.values(data.details)) {
+        for (const drink of Object.values(point.details)) {
+          if (!(drink.id in result)) {
+            result[drink.id] = {
+              id: drink.id,
+              name: session.drinks.get(drink.id)?.name,
+              earn: 0,
+              cost: 0,
+              margin: 0,
+            };
+          }
+          const datum = result[drink.id];
+          datum.earn += drink.earn;
+          datum.cost += drink.cost;
+          datum.margin += drink.margin;
+        }
+      }
+    }
+    return Object.values(result).sort(({ margin: a }, { margin: b }) => b - a);
+  }
 
   constructor(session) {
     const filters = new Filters(DECLARE_BEVERAGES_FILTERS(session));
