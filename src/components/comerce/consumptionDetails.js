@@ -4,6 +4,8 @@ import { Table } from 'antd';
 
 import Format from 'elements/format';
 
+import classes from './primecost/index.module.scss';
+
 const columns = (width) => [
   {
     title: 'Напиток',
@@ -38,6 +40,7 @@ const Details = ({ columnWidth, _, item }) => {
   const { detailsRows } = item;
   return (
     <Table
+      className={classes.details}
       columns={columns(columnWidth)}
       dataSource={detailsRows}
       pagination={false}

@@ -9,8 +9,16 @@ class PrimeCostRow {
 
   expanded = observable.map();
 
+  @observable smallScreenAddition;
+
   @action setExpanded(expanded, parent) {
     this.expanded.set(parent, expanded);
+  }
+
+  @action setSmallScreenAffition(value) {
+    if (this.smallScreenAddition !== value) {
+      this.smallScreenAddition = value;
+    }
   }
 
   constructor(cityId, data, session) {
@@ -87,6 +95,9 @@ class PrimeCostRow {
         ).details;
         for (const key of keys) {
           result += Object.entries(father[key].details).length + 1;
+          if (this.smallScreenAddition && typeof parent !== 'undefined') {
+            result += 0.5;
+          }
         }
       }
     }

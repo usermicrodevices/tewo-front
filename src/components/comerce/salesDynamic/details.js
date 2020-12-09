@@ -48,6 +48,7 @@ const Details = ({ columnWidth, _, item }) => {
   const { details: { rows } } = item;
   return (
     <Table
+      className={classNames.details}
       columns={columns(columnWidth)}
       dataSource={rows}
       pagination={false}

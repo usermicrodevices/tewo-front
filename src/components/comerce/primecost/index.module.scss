@@ -21,8 +21,12 @@
   }
 }
 
-.detailschild>td {
-  :global .ant-table-wrapper:only-child .ant-table {
-    margin-left: 0px;
+.details {
+  padding-left: 16px;
+  background-color: #FBFBFB;
+  .detailschild>td {
+    :global .ant-table-wrapper:only-child .ant-table {
+      margin-left: 0px;
+    }
   }
 }
