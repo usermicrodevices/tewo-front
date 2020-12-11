@@ -71,6 +71,7 @@ const ingredientColumns = (width) => [
     title: 'Ингредиент',
     dataIndex: 'name',
     render: (name) => <Format width={width[0]}>{name}</Format>,
+    width: width[0],
   },
   {
     title: 'Ед. изм.',
@@ -121,38 +122,42 @@ const GENERIC_EXPANDABLE = {
   ),
 };
 
-const Details = ({ columnWidth, _, item }) => (
-  <Table
-    columns={columns(columnWidth)}
-    dataSource={item.rows}
-    pagination={false}
-    expandable={{
-      expandedRowRender: ({ details: drinks, key }) => (
-        <Table
-          columns={drinkColumns(columnWidth)}
-          dataSource={drinks}
-          pagination={false}
-          expandable={{
-            expandedRowRender: ({ details: ingredients }) => (
-              <Table
-                columns={ingredientColumns(columnWidth)}
-                dataSource={ingredients}
-                pagination={false}
-              />
-            ),
-            onExpandedRowsChange: (expanded) => item.setExpanded(expanded, key),
-            expandIconColumnIndex: 5,
-            expandedRowKeys: item.expanded.get(key) || [],
-            ...GENERIC_EXPANDABLE,
-          }}
-        />
-      ),
-      onExpandedRowsChange: (expanded) => item.setExpanded(expanded),
-      expandIconColumnIndex: 3,
-      expandedRowKeys: item.expanded.get() || [],
-      ...GENERIC_EXPANDABLE,
-    }}
-  />
-);
+const Details = ({ columnWidth, _, item }) => {
+  item.setSmallScreenAffition(columnWidth.reduce((p, c) => p + c, 0) < 1250);
+  return (
+    <Table
+      columns={columns(columnWidth)}
+      dataSource={item.rows}
+      pagination={false}
+      className={classes.details}
+      expandable={{
+        expandedRowRender: ({ details: drinks, key }) => (
+          <Table
+            columns={drinkColumns(columnWidth)}
+            dataSource={drinks}
+            pagination={false}
+            expandable={{
+              expandedRowRender: ({ details: ingredients }) => (
+                <Table
+                  columns={ingredientColumns(columnWidth)}
+                  dataSource={ingredients}
+                  pagination={false}
+                />
+              ),
+              onExpandedRowsChange: (expanded) => item.setExpanded(expanded, key),
+              expandIconColumnIndex: 5,
+              expandedRowKeys: item.expanded.get(key) || [],
+              ...GENERIC_EXPANDABLE,
+            }}
+          />
+        ),
+        onExpandedRowsChange: (expanded) => item.setExpanded(expanded),
+        expandIconColumnIndex: 3,
+        expandedRowKeys: item.expanded.get() || [],
+        ...GENERIC_EXPANDABLE,
+      }}
+    />
+  );
+};
 
 export default observer(Details);

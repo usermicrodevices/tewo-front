@@ -17,7 +17,7 @@ class Device extends Datum {
 
   setupDate;
 
-  salePointId;
+  @observable salePointId;
 
   serial;
 
@@ -63,6 +63,10 @@ class Device extends Datum {
       timeZone: {
         type: 'selector',
         selector: zones.RU.map((v) => [v, v]),
+      },
+      salePointId: {
+        type: 'selector',
+        selector: this.session.points.selector,
       },
       setupDate: {
         type: 'date',
@@ -199,7 +203,7 @@ class Device extends Datum {
         value: this.name,
       },
       {
-        dataIndex: 'salePoint',
+        dataIndex: 'salePointId',
         title: 'Объект',
         value: this.salePointName,
       },

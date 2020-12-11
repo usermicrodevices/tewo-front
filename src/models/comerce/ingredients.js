@@ -6,6 +6,7 @@ import Table from 'models/table';
 import { getIngredientsConsumption } from 'services/ingredients';
 import { DECLARE_BEVERAGES_FILTERS } from 'models/beverages';
 import Details from 'components/comerce/consumptionDetails';
+import { SemanticRanges } from 'utils/date';
 
 const declareColumns = () => ({
   ingredientName: {
@@ -49,6 +50,7 @@ class Ingredients extends Table {
     const filters = new Filters(DECLARE_BEVERAGES_FILTERS(session));
 
     filters.isShowSearch = false;
+    filters.set('device_date', SemanticRanges.prw30Days.resolver());
 
     super(declareColumns(session), getIngredientsConsumption(session), filters);
   }

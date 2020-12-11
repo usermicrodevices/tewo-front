@@ -31,8 +31,9 @@ class Datum {
   }
 
   update(data, ...aditionalArgs) {
+    console.log(this, data);
     console.assert(
-      Object.entries(data).filter(([key]) => typeof this[key] === 'undefined').length === 0,
+      Object.keys(data).filter((key) => typeof this[key] === 'undefined').length === 0,
       'not all keys from update data is expected in object',
       this,
       data,
