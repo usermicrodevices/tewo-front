@@ -2,6 +2,7 @@ import React, {
   useRef, useCallback, useImperativeHandle,
   useEffect,
 } from 'react';
+import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import {
   YMaps, Map as YandexMap, Placemark, Clusterer,
@@ -56,10 +57,9 @@ function YMapPoint({
   );
 }
 
-function YMapCluster({ points, options }) {
-  return (
-    <Clusterer options={options}>
-      {
+const YMapCluster = observer(({ points, options }) => (
+  <Clusterer options={options}>
+    {
         points.map(({
           id, location, state, name, values,
         }) => (
@@ -73,9 +73,8 @@ function YMapCluster({ points, options }) {
           />
         ))
       }
-    </Clusterer>
-  );
-}
+  </Clusterer>
+));
 
 function YMap({
   points, center, zoom, onZoom, onInfoShow, fRef, height,

@@ -1,6 +1,6 @@
 /* eslint class-methods-use-this: off */
 
-import { computed } from 'mobx';
+import { computed, action } from 'mobx';
 import localStorage from 'mobx-localstorage';
 
 const MENU_OPEN_STORAGE_KEY = 'is_menu_open';
@@ -14,7 +14,13 @@ class Menu {
     localStorage.setItem(MENU_OPEN_STORAGE_KEY, !val);
   }
 
-  @computed get mode() { return this.isOpen ? 'inline' : 'vertical'; }
+  @action.bound open() {
+    this.isOpen = true;
+  }
+
+  @action.bound close() {
+    this.isOpen = false;
+  }
 }
 
 export default Menu;

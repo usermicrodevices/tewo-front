@@ -4,6 +4,8 @@ import { inject, observer } from 'mobx-react';
 import { useLocation } from 'react-router-dom';
 import classnames from 'classnames';
 
+import * as device from 'utils/device';
+
 import data from './data';
 import Item from './item';
 import Submenu from './submenu';
@@ -36,13 +38,22 @@ const findCurrentElement = (currentPathname) => {
 const MenuComponent = inject('menu')(observer(({ menu }) => {
   const { pathname } = useLocation();
   const { defaultSelectedKeys, defaultOpenKeys } = findCurrentElement(pathname);
+
+  function onClickMenu() {
+    if (menu.isOpen && device.isMobile()) {
+      menu.close();
+    }
+  }
+
   return (
     <Menu
+      mode="inline"
+      onClick={onClickMenu}
       defaultSelectedKeys={defaultSelectedKeys}
       defaultOpenKeys={menu.isOpen ? defaultOpenKeys : []}
       selectedKeys={defaultSelectedKeys}
-      mode={menu.mode}
-      className={classnames(style.menu, { [style.vertical]: !menu.isOpen })}
+      className={classnames(style.menu)}
+      inlineCollapsed={!menu.isOpen}
     >
       {
         data.map(({ icon, text, act }) => {
@@ -50,7 +61,7 @@ const MenuComponent = inject('menu')(observer(({ menu }) => {
             console.assert(typeof icon !== 'undefined');
             return <Submenu key={text} icon={icon} items={act}>{menu.isOpen && text}</Submenu>;
           }
-          return <Item icon={icon} key={text} act={act}>{menu.isOpen && text}</Item>;
+          return <Item icon={icon} key={text} act={act} title={text}>{menu.isOpen && text}</Item>;
         })
       }
     </Menu>

@@ -24,7 +24,7 @@ const Submenu = ({
   >
     {
       items.map(({ act, text }) => (
-        <Item key={text} act={act}>{text}</Item>
+        <Item key={text} act={act} title={text}>{text}</Item>
       ))
     }
   </SubMenu>
