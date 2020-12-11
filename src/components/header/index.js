@@ -69,7 +69,7 @@ class Header extends React.Component {
         <Dropdown overlay={this.menu} placement="bottomRight">
           <div className={style.settings}>
             <Icon className={style.gear} color="text" name="settings-outline" />
-            Настройки
+            <span className={style.label}>Настройки</span>
           </div>
         </Dropdown>
       </div>

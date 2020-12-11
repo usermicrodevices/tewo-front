@@ -1,4 +1,4 @@
-@import 'src/themes/constants';
+@import "src/themes/constants";
 
 $icon-size: 34px;
 
@@ -8,13 +8,13 @@ $icon-size: 34px;
   padding-top: 37px;
   overflow-y: auto;
   overflow-x: hidden;
-  direction:rtl;
+  direction: rtl;
 
-  >li {
+  > li {
     * {
-      direction:ltr;
+      direction: ltr;
     }
-    direction:ltr;
+    direction: ltr;
   }
 
   // Disable jumping effect while menu toggling
@@ -24,28 +24,43 @@ $icon-size: 34px;
     transition: none;
   }
 
-
-}
-
-.vertical {
-  width: $small-menu-width;
-  padding-top: 0px;
-
-  > :global(.ant-menu-item), :global(.ant-menu-submenu-vertical) > :global(.ant-menu-submenu-title) {
-    height: $small-menu-width - 8px;
+  @include mobile {
+    top: 56px;
+    position: fixed;
+    z-index: 1;
+    width: 100vw;
+    height: calc(100% - 40px);
+    overflow-y: auto;
+    padding: 12px 0 32px 0;
+    margin: 0;
   }
 
-  :global(.anticon) {
-    font-size: 34px;
-    margin-left: $small-menu-width / 2 - $icon-size / 2 - 16px;
-    margin-top: $small-menu-width / 2 - $icon-size / 2 - 4px;
-  }
+  &:global(.ant-menu-inline-collapsed) {
+    width: $small-menu-width;
+    padding-top: 0;
 
-  :global(.ant-menu-submenu-arrow) {
-    display: none;
-  }
+    :global(.ant-menu-item),
+    :global(.ant-menu-submenu .ant-menu-submenu-title) {
+      display: flex;
+      align-items: center;
+      height: $small-menu-width - 8px;
+      padding: 0 32px !important;
+    }
 
-  :global(.ant-menu-submenu-title) {
-    text-overflow: clip;
+    :global(.anticon),
+    :global(.ant-menu-submenu > .ant-menu-submenu-title .anticon) {
+      font-size: 34px;
+    }
+
+    :global(.ant-menu-selected::after),
+    :global(.ant-menu-item-selected::after) {
+      transform: scaleY(1);
+      opacity: 1;
+      transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), -webkit-transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
+    }
+
+    @include mobile {
+      display: none;
+    }
   }
 }
