@@ -86,9 +86,9 @@ const rangeMetricCompareCell = ({ cur, prw }) => {
     <Text>
       <div style={{ display: 'flex', alignItems: 'baseline' }}>
         <Format>{ a }</Format>
-        {' / '}
+        {'₽ / '}
         <Format>{ b }</Format>
-        { ' / '}
+        {'₽ / '}
         <Format>{ c }</Format>
       </div>
     </Text>

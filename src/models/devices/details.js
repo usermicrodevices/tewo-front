@@ -12,8 +12,6 @@ class Details {
 
   @observable stats = null;
 
-  @observable clearancesAmount;
-
   @observable lastBeverages;
 
   @observable serviceEvents;
@@ -118,9 +116,6 @@ class Details {
     });
     me.session.events.getDeviceServiceEvents(me.id).then(({ results }) => {
       this.serviceEvents = results;
-    });
-    me.session.events.getDeviceClearancesEventsLastWeekCount(me.id).then((count) => {
-      this.clearancesAmount = count;
     });
 
     me.session.events.getDeviceClearances(me.id).then(({ results }) => {

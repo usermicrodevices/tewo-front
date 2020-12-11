@@ -15,7 +15,9 @@ const ACTIONS_COLUMN_WIDT = 70;
 const SCROLL_PANE_WIDTH = 25;
 const MAX_ROWS_AMOUNT = 620000;
 
-const Row = (data, columns, freshItems, rowFunc, columnWidth, actions, onRowClick, openedRows) => withRouter(observer(({ index: rowIndex, style, history: { push } }) => {
+const Row = (
+  data, columns, freshItems, rowFunc, columnWidth, actions, onRowClick, openedRows,
+) => withRouter(observer(({ index: rowIndex, style, history: { push } }) => {
   const index = rowFunc(rowIndex);
   const rowData = data[index];
   if (rowIndex === MAX_ROWS_AMOUNT - 1) {
@@ -46,7 +48,9 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions, onRowClic
         onClick={() => onRowClick(index)}
       >
         {
-          columns.map(({ align, key, transform }, columnIndex) => {
+          columns.map(({
+            align, key, transform, suffix,
+          }, columnIndex) => {
             const width = columnWidth[columnIndex];
             let datum = rowData[key];
             if (transform) {
@@ -56,6 +60,7 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions, onRowClic
             return (
               <div key={key} style={cellStyle} className={styles['virtual-table-cell']}>
                 <Format width={width}>{datum}</Format>
+                {suffix}
               </div>
             );
           })
@@ -66,7 +71,7 @@ const Row = (data, columns, freshItems, rowFunc, columnWidth, actions, onRowClic
             className={classNames(styles['virtual-table-cell'], styles.lastcolumn, styles.actions, { [styles.hidehover]: !actions.detailsWidget })}
           >
             { actions.detailsWidget && (
-              <div className={styles.collapseicon} style={{ transform: `rotate(${openedRows?.has(index) ? 180 : 0}deg)` }}>
+              <div className={styles.collapseicon} style={{ cursor: 'pointer', transform: `rotate(${openedRows?.has(index) ? 180 : 0}deg)` }}>
                 <DownOutlined />
               </div>
             )}

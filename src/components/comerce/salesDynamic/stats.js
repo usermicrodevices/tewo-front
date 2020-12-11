@@ -9,7 +9,7 @@ import SummaryCard from 'elements/card/summary';
 const Stats = ({ table: { wholeSales: { cur, prw } } }) => (
   <SummaryCard>
     <div>
-      <Typography.Value size="xl"><Format>{ cur }</Format></Typography.Value>
+      <Typography.Value size="xl"><Format isCost>{ cur }</Format></Typography.Value>
       <Typography.Caption>сумма продаж за текущий период</Typography.Caption>
     </div>
     { cur !== prw && (
@@ -19,7 +19,7 @@ const Stats = ({ table: { wholeSales: { cur, prw } } }) => (
       </div>
     )}
     <div>
-      <Typography.Value size="xl"><Format>{ prw }</Format></Typography.Value>
+      <Typography.Value size="xl"><Format isCost>{ prw }</Format></Typography.Value>
       <Typography.Caption>сумма продаж за предыдущий период</Typography.Caption>
     </div>
   </SummaryCard>

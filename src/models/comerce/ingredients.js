@@ -12,7 +12,7 @@ const declareColumns = () => ({
   ingredientName: {
     isVisibleByDefault: true,
     title: 'Ингредиент',
-    grow: 1,
+    grow: 3,
   },
   measure: {
     isVisibleByDefault: true,
@@ -30,6 +30,7 @@ const declareColumns = () => ({
     title: 'Цена',
     grow: 1,
     sortDirections: 'both',
+    suffix: '₽',
   },
   amount: {
     isVisibleByDefault: true,
@@ -38,6 +39,7 @@ const declareColumns = () => ({
     sortDirections: 'both',
     isDefaultSort: true,
     isAsyncorder: true,
+    suffix: '₽',
   },
 });
 

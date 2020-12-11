@@ -11,9 +11,7 @@ import DevicesList from './devicesList';
 
 import style from './style.module.scss';
 
-const SalePointTitleAction = inject('element')(observer(({ element: { location, address } }) => {
-  return <Location location={location} address={address} />;
-}));
+const SalePointTitleAction = inject('element')(observer(({ element: { location, address } }) => <Location location={location} address={address} />));
 
 const SalePointOverview = () => (
   <div className={style.main}>

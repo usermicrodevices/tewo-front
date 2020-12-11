@@ -26,7 +26,7 @@ const SubTitle = ({ salePoints }) => {
     return name;
   }
   const more = salePoints.length - 1;
-  const text = `${name} и ещё ${more} ${plural(more, ['объект', 'объектов', 'объекта'])}`
+  const text = `${name} и ещё ${more} ${plural(more, ['объект', 'объектов', 'объекта'])}`;
 
   return <Typography.Caption>{text}</Typography.Caption>;
 };

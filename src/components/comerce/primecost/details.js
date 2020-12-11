@@ -98,13 +98,15 @@ const ingredientColumns = (width) => [
   {
     title: 'Стоимость на порцию',
     dataIndex: 'drinkCost',
-    render: (drinkCost) => <Format>{drinkCost}</Format>,
+    render: (drinkCost) => (
+      <Format isCost>{drinkCost}</Format>
+    ),
     sorter: (a, b) => a.drinkCost - b.drinkCost,
   },
   {
     title: 'Стоимость суммарно',
     dataIndex: 'cost',
-    render: (cost) => <Format>{cost}</Format>,
+    render: (cost) => <Format isCost>{cost}</Format>,
     sorter: (a, b) => a.cost - b.cost,
   },
 ];

@@ -11,26 +11,24 @@ import Chart from './chart';
 
 import classes from './index.module.scss';
 
-const Cleans = ({ table }) => {
-  return (
-    <>
-      <TableHeader
-        title="Себестоимость"
-        customButtons={(
-          <>
-            <FiltersButton />
-          </>
+const Cleans = ({ table }) => (
+  <>
+    <TableHeader
+      title="Себестоимость"
+      customButtons={(
+        <>
+          <FiltersButton />
+        </>
         )}
-      />
-      <div className={classes.root}>
-        <Chart />
-        <Summary />
-        <Card className={classes.table}>
-          <Table />
-        </Card>
-      </div>
-    </>
-  );
-};
+    />
+    <div className={classes.root}>
+      <Chart />
+      <Summary />
+      <Card className={classes.table}>
+        <Table />
+      </Card>
+    </div>
+  </>
+);
 
 export default inject('table')(observer(Cleans));

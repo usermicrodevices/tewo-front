@@ -19,7 +19,7 @@ const Color = ({ children }) => (
 );
 
 const Format = ({
-  children, width,
+  children, width, isCost,
 }) => {
   if (typeof children === 'undefined') {
     return <Loader />;
@@ -45,6 +45,9 @@ const Format = ({
     txt = children;
   } else if (typeof children === 'number') {
     txt = FORMAT.format(children);
+    if (isCost) {
+      txt = `${txt}₽`;
+    }
   } else if (moment.isMoment(children)) {
     return (
       <div className={style.clock}>

@@ -28,10 +28,11 @@ const declareColumns = () => ({
     title: 'Сумма продаж',
     grow: 1,
     sortDirections: 'both',
+    suffix: '₽',
   },
   partOfAll: {
     isVisibleByDefault: true,
-    title: '% от общей суммы продаж',
+    title: 'Доля наливов',
     grow: 1,
     sortDirections: 'both',
     transform: (_, { percent }) => Format({ children: percent }),
@@ -40,8 +41,6 @@ const declareColumns = () => ({
 
 class Sales extends Table {
   @observable clearancesAmount;
-
-  @observable beveragesAfterClearances = undefined;
 
   constructor(session) {
     const filters = new Filters({

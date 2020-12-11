@@ -19,6 +19,7 @@ const declareColumns = () => ({
     title: 'Выручка',
     grow: 1,
     sortDirections: 'both',
+    suffix: '₽',
   },
   margin: {
     isVisibleByDefault: true,
@@ -27,6 +28,7 @@ const declareColumns = () => ({
     sortDirections: 'both',
     isDefaultSort: true,
     isAsyncorder: true,
+    suffix: '₽',
   },
 });
 
@@ -95,10 +97,10 @@ class PrimeCost extends Table {
         }
       }
     }
-    const orderedResult = Object.entries(result).sort(([_, { margin: a }], [__, { margin: b }]) => b - a).slice(0, DRINKS_AMOUNT);
+    const orderedResult = Object.entries(result).sort(([, { margin: a }], [, { margin: b }]) => b - a).slice(0, DRINKS_AMOUNT);
     const categories = orderedResult.slice(0, DRINKS_AMOUNT).map(([drinkId]) => session.drinks.get(parseInt(drinkId, 10))?.name);
     const usedIngredientsSet = new Set();
-    for (const [_, { data }] of orderedResult) {
+    for (const [, { data }] of orderedResult) {
       for (const ingredientId of Object.keys(data)) {
         usedIngredientsSet.add(parseInt(ingredientId, 10));
       }
@@ -114,11 +116,11 @@ class PrimeCost extends Table {
     });
     for (const [ingredientIndex, ingredientId] of usedIngredientsIds.entries()) {
       const seria = series[ingredientIndex];
-      for (const [drinkIndex, [_, { data }]] of orderedResult.entries()) {
+      for (const [drinkIndex, [, { data }]] of orderedResult.entries()) {
         seria.data[drinkIndex] = data[ingredientId] || 0;
       }
     }
-    for (const [drinkIndex, [_, { margin }]] of orderedResult.entries()) {
+    for (const [drinkIndex, [, { margin }]] of orderedResult.entries()) {
       series[series.length - 1].data[drinkIndex] = margin;
     }
     return {

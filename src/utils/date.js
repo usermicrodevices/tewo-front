@@ -5,7 +5,6 @@ const momentToArg = (m) => m.format().replace('+', '%2B');
 
 const daterangeToArgs = (range, name) => {
   if (!Array.isArray(range) || range.length !== 2) {
-    console.error('wrong daterange filter args');
     return '';
   }
   if (!moment.isMoment(range[0]) || !moment.isMoment(range[1])) {

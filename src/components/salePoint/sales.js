@@ -67,14 +67,14 @@ const Sales = ({ element: { details } }) => {
         </Typography.Title>
         <div className={styles.rangereport}>
           <div className={styles.values}>
-            <Typography.Value size="xl" strong><Format>{salesCur}</Format></Typography.Value>
+            <Typography.Value size="xl" strong><Format isCost>{salesCur}</Format></Typography.Value>
             <ChangesLabel value={salesDiff} />
           </div>
           <Typography.Caption>продаж за текущий период</Typography.Caption>
         </div>
         <div className={classNames(styles.rangereport, styles.prew)}>
           <div className={styles.values}>
-            <Typography.Value size="l"><Format>{salesPrw}</Format></Typography.Value>
+            <Typography.Value size="l"><Format isCost>{salesPrw}</Format></Typography.Value>
           </div>
           <Typography.Caption>продаж за предыдущий период</Typography.Caption>
         </div>

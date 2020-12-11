@@ -2,7 +2,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 
 import Format from 'elements/format';
-import Loader from 'elements/loader';
 import Typography from 'elements/typography';
 import plural from 'utils/plural';
 
@@ -33,7 +32,7 @@ const Statistic = inject(({ session, storage }) => ({ session, storage }))(obser
           return null;
         }
         const items = Object.entries(storage.top)
-          .sort(([_, b1], [__, b2]) => Math.sign(b2.beverages - b1.beverages))
+          .sort(([, b1], [, b2]) => Math.sign(b2.beverages - b1.beverages))
           .slice(0, 6);
         const salePointsSet = new Set(items.map(([id]) => parseInt(id, 10)));
         if (session.points.isLoaded) {

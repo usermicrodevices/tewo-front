@@ -33,7 +33,7 @@ const BeveragesRateDiagram = inject(({ session, storage }) => ({ session, storag
     }
   }
   let maxValue = 0;
-  for (const [_, value] of top) {
+  for (const [, value] of top) {
     maxValue = Math.max(maxValue, value);
   }
   maxValue = sweetLabelsMax(maxValue);

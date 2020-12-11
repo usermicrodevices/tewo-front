@@ -10,24 +10,15 @@ import classes from './summary.module.scss';
 const Row = ({ earn, cost, margin }) => (
   <div className={classes.row}>
     <div>
-      <Typography.Value size="xl">
-        <Format>{ earn }</Format>
-        ₽
-      </Typography.Value>
+      <Typography.Value size="xl"><Format isCost>{ earn }</Format></Typography.Value>
       <Typography.Caption className={classes.caption}>выручка</Typography.Caption>
     </div>
     <div>
-      <Typography.Value size="xl">
-        <Format>{ cost }</Format>
-        ₽
-      </Typography.Value>
+      <Typography.Value size="xl"><Format isCost>{ cost }</Format></Typography.Value>
       <Typography.Caption className={classes.caption}>себестоимость</Typography.Caption>
     </div>
     <div>
-      <Typography.Value size="xl">
-        <Format>{ margin }</Format>
-        ₽
-      </Typography.Value>
+      <Typography.Value size="xl"><Format isCost>{ margin }</Format></Typography.Value>
       <Typography.Caption className={classes.caption}>прибыль</Typography.Caption>
     </div>
   </div>

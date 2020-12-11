@@ -39,7 +39,7 @@ const sum = (data) => {
 
 const SalesDistrib = ({
   table: {
-    sort, clearancesAmount, data: indirectData, beveragesAfterClearances,
+    sort, data: indirectData,
   },
 }) => {
   const isInverseSort = sort.direction === 'ascend';
@@ -52,10 +52,6 @@ const SalesDistrib = ({
   return (
     <>
       <AntdCatd className={classes.chart}>
-        <div className={classes.toplabels}>
-          <Label value={clearancesAmount} caption="очисток за период" />
-          <Label value={beveragesAfterClearances} caption="количество наливов с прошедшей очистки" />
-        </div>
         <div className={classes.kernel}>
           <Pie
             series={series}

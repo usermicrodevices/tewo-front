@@ -4,6 +4,7 @@ import { Card } from 'antd';
 
 import Icon from 'elements/icon';
 import Typography from 'elements/typography';
+import Format from 'elements/format';
 
 import Badge from '../badge';
 import style from './index.module.scss';
@@ -30,8 +31,8 @@ const Statistic = ({ element: { details } }) => (
         label="динамика продаж"
       />
       <Badge
-        value={details.beveragesStats.salesCur}
-        label="сумма денег руб"
+        value={typeof details.beveragesStats.salesCur === 'number' ? `${Format({ children: details.beveragesStats.salesCur })}₽` : details.beveragesStats.salesCur}
+        label="сумма денег"
       />
       <Badge
         label="потрачено зёрен"

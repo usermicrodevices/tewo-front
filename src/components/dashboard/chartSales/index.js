@@ -11,7 +11,7 @@ import classnames from './index.module.scss';
 const ChartSalesHeader = ({ diff, current }) => (
   <div className={classnames.header}>
     <h2>
-      <Format>{current}</Format>
+      <Format isCost>{current}</Format>
     </h2>
     <ChangesLabel value={diff} />
   </div>

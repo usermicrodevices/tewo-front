@@ -1,10 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { useLocation, Link } from 'react-router-dom';
-import {
-  PageHeader, Menu, Space, Button,
-} from 'antd';
-import Icon from 'elements/icon';
+import { PageHeader, Menu } from 'antd';
 
 import style from './style.module.scss';
 
