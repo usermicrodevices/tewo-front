@@ -36,7 +36,7 @@
         }
 
         content {
-            padding-top: $header-height + 12px;
+            padding: $header-height + $mobile-padding $mobile-padding;
             overflow: initial;
         }
     }

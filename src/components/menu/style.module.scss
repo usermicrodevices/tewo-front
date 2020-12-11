@@ -29,9 +29,9 @@ $icon-size: 34px;
     position: fixed;
     z-index: 1;
     width: 100vw;
-    height: calc(100vh - 56px);
-    overflow: auto;
-    padding: 12px 0;
+    height: calc(100% - 40px);
+    overflow-y: auto;
+    padding: 12px 0 32px 0;
     margin: 0;
   }
 

@@ -6,10 +6,6 @@
     align-items: center;
     background-color: white;
 
-    @include mobile {
-        padding: 0 $mobile-padding;
-    }
-
     .title {
         min-height: $header-height;
         flex-grow: 1;
@@ -36,6 +32,8 @@
 
         @include mobile {
             margin: 0;
+            padding: $mobile-padding;
+            box-sizing: content-box;
         }
     }
 
@@ -57,6 +55,8 @@
 
             .gear {
                 margin: 0;
+                padding: $mobile-padding;
+                box-sizing: content-box;
             }
 
             .label {
