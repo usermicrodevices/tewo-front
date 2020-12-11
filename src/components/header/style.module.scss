@@ -6,6 +6,10 @@
     align-items: center;
     background-color: white;
 
+    @include mobile {
+        padding: 0 $mobile-padding;
+    }
+
     .title {
         min-height: $header-height;
         flex-grow: 1;
@@ -14,6 +18,12 @@
         background-size: 100% ($header-height - 10);
         background-repeat: no-repeat;
         background-position: 50% 50%;
+
+        @include mobile {
+            height: 45px;
+            width: 100px;
+            flex-grow: 0;
+        }
     }
 
     .menuButton {
@@ -23,6 +33,10 @@
         fill: $link-color;
         margin-left: $generic-margin;
         margin-right: -($generic-margin + $generic-icon-size);
+
+        @include mobile {
+            margin: 0;
+        }
     }
 
     .settings {
@@ -30,12 +44,25 @@
         margin-left: -114.5px - $generic-margin;
         display: flex;
         align-items: center;
+        cursor: pointer;
 
         .gear {
             font-size: $generic-icon-size;
             margin-right: 8px;
             margin-left: 8px;
         }
-        cursor: pointer;
+
+        @include mobile {
+            margin: 0;
+
+            .gear {
+                margin: 0;
+            }
+
+            .label {
+                display: none;
+            }
+        }
     }
 }
+

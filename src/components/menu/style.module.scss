@@ -24,6 +24,16 @@ $icon-size: 34px;
     transition: none;
   }
 
+  @include mobile {
+    top: 56px;
+    position: fixed;
+    z-index: 1;
+    width: 100vw;
+    height: calc(100vh - 56px);
+    overflow: auto;
+    padding: 12px 0;
+    margin: 0;
+  }
 
 }
 
@@ -47,5 +57,9 @@ $icon-size: 34px;
 
   :global(.ant-menu-submenu-title) {
     text-overflow: clip;
+  }
+
+  @include mobile {
+    display: none;
   }
 }

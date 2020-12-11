@@ -16,3 +16,22 @@ $value-size-m: 14px;
 $value-size-l: 16px;
 $value-size-xl: 20px;
 $value-size-xxxl: 42px;
+
+
+$desktop-width: 1024px;
+$tablet-width: 768px;
+$mobile-width: 480px;
+
+$mobile-padding: 10px;
+
+@mixin tablet {
+  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: #{$mobile-width}) {
+    @content;
+  }
+}
