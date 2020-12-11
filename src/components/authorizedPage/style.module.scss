@@ -22,6 +22,24 @@
         display: flex;
         flex-direction: column;
     };
+
+    @include mobile {
+        width: 100%;
+        display: block;
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+        }
+
+        content {
+            padding: $header-height + $mobile-padding $mobile-padding;
+            overflow: initial;
+        }
+    }
 }
 
 .smallMenu.main {
