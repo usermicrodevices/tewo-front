@@ -83,7 +83,7 @@ const transform = (json, group) => {
   group.id = json.id;
   group.name = json.name;
   group.companyId = json.company;
-  group.conception = json.conception;
+  group.conceptionId = json.conception;
   group.systemKey = json.system_key;
   group.devicesIdSet = observable.set(json.device_set);
   group.pricesIdSet = observable.set(json.price_set);
@@ -107,7 +107,7 @@ const FORM = {
   id: 'id',
   name: 'name',
   companyId: 'company',
-  conception: 'conception',
+  conceptionId: 'conception',
   systemKey: 'system_key',
   devicesIdSet: 'device_set',
   pricesIdSet: 'price_set',

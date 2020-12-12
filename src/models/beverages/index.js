@@ -74,7 +74,7 @@ const declareColumns = (session) => ({
   canceled: {
     isVisibleByDefault: true,
     title: 'Отменена',
-    width: 70,
+    width: 80,
     transform: (v) => (v ? canceledIcon : ''),
   },
 });
@@ -108,14 +108,12 @@ const declareFilters = (session) => ({
     title: 'Напиток',
     apply: (general, data) => general(data.drink),
     selector: () => session.drinks.selector,
-    disabled: (filter) => !filter.data.has('device__id'),
   },
   operation__id: {
     type: 'selector',
     title: 'Тип оплаты',
     apply: (general, data) => general(data.sale_sum),
     selector: () => session.beverageOperations.selector,
-    disabled: true,
   },
   canceled: {
     type: 'checkbox',

@@ -13,6 +13,7 @@ const PriceCell = (value, { sendValue }) => {
   const [isWarn, setWarn] = useState(false);
   const [isEdditing, setEdditing] = useState(false);
   const [isSending, setSending] = useState(false);
+  const [isSuccess, setSuccess] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
 
   const commit = () => {
@@ -20,6 +21,8 @@ const PriceCell = (value, { sendValue }) => {
       sendValue(currentValue)
         .then(() => {
           message.success('Цена успешно обновлена');
+          setSuccess(true);
+          setTimeout(() => { setSuccess(false); }, 1000);
         })
         .catch(() => {
           message.error('Не удалось обновить цену');
@@ -35,7 +38,7 @@ const PriceCell = (value, { sendValue }) => {
   };
   if (isEdditing) {
     return (
-      <div className={classNames(classes.root, { [classes.warn]: isWarn })}>
+      <div className={classNames(classes.root, { [classes.warn]: isWarn, [classes.success]: isSuccess })}>
         <InputNumber min={0} defaultValue={currentValue} onChange={setCurrentValue} />
         <Button
           icon={<SendOutlined style={{ transform: 'scale(1.37)' }} />}
@@ -51,8 +54,8 @@ const PriceCell = (value, { sendValue }) => {
     );
   }
   return (
-    <div className={classNames(classes.root, { [classes.warn]: isWarn })}>
-      <Format>{value}</Format>
+    <div className={classNames(classes.root, { [classes.warn]: isWarn, [classes.success]: isSuccess })}>
+      <Format isCost>{value}</Format>
       {
         isSending
           ? <LoadingOutlined />

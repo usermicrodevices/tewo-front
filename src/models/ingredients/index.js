@@ -74,11 +74,11 @@ class Ingridients extends Table {
     return 'Ingridients';
   }
 
-  @computed get selector() {
+  getSelector(filterPredicate) {
     if (!this.isLoaded) {
       return undefined;
     }
-    return this.rawData.map(({ id, name }) => [id, name]);
+    return this.rawData.filter(filterPredicate).map(({ id, name }) => [id, name]);
   }
 
   get(typeId) {

@@ -30,6 +30,7 @@ const RecipeEditroTable = ({ data, isEdditing }) => {
   const ds = data.ingredients.map(({
     id: ingredientId, amount, ingredient, selector,
   }, index) => ({
+    key: index,
     id: index + 1,
     ingredientId,
     name: ingredient ? ingredient.name : ingredient,

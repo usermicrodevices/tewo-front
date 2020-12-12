@@ -22,7 +22,7 @@ const Statistic = ({ element: { details } }) => (
         label="наливов за период"
       />
       <Badge
-        value={undefined}
+        value={details.usedQRCodes}
         label="использовано QR менеджера"
       />
       <Badge
@@ -33,12 +33,6 @@ const Statistic = ({ element: { details } }) => (
       <Badge
         value={typeof details.beveragesStats.salesCur === 'number' ? `${Format({ children: details.beveragesStats.salesCur })}₽` : details.beveragesStats.salesCur}
         label="сумма денег"
-      />
-      <Badge
-        label="потрачено зёрен"
-      />
-      <Badge
-        label="потрачено молока"
       />
     </div>
   </Card>

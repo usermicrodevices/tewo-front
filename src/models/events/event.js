@@ -1,8 +1,6 @@
 /* eslint camelcase: off */
 import { computed } from 'mobx';
 
-import plural from 'utils/plural';
-
 class Event {
   id;
 
@@ -34,45 +32,6 @@ class Event {
 
   get device__sale_point__company__id() {
     return this.company.id;
-  }
-
-  get durationText() {
-    const beginYear = this.openDate.year();
-    if (!this.closeDate.isValid()) {
-      return `Начало ${this.openDate.format('DD MMMM YYYY HH:mm')} не завершено`;
-    }
-    const endYear = this.closeDate.year();
-    if (beginYear !== endYear) {
-      return `${this.openDate.format('DD MMMM YYYY HH:mm')} - ${this.closeDate.format('DD MMMM YYYY HH:mm')}`;
-    }
-    const beginMonth = this.openDate.month();
-    const endMonth = this.closeDate.month();
-    if (beginMonth !== endMonth) {
-      return `${this.openDate.year()} год, ${this.openDate.format('DD MMMM HH:mm')} - ${this.closeDate.format('DD MMMM HH:mm')}`;
-    }
-    const beginDay = this.openDate.day();
-    const endDay = this.closeDate.day();
-    if (beginDay !== endDay) {
-      return `${this.openDate.format('MMMM')} ${this.openDate.format('DD HH:mm')} - ${this.closeDate.format('DD HH:mm')}`;
-    }
-    const beginHour = this.openDate.hour();
-    const endHour = this.closeDate.hour();
-    if (beginHour !== endHour) {
-      return `${this.openDate.format('DD MMMM')}, ${this.openDate.format('HH:mm')} - ${this.closeDate.format('HH:mm')}`;
-    }
-    const d = this.closeDate - this.openDate;
-    const m = Math.floor(d / 60000);
-    const s = Math.round((d - m * 60000) / 1000);
-    if (m > 60) {
-      console.warn(d, this.openDate, this.closeDate);
-    }
-    if (m === 0) {
-      return `Произошло ${this.openDate.format('DD MMMM HH:mm')}, длилось ${s} ${plural(s, ['секунду', 'секунд', 'секунды'])}`;
-    }
-    if (m > 3) {
-      return `Произошло ${this.openDate.format('DD MMMM HH:mm')}, длилось ${m} ${plural(s, ['минуту', 'минут', 'минуты'])}`;
-    }
-    return `Произошло ${this.openDate.format('DD MMMM HH:mm')}, длилось ${m}:${s >= 10 ? s : `0${s}`}`;
   }
 
   get start_date() {

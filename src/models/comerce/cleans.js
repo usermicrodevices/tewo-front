@@ -18,11 +18,6 @@ const declareColumns = () => ({
     title: 'Город',
     grow: 1,
   },
-  tag: {
-    isVisibleByDefault: true,
-    title: 'Тег',
-    grow: 1,
-  },
   salePointName: {
     isVisibleByDefault: true,
     title: 'Объект',
@@ -43,7 +38,7 @@ const declareColumns = () => ({
   },
 });
 
-class Sales extends Table {
+class Cleans extends Table {
   @observable cleans;
 
   @observable stats = {};
@@ -112,4 +107,4 @@ class Sales extends Table {
   get isImpossibleToBeSync() { return true; }
 }
 
-export default Sales;
+export default Cleans;

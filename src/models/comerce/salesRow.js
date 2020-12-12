@@ -37,20 +37,6 @@ class SalesRow {
     return this.details.isLoaded;
   }
 
-  @computed get deltaSales() {
-    if (this.prwSales === 0) {
-      return null;
-    }
-    return this.curSales / this.prwSales;
-  }
-
-  @computed get deltaBeverages() {
-    if (this.prwBeverages === 0) {
-      return null;
-    }
-    return this.curBeverages / this.prwBeverages;
-  }
-
   @computed get salePoint() {
     return this.session.points.get(this.salePointId);
   }

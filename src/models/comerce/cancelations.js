@@ -47,7 +47,10 @@ class Sales extends Table {
   @observable top;
 
   constructor(session) {
-    const filters = new Filters(DECLARE_BEVERAGES_FILTERS(session));
+    const rawFilters = DECLARE_BEVERAGES_FILTERS(session);
+    delete rawFilters.canceled;
+    rawFilters.device_date.type = 'daterange';
+    const filters = new Filters(rawFilters);
 
     filters.isShowSearch = false;
     filters.set('device_date', SemanticRanges.prw30Days.resolver());

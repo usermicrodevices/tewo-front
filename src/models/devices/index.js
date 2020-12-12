@@ -99,8 +99,7 @@ const declareFilters = (session) => ({
     type: 'selector',
     title: 'Модель оборудования',
     apply: (general, data) => general(data.deviceModelId),
-    selector: () => [],
-    disabled: true,
+    selector: () => session.deviceModels.selector,
   },
   serial: {
     type: 'text',

@@ -26,15 +26,15 @@ const Editor = ({
       setIsEdditing(true);
     }
   });
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [form] = Form.useForm();
+  const isRecipeMode = data instanceof RecipeEditor;
   const setIsEdditing = (v) => {
     if (isRecipeMode && !v) { data.cancel(); }
     if (!isModal) { history.push(url.replace(!v ? 'edit' : 'view', v ? 'edit' : 'view')); }
     if (data.id === null) { onCancel(); }
     setRawIsEdditing(v);
   };
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [form] = Form.useForm();
-  const isRecipeMode = data instanceof RecipeEditor;
 
   if (typeof data === 'undefined') {
     return null;

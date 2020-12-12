@@ -45,7 +45,7 @@ const devicesCell = (devices, _, width) => {
       { isNeedDropdown && (
         <Dropdown
           overlay={(
-            <Menu>
+            <Menu style={{ maxHeight: 300, overflowY: 'auto' }}>
               {
                 devices.slice(forShow).map(({ name, id }) => (
                   <Menu.Item key={id}>
@@ -78,7 +78,7 @@ const durationCell = ({ openDate, closeDate }) => {
   return <Format>{null}</Format>;
 };
 
-const rangeMetricCompareCell = ({ cur, prw }) => {
+const rangeMetricCompareCell = ({ cur, prw }, suffix = '') => {
   if (typeof cur !== 'number') {
     return <Format>{ cur }</Format>;
   }
@@ -86,9 +86,9 @@ const rangeMetricCompareCell = ({ cur, prw }) => {
     <Text>
       <div style={{ display: 'flex', alignItems: 'baseline' }}>
         <Format>{ a }</Format>
-        {'₽ / '}
+        {`${suffix} / `}
         <Format>{ b }</Format>
-        {'₽ / '}
+        {`${suffix} / `}
         <Format>{ c }</Format>
       </div>
     </Text>

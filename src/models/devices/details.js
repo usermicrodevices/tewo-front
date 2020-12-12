@@ -24,6 +24,8 @@ class Details {
 
   @observable voltage;
 
+  @observable usedQRCodes = 0;
+
   @computed get voltageSeries() {
     const { minPower, maxPower } = { minPower: 220, maxPower: 240 };
     return [
@@ -139,7 +141,7 @@ class Details {
   }
 
   @computed get isWaterQualified() {
-    return Array.isArray(this.waterQuality);
+    return Array.isArray(this.waterQuality) && this.waterQuality.findIndex(({ quality }) => quality !== 0) >= 0;
   }
 }
 

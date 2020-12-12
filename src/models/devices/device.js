@@ -180,6 +180,11 @@ class Device extends Datum {
     return priceGroup && priceGroup.name;
   }
 
+  @computed get conceptionName() {
+    const { priceGroup } = this;
+    return priceGroup && priceGroup.conceptionName;
+  }
+
   @computed get values() {
     return [
       {
@@ -195,7 +200,7 @@ class Device extends Datum {
       {
         dataIndex: 'conception',
         title: 'Концепция',
-        value: null,
+        value: this.conceptionName,
       },
       {
         dataIndex: 'name',

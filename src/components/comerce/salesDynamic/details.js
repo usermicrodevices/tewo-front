@@ -28,7 +28,7 @@ const columns = (width) => [
   {
     title: explainedTitleCell('Продажи', '(текущий / предыдущий / %)'),
     dataIndex: 'deltaSales',
-    render: (_, row) => rangeMetricCompareCell(row.sales),
+    render: (_, row) => rangeMetricCompareCell(row.sales, '₽'),
     width: width[2],
     sorter: (a, b) => comparator(a.sales, b.sales),
   },

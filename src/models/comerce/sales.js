@@ -23,14 +23,14 @@ const declareColumns = () => ({
     grow: 1,
     sortDirections: 'both',
   },
-  deltaSales: {
+  curSales: {
     isVisibleByDefault: true,
     title: explainedTitleCell('Продажи', '(текущий / предыдущий / %)'),
     grow: 2,
-    transform: (_, row) => rangeMetricCompareCell(row.sales),
+    transform: (_, row) => rangeMetricCompareCell(row.sales, '₽'),
     sortDirections: 'both',
   },
-  deltaBeverages: {
+  curBeverages: {
     isVisibleByDefault: true,
     title: explainedTitleCell('Наливы', '(текущий / предыдущий / %)'),
     grow: 2,

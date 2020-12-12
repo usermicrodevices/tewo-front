@@ -17,6 +17,8 @@ const COLUMNS = [
     title: 'Название',
     dataIndex: 'name',
     render: (name) => <Format>{name}</Format>,
+    sorter: (a, b) => a.name.localeCompare(b.name) || a.key - b.key,
+    defaultSortOrder: 'ascend',
   },
   {
     title: 'НДС',
@@ -24,14 +26,10 @@ const COLUMNS = [
     render: (v) => <Format>{v}</Format>,
   },
   {
-    title: 'Валюта',
-    dataIndex: 'currency',
-    render: (v) => <Format>{v}</Format>,
-  },
-  {
     title: 'Цена',
     dataIndex: 'value',
     render: priceCell,
+    sorter: (a, b) => b.value - a.value || a.key - b.key,
   },
   {
     title: '',

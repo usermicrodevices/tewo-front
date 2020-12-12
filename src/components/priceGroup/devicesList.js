@@ -23,7 +23,7 @@ const DevicesList = ({
     key: device.id,
     name: device.name,
     syncDate: device.priceSyncDate,
-    isCynchronized: false,
+    isCynchronized: device.priceSyncDate > element.lastUpdate,
     salePointName: device.salePointName,
     rm: () => element.removeDevice(device.id),
     setSynk: { setSync: select(device.id), isSelected: selected.has(device.id) },
@@ -36,13 +36,13 @@ const DevicesList = ({
 
   const COLUMNS = [
     {
+      title: 'Название',
+      dataIndex: 'name',
+    },
+    {
       title: 'Объект',
       dataIndex: 'salePointName',
       render: (name) => <Format>{name}</Format>,
-    },
-    {
-      title: 'Название',
-      dataIndex: 'name',
     },
     {
       title: 'Дата синхронизации',

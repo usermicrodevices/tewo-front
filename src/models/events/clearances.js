@@ -4,7 +4,7 @@ import { observable, reaction } from 'mobx';
 import Table from 'models/table';
 import Filters from 'models/filters';
 import { getClearances, getDetergrnts } from 'services/events';
-import { tableItemLink } from 'elements/table/trickyCells';
+import { tableItemLink, durationCell } from 'elements/table/trickyCells';
 import TimeAgo from 'elements/timeago';
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
 
@@ -30,7 +30,7 @@ const declareColumns = () => ({
     isVisibleByDefault: true,
     title: 'Длительность',
     grow: 2,
-    transform: (_, data) => data.durationText,
+    transform: (_, data) => durationCell(data),
     sortDirections: 'both',
   },
   companyName: {

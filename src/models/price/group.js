@@ -8,7 +8,7 @@ class PriceGroup extends Datum {
 
   @observable companyId;
 
-  @observable conception;
+  @observable conceptionId = null;
 
   @observable systemKey;
 
@@ -35,7 +35,7 @@ class PriceGroup extends Datum {
       id: this.id,
       name: this.name,
       companyId: this.companyId,
-      conception: this.conception,
+      conceptionId: this.conception,
       systemKey: this.systemKey,
       devicesIdSet: new Set([...this.devicesIdSet.values()]),
       pricesIdSet: new Set([...this.pricesIdSet.values()]),
@@ -99,9 +99,17 @@ class PriceGroup extends Datum {
   }
 
   @action synchronize() {
+    const now = moment();
     return this.session.priceGroups.synchronize(this.id, this.selectedSync).then(() => {
+      for (const deviceId of this.selectedSync.values()) {
+        this.session.devices.get(deviceId).priceSyncDate = now;
+      }
       this.selectedSync = new Set();
     });
+  }
+
+  @computed get conceptionName() {
+    return this.session.сonceptions.get(this.conceptionId)?.name;
   }
 
   @computed get editable() {
@@ -115,9 +123,9 @@ class PriceGroup extends Datum {
         selector: this.session.companies.selector,
         isRequired: true,
       },
-      conception: {
-        type: 'number',
-        isRequired: true,
+      conceptionId: {
+        type: 'selector',
+        selector: this.session.сonceptions.selector,
       },
     };
   }
@@ -135,9 +143,9 @@ class PriceGroup extends Datum {
         value: this.companyName,
       },
       {
-        dataIndex: 'conception',
+        dataIndex: 'conceptionId',
         title: 'Концепция',
-        value: this.conception,
+        value: this.conceptionName,
       },
     ];
   }

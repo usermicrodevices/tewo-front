@@ -34,7 +34,11 @@ class RecipeEditor {
 
   @computed get ingredientsSelector() {
     const usedIngredients = new Set((this.recipe).map(({ id }) => id));
-    return this.session.ingredients.selector.filter(([id]) => !usedIngredients.has(id));
+    const { companyId: cId } = this.drink;
+    return this.session.ingredients.getSelector(({ id, companyId }) => (
+      !usedIngredients.has(id)
+      && companyId === cId
+    ));
   }
 
   @action setIngredient(itm, val) {

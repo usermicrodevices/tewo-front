@@ -41,8 +41,8 @@ class Details {
         name: drinksResolver && drinksResolver.get(drinkId),
         beverages,
         sales,
-        deltaSales: sales.cur / sales.prw,
-        deltaBeverages: beverages.cur / beverages.prw,
+        deltaSales: sales.cur,
+        deltaBeverages: beverages.cur,
       };
     });
   }

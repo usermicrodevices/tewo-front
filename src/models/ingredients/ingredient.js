@@ -52,11 +52,6 @@ class Ingridient extends Datum {
         type: 'number',
         isRequired: true,
       },
-      currencyId: {
-        type: 'selector',
-        selector: this.session.currencies.selector,
-        isRequired: true,
-      },
       dimension: {
         type: 'text',
         isRequired: true,
@@ -89,7 +84,7 @@ class Ingridient extends Datum {
       {
         dataIndex: 'currencyId',
         title: 'Валюта',
-        value: this.currency,
+        value: this.currencyName,
       },
       {
         dataIndex: 'dimension',

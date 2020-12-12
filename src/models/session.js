@@ -22,6 +22,7 @@ import Prices from './price';
 import PriceGroups from './price/groups';
 import Currencies from './currencies';
 import NDS from './nds';
+import Conceptions from './conceptions';
 
 class Session {
   operations = new Operations();
@@ -33,6 +34,8 @@ class Session {
   deviceModels = new DeviceModels();
 
   deviceTypes = new DeviceTypes();
+
+  сonceptions = new Conceptions();
 
   nds = new NDS();
 

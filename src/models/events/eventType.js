@@ -1,7 +1,6 @@
 import { computed, observable } from 'mobx';
 import Datum from 'models/datum';
 import { humanizeSeconds } from 'utils/date';
-import plural from 'utils/plural';
 
 class EventType extends Datum {
   id;

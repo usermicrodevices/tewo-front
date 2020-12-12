@@ -8,7 +8,7 @@ import { getEvents, getEventsClearancesChart, getClearances } from 'services/eve
 import TimeAgo from 'elements/timeago';
 import colorizedCell from 'elements/table/colorizedCell';
 import { eventsLog as eventsLogRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
-import { tableItemLink } from 'elements/table/trickyCells';
+import { tableItemLink, durationCell } from 'elements/table/trickyCells';
 
 const TECH_SERVICE_EVENT_ID = 20;
 
@@ -68,7 +68,7 @@ const declareColumns = () => ({
     isVisibleByDefault: true,
     title: 'Длительность',
     grow: 2,
-    transform: (_, data) => data.durationText,
+    transform: (_, data) => durationCell(data),
     sortDirections: 'both',
   },
   openDate: {

@@ -19,7 +19,7 @@ const Cleans = ({ table }) => {
   return (
     <>
       <TableHeader
-        title="Расход чистящих средств"
+        title="Отмена напитков"
         customButtons={(
           <>
             <Button disabled icon={<DownloadOutlined />}>Экспорт Excel</Button>

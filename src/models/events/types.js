@@ -20,11 +20,12 @@ const declareColumns = () => ({
     grow: 2,
     sortDirections: 'both',
   },
-  reactionTimeText: {
+  reactionTime: {
     isVisibleByDefault: true,
     title: 'Время реакции',
     grow: 1,
     sortDirections: 'both',
+    transform: (_, { reactionTimeText }) => reactionTimeText,
   },
   priorityDescription: {
     isVisibleByDefault: true,
