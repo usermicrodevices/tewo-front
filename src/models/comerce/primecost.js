@@ -68,7 +68,17 @@ class PrimeCost extends Table {
         }
       }
     }
-    return Object.values(result).sort(({ margin: a }, { margin: b }) => b - a);
+    return Object.values(result).map(({
+      earn,
+      cost,
+      margin,
+      ...other
+    }) => ({
+      earn: Math.round(earn),
+      cost: Math.round(cost),
+      margin: Math.round(margin),
+      ...other,
+    })).sort(({ margin: a }, { margin: b }) => b - a);
   }
 
   @computed get chart() {
