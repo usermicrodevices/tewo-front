@@ -11,10 +11,12 @@ import NoData from 'elements/noData';
 
 import style from './performance.module.scss';
 
+const hourToName = (hour) => `${hour >= 10 ? hour : `0${hour}`}:00`;
+
 const convertSeries = (data) => new Array(24).fill(null).map((_, id) => {
   const hour = 23 - id;
   return ({
-    name: `${hour >= 10 ? hour : `0${hour}`}:00`,
+    name: hourToName(hour),
     data: new Array(7).fill(null).map((__, day) => data[day][hour]),
   });
 });
@@ -76,6 +78,14 @@ const settings = (data) => ({
       intersect: true,
       x: {
         show: false,
+      },
+      y: {
+        title: {
+          formatter: (val) => {
+            const hour = parseInt(val, 10);
+            return `${hourToName(hour)} — ${hourToName(hour + 1)}`;
+          },
+        },
       },
     },
     xaxis: {
