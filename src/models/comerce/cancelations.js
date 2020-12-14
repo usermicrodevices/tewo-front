@@ -56,12 +56,13 @@ class Sales extends Table {
     filters.set('device_date', SemanticRanges.prw30Days.resolver());
 
     super(declareColumns(session), (limit, offset, search) => {
+      const cnceledFilters = `canceled=1${search ? `&${search}` : ''}`;
       getBeveragesStats(null, search, 86400)
         .then((data) => { this.whole = data; });
-      getBeveragesStats(null, `canceled=1${search ? `&${search}` : ''}`, 86400)
+      getBeveragesStats(null, cnceledFilters, 86400)
         .then((data) => { this.canceled = data; });
-      getSalesTop(`canceled=1${search ? `&${search}` : ''}`).then((result) => { this.top = result.sort(({ beverages: a }, { beverages: b }) => b - a); });
-      return getBeverages(session)(limit, offset, search);
+      getSalesTop(cnceledFilters).then((result) => { this.top = result.sort(({ beverages: a }, { beverages: b }) => b - a); });
+      return getBeverages(session)(limit, offset, cnceledFilters);
     }, filters);
   }
 
