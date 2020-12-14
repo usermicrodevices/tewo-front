@@ -10,7 +10,7 @@ import style from './style.module.scss';
 
 const LENGTH_LIMIT = 30;
 
-const VIEW_CHART_HEIGHT_PART = 280 / (280 + 130);
+const VIEW_CHART_HEIGHT_PART = 320 / (320 + 130);
 
 const provideAxis = (name, seriesName, opposite) => (
   {
@@ -30,6 +30,7 @@ const provideAxis = (name, seriesName, opposite) => (
       text: name.text,
       style: {
         color: 'black',
+        fontWeight: 500,
       },
     },
   }
@@ -81,12 +82,13 @@ const ScalebleChart = ({
       },
       id: 'chart2',
       height: isHaveOverviewChart ? VIEW_CHART_HEIGHT_PART * height : height,
+      fontFamily: 'Inter',
       ...locale,
     },
     navigation: { menuItemStyle: { display: 'none' } },
     colors,
     stroke: {
-      width: 4,
+      width: 2,
       curve: 'smooth',
     },
     exporting: {

@@ -25,7 +25,7 @@ const Speedometr = ({ storage: { value, maxSpeed, updateValue } }) => {
         <Typography.Value size="xxxl">
           <Format width={150}>{value}</Format>
         </Typography.Value>
-        <Typography.Text>{speedLabelText}</Typography.Text>
+        <Typography.Caption type="secondary">{speedLabelText}</Typography.Caption>
       </div>
       <SeedometrChart value={value} max={maxSpeed} />
     </div>

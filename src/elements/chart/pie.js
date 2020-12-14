@@ -27,6 +27,9 @@ const Pie = ({ series, labels, width }) => (
     options={{
       labels,
       colors: PIE_COLORS,
+      chart: {
+        fontFamily: 'Inter',
+      },
       legend: {
         show: false,
       },

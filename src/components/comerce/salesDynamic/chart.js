@@ -21,7 +21,7 @@ const Chart = ({
       <ScalebleChart
         y={series}
         x={xSeria}
-        height={335}
+        height={360}
         y1={SALES_CHART_LABELS[Array.isArray(series) && series.length > 0 ? series[0].axis : 0]}
       />
     </div>

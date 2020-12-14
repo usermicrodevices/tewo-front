@@ -89,7 +89,7 @@ class Sales extends Table {
         {
           data: this.canceled.beveragesSeria,
           name: 'Отменённых наливов',
-          width: 4,
+          width: 2,
           axis: 1,
         },
       ];
@@ -99,7 +99,7 @@ class Sales extends Table {
         {
           data: this.whole.beveragesSeria,
           name: 'Всего наливов',
-          width: 4,
+          width: 2,
           axis: 0,
         },
       ];
@@ -108,13 +108,13 @@ class Sales extends Table {
       {
         data: this.whole.beveragesSeria,
         name: 'Всего наливов',
-        width: 4,
+        width: 2,
         axis: 0,
       },
       {
         data: [...new Array(this.whole.length - this.canceled.length).fill(0), ...this.canceled.beveragesSeria],
         name: 'Отменённых наливов',
-        width: 4,
+        width: 2,
         axis: 1,
       },
     ];

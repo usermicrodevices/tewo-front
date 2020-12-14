@@ -11,6 +11,7 @@ function getChartOptions({ labels, color }) {
       toolbar: {
         show: false,
       },
+      fontFamily: 'Inter',
     },
     colors: [color],
     dataLabels: {
@@ -18,6 +19,7 @@ function getChartOptions({ labels, color }) {
     },
     stroke: {
       curve: 'smooth',
+      width: 3,
     },
     grid: {
       show: false,

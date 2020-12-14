@@ -10,6 +10,7 @@ const { Text } = Typography;
 const getClassNameBySize = (size) => {
   switch (size) {
     case 'xxxl':
+    case 'xxl':
     case 'xl':
     case 'l':
     case 's':

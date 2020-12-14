@@ -1,13 +1,11 @@
 @import 'src/themes/constants';
 
 .wrapper {
-  margin: 0 -$generic-margin 0 -$generic-margin;
-  padding: 10px;
   .header {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin: 65px $generic-margin 0 54px;
+    padding:  0 10px 10px 10px;
   }
 }
 

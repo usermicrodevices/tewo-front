@@ -6,8 +6,6 @@ import { applyRecipe } from 'services/recipes';
 class RecipeEditor {
   drink;
 
-  name = 'Рецептура';
-
   editable = {};
 
   @observable recipe;
@@ -18,6 +16,10 @@ class RecipeEditor {
     this.session = session;
     this.drink = drink;
     this.cancel();
+  }
+
+  @computed get name() {
+    return `Рецепт для ${this.drink.name}`;
   }
 
   @computed get values() {

@@ -9,6 +9,10 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+
+    .caption {
+      margin-left: 6px;
+    }
   }
   .top {
     grid-row-end: span 2;
@@ -23,7 +27,7 @@
       justify-content: space-between;
       align-items: center;
       height: 46px;
-      border-bottom: solid 1px;
+      border-bottom: solid 1px #e8e8e8;
       width: 100%;
 
       &:last-child {
