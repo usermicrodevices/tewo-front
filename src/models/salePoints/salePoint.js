@@ -40,6 +40,8 @@ class SalePoint extends Datum {
 
   @observable tags = [];
 
+  @observable isFavorite;
+
   session;
 
   detailsData;

@@ -67,7 +67,7 @@ const declareColumns = (session) => ({
     isVisibleByDefault: true,
     title: 'Стоимость',
     align: 'right',
-    width: 100,
+    width: 120,
     sortDirections: 'both',
     suffix: '₽',
   },

@@ -7,6 +7,8 @@ import IngredientsPicker from './ingredientspicker';
 import LocationPicker from './locationpicker';
 import ColorPicker from './colorpicker';
 
+import classes from './cellEditor.module.scss';
+
 const CellEditor = ({
   editor: {
     type, selector, isMultiple, rows, placeholder, rules,
@@ -47,14 +49,14 @@ const CellEditor = ({
         </Form.Item>
       );
     }
-    case 'minutes': {
+    case 'seconds': {
       return (
-        <>
-          <Form.Item>
+        <div className={classes.minutes}>
+          <Form.Item name={name}>
             <InputNumber />
           </Form.Item>
-          {' минут'}
-        </>
+          <span>секунд</span>
+        </div>
       );
     }
     case 'phone': {
