@@ -1,4 +1,6 @@
-import { computed, observable, reaction } from 'mobx';
+import {
+  computed, observable, reaction, when,
+} from 'mobx';
 
 import { getBeveragesSalePointsStats } from 'services/beverage';
 
@@ -13,7 +15,7 @@ class FavoriteObjects {
     this.generic = settings;
     this.session = session;
 
-    reaction(() => [this.generic.salePointsId, this.generic.dateRange], () => {
+    reaction(() => this.generic.dateRange, () => {
       this.data = undefined;
       this.update();
     });
@@ -55,11 +57,18 @@ class FavoriteObjects {
   }
 
   update = () => {
-    getBeveragesSalePointsStats(
-      this.generic.dateRange,
-      86400,
-      this.generic.salePointsId,
-    ).then((result) => { this.data = result; });
+    when(() => this.session.points.rawData.filter(({ isFavorite }) => typeof isFavorite !== 'undefined').length !== 0).then(() => {
+      const favorites = this.session.points.rawData.filter(({ isFavorite }) => isFavorite);
+      if (favorites.length === 0) {
+        this.data = null;
+      } else {
+        getBeveragesSalePointsStats(
+          this.generic.dateRange,
+          86400,
+          favorites,
+        ).then((result) => { this.data = result; });
+      }
+    });
   };
 }
 

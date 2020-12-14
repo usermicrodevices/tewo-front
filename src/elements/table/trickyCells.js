@@ -69,10 +69,9 @@ const devicesCell = (devices, _, width) => {
 const durationCell = ({ openDate, closeDate }) => {
   if (openDate.isValid()) {
     return (
-      <>
-        <div><Text>{openDate.format('d MMMM, hh:mm')}</Text></div>
-        <div><Text type="secondary">{closeDate.isValid() ? moment.duration(closeDate - openDate).humanize() : 'не завершено'}</Text></div>
-      </>
+      <Text>
+        {closeDate.isValid() ? moment.duration(closeDate - openDate).humanize() : 'не завершено'}
+      </Text>
     );
   }
   return <Format>{null}</Format>;

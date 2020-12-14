@@ -49,7 +49,7 @@ class EventType extends Datum {
 
   editable = {
     reactionTime: {
-      type: 'minutes',
+      type: 'seconds',
     },
     color: {
       type: 'color',

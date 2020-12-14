@@ -100,6 +100,37 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
     }
     return result;
   });
+  const FAVORITES_LOCATION = '/refs/favorites';
+  const FAVORITES_SHOULDBE = {
+    id: 'number',
+    owner: 'number',
+    salepoints: 'array',
+  };
+  const getFavorites = get(FAVORITES_LOCATION).then((json) => {
+    const favoritePoints = new Set();
+    if (!Array.isArray(json)) {
+      apiCheckConsole.error(`${FAVORITES_LOCATION} ожидаеся в ответ массив, получен ${typeof json}`, json);
+    } else {
+      for (const datum of json) {
+        checkData(datum, FAVORITES_SHOULDBE);
+        for (const pointId of datum.salepoints) {
+          if (typeof pointId !== 'number') {
+            apiCheckConsole.error(`${FAVORITES_LOCATION} salepoins получен ${typeof json}, ожидается число`, datum);
+          } else {
+            favoritePoints.add(pointId);
+          }
+        }
+      }
+    }
+    return favoritePoints;
+  });
+  Promise.all([getBasic, getFavorites]).then(([points, favorites]) => {
+    transaction(() => {
+      for (const point of points) {
+        point.isFavorite = favorites.has(point.id);
+      }
+    });
+  });
   Promise.all([getBasic, getExtend]).then(([points, addon]) => {
     transaction(() => {
       for (const point of points) {

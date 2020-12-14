@@ -82,11 +82,6 @@ class Ingridient extends Datum {
         value: this.cost,
       },
       {
-        dataIndex: 'currencyId',
-        title: 'Валюта',
-        value: this.currencyName,
-      },
-      {
         dataIndex: 'dimension',
         title: 'Единица измерения',
         value: this.dimension,
