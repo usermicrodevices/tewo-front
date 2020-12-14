@@ -19,7 +19,7 @@ const ClearanceChart = ({ element: { details: { clearancesChart } } }) => (
               data: clearancesChart.beverages,
               type: 'line',
               axis: 2,
-              width: 4,
+              width: 2,
             },
             {
               name: 'Фактическое число очисток',

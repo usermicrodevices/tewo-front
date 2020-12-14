@@ -49,19 +49,22 @@ const Stats = inject('table')(observer(({ table }) => {
     detergent /= 1e3;
   }
   return (
-    <SummaryCard>
+    <SummaryCard align="middle">
       <div>
-        <Typography.Value size="xl"><Format>{ table.isLoaded ? table.data.length : undefined }</Format></Typography.Value>
+        <Typography.Value size="xxl"><Format>{ table.isLoaded ? table.data.length : undefined }</Format></Typography.Value>
         <Typography.Caption>очисток за период</Typography.Caption>
       </div>
       <div>
-        <Typography.Value size="xl"><Format>{ tablets }</Format></Typography.Value>
+        <Typography.Value size="xxl"><Format>{ tablets }</Format></Typography.Value>
         <Typography.Caption>потрачено таблеток</Typography.Caption>
       </div>
       <div>
         <div>
-          <Typography.Value size="xl"><Format>{ detergent }</Format></Typography.Value>
-          { typeof detergent === 'number' && <Typography.Caption>{ext}</Typography.Caption> }
+          <Typography.Value size="xxl">
+            <Format>{ detergent }</Format>
+            {' '}
+            { typeof detergent === 'number' && ext }
+          </Typography.Value>
         </div>
         <Typography.Caption>потрачено жидкости</Typography.Caption>
       </div>

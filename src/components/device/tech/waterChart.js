@@ -26,7 +26,7 @@ const WaterChart = ({ size, element: { details } }) => {
       enabled: true,
     },
     stroke: {
-      width: 4,
+      width: 2,
       curve: 'smooth',
     },
     xaxis: {

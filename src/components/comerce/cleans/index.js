@@ -71,24 +71,24 @@ const Cleans = ({ table }) => {
             )
             : <Loader size="large" /> }
         </AntCard>
-        <SummaryCard>
+        <SummaryCard align="middle">
           <div>
-            <Typography.Value size="xl"><Format>{ tablets }</Format></Typography.Value>
+            <Typography.Value size="xxl"><Format>{ tablets }</Format></Typography.Value>
             <Typography.Caption>количество таблеток за период</Typography.Caption>
           </div>
           <div>
             <div>
-              <Typography.Value size="xl"><Format>{ detergent }</Format></Typography.Value>
+              <Typography.Value size="xxl"><Format>{ detergent }</Format></Typography.Value>
               { typeof detergent === 'number' && <Typography.Caption>{ext}</Typography.Caption> }
             </div>
             <Typography.Caption>количество жидкости за период</Typography.Caption>
           </div>
           <div>
-            <Typography.Value size="xl"><Format>{ cleans?.actualSum }</Format></Typography.Value>
+            <Typography.Value size="xxl"><Format>{ cleans?.actualSum }</Format></Typography.Value>
             <Typography.Caption>фактическое количество очисток</Typography.Caption>
           </div>
           <div>
-            <Typography.Value size="xl"><Format>{ cleans?.expectedSum }</Format></Typography.Value>
+            <Typography.Value size="xxl"><Format>{ cleans?.expectedSum }</Format></Typography.Value>
             <Typography.Caption>ожидаемое количество очисток</Typography.Caption>
           </div>
         </SummaryCard>

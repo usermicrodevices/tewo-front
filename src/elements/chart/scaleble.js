@@ -86,7 +86,7 @@ const ScalebleChart = ({
     navigation: { menuItemStyle: { display: 'none' } },
     colors,
     stroke: {
-      width: 4,
+      width: 2,
       curve: 'smooth',
     },
     exporting: {
