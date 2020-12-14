@@ -11,7 +11,7 @@ import NoData from 'elements/noData';
 
 import styles from './style.module.scss';
 
-const ACTIONS_COLUMN_WIDT = 70;
+const ACTIONS_COLUMN_WIDT = 100;
 const SCROLL_PANE_WIDTH = 25;
 const MAX_ROWS_AMOUNT = 620000;
 
