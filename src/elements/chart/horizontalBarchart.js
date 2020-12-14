@@ -24,6 +24,7 @@ const ChartWidget = ({ size }) => {
       type: 'bar',
       height: 350,
       stacked: true,
+      fontFamily: 'Inter',
     },
     plotOptions: {
       bar: {

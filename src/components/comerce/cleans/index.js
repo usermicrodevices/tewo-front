@@ -48,7 +48,7 @@ const Cleans = ({ table }) => {
                     data: cleans.beverages,
                     type: 'line',
                     axis: 2,
-                    width: 4,
+                    width: 2,
                   },
                   {
                     name: 'Фактическое число очисток',
