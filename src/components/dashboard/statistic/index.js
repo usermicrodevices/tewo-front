@@ -33,7 +33,7 @@ const Statistic = inject(({ session, storage }) => ({ session, storage }))(obser
         }
         const items = Object.entries(storage.top)
           .sort(([, b1], [, b2]) => Math.sign(b2.beverages - b1.beverages))
-          .slice(0, 6);
+          .slice(0, 4);
         const salePointsSet = new Set(items.map(([id]) => parseInt(id, 10)));
         if (session.points.isLoaded) {
           for (const { id, name } of session.points.getSubset(salePointsSet)) {
@@ -42,11 +42,19 @@ const Statistic = inject(({ session, storage }) => ({ session, storage }))(obser
         }
         return (
           <>
-            { items.map(([id, { beverages }]) => (
-              <div key={id} className={style.note}>
-                <Typography.Text><Format width={250}>{ namesMap[id] }</Format></Typography.Text>
-                <Typography.Text className={style.beverages}><Format>{ beverages }</Format></Typography.Text>
-              </div>
+            { items.map(([id, { beverages, deviceState }]) => (
+              <React.Fragment key={id}>
+                <div className={style.note}>
+                  <Typography.Text><Format width={250}>{ namesMap[id] }</Format></Typography.Text>
+                  <Typography.Text className={style.beverages}><Format>{ beverages }</Format></Typography.Text>
+                </div>
+                <div className={style.rate}>
+                  <div style={{ backgroundColor: '#FF3B30' }}><Format>{ deviceState.err }</Format></div>
+                  <div style={{ backgroundColor: '#F7C955' }}><Format>{ deviceState.warn }</Format></div>
+                  <div style={{ backgroundColor: '#4CD964' }}><Format>{ deviceState.ok }</Format></div>
+                  <div style={{ backgroundColor: '#666666' }}><Format>{ deviceState.grey }</Format></div>
+                </div>
+              </React.Fragment>
             ))}
           </>
         );

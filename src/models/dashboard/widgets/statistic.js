@@ -50,7 +50,33 @@ class Statistic {
       const v = {
         beverages: 0,
         sales: 0,
+        deviceState: {
+          err: 0,
+          warn: 0,
+          ok: 0,
+          grey: 0,
+        },
       };
+      const { deviceState } = v;
+      const devices = this.session.devices.getPointDevices(parseInt(salePointId, 10));
+      if (Array.isArray(devices)) {
+        for (const device of devices) {
+          if (device.status === -1) {
+            deviceState.grey += 1;
+          } else if (device.status === 0) {
+            deviceState.err += 1;
+          } else if (device.isNeedTechService) {
+            deviceState.warn += 1;
+          } else {
+            deviceState.ok += 1;
+          }
+        }
+      } else {
+        deviceState.grey = undefined;
+        deviceState.err = undefined;
+        deviceState.warn = undefined;
+        deviceState.ok = undefined;
+      }
       for (const { beverages, sales } of values) {
         v.beverages += beverages;
         v.sales += sales;

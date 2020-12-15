@@ -41,6 +41,8 @@ class Device extends Datum {
 
   @observable priceSyncDate;
 
+  status;
+
   detailsData = null;
 
   stopDate;
