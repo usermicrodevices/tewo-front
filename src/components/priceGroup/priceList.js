@@ -49,8 +49,9 @@ const COLUMNS = [
 ];
 
 const PriceList = ({ element, onAdd, isLoading }) => {
+  const { conceptionExtPLU } = element;
   const toDataSource = (price) => ({
-    plu: price.plu,
+    plu: `${price.plu} (${(conceptionExtPLU && conceptionExtPLU[price.drinkId]) || '—'})`,
     key: price.id,
     name: price.name,
     value: price.value,

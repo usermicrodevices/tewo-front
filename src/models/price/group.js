@@ -108,8 +108,16 @@ class PriceGroup extends Datum {
     });
   }
 
+  @computed get conception() {
+    return this.session.сonceptions.get(this.conceptionId);
+  }
+
   @computed get conceptionName() {
-    return this.session.сonceptions.get(this.conceptionId)?.name;
+    return this.conception.name;
+  }
+
+  @computed get conceptionExtPLU() {
+    return this.conception.extPLU;
   }
 
   @computed get editable() {
