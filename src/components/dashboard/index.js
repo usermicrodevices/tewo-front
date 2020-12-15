@@ -59,9 +59,9 @@ class Dashboard extends React.Component {
                 placement="bottomRight"
                 trigger={['click']}
               >
-                <Button icon={<Icon name="calendar-outline" />}>Диапазон дат</Button>
+                <Button className={style.button} icon={<Icon name="calendar-outline" />}>Диапазон дат</Button>
               </Dropdown>
-              <Button onClick={() => { storage.editNewSettings(); }}>+ добавить</Button>
+              <Button className={style.button} onClick={() => { storage.editNewSettings(); }}>+ добавить</Button>
             </Space>
           </div>
           <Grid />

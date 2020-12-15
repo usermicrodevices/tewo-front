@@ -51,15 +51,15 @@ const Stats = ({ session, element: { details, priceGroups } }) => {
           <Typography.Value className={style.value} size="l" strong>
             {typeof offDevicesAmount === 'number' ? offDevicesAmount : <Loader size="small" />}
           </Typography.Value>
-          <Typography.Caption>не работает</Typography.Caption>
+          <Typography.Caption>выключено</Typography.Caption>
         </div>
-        <div className={classNames(style.state, style.danger)}>
+        <div className={classNames(style.state)}>
           <Typography.Value className={style.value} size="l" strong>{isLoaded ? devicesServceRequiredAmount : <Loader size="small" />}</Typography.Value>
-          <Typography.Caption>нужен сервис</Typography.Caption>
+          <Typography.Caption>требуется ТО</Typography.Caption>
         </div>
         <div className={style.state}>
           <Typography.Value className={style.value} size="l" strong>{isLoaded ? devicesHardWaterAmount : <Loader size="small" />}</Typography.Value>
-          <Typography.Caption>жесткая вода</Typography.Caption>
+          <Typography.Caption>жесткость превышена</Typography.Caption>
         </div>
       </div>
       <div className={classNames(style.sublabel, style.downtime)}>
