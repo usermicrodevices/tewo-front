@@ -9,6 +9,11 @@
 
   min-height: 1000px;
   overflow: hidden;
+  .detergent {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+  }
 
   .table {
     grid-column-end: span 2;

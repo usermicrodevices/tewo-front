@@ -89,7 +89,7 @@ class Cleans extends Table {
           });
 
         const deviceFilter = devicesFilter.length > 0 ? `device__id${devicesFilter.length > 1 ? '__in' : ''}=${devicesFilter}` : '';
-        const dateFilter = daterangeToArgs(daterange);
+        const dateFilter = daterangeToArgs(daterange, 'open_date');
         getDetergrnts(deviceFilter ? `${deviceFilter}${dateFilter}` : dateFilter.slice(1))
           .then((stats) => { this.stats = stats; });
         return {

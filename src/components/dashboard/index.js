@@ -6,7 +6,6 @@ import {
 
 import Icon from 'elements/icon';
 import Typography from 'elements/typography';
-import DashboardModel from 'models/dashboard';
 
 import Grid from './grid';
 import SettingsEditor from './settingsEditor';
@@ -25,7 +24,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
-    this.storage = new DashboardModel('dashboard', props.session);
+    this.storage = props.session.dashboard;
   }
 
   componentDidMount() {

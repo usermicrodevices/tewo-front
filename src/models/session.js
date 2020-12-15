@@ -23,6 +23,7 @@ import PriceGroups from './price/groups';
 import Currencies from './currencies';
 import NDS from './nds';
 import Conceptions from './conceptions';
+import DashboardModel from './dashboard';
 
 class Session {
   operations = new Operations();
@@ -74,6 +75,8 @@ class Session {
   notificationTypes = new NotificationTypes(this);
 
   personalNotifications = new PersonalNotifications(this);
+
+  dashboard = new DashboardModel('dashboard', this);
 }
 
 export default Session;

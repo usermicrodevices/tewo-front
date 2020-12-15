@@ -77,7 +77,7 @@ const Cleans = ({ table }) => {
             <Typography.Caption>количество таблеток за период</Typography.Caption>
           </div>
           <div>
-            <div>
+            <div className={classes.detergent}>
               <Typography.Value size="xxl"><Format>{ detergent }</Format></Typography.Value>
               { typeof detergent === 'number' && <Typography.Caption>{ext}</Typography.Caption> }
             </div>
