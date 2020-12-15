@@ -16,14 +16,14 @@ const columns = (width) => [
   {
     title: 'Выручка',
     dataIndex: 'earn',
-    render: (earn) => <Format>{earn}</Format>,
+    render: (earn) => <Format isCost>{earn}</Format>,
     width: width[1],
     sorter: (a, b) => a.earn - b.earn,
   },
   {
     title: 'Маржа',
     dataIndex: 'margin',
-    render: (margin) => <Format>{margin}</Format>,
+    render: (margin) => <Format isCost>{margin}</Format>,
     width: width[2],
     sorter: (a, b) => a.margin - b.margin,
   },
@@ -46,21 +46,21 @@ const drinkColumns = (width) => [
   {
     title: 'Цена',
     dataIndex: 'cost',
-    render: (cost) => <Format>{cost}</Format>,
+    render: (cost) => <Format isCost>{cost}</Format>,
     width: width[2] / 3,
     sorter: (a, b) => a.cost - b.cost,
   },
   {
     title: 'Выручка',
     dataIndex: 'earn',
-    render: (earn) => <Format>{earn}</Format>,
+    render: (earn) => <Format isCost>{earn}</Format>,
     width: width[2] / 3,
     sorter: (a, b) => a.earn - b.earn,
   },
   {
     title: 'Маржа',
     dataIndex: 'margin',
-    render: (margin) => <Format>{margin}</Format>,
+    render: (margin) => <Format isCost>{margin}</Format>,
     width: width[2] / 3,
     sorter: (a, b) => a.margin - b.margin,
   },
@@ -92,7 +92,7 @@ const ingredientColumns = (width) => [
   {
     title: 'Цена ингредиента',
     dataIndex: 'ingredientCost',
-    render: (ingredientCost) => <Format>{ingredientCost}</Format>,
+    render: (ingredientCost) => <Format isCost>{ingredientCost}</Format>,
     sorter: (a, b) => a.ingredientCost - b.ingredientCost,
   },
   {

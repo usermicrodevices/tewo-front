@@ -7,6 +7,8 @@ import Table from 'models/table';
 import { DECLARE_BEVERAGES_FILTERS } from 'models/beverages';
 import { getSalesTop } from 'services/salePoints';
 import { SemanticRanges } from 'utils/date';
+import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
+import { tableItemLink } from 'elements/table/trickyCells';
 
 const declareColumns = () => ({
   deviceDate: {
@@ -26,11 +28,13 @@ const declareColumns = () => ({
     isVisibleByDefault: true,
     title: 'Объект',
     grow: 1,
+    transform: (_, datum, width) => tableItemLink(datum.salePointName, `${salePointsRout.path}/${datum.salePointId}`, width),
   },
   deviceName: {
     isVisibleByDefault: true,
     title: 'Оборудование',
     grow: 1,
+    transform: (_, datum, width) => tableItemLink(datum.deviceName, `${devicesRout.path}/${datum.deviceId}`, width),
   },
   drinkName: {
     isVisibleByDefault: true,

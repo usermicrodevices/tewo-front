@@ -65,7 +65,7 @@ class FavoriteObjects {
         getBeveragesSalePointsStats(
           this.generic.dateRange,
           86400,
-          favorites,
+          favorites.map(({ id }) => id),
         ).then((result) => { this.data = result; });
       }
     });

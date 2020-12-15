@@ -61,6 +61,9 @@ class Statistic {
   }
 
   update = () => {
+    if (typeof this.generic.salePointsId === 'undefined') {
+      return;
+    }
     getBeveragesSalePointsStats(
       SmallSemanticRanges.prwHalfAnHour.resolver(),
       60,

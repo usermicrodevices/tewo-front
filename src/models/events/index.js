@@ -1,11 +1,8 @@
 /* eslint class-methods-use-this: off */
-import moment from 'moment';
-
-import { daterangeToArgs } from 'utils/date';
+import { daterangeToArgs, SemanticRanges } from 'utils/date';
 import Table from 'models/table';
 import Filters from 'models/filters';
 import { getEvents, getEventsClearancesChart, getClearances } from 'services/events';
-import TimeAgo from 'elements/timeago';
 import colorizedCell from 'elements/table/colorizedCell';
 import { eventsLog as eventsLogRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { tableItemLink, durationCell } from 'elements/table/trickyCells';
@@ -74,15 +71,13 @@ const declareColumns = () => ({
   openDate: {
     isVisibleByDefault: false,
     title: 'Время начала',
-    grow: 1,
-    transform: (date) => date && TimeAgo({ date }),
+    width: 189,
     sortDirections: 'both',
   },
   closeDate: {
     isVisibleByDefault: false,
     title: 'Время завершения',
-    grow: 1,
-    transform: (date) => date && TimeAgo({ date }),
+    width: 189,
     sortDirections: 'both',
   },
 });
@@ -148,7 +143,7 @@ class Events extends Table {
   }
 
   getDeviceClearancesEventsLastWeekCount(deviceId) {
-    const daterange = [moment().subtract(1, 'week'), moment()];
+    const daterange = SemanticRanges.prw7Days.resolver();
     const datefilter = daterangeToArgs(daterange, 'open_date');
     return getClearances(this.session)(1, 0, `device__id__in=${deviceId}${datefilter}`).then(({ count }) => count);
   }

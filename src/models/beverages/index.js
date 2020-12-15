@@ -2,7 +2,6 @@
 import Table from 'models/table';
 import Filters from 'models/filters';
 import { getBeverages } from 'services/beverage';
-import TimeAgo from 'elements/timeago';
 import { typeNameToIcon, canceledIcon } from 'elements/beverageIcons';
 import { beverage as beverageRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { daterangeToArgs } from 'utils/date';
@@ -26,14 +25,14 @@ const declareColumns = (session) => ({
     title: 'Момент налива',
     grow: 1,
     isDefaultSort: true,
-    transform: (date) => (+date && TimeAgo({ date })) || null,
+    width: 189,
     sortDirections: 'both',
   },
   createdDate: {
     isVisibleByDefault: false,
     title: 'Время получения данных на сервер',
     grow: 1,
-    transform: (date) => (+date && TimeAgo({ date })) || null,
+    width: 189,
     sortDirections: 'both',
   },
   deviceName: {

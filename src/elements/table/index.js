@@ -5,6 +5,8 @@ import { withSize } from 'react-sizeme';
 import classnames from 'classnames';
 
 import Icon from 'elements/icon';
+import Format from 'elements/format';
+import plural from 'utils/plural';
 
 import { ACTIONS_COLUMN_WIDT, SCROLL_PANE_WIDTH } from './row';
 import Content from './content';
@@ -46,8 +48,8 @@ class TableComponent extends React.Component {
       <div className={classnames(className, style.whole)}>
         { !isHideTitleRow && (
           <div className={style.buttons}>
-            { isShowSearch && <Input allowClear prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} /> }
-            { process.env.NODE_ENV !== 'production' && <p>{`Доступно ${data.length} записей`}</p> }
+            { isShowSearch && <Input placeholder="Поиск" allowClear prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} /> }
+            <p>{`Доступно ${Format({ children: data.length })} ${plural(data.length, ['запись', 'записей', 'записи'])}`}</p>
           </div>
         )}
         <Header columnWidth={columnWidth} />

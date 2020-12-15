@@ -8,15 +8,7 @@ import Format from 'elements/format';
 
 import classNames from './index.module.scss';
 
-const comparator = (a, b) => {
-  const getProgress = ({ cur, prw }) => {
-    if (typeof prw !== 'number' || prw === 0) {
-      return Infinity;
-    }
-    return (cur - prw) / prw;
-  };
-  return getProgress(b) - getProgress(a);
-};
+const comparator = (a, b) => b.cur - a.cur;
 
 const columns = (width) => [
   {

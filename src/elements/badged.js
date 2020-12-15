@@ -8,7 +8,7 @@ const Badged = stylied.div`
   content: " ";
   display: ${({ align }) => (align === 'right' ? 'inline-block' : 'block')};
   margin-left: ${({ align }) => (align === 'right' ? '8px' : '0px')};
-  border-radius: ${({ size }) => size}px;
+  border-radius: ${({ size }) => size * 2}px;
   background-color: ${({ stateColor }) => stateColor};
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;

@@ -27,7 +27,7 @@ const Row = ({ earn, cost, margin }) => (
 const Summary = ({ table }) => {
   const { summary, top } = table;
   return (
-    <SummaryCard>
+    <SummaryCard className={classes.whole}>
       <div>
         <div className={classes.title}><Typography.Title level={4}>Общие данные по напиткам</Typography.Title></div>
         <Row earn={summary.earn} cost={summary.cost} margin={summary.margin} />

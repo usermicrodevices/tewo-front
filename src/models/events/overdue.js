@@ -8,7 +8,6 @@ import { getOverdued, getDowntimes } from 'services/events';
 import colorizedCell from 'elements/table/colorizedCell';
 import { tableItemLink } from 'elements/table/trickyCells';
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
-import TimeAgo from 'elements/timeago';
 
 const declareColumns = () => ({
   id: {
@@ -60,15 +59,13 @@ const declareColumns = () => ({
   openDate: {
     isVisibleByDefault: false,
     title: 'Время начала',
-    grow: 1,
-    transform: (date) => date && TimeAgo({ date }),
+    width: 189,
     sortDirections: 'both',
   },
   closeDate: {
     isVisibleByDefault: false,
     title: 'Время завершения',
-    grow: 1,
-    transform: (date) => date && TimeAgo({ date }),
+    width: 189,
     sortDirections: 'both',
   },
 });

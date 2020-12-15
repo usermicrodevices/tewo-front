@@ -26,6 +26,8 @@ class Details {
 
   @observable usedQRCodes = 0;
 
+  @observable clearancesAmount;
+
   @computed get voltageSeries() {
     const { minPower, maxPower } = { minPower: 220, maxPower: 240 };
     return [
@@ -119,6 +121,7 @@ class Details {
     me.session.events.getDeviceServiceEvents(me.id).then(({ results }) => {
       this.serviceEvents = results;
     });
+    me.session.events.getDeviceClearancesEventsLastWeekCount(me.id).then((v) => { this.clearancesAmount = v; });
 
     me.session.events.getDeviceClearances(me.id).then(({ results }) => {
       const datesMap = {};

@@ -69,9 +69,8 @@ const COLUMNS = {
   setupDate: {
     isVisibleByDefault: true,
     title: 'Дата монтажа',
-    grow: 3,
+    width: 189,
     sortDirections: 'both',
-    transform: (data) => data.format('D MMMM YYYY'),
   },
 };
 

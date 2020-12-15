@@ -14,7 +14,7 @@ class DeviceListOff {
   }
 
   @computed get isLoaded() {
-    return this.session.devices.isLoaded;
+    return this.session.devices.rawData.filter(({ isOn }) => typeof isOn !== 'undefined').length !== 0;
   }
 
   @computed get rows() {

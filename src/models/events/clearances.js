@@ -5,7 +5,6 @@ import Table from 'models/table';
 import Filters from 'models/filters';
 import { getClearances, getDetergrnts } from 'services/events';
 import { tableItemLink, durationCell } from 'elements/table/trickyCells';
-import TimeAgo from 'elements/timeago';
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
 
 import ClearancesCalendar from './clearancesCalendar';
@@ -22,8 +21,7 @@ const declareColumns = () => ({
   createdDate: {
     isVisibleByDefault: false,
     title: 'Время начала',
-    grow: 1,
-    transform: (date) => date && TimeAgo({ date }),
+    width: 189,
     sortDirections: 'both',
   },
   duration: {

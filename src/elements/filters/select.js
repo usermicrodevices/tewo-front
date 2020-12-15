@@ -7,14 +7,14 @@ const { Option } = Select;
 const filterComparator = (inputValue, { children }) => children.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
 
 const Selector = ({
-  title, value, onChange, selector, isSingle, disabled, disallowClear,
+  title, value, onChange, selector, isSingle, disabled, disallowClear, minWidth,
 }) => {
   const titleWidget = Array.isArray(selector) ? title : (
     <Loader />
   );
   return (
     <Select
-      style={{ minWidth: 150 }}
+      style={{ minWidth: minWidth || 150 }}
       placeholder={titleWidget}
       onChange={onChange}
       mode={isSingle ? undefined : 'multiple'}
