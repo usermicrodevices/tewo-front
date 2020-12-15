@@ -4,6 +4,8 @@ import { inject, observer } from 'mobx-react';
 import Format from 'elements/format';
 import Typography from 'elements/typography';
 import plural from 'utils/plural';
+import { salePoints as salePointsRout } from 'routes';
+import { tableItemLink } from 'elements/table/trickyCells';
 
 import Chart from './chart';
 
@@ -27,7 +29,7 @@ const Statistic = inject(({ session, storage }) => ({ session, storage }))(obser
     </div>
     <div className={style.top}>
       {(() => {
-        const namesMap = {};
+        const pointsMap = {};
         if (typeof storage.top === 'undefined') {
           return null;
         }
@@ -36,8 +38,8 @@ const Statistic = inject(({ session, storage }) => ({ session, storage }))(obser
           .slice(0, 4);
         const salePointsSet = new Set(items.map(([id]) => parseInt(id, 10)));
         if (session.points.isLoaded) {
-          for (const { id, name } of session.points.getSubset(salePointsSet)) {
-            namesMap[id] = name;
+          for (const point of session.points.getSubset(salePointsSet)) {
+            pointsMap[point.id] = point;
           }
         }
         return (
@@ -45,7 +47,7 @@ const Statistic = inject(({ session, storage }) => ({ session, storage }))(obser
             { items.map(([id, { beverages, deviceState }]) => (
               <React.Fragment key={id}>
                 <div className={style.note}>
-                  <Typography.Text><Format width={250}>{ namesMap[id] }</Format></Typography.Text>
+                  <Typography.Text>{ tableItemLink(pointsMap[id]?.name, `${salePointsRout.path}/${id}`, 450) }</Typography.Text>
                   <Typography.Text className={style.beverages}><Format>{ beverages }</Format></Typography.Text>
                 </div>
                 <div className={style.rate}>
