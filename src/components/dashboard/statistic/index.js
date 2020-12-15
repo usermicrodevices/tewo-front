@@ -16,8 +16,8 @@ const Statistic = inject(({ session, storage }) => ({ session, storage }))(obser
         typeof storage.value !== 'undefined' && (
           <>
             <Typography.Value size="xxxl"><Format>{storage.value}</Format></Typography.Value>
-            <Typography.Caption>
-              {plural(storage.value, ['Налив', 'Наливов', 'Налива'])}
+            <Typography.Caption className={style.caption} type="secondary">
+              {plural(storage.value, ['налив', 'наливов', 'налива'])}
               <br />
               за 30 минут
             </Typography.Caption>

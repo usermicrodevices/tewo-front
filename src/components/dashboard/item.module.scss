@@ -21,9 +21,10 @@
           }
         }
         .anchor {
-          margin-left: -15px;
-          margin-right: 15px;
+          margin-left: -22px;
           cursor: grab;
+          opacity: 0.4;
+
           &:active {
             cursor: grabbing;
           }
@@ -37,6 +38,11 @@
     }
     &:hover {
       .header {
+        .label {
+          .anchor {
+            opacity: 1;
+          }
+        }
         .toolbar {
           opacity: 1;
         }

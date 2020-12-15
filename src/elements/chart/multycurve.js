@@ -27,8 +27,10 @@ const provideAxis = (opposite, decimalsInFloat, name, title) => ({
     text: title,
     style: {
       color: 'black',
+      fontWeight: 500,
     },
   },
+  forceNiceScale: true,
   decimalsInFloat,
   tooltip: {
     enabled: true,
@@ -97,6 +99,7 @@ const ClearanceChart = ({
       zoom: {
         enabled: false,
       },
+      fontFamily: 'Inter',
       ...locale,
     },
     dataLabels: {
