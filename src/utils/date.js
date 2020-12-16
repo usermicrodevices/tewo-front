@@ -51,7 +51,7 @@ function* alineDates([firstDay, lastDay], step, data, transform, dateKey = 'mome
     return [intoComparationNumber(+m, step), datum];
   }));
   const curDay = firstDay.clone();
-  while (curDay + step <= lastDay) {
+  while (curDay <= lastDay) {
     const item = dataMap.get(intoComparationNumber(+curDay, step));
     yield {
       moment: curDay.clone(),

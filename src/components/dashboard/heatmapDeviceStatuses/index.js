@@ -20,8 +20,6 @@ const Chart = withSize()(inject('storage')(observer(({ storage, size }) => {
     setSelected(item.x);
   }, []);
 
-  console.log(size);
-
   const contentElement = isLoaded ? (
     <>
       <Heatmap
