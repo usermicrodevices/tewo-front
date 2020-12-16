@@ -14,12 +14,15 @@ class DeviceListOff {
   }
 
   @computed get isLoaded() {
-    return this.session.devices.rawData.filter(({ isOn }) => typeof isOn !== 'undefined').length !== 0;
+    return this.session.devices.isLoaded;
   }
 
   @computed get rows() {
     const pointsSet = this.generic.salePointsId === null ? { has: () => true } : new Set(this.generic.salePointsId);
-    return this.session.devices.rawData.filter(({ salePointId, isOn, isInactive }) => !isOn && !isInactive && pointsSet.has(salePointId)).map((e) => ({
+    const offDevices = this.session.devices.rawData.filter(
+      ({ salePointId, isOn, isInactive }) => !isOn && !isInactive && pointsSet.has(salePointId),
+    );
+    return offDevices.map((e) => ({
       salePoint: e.salePoint,
       deviceName: e.name,
       timeInfo: { openDate: e.stopDate, closeDate: moment() },

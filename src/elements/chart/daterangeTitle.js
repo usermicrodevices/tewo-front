@@ -8,7 +8,7 @@ import styles from './daterangeTitle.module.scss';
 
 const DaterangeTitle = ({ announce, range, className }) => {
   if (!isDateRange(range)) {
-    return <div className={className}>за все время</div>;
+    return <div className={className}>{`${announce}: за все время`}</div>;
   }
   return (
     <div className={classnames(styles.whole, className)}>
