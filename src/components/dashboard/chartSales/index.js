@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { withSize } from 'react-sizeme';
 
 import SimpleCurve from 'elements/chart/simpleCurve';
 import Format from 'elements/format';
@@ -43,4 +44,4 @@ const ChartSales = ({ storage }) => {
   );
 };
 
-export default inject('storage')(observer(ChartSales));
+export default withSize()(inject('storage')(observer(ChartSales)));

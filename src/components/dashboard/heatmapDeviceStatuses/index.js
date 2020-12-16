@@ -1,14 +1,15 @@
 import React, { useCallback } from 'react';
 import { inject, observer } from 'mobx-react';
+import { withSize } from 'react-sizeme';
 
-import Heatmap from 'elements/chart/heatmap/index';
+import Heatmap from 'elements/chart/heatmap';
 import Loader from 'elements/loader';
 import DeviceInfoModal from './deviceInfoModal';
 
 import { createTooltip, legend, getItemFromChartEvent } from './utils';
 import classnames from './index.module.scss';
 
-const Chart = inject('storage')(observer(({ storage }) => {
+const Chart = withSize()(inject('storage')(observer(({ storage, size }) => {
   const {
     isLoaded, chartData, isSelectedVisible, setSelected, selectedDevice,
   } = storage;
@@ -18,6 +19,8 @@ const Chart = inject('storage')(observer(({ storage }) => {
     const item = getItemFromChartEvent(chartEvent);
     setSelected(item.x);
   }, []);
+
+  console.log(size);
 
   const contentElement = isLoaded ? (
     <>
@@ -44,6 +47,6 @@ const Chart = inject('storage')(observer(({ storage }) => {
       {contentElement}
     </div>
   );
-}));
+})));
 
 export default Chart;

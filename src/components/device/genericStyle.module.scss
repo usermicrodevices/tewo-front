@@ -19,6 +19,10 @@
   :global .anticon {
     fill: $link-color;
     margin-right: 8px;
+
+    > svg {
+      fill: $link-color;
+    }
   }
 }
 
