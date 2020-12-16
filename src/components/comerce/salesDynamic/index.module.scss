@@ -26,6 +26,13 @@
   height: 100%;
   align-items: flex-start;
 
+  .chartchead {
+    display: flex;
+    >div:last-child {
+      margin-left: 50px;
+    }
+  }
+
   >.chart {
     align-self: stretch;
     display: flex;

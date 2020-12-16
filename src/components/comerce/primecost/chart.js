@@ -6,9 +6,8 @@ import { withSize } from 'react-sizeme';
 
 import colors from 'themes/chart';
 import NoData from 'elements/noData';
-
+import DaterangeTitle from 'elements/chart/daterangeTitle';
 import locale from 'elements/chart/locale';
-import style from 'elements/chart/style.module.scss';
 
 const PrimecostChart = inject('table')(observer(({
   size, table,
@@ -71,12 +70,13 @@ const PrimecostChart = inject('table')(observer(({
   );
 }));
 
-const Wrap = withSize()(({
-  size: { width },
+const Wrap = withSize()(inject('table')(observer(({
+  size: { width }, table,
 }) => (
   <Card>
-    <div className={style.chartwrap}><PrimecostChart size={{ width: width - 50, height: 421 }} /></div>
+    <DaterangeTitle announce="Период" range={table.filter.get('device_date')} />
+    <PrimecostChart size={{ width: width - 50, height: 403 }} />
   </Card>
-));
+))));
 
-export default inject('table')(observer(Wrap));
+export default Wrap;

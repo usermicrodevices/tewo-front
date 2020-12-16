@@ -12,6 +12,7 @@ import Format from 'elements/format';
 import Typography from 'elements/typography';
 import Loader from 'elements/loader';
 import Multycurve from 'elements/chart/multycurve';
+import DaterangeTitle from 'elements/chart/daterangeTitle';
 
 import classes from './index.module.scss';
 
@@ -39,35 +40,38 @@ const Cleans = ({ table }) => {
         <AntCard>
           { typeof cleans !== 'undefined' && cleans.x !== 'undefined'
             ? (
-              <Multycurve
-                height={384}
-                x={cleans.x}
-                y={[
-                  {
-                    name: 'Наливы',
-                    data: cleans.beverages,
-                    type: 'line',
-                    axis: 2,
-                    width: 2,
-                  },
-                  {
-                    name: 'Фактическое число очисток',
-                    data: cleans.actual,
-                    type: 'column',
-                    axis: 1,
-                    width: 1,
-                  },
-                  {
-                    name: 'Ожидаемое число очисток',
-                    data: cleans.expected,
-                    type: 'column',
-                    axis: 1,
-                    width: 1,
-                  },
-                ]}
-                y1={{ text: 'Наливов в день', decimalsInFloat: 0 }}
-                y2={{ text: 'Очисток в день', decimalsInFloat: 0 }}
-              />
+              <div>
+                <DaterangeTitle announce="Период" range={table.filter.get('clearanceDate')} />
+                <Multycurve
+                  height={366}
+                  x={cleans.x}
+                  y={[
+                    {
+                      name: 'Наливы',
+                      data: cleans.beverages,
+                      type: 'line',
+                      axis: 2,
+                      width: 2,
+                    },
+                    {
+                      name: 'Фактическое число очисток',
+                      data: cleans.actual,
+                      type: 'column',
+                      axis: 1,
+                      width: 1,
+                    },
+                    {
+                      name: 'Ожидаемое число очисток',
+                      data: cleans.expected,
+                      type: 'column',
+                      axis: 1,
+                      width: 1,
+                    },
+                  ]}
+                  y1={{ text: 'Наливов в день', decimalsInFloat: 0 }}
+                  y2={{ text: 'Очисток в день', decimalsInFloat: 0 }}
+                />
+              </div>
             )
             : <Loader size="large" /> }
         </AntCard>

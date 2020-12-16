@@ -8,17 +8,11 @@ import Format from 'elements/format';
 import { Pie, PIE_COLORS } from 'elements/chart/pie';
 import Typography from 'elements/typography';
 import Badge from 'elements/badged';
+import DaterangeTitle from 'elements/chart/daterangeTitle';
 
 import classes from './index.module.scss';
 
 const COLUMN_NOTES_AMOUNT = 6;
-
-const Label = ({ value, caption }) => (
-  <div>
-    <Typography.Value><Format>{ value }</Format></Typography.Value>
-    <Typography.Caption>{ caption }</Typography.Caption>
-  </div>
-);
 
 const toLabel = (offset) => (({ drinkName, drinkId, beverages }, id) => (
   <div key={drinkId}>
@@ -39,7 +33,7 @@ const sum = (data) => {
 
 const SalesDistrib = ({
   table: {
-    sort, data: indirectData,
+    sort, data: indirectData, filter,
   },
 }) => {
   const isInverseSort = sort.direction === 'ascend';
@@ -53,11 +47,14 @@ const SalesDistrib = ({
     <>
       <AntdCatd className={classes.chart}>
         <div className={classes.kernel}>
-          <Pie
-            series={series}
-            width={400}
-            labels={labels}
-          />
+          <div>
+            <DaterangeTitle announce="Период" range={filter.get('device_date')} />
+            <Pie
+              series={series}
+              width={382}
+              labels={labels}
+            />
+          </div>
           <div className={classes.list}>
             { data.slice(0, COLUMN_NOTES_AMOUNT).map(toLabel(0)) }
           </div>

@@ -3,7 +3,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Card, Divider } from 'antd';
 import classNames from 'classnames';
-import { SwapRightOutlined } from '@ant-design/icons';
 
 import DatergangePicker from 'elements/filters/daterangepicker';
 import Loader from 'elements/loader';
@@ -13,6 +12,7 @@ import ChangesLabel from 'elements/changesLabel';
 import ScalebleChart from 'elements/chart/scaleble';
 import CurvesPicker from 'elements/curvePicker';
 import { SALES_CHART_LABELS } from 'models/detailsProps';
+import DaterangeTitle from 'elements/chart/daterangeTitle';
 
 import styles from './sales.module.scss';
 
@@ -35,14 +35,7 @@ const Sales = ({ element: { details } }) => {
       <div className={styles.chart}>
         <div className={styles.filters}>
           <DatergangePicker title="Период" value={imputsManager.dateRange} onChange={(v) => { imputsManager.dateRange = v; }} />
-          <div className={styles.prew}>
-            <div>Предыдущий период:</div>
-            <div>
-              <span>{prew[0].format('yyyy-MM-DD')}</span>
-              <SwapRightOutlined />
-              <span>{prew[1].format('yyyy-MM-DD')}</span>
-            </div>
-          </div>
+          <DaterangeTitle announce="Предыдущий период" range={prew} />
           <CurvesPicker imputsManager={imputsManager} />
         </div>
         <div className={styles.curves}>

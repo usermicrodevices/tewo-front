@@ -1,20 +1,26 @@
 @import 'src/themes/constants';
 
-.values {
+.charthead {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-
-  >div {
+  justify-content: space-between;
+  .values {
     display: flex;
     align-items: center;
 
-    .value {
-      margin-right: 11px;
+    >div {
+      display: flex;
+      align-items: center;
+
       margin-left: 30px;
+
+      >span:first-child {
+        margin-right: 11px;
+      }
     }
   }
 }
+
 
 .table {
   max-height: calc(100vh - 700px);

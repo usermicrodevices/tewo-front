@@ -9,6 +9,7 @@ import Table from 'elements/table';
 import { FiltersButton } from 'elements/filters';
 import Multycurve from 'elements/chart/multycurve';
 import Loader from 'elements/loader';
+import DaterangeTitle from 'elements/chart/daterangeTitle';
 
 import Summary from './summary';
 
@@ -31,13 +32,16 @@ const Cleans = ({ table }) => {
         <AntCard>
           { !isLoaded && <div className={classes.chartloader}><Loader size="large" /></div> }
           { isLoaded && (
-            <Multycurve
-              height={380}
-              x={xSeria}
-              y={series}
-              y1={{ text: 'Наливов в день', decimalsInFloat: 0 }}
-              y2={{ text: 'Отмен в день', decimalsInFloat: 0 }}
-            />
+            <div>
+              <DaterangeTitle announce="Период" range={table.filter.get('device_date')} />
+              <Multycurve
+                height={362}
+                x={xSeria}
+                y={series}
+                y1={{ text: 'Наливов в день', decimalsInFloat: 0 }}
+                y2={{ text: 'Отмен в день', decimalsInFloat: 0 }}
+              />
+            </div>
           )}
         </AntCard>
         <Summary />
