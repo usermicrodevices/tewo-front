@@ -27,20 +27,20 @@ const Condition = ({ element: { details: { stats, lastService, clearancesAmount 
           label="осталось циклов до ТО"
         />
         <Badge
-          value={stats && stats.waterQualityMetric}
-          label="жесткость воды"
-        />
-        <Badge
-          value={clearancesAmount}
-          label="очисток за 7 дней"
-        />
-        <Badge
           value={lastService && lastService.format(DATE_FORMAT)}
           label="дата предыдущего ТО"
         />
         <Badge
           value={techServicesLeft ? stats && stats.techServiceForecastDate.format(DATE_FORMAT) : 'Требуется ТО'}
           label="прогнозируемая дата ТО"
+        />
+        <Badge
+          value={stats && stats.waterQualityMetric}
+          label="жесткость воды"
+        />
+        <Badge
+          value={clearancesAmount}
+          label="очисток за 7 дней"
         />
       </div>
     </Card>

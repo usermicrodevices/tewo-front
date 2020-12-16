@@ -14,7 +14,7 @@ function Heatmap({
   }, options);
 
   return (
-    <Chart height="100%" options={heatmapOptions} series={series} type="heatmap" />
+    <Chart height="100%" width="100%" options={heatmapOptions} series={series} type="heatmap" />
   );
 }
 

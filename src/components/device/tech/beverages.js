@@ -1,10 +1,10 @@
 import React from 'react';
 import { Card, Table } from 'antd';
+import { CoffeeOutlined } from '@ant-design/icons';
 import { inject, observer } from 'mobx-react';
 import classnames from 'classnames';
 
 import Format from 'elements/format';
-import Icon from 'elements/icon';
 import { canceledIcon } from 'elements/beverageIcons';
 
 import style from './index.module.scss';
@@ -34,7 +34,7 @@ const Beverages = ({ element: { details: { lastBeverages, serviceEvents } } }) =
   return (
     <Card className={classnames(style.beverages, { [style.onlybeverages]: !Array.isArray(serviceEvents) || serviceEvents.length === 0 })}>
       <div className={classnames(genericStyle.title, style.title)}>
-        <Icon size={18} name="droplet-outline" />
+        <CoffeeOutlined />
         Последние наливы
       </div>
       <div className={style.table}>
