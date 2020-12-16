@@ -100,10 +100,9 @@ const ScalebleChart = ({
     },
     yaxis,
     tooltip: {
-      shared: false,
-      intersect: true,
+      shared: true,
       x: {
-        show: false,
+        show: true,
       },
     },
     legend: {

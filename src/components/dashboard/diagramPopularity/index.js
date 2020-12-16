@@ -17,7 +17,7 @@ const DiagramTechState = inject('storage')(observer(({
     <div className={classes.root}>
       <Pie
         series={chart.map(({ count }) => count)}
-        width={200}
+        width={265}
         labels={chart.map(({ label }) => label || '')}
       />
       {chart.slice(0, 4).map(({ count, label, id }, index) => (

@@ -33,7 +33,7 @@ const Filter = (
       return <Input allowClear disabled={disabled} placeholder={title} onChange={({ target }) => onChange(target.value)} value={value} />;
     case 'selector': case 'singleselector': {
       const isSingle = type === 'singleselector';
-      return <Select minWidth={400} disabled={disabled} title={title} value={value} onChange={onChange} selector={selector} isSingle={isSingle} />;
+      return <Select minWidth={330} disabled={disabled} title={title} value={value} onChange={onChange} selector={selector} isSingle={isSingle} />;
     }
     case 'checkbox':
       return <Checkbox disabled={disabled} checked={value} onChange={({ target: { checked } }) => onChange(checked)}>{title}</Checkbox>;

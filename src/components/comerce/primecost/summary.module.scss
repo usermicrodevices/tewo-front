@@ -18,17 +18,15 @@
     justify-content: space-between;
     margin-right: 20px;
 
-    &:hover>div {
-      background-color: white;
-    }
-
     >div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       height: 61px;
       width: 150px;
       padding: 8px 15px;
       background-color: #FAFAFA;
       border-radius: 8px;
-      transition: all 0.2s linear;
 
       .caption {
         color: #8c8c8c;
@@ -36,24 +34,28 @@
     }
   }
 
-  .top>div:last-child {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+  .top {
+    padding-bottom: 10px;
 
-    .row {
-      margin-right: 5px;
-    }
-
-    >div {
+    >div:last-child {
       display: flex;
       flex-direction: column;
+      align-items: stretch;
 
-      .name {
-        padding: 5px 0px;
+      .row {
+        margin-right: 5px;
+      }
 
-        ::first-letter {
-          color: #BFBFBF;
+      >div {
+        display: flex;
+        flex-direction: column;
+
+        .name {
+          padding: 5px 0px;
+
+          ::first-letter {
+            color: #BFBFBF;
+          }
         }
       }
     }
