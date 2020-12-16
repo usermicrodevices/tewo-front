@@ -28,6 +28,8 @@ class Details {
 
   @observable clearancesAmount;
 
+  @observable lastClearances = [];
+
   @computed get voltageSeries() {
     const { minPower, maxPower } = { minPower: 220, maxPower: 240 };
     return [
@@ -127,6 +129,7 @@ class Details {
     me.session.events.getDeviceClearancesEventsLastWeekCount(me.id).then((v) => { this.clearancesAmount = v; });
 
     me.session.events.getDeviceClearances(me.id).then(({ results }) => {
+      this.lastClearances = results.slice(0, 3);
       const datesMap = {};
       results.forEach(({ openDate }) => {
         const key = openDate.format('YYYYMMDD');
