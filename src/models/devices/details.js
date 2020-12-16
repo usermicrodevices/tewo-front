@@ -24,7 +24,7 @@ class Details {
 
   @observable voltage;
 
-  @observable usedQRCodes = 0;
+  @observable usedQRCodes;
 
   @observable clearancesAmount;
 
@@ -117,6 +117,9 @@ class Details {
     me.session.devices.getStats(me.id).then((stats) => { this.stats = stats; });
     me.session.beverages.getBeveragesForDevice(me.id, 10).then(({ results }) => {
       this.lastBeverages = results;
+    });
+    me.session.devices.getQR(me.id).then((qrCount) => {
+      this.usedQRCodes = qrCount;
     });
     me.session.events.getDeviceServiceEvents(me.id).then(({ results }) => {
       this.serviceEvents = results;
