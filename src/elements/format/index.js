@@ -44,7 +44,7 @@ const Format = ({
     }
     txt = children;
   } else if (typeof children === 'number') {
-    txt = FORMAT.format(children);
+    txt = FORMAT.format(children.toFixed(2));
     if (isCost) {
       txt = `${txt}₽`;
     }

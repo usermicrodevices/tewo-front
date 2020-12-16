@@ -10,15 +10,15 @@ import classes from './summary.module.scss';
 const Row = ({ earn, cost, margin }) => (
   <div className={classes.row}>
     <div>
-      <Typography.Value size="xl"><Format isCost>{ earn }</Format></Typography.Value>
+      <Typography.Value size="l"><Format isCost>{ earn }</Format></Typography.Value>
       <Typography.Caption className={classes.caption}>выручка</Typography.Caption>
     </div>
     <div>
-      <Typography.Value size="xl"><Format isCost>{ cost }</Format></Typography.Value>
+      <Typography.Value size="l"><Format isCost>{ cost }</Format></Typography.Value>
       <Typography.Caption className={classes.caption}>себестоимость</Typography.Caption>
     </div>
     <div>
-      <Typography.Value size="xl"><Format isCost>{ margin }</Format></Typography.Value>
+      <Typography.Value size="l"><Format isCost>{ margin }</Format></Typography.Value>
       <Typography.Caption className={classes.caption}>прибыль</Typography.Caption>
     </div>
   </div>
@@ -40,7 +40,7 @@ const Summary = ({ table }) => {
               id, name, earn, cost, margin,
             }, index) => (
               <div key={id}>
-                <div className={classes.name}><Typography.Title level={2}>{`${index + 1} ${name}`}</Typography.Title></div>
+                <div className={classes.name}><Typography.Text>{`${index + 1} ${name}`}</Typography.Text></div>
                 <Row earn={earn} cost={cost} margin={margin} />
               </div>
             ))
