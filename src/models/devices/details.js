@@ -83,6 +83,7 @@ class Details {
       this.beveragesStats = new BerevagesStatsPair((daterange) => me.session.devices.getSalesChart(me.id, daterange), this.imputsManager);
 
       this.clearancesChart = undefined;
+      this.usedQRCodes = undefined;
 
       me.session.events.getDeviceClearancesChart(me.id, this.imputsManager.dateRange).then((result) => {
         const series = {
@@ -113,15 +114,15 @@ class Details {
       me.session.devices.getWaterQuality(this.me.id, this.imputsManager.dateRange).then((result) => {
         this.waterQuality = result;
       });
+      me.session.devices.getQR(me.id, this.imputsManager.dateRange).then((qrCount) => {
+        this.usedQRCodes = qrCount;
+      });
     };
     reaction(() => this.imputsManager.dateRange, updateDateRelatedData);
     updateDateRelatedData();
     me.session.devices.getStats(me.id).then((stats) => { this.stats = stats; });
     me.session.beverages.getBeveragesForDevice(me.id, 10).then(({ results }) => {
       this.lastBeverages = results;
-    });
-    me.session.devices.getQR(me.id).then((qrCount) => {
-      this.usedQRCodes = qrCount;
     });
     me.session.events.getDeviceServiceEvents(me.id).then(({ results }) => {
       this.serviceEvents = results;

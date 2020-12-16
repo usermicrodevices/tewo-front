@@ -288,7 +288,10 @@ const getWaterQuality = (deviceId, daterange) => {
 
 const QR_BEVERAGE_PAYMENT_TYPE = 5;
 
-const getQR = (deviceId) => getBeverages()(1, 0, `device__id=${deviceId}&operation__id=${QR_BEVERAGE_PAYMENT_TYPE}`).then(({ count }) => count);
+const getQR = (deviceId, daterange) => {
+  const dangeart = daterangeToArgs(daterange, 'device_date');
+  return getBeverages()(1, 0, `device__id=${deviceId}&operation__id=${QR_BEVERAGE_PAYMENT_TYPE}${dangeart}`).then(({ count }) => count);
+};
 
 export {
   getDevices, getDeviceModels, getStats, getSalesChart, applyDevice, getDeviceTypes, getVoltage, getWaterQuality, getQR,
