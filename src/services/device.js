@@ -28,6 +28,7 @@ const RENAMER = {
   lastoff: 'stopDate',
   tech: 'isNeedTechService',
   sync_date: 'priceSyncDate',
+  status: 'status',
 };
 
 function converter(json, acceptor) {
@@ -86,16 +87,15 @@ const getDevices = (session) => () => new Promise((resolve, reject) => {
     if (Array.isArray(result)) {
       for (const json of result) {
         if (checkData(json, {
+          id: 'number',
           downtime: 'number',
           has_off_devices: 'boolean',
           has_overloc_ppm: 'boolean',
-          id: 'number',
           need_tech_service: 'boolean',
           opened_tasks: 'boolean',
         })) {
           addition.set(json.id, {
             downtime: json.downtime,
-            isOn: !json.has_off_devices,
             isHasOverlocPPM: json.has_overloc_ppm,
             isNeedTechService: json.need_tech_service,
             isHaveOverdueTasks: json.opened_tasks,

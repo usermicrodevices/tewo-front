@@ -27,10 +27,6 @@ class Device extends Datum {
 
   @observable timeZone;
 
-  @observable isOn;
-
-  isInactive = false;
-
   @observable downtime;
 
   @observable isHasOverlocPPM;
@@ -48,6 +44,14 @@ class Device extends Datum {
   stopDate;
 
   session;
+
+  get isOn() {
+    return this.status === 0;
+  }
+
+  get isInactive() {
+    return this.status === -1;
+  }
 
   constructor(session) {
     super(session.devices.applyDevice);

@@ -8,7 +8,7 @@ import NoData from 'elements/noData';
 import locale from './locale';
 import style from './style.module.scss';
 
-const LENGTH_LIMIT = 30;
+const LENGTH_LIMIT = 27;
 
 const VIEW_CHART_HEIGHT_PART = 320 / (320 + 130);
 
