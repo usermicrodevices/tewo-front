@@ -32,6 +32,8 @@ import DeviceListDowntimeWidget from 'components/dashboard/deviceListDowntime';
 import DeviceListDowntimeModel from 'models/dashboard/widgets/deviceListDowntime';
 import DeviceListOffWidget from 'components/dashboard/deviceListOff';
 import DeviceListOffModel from 'models/dashboard/widgets/deviceListOff';
+import MapWidget from 'components/dashboard/map';
+import MapWidgetModel from 'models/dashboard/widgets/map';
 
 /**
  *
@@ -206,6 +208,15 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     tickDuration: 3600,
     widget: DeviceListOffWidget,
     model: DeviceListOffModel,
+  },
+  mapSalePoints: {
+    rowSpan: 152,
+    colSpan: 2,
+    isHaveDateFilter: false,
+    isHavePointsFilter: true,
+    excludedDateRandes: new Set([]),
+    widget: MapWidget,
+    model: MapWidgetModel,
   },
 };
 
