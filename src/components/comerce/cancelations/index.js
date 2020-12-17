@@ -10,6 +10,7 @@ import { FiltersButton } from 'elements/filters';
 import Multycurve from 'elements/chart/multycurve';
 import Loader from 'elements/loader';
 import DaterangeTitle from 'elements/chart/daterangeTitle';
+import Typography from 'elements/typography';
 
 import Summary from './summary';
 
@@ -46,6 +47,7 @@ const Cleans = ({ table }) => {
         </AntCard>
         <Summary />
         <Card className={classes.table}>
+          <Typography.Title level={3}>Список отмененных напитков</Typography.Title>
           <Table />
         </Card>
       </div>

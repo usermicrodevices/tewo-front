@@ -30,7 +30,7 @@ const WaterChart = ({ size, element: { details } }) => {
       curve: 'smooth',
     },
     xaxis: {
-      categories: dates.map((d) => d.format('D MMM hh:mm')),
+      categories: dates.map((d) => d.format('D MMM HH:mm')),
     },
     yaxis: {
       axisTicks: {
