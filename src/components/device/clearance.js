@@ -12,7 +12,7 @@ import style from './genericStyle.module.scss';
 const Clearance = ({
   history: { push },
   location: { pathname },
-  element: { details: { serviceEvents } },
+  element: { details: { serviceEvents, lastClearances } },
 }) => Array.isArray(serviceEvents) && serviceEvents.length > 0 && (
   <Card className={style.clearance}>
     <div className={style.title}>
@@ -32,7 +32,7 @@ const Clearance = ({
     </div>
     <div className={style.badges}>
       {
-        serviceEvents.slice(0, 3).map(({ id, openDate }) => (
+        lastClearances.map(({ id, openDate }) => (
           <Badge
             key={id}
             value={openDate.format('DD.MM.YY')}

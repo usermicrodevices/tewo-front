@@ -24,9 +24,11 @@ class Details {
 
   @observable voltage;
 
-  @observable usedQRCodes = 0;
+  @observable usedQRCodes;
 
   @observable clearancesAmount;
+
+  @observable lastClearances = [];
 
   @computed get voltageSeries() {
     const { minPower, maxPower } = { minPower: 220, maxPower: 240 };
@@ -81,6 +83,7 @@ class Details {
       this.beveragesStats = new BerevagesStatsPair((daterange) => me.session.devices.getSalesChart(me.id, daterange), this.imputsManager);
 
       this.clearancesChart = undefined;
+      this.usedQRCodes = undefined;
 
       me.session.events.getDeviceClearancesChart(me.id, this.imputsManager.dateRange).then((result) => {
         const series = {
@@ -111,6 +114,9 @@ class Details {
       me.session.devices.getWaterQuality(this.me.id, this.imputsManager.dateRange).then((result) => {
         this.waterQuality = result;
       });
+      me.session.devices.getQR(me.id, this.imputsManager.dateRange).then((qrCount) => {
+        this.usedQRCodes = qrCount;
+      });
     };
     reaction(() => this.imputsManager.dateRange, updateDateRelatedData);
     updateDateRelatedData();
@@ -124,6 +130,7 @@ class Details {
     me.session.events.getDeviceClearancesEventsLastWeekCount(me.id).then((v) => { this.clearancesAmount = v; });
 
     me.session.events.getDeviceClearances(me.id).then(({ results }) => {
+      this.lastClearances = results.slice(0, 3);
       const datesMap = {};
       results.forEach(({ openDate }) => {
         const key = openDate.format('YYYYMMDD');

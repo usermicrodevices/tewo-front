@@ -77,7 +77,7 @@ const getBeverageOperations = (map) => get('refs/operations/').then((data) => {
 });
 
 const getBeveragesStats = (daterange, filters, step) => {
-  const rangeArg = daterangeToArgs(daterange, 'device_date') || `device_date__gt=${momentToArg(moment(1))}`;
+  const rangeArg = daterangeToArgs(daterange, 'device_date') || `&device_date__gt=${momentToArg(moment(1))}`;
   const location = `/data/beverages/stats/?step=${step}${rangeArg}${filters ? `&${filters}` : ''}`;
   const mustBe = {
     moment: 'date',

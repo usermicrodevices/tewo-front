@@ -134,7 +134,7 @@ class Sales extends Table {
     if (typeof this.canceled === 'undefined') {
       return this.whole.xSeria;
     }
-    return this.whole.length > this.canceled.length ? this.whole.xSeria : this.canceled.xSeria;
+    return this.whole.length >= this.canceled.length ? this.whole.xSeria : this.canceled.xSeria;
   }
 }
 

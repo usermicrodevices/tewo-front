@@ -8,7 +8,7 @@ import Device from 'models/devices/device';
 import apiCheckConsole from 'utils/console';
 import { alineDates, daterangeToArgs, isDateRange } from 'utils/date';
 
-import { getBeveragesStats } from './beverage';
+import { getBeverages, getBeveragesStats } from './beverage';
 
 const LOCATION = '/refs/devices/';
 
@@ -286,6 +286,13 @@ const getWaterQuality = (deviceId, daterange) => {
     });
 };
 
+const QR_BEVERAGE_PAYMENT_TYPE = 5;
+
+const getQR = (deviceId, daterange) => {
+  const dangeart = daterangeToArgs(daterange, 'device_date');
+  return getBeverages()(1, 0, `device__id=${deviceId}&operation__id=${QR_BEVERAGE_PAYMENT_TYPE}${dangeart}`).then(({ count }) => count);
+};
+
 export {
-  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice, getDeviceTypes, getVoltage, getWaterQuality,
+  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice, getDeviceTypes, getVoltage, getWaterQuality, getQR,
 };
