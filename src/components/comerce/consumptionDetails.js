@@ -11,13 +11,13 @@ const columns = (width) => [
     title: 'Напиток',
     dataIndex: 'name',
     render: (name) => <Format width={width[0]}>{name}</Format>,
-    width: width[0],
+    width: width[0] - 100,
   },
   {
     title: 'Кол-во напитков',
     dataIndex: 'drinksCount',
     render: (drinksCount) => <Format>{drinksCount}</Format>,
-    width: width[1],
+    width: width[1] + 100,
     sorter: (a, b) => a.drinksCount - b.drinksCount,
   },
   {

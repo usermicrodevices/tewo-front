@@ -8,7 +8,6 @@ import SalesRow from 'models/comerce/salesRow';
 import BeveragesStats from 'models/beverages/stats';
 import apiCheckConsole from 'utils/console';
 import PrimeCostRow from 'models/comerce/primecostRow';
-import { CONSUMPTION_MUST_BE } from 'services/ingredients';
 
 import { getSalesTop } from './salePoints';
 import { BEVERAGES_SALE_POINTS_STATS, getBeveragesDense } from './beverage';
@@ -105,6 +104,13 @@ const salesDetails = (salePointId, filter) => {
       return getSalesTop(`device__sale_point__id=${salePointId}${search ? `&${search}` : ''}${rangeArg}`);
     }),
   );
+};
+
+const CONSUMPTION_MUST_BE = {
+  cost: 'number',
+  drinks_count: 'number',
+  earn: 'number',
+  ingredients_count: 'number',
 };
 
 const getPrimecost = (session, chartDataAcceptor) => (_, __, search) => {

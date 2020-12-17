@@ -6,6 +6,8 @@ import Ingredient from 'models/ingredients/ingredient';
 import apiCheckConsole from 'utils/console';
 import IngredientsRow from 'models/comerce/ingredientsRow';
 
+import { getBeveragesDense } from './beverage';
+
 const LOCATION = '/refs/ingredients/';
 
 const RENAMER = {
@@ -69,58 +71,53 @@ const applyIngredient = (id, changes, session) => {
 
 const deleteIngredient = (id) => del(`${LOCATION}${id}`);
 
-const CONSUMPTION_MUST_BE = {
-  cost: 'number',
-  drinks_count: 'number',
-  earn: 'number',
-  ingredients_count: 'number',
-};
-
-const getIngredientsConsumption = (session) => (_, __, search) => {
-  const location = `/data/beverages/salepoints_ingredients/${search ? `?${search}` : ''}`;
-  return get(location).then((response) => {
-    const ingredients = {};
-    if (typeof response !== 'object' || response === null) {
-      apiCheckConsole.error(`Неожиданный ответ по адресу ${location}`, response);
-    }
-    for (const point of Object.values(response)) {
-      if (typeof point !== 'object' || point === null) {
-        apiCheckConsole.error(`Неожиданный ответ по адресу ${location} (ождается объект описания точки продажи)`, point, response);
-      }
-      for (const [ingredientId, ingredientJSON] of Object.entries(point)) {
+const getIngredientsConsumption = (session) => (_, __, search) => getBeveragesDense(search).then((response) => {
+  const ingredients = {};
+  for (const point of response.values()) {
+    for (const [drinkId, drinkData] of point.entries()) {
+      for (const [ingredientId, ingredientData] of drinkData.ingredients.entries()) {
         if (!(ingredientId in ingredients)) {
-          ingredients[ingredientId] = {};
-        }
-        if (typeof ingredientJSON !== 'object' || ingredientJSON === null) {
-          apiCheckConsole.error(`Неожиданный ответ по адресу ${location} (ождается объект описания ингредиента)`, ingredientJSON, response);
+          ingredients[ingredientId] = {
+            details: {},
+            count: 0,
+            costOfAll: 0,
+          };
         }
         const ingredient = ingredients[ingredientId];
-        for (const [drinkId, drinkJSON] of Object.entries(ingredientJSON)) {
-          if (!(drinkId in ingredient)) {
-            ingredient[drinkId] = {
-              cost: 0,
-              drinksCount: 0,
-              earn: 0,
-              ingredientsCount: 0,
-            };
-          }
-          const drink = ingredient[drinkId];
-          checkData(drinkJSON, CONSUMPTION_MUST_BE);
-          drink.cost += drinkJSON.cost;
-          drink.drinksCount += drinkJSON.drinks_count;
-          drink.earn += drinkJSON.earn;
-          drink.ingredientsCount += drinkJSON.ingredients_count;
+        ingredient.count += ingredientData.count;
+        ingredient.costOfAll += ingredientData.cost;
+
+        if (!(drinkId in ingredient.details)) {
+          ingredient.details[drinkId] = {
+            drinksCount: 0,
+            earn: 0,
+            ingredientsCount: 0,
+          };
+        }
+        const drink = ingredient.details[drinkId];
+        drink.ingredientsCount += ingredientData.count;
+      }
+    }
+  }
+  for (const point of response.values()) {
+    for (const ingredient of Object.values(ingredients)) {
+      for (const [drinkId, drinkData] of Object.entries(ingredient.details)) {
+        const drink = point.get(drinkId);
+        if (typeof drink === 'object') {
+          drinkData.earn += drink.sum;
+          drinkData.drinksCount += drink.count;
         }
       }
     }
-    const results = Object.entries(ingredients).map(([id, ingredient]) => new IngredientsRow(parseInt(id, 10), ingredient, session));
-    return {
-      count: results.length,
-      results,
-    };
-  });
-};
+  }
+
+  const results = Object.entries(ingredients).map(([id, ingredient]) => new IngredientsRow(parseInt(id, 10), ingredient, session));
+  return {
+    count: results.length,
+    results,
+  };
+});
 
 export {
-  getIngredients, applyIngredient, deleteIngredient, getIngredientsConsumption, CONSUMPTION_MUST_BE,
+  getIngredients, applyIngredient, deleteIngredient, getIngredientsConsumption,
 };

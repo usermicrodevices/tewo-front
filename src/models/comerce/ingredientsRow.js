@@ -3,7 +3,7 @@ import { computed } from 'mobx';
 class IngredientsRow {
   ingredientId;
 
-  details;
+  data;
 
   session;
 
@@ -11,9 +11,9 @@ class IngredientsRow {
     return this.session.ingredients.get(this.ingredientId);
   }
 
-  constructor(ingredientId, details, session) {
+  constructor(ingredientId, data, session) {
     this.ingredientId = ingredientId;
-    this.details = details;
+    this.data = data;
     this.session = session;
   }
 
@@ -26,39 +26,26 @@ class IngredientsRow {
   }
 
   @computed get count() {
-    let sum = 0;
-    if (typeof this.details === 'object' && this.details !== null) {
-      for (const { ingredientsCount } of Object.values(this.details)) {
-        sum += ingredientsCount;
-      }
-    }
-    return sum;
+    return this.data.count;
+  }
+
+  @computed get costOfAll() {
+    return this.data.costOfAll;
   }
 
   @computed get cost() {
     return this.ingredient?.cost;
   }
 
-  @computed get amount() {
-    let sum = 0;
-    if (typeof this.details === 'object' && this.details !== null) {
-      for (const { earn } of Object.values(this.details)) {
-        sum += earn;
-      }
-    }
-    return sum / 100;
-  }
-
   @computed get detailsRowsCount() {
-    return Object.keys(this.details).length;
+    return Object.keys(this.data.details).length;
   }
 
   @computed get detailsRows() {
-    return Object.entries(this.details).map(([drinkId, detail]) => ({
+    return Object.entries(this.data.details).map(([drinkId, detail]) => ({
       key: drinkId,
       name: this.session.drinks.get(parseInt(drinkId, 10))?.name,
       ...detail,
-      earn: detail.earn / 100,
     }));
   }
 }

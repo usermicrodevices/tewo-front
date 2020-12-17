@@ -32,7 +32,7 @@ const declareColumns = () => ({
     sortDirections: 'both',
     suffix: '₽',
   },
-  amount: {
+  costOfAll: {
     isVisibleByDefault: true,
     title: 'Сумма',
     grow: 1,
