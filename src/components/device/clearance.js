@@ -12,8 +12,8 @@ import style from './genericStyle.module.scss';
 const Clearance = ({
   history: { push },
   location: { pathname },
-  element: { details: { serviceEvents, lastClearances } },
-}) => Array.isArray(serviceEvents) && serviceEvents.length > 0 && (
+  element: { details: { lastClearances } },
+}) => Array.isArray(lastClearances) && lastClearances.length > 0 && (
   <Card className={style.clearance}>
     <div className={style.title}>
       <Typography.Title level={4}>
