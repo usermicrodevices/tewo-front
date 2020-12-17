@@ -162,10 +162,60 @@ const getBeveragesSalePointsStats = (dateRange, step, salePoints) => {
   });
 };
 
+const getBeveragesDense = (search) => {
+  const location = `/data/beverages/spoints_ingredients/${search ? `?${search}` : ''}`;
+  return get(location).then((rawData) => {
+    const result = new Map();
+    if (typeof rawData !== 'object') {
+      apiCheckConsole.error(`${location} ожидается объект, получен`, rawData);
+      return {};
+    }
+    for (const [pointId, pointRawData] of Object.entries(rawData)) {
+      if (typeof pointRawData !== 'object') {
+        apiCheckConsole.error(`${location} ожидается объект в качестве описания точки продажи, получен`, pointRawData);
+        return {};
+      }
+      const drinks = new Map();
+      result.set(parseInt(pointId, 10), drinks);
+      for (const [drinkId, drinkRawData] of Object.entries(pointRawData)) {
+        if (!checkData(drinkRawData, {
+          drinks_count: 'number',
+          ingredients: 'object',
+          sum: 'number',
+        })) {
+          apiCheckConsole.error(`${location} неожиданный объект в качестве описания напитка`, drinkRawData);
+          return {};
+        }
+        const drink = {
+          count: drinkRawData.drinks_count,
+          sum: drinkRawData.sum / 100,
+          ingredients: new Map(),
+        };
+        drinks.set(parseInt(drinkId, 10), drink);
+        for (const [ingredientId, ingredientData] of Object.entries(drinkRawData.ingredients)) {
+          if (!checkData(ingredientData, {
+            ingredients_count: 'number',
+            cost: 'number',
+          })) {
+            apiCheckConsole.error(`${location} неожиданный объект в качестве описания ингредиента`, ingredientData);
+            return {};
+          }
+          drink.ingredients.set(parseInt(ingredientId, 10), {
+            count: ingredientData.ingredients_count,
+            cost: ingredientData.cost / 100,
+          });
+        }
+      }
+    }
+    return result;
+  });
+};
+
 export {
   getBeverages,
   getBeverageOperations,
   getBeveragesStats,
   getBeveragesSalePointsStats,
+  getBeveragesDense,
   BEVERAGES_SALE_POINTS_STATS,
 };

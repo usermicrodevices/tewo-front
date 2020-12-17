@@ -1,5 +1,5 @@
 /* eslint class-methods-use-this: off */
-import { computed } from 'mobx';
+import { computed, observable } from 'mobx';
 
 import Filters from 'models/filters';
 import Table from 'models/table';
@@ -33,6 +33,8 @@ const declareColumns = () => ({
 });
 
 class PrimeCost extends Table {
+  @observable chartData;
+
   @computed get summary() {
     const result = {
       earn: 0,
@@ -82,28 +84,26 @@ class PrimeCost extends Table {
   }
 
   @computed get chart() {
+    if (typeof this.chartData === 'undefined') {
+      return undefined;
+    }
     const DRINKS_AMOUNT = 6;
     const { session } = this;
     const result = {};
-    for (const { data } of this.rawData) {
-      for (const point of Object.values(data.details)) {
-        for (const drink of Object.values(point.details)) {
-          if (!(drink.id in result)) {
-            const ingredients = {};
-            for (const ingredientId of Object.keys(drink.details)) {
-              ingredients[ingredientId] = 0;
-            }
-            result[drink.id] = {
-              name: session.drinks.get(drink.id)?.name,
-              margin: 0,
-              data: ingredients,
-            };
-          }
-          const datum = result[drink.id];
-          for (const { id, cost } of Object.values(drink.details)) {
-            datum.data[id] += cost;
-          }
-          datum.margin += drink.margin;
+    for (const drinks of this.chartData.values()) {
+      for (const [drinkId, drink] of drinks.entries()) {
+        if (!(drinkId in result)) {
+          result[drinkId] = {
+            name: session.drinks.get(drinkId)?.name,
+            margin: 0,
+            data: {},
+          };
+        }
+        const datum = result[drinkId];
+        datum.margin += drink.sum;
+        for (const [ingredientId, { cost }] of drink.ingredients.entries()) {
+          datum.data[ingredientId] = (datum.data[ingredientId] || 0) + cost;
+          datum.margin -= cost;
         }
       }
     }
@@ -147,7 +147,16 @@ class PrimeCost extends Table {
     filters.isShowSearch = false;
     filters.set('device_date', SemanticRanges.prw30Days.resolver());
 
-    super(declareColumns(session), getPrimecost(session), filters);
+    const i = { v: 0 };
+    super(declareColumns(session), (limit, offset, search) => {
+      if (i.v) {
+        this.chartData = undefined;
+      }
+      i.v += 1;
+      return getPrimecost(session, (chartData) => {
+        this.chartData = chartData;
+      })(limit, offset, search);
+    }, filters);
 
     this.session = session;
   }

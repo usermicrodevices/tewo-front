@@ -16,7 +16,7 @@
   .row {
     display: flex;
     justify-content: space-between;
-    margin-right: 20px;
+    margin-right: 5px;
 
     >div {
       display: flex;
@@ -36,15 +36,12 @@
 
   .top {
     padding-bottom: 10px;
+    flex-grow: 1;
 
     >div:last-child {
       display: flex;
       flex-direction: column;
       align-items: stretch;
-
-      .row {
-        margin-right: 5px;
-      }
 
       >div {
         display: flex;

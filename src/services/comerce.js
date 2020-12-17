@@ -11,7 +11,7 @@ import PrimeCostRow from 'models/comerce/primecostRow';
 import { CONSUMPTION_MUST_BE } from 'services/ingredients';
 
 import { getSalesTop } from './salePoints';
-import { BEVERAGES_SALE_POINTS_STATS } from './beverage';
+import { BEVERAGES_SALE_POINTS_STATS, getBeveragesDense } from './beverage';
 
 const sumRow = (arr) => {
   const result = {
@@ -107,12 +107,13 @@ const salesDetails = (salePointId, filter) => {
   );
 };
 
-const getPrimecost = (session) => (_, __, search) => {
+const getPrimecost = (session, chartDataAcceptor) => (_, __, search) => {
   const location = `/data/beverages/salepoints_ingredients/${search ? `?${search}` : ''}`;
+  getBeveragesDense(search).then(chartDataAcceptor);
   return Promise.all([
     when(() => session.points.isLoaded).then(() => session.points.rawData),
     get(location),
-  ]).then(([salePoints, response]) => {
+  ]).then(([salePoints, response, additionalDense]) => {
     const map = {};
     for (const { id: pointId, cityId } of salePoints.filter(({ id }) => id in response)) {
       if (!(cityId in map)) {

@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import SummaryCard from 'elements/card/summary';
 import Typography from 'elements/typography';
 import Format from 'elements/format';
+import Loader from 'elements/loader';
 
 import classes from './summary.module.scss';
 
@@ -45,6 +46,7 @@ const Summary = ({ table }) => {
               </div>
             ))
           }
+          { top.length === 0 && <Loader /> }
         </div>
       </div>
     </SummaryCard>

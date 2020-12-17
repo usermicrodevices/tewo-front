@@ -8,14 +8,18 @@ import colors from 'themes/chart';
 import NoData from 'elements/noData';
 import DaterangeTitle from 'elements/chart/daterangeTitle';
 import locale from 'elements/chart/locale';
+import Loader from 'elements/loader';
 
 const PrimecostChart = inject('table')(observer(({
   size, table,
 }) => {
-  if (!table.isLoaded) {
-    return <NoData noMargin title="Недостаточно данных для построения графика" />;
+  if (typeof table.chart === 'undefined') {
+    return <Loader size="large" />;
   }
   const { categories, series } = table.chart;
+  if (categories.length === 0) {
+    return <NoData noMargin title="Недостаточно данных для построения графика" />;
+  }
 
   const data = {
     colors,
