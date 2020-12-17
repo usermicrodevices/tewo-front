@@ -17,7 +17,12 @@ const COLUMNS = [
     title: 'Название',
     dataIndex: 'name',
     render: (name) => <Format>{name}</Format>,
-    sorter: (a, b) => a.name.localeCompare(b.name) || a.key - b.key,
+    sorter: (a, b) => {
+      if (typeof a.name === 'string' && typeof b.name === 'string') {
+        return a.name.localeCompare(b.name) || a.key - b.key;
+      }
+      return a.key - b.key;
+    },
     defaultSortOrder: 'ascend',
   },
   {

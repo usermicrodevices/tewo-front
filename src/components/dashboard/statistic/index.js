@@ -51,10 +51,10 @@ const Statistic = inject(({ session, storage }) => ({ session, storage }))(obser
                   <Typography.Text className={style.beverages}><Format>{ beverages }</Format></Typography.Text>
                 </div>
                 <div className={style.rate}>
-                  <div style={{ backgroundColor: '#FF3B30' }}><Format>{ deviceState.err }</Format></div>
-                  <div style={{ backgroundColor: '#F7C955' }}><Format>{ deviceState.warn }</Format></div>
-                  <div style={{ backgroundColor: '#4CD964' }}><Format>{ deviceState.ok }</Format></div>
-                  <div style={{ backgroundColor: '#666666' }}><Format>{ deviceState.grey }</Format></div>
+                  <div style={{ backgroundColor: '#FF3B30' }}><Format>{ deviceState.err || 0 }</Format></div>
+                  <div style={{ backgroundColor: '#F7C955' }}><Format>{ deviceState.warn || 0 }</Format></div>
+                  <div style={{ backgroundColor: '#4CD964' }}><Format>{ deviceState.ok || 0 }</Format></div>
+                  <div style={{ backgroundColor: '#666666' }}><Format>{ deviceState.grey || 0 }</Format></div>
                 </div>
               </React.Fragment>
             ))}

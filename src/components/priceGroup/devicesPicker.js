@@ -11,9 +11,7 @@ import classes from './pickers.module.scss';
 const DevicePicker = ({ element, session, onSelect }) => {
   const [searchText, setSearch] = useState('');
   const search = searchText.toLowerCase();
-  const [companies, setCompanies] = useState([]);
   const [points, setSalePoint] = useState([]);
-  const companiesSet = companies.length === 0 ? { has: () => true } : new Set(companies);
   const pointsSet = points.length === 0 ? { has: () => true } : new Set(points);
   const skipSet = new Set(element.devices.map(({ id }) => id));
   const ds = session.devices.isLoaded ? session.devices.rawData
@@ -22,7 +20,7 @@ const DevicePicker = ({ element, session, onSelect }) => {
     }) => (
       name.toLowerCase().indexOf(search) >= 0
       && !skipSet.has(id)
-      && (!salePoint || companiesSet.has(salePoint.companyId))
+      && (!salePoint || salePoint.companyId === element.companyId)
       && pointsSet.has(salePointId)
       && companyId === element.companyId
     ))
@@ -35,7 +33,6 @@ const DevicePicker = ({ element, session, onSelect }) => {
     <div>
       <div className={classes.inputs}>
         <Input allowClear prefix={<Icon name="search-outline" />} value={searchText} onChange={({ target }) => setSearch(target.value)} />
-        <Select title="Компания" value={companies} onChange={setCompanies} selector={session.companies.selector} />
         <Select title="Объект" value={points} onChange={setSalePoint} selector={session.points.selector} />
       </div>
       <SelectableTable

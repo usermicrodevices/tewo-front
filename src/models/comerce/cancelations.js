@@ -81,7 +81,7 @@ class Sales extends Table {
   }
 
   @computed get canceledBeveragesAmount() {
-    return this.canceled?.beverages;
+    return this.isLoaded ? this.data.length : undefined;
   }
 
   @computed get series() {

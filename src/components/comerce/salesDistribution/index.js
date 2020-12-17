@@ -65,7 +65,7 @@ const SalesDistrib = ({
           ) }
         </div>
       </AntdCatd>
-      <Card><Table /></Card>
+      <Card className={classes.table}><Table /></Card>
     </>
   );
 };
