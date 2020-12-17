@@ -56,9 +56,9 @@ class Map {
 
   @observable isInfoModalShown = false;
 
-  constructor(session) {
+  constructor(session, filters) {
     this.session = session;
-    this.filters = new Filters(declareFilters(session));
+    this.filters = filters || new Filters(declareFilters(session));
   }
 
   @action showPointInfo(id) {
