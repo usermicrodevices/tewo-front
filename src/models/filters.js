@@ -2,9 +2,15 @@ import {
   action, observable, computed, transaction, autorun, toJS,
 } from 'mobx';
 import moment from 'moment';
-import { momentToArg } from 'utils/date';
+import { isDateRange, momentToArg } from 'utils/date';
 
 const rangeComparator = (lhs, rhs) => {
+  if (!isDateRange(rhs) && isDateRange(lhs)) {
+    return null;
+  }
+  if (isDateRange(rhs) && !isDateRange(lhs)) {
+    return null;
+  }
   const [lBegin, lEnd] = lhs;
   const [rBegin, rEnd] = rhs;
   if (rBegin < lBegin || rEnd > lEnd) {
@@ -291,7 +297,16 @@ class Filters {
   clone() {
     const result = new Filters(this.filters);
     result.searchText = this.filters.searchText;
-    result.data = JSON.parse(JSON.stringify(toJS(this.data)));
+    result.data = observable.map(Object.entries(JSON.parse(JSON.stringify(toJS(this.data)))));
+    for (const [key, value] of result.data.entries()) {
+      if (Array.isArray(value) && value.length === 2) {
+        const range = value.map((v) => moment(v));
+        const [l, r] = range;
+        if (l.isValid() && r.isValid()) {
+          result.data.set(key, range);
+        }
+      }
+    }
     return result;
   }
 }
