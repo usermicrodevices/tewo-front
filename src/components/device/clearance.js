@@ -36,7 +36,7 @@ const Clearance = ({
           <Badge
             key={id}
             value={openDate.format('DD.MM.YY')}
-            label={openDate.format('hh:mm')}
+            label={openDate.format('HH:mm')}
           />
         ))
       }

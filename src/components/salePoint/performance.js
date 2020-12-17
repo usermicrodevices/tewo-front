@@ -9,6 +9,8 @@ import Typography from 'elements/typography';
 import { gradient } from 'utils/color';
 import NoData from 'elements/noData';
 
+import plural from 'utils/plural';
+
 import style from './performance.module.scss';
 
 const hourToName = (hour) => `${hour >= 10 ? hour : `0${hour}`}:00`;
@@ -74,18 +76,20 @@ const settings = (data) => ({
       show: false,
     },
     tooltip: {
+      custom({
+        series, seriesIndex, dataPointIndex, w,
+      }) {
+        const hour = parseInt(w.config.series[seriesIndex].name, 10);
+        const time = `${hourToName(hour)} — ${hourToName(hour + 1)}`;
+        const beverages = series[seriesIndex][dataPointIndex];
+        const beveragesText = plural(beverages, ['налив', 'наливов', 'налива']);
+
+        return `<div style="padding: 3px;">${time}: ${beverages} <b>${beveragesText}</b></div>`;
+      },
       shared: false,
       intersect: true,
       x: {
         show: false,
-      },
-      y: {
-        title: {
-          formatter: (val) => {
-            const hour = parseInt(val, 10);
-            return `${hourToName(hour)} — ${hourToName(hour + 1)}`;
-          },
-        },
       },
     },
     xaxis: {

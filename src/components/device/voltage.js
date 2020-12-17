@@ -91,7 +91,7 @@ const Commerce = ({ element: { details }, size: { width } }) => {
       })),
     },
     xaxis: {
-      categories: dates.map((d) => d.format('D MMM hh:mm')),
+      categories: dates.map((d) => d.format('D MMM HH:mm')),
     },
     yaxis: [
       {

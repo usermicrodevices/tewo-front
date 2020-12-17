@@ -97,6 +97,7 @@ const Cleans = ({ table }) => {
           </div>
         </SummaryCard>
         <Card className={classes.table}>
+          <Typography.Title level={3}>Последние очистки</Typography.Title>
           <Table />
         </Card>
       </div>

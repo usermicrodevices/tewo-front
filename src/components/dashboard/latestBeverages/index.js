@@ -23,7 +23,7 @@ const FavoriteObjects = tableWidget([
   {
     title: 'Дата налива',
     dataIndex: 'deviceDate',
-    render: (v) => <Format>{v.format('d MMMM, hh:mm')}</Format>,
+    render: (v) => <Format>{v.format('d MMMM, HH:mm')}</Format>,
   },
   {
     title: '',
