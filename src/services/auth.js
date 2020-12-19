@@ -33,17 +33,14 @@ function contacts() {
         id: 'number',
         info: 'string',
         privacy: 'string',
+        email: 'string',
+        phone: 'string',
+        text_for_tech_support: 'string',
       })) {
         apiCheckConsole.error(`${path} получил некорректные данные`);
         return defaultContacts;
       }
-      const { info } = item;
-      const items = info.split(' ');
-      if (items.length !== 2) {
-        apiCheckConsole.error(`неожиданные данные для ${path}, ожидается "<phone> <email>", получено`, info);
-        return defaultContacts;
-      }
-      const [phone, email] = items;
+      const { phone, email } = item;
       if (phone.length !== 11 || phone.slice(0, 1) !== '8') {
         apiCheckConsole.error(`${path}, телефон должен быть в формате 88007003942, получен`, phone, phone.length, phone.slice(0, 1));
         return defaultContacts;

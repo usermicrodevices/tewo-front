@@ -26,6 +26,19 @@ const getBeverages = (session) => (limit, offset = 0, filter = '') => new Promis
     const mayBe = {
       drink: 'number',
       operation: 'number',
+
+      code_authorization: 'any',
+      card_type: 'any',
+      mask_card: 'any',
+      link: 'any',
+      seller: 'any',
+      terminal: 'any',
+      check_num: 'any',
+      state: 'any',
+      time_stamp_transaction: 'any',
+      qrcode: 'any',
+      card: 'any',
+      commission: 'any',
     };
     checkData(response, {
       count: 'number',

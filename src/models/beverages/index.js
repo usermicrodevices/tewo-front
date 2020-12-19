@@ -23,7 +23,6 @@ const declareColumns = (session) => ({
   deviceDate: {
     isVisibleByDefault: true,
     title: 'Момент налива',
-    grow: 1,
     isDefaultSort: true,
     width: 189,
     sortDirections: 'both',
@@ -31,7 +30,6 @@ const declareColumns = (session) => ({
   createdDate: {
     isVisibleByDefault: false,
     title: 'Время получения данных на сервер',
-    grow: 1,
     width: 189,
     sortDirections: 'both',
   },

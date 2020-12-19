@@ -4,6 +4,7 @@ import { withSize } from 'react-sizeme';
 
 import colors from 'themes/chart';
 import NoData from 'elements/noData';
+import { FORMAT } from 'elements/format';
 
 import locale from './locale';
 import style from './style.module.scss';
@@ -19,6 +20,12 @@ const provideAxis = (opposite, decimalsInFloat, name, title) => ({
     color: 'black',
   },
   labels: {
+    formatter: (v) => {
+      if (decimalsInFloat === 0 && Math.round(v) !== v) {
+        return null;
+      }
+      return FORMAT.format(v.toFixed(decimalsInFloat));
+    },
     style: {
       color: 'black',
     },
@@ -31,7 +38,6 @@ const provideAxis = (opposite, decimalsInFloat, name, title) => ({
     },
   },
   forceNiceScale: true,
-  decimalsInFloat,
   tooltip: {
     enabled: true,
   },
@@ -54,6 +60,7 @@ const rangesUnion = (lhs, rhs) => ({
 const ClearanceChart = ({
   size, x, y, y1, y2,
 }) => {
+  console.log('it\'s me!');
   if (!Array.isArray(x) || !Array.isArray(y) || x.length <= 1 || y.length === 0) {
     return <NoData noMargin title="Недостаточно данных для построения графика" />;
   }
