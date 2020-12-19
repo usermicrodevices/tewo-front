@@ -37,10 +37,6 @@ class IngredientsRow {
     return this.ingredient?.cost;
   }
 
-  @computed get detailsRowsCount() {
-    return Object.keys(this.data.details).length;
-  }
-
   @computed get detailsRows() {
     return Object.entries(this.data.details).map(([drinkId, detail]) => ({
       key: drinkId,

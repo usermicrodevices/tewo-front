@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import { observer } from 'mobx-react';
 import { Table } from 'antd';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
@@ -114,7 +114,7 @@ const ingredientColumns = (width) => [
 const GENERIC_EXPANDABLE = {
   rowExpandable: () => true,
   expandRowByClick: true,
-  expandedRowClassName: (record, index, indent) => classes.detailschild,
+  expandedRowClassName: () => classes.detailschild,
   expandIcon: ({ expanded, onExpand, record }) => (
     expanded ? (
       <UpOutlined onClick={(e) => onExpand(record, e)} />
@@ -125,7 +125,7 @@ const GENERIC_EXPANDABLE = {
 };
 
 const Details = ({ columnWidth, _, item }) => {
-  item.setSmallScreenAffition(columnWidth.reduce((p, c) => p + c, 0) < 1250);
+  const [, forceRender] = useReducer((s) => s + 1, 0);
   return (
     <Table
       columns={columns(columnWidth)}
@@ -146,7 +146,10 @@ const Details = ({ columnWidth, _, item }) => {
                   pagination={false}
                 />
               ),
-              onExpandedRowsChange: (expanded) => item.setExpanded(expanded, key),
+              onExpandedRowsChange: (expanded) => {
+                item.setExpanded(expanded, key);
+                forceRender();
+              },
               expandIconColumnIndex: 5,
               expandedRowKeys: item.expanded.get(key) || [],
               ...GENERIC_EXPANDABLE,

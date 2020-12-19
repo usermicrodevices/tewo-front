@@ -16,6 +16,8 @@ const DEFAULT_PRESCROLL_HEIGHT = 2150;
 class Content extends React.Component {
   listRef;
 
+  heights = new Map();
+
   constructor(props) {
     super(props);
 
@@ -40,6 +42,16 @@ class Content extends React.Component {
     }
     return row;
   };
+
+  setHeightOfExpanded = (row, height) => {
+    const { heights } = this;
+    if (typeof height === 'number' && heights.get(row) !== height) {
+      setTimeout(() => {
+        this.heights.set(row, height);
+        this.forceUpdate();
+      });
+    }
+  }
 
   render() {
     const { table, width, columnWidth } = this.props;
@@ -66,7 +78,6 @@ class Content extends React.Component {
       table.triggerOpenedRow(index);
       this.forceUpdate();
     } : () => {};
-    const heights = new Map((openedRows ? [...openedRows.keys()] : []).map((idx) => [idx, data[idx].detailsRowsCount + 1]));
     return (
       <List
         onScroll={this.onScroll}
@@ -81,7 +92,7 @@ class Content extends React.Component {
           }
           const index = this.rowFunc(row);
           if (openedRows?.has(index)) {
-            return ROW_HEIGHT + 51.3578 * ((heights.get(row)) || 5);
+            return (this.heights.get(index) || 0) + ROW_HEIGHT;
           }
           return ROW_HEIGHT;
         }}
@@ -89,7 +100,7 @@ class Content extends React.Component {
         data={data}
       >
         {
-          Row(data, columns, newElements, this.rowFunc, columnWidth, actions, onRowClick, openedRows)
+          Row(data, columns, newElements, this.rowFunc, columnWidth, actions, onRowClick, openedRows, this.setHeightOfExpanded)
         }
       </List>
     );
