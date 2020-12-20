@@ -9,6 +9,7 @@ import Item from './item';
 import generateLayout from './layoutGenerator';
 
 import itemStyle from './item.module.scss';
+import NoData from 'elements/noData';
 
 const COLUMNS_MIN_WIDTH = 280;
 
@@ -48,6 +49,14 @@ const dressLayout = (layout, widgets, columnsAmount) => {
 const Dashboard = ({ size, grid }) => {
   const colsAmount = Math.floor(size.width / COLUMNS_MIN_WIDTH);
   const { widgets } = grid;
+  if (widgets.length === 0) {
+    return (
+      <NoData
+        title="На панели нет ниодного виджета"
+        text="Добавьте виджеты с помощью кнопки в правом верхнем углу"
+      />
+    );
+  }
   const layout = dressLayout(grid.getLayout(colsAmount), widgets, colsAmount);
   return (
     <GridLayout

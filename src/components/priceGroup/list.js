@@ -33,6 +33,7 @@ const List = observer(({
         />
       </div>
       <Input
+        placeholder="Поиск"
         allowClear
         className={style.filter}
         prefix={<Icon name="search-outline" />}

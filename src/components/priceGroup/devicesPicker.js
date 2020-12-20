@@ -32,7 +32,7 @@ const DevicePicker = ({ element, session, onSelect }) => {
   return (
     <div>
       <div className={classes.inputs}>
-        <Input allowClear prefix={<Icon name="search-outline" />} value={searchText} onChange={({ target }) => setSearch(target.value)} />
+        <Input placeholder="Поиск" allowClear prefix={<Icon name="search-outline" />} value={searchText} onChange={({ target }) => setSearch(target.value)} />
         <Select title="Объект" value={points} onChange={setSalePoint} selector={session.points.selector} />
       </div>
       <SelectableTable
