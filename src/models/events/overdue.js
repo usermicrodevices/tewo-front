@@ -8,6 +8,7 @@ import { getOverdued, getDowntimes } from 'services/events';
 import colorizedCell from 'elements/table/colorizedCell';
 import { tableItemLink } from 'elements/table/trickyCells';
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
+import { SemanticRanges } from 'utils/date';
 
 const declareColumns = () => ({
   id: {
@@ -111,6 +112,7 @@ class Overdue extends Table {
     const filters = new Filters(declareFilters(session));
     super(declareColumns(), getOverdued(session), filters);
     this.filter.isShowSearch = false;
+    this.filter.set('open_date', SemanticRanges.prw30Days.resolver());
     this.session = session;
 
     const update = () => {
@@ -158,6 +160,8 @@ class Overdue extends Table {
     }
     return sum;
   }
+
+  get isImpossibleToBeSync() { return true; }
 }
 
 export default Overdue;
