@@ -38,10 +38,10 @@ const drinkColumns = (width) => [
   },
   {
     title: 'Количество',
-    dataIndex: 'ingredientsCount',
+    dataIndex: 'count',
     render: (ingredientsCount) => <Format>{ingredientsCount}</Format>,
     width: width[1],
-    sorter: (a, b) => a.ingredientsCount - b.ingredientsCount,
+    sorter: (a, b) => a.count - b.count,
   },
   {
     title: 'Цена',
@@ -85,9 +85,9 @@ const ingredientColumns = (width) => [
   },
   {
     title: 'Общее Кол-во',
-    dataIndex: 'ingredientsCount',
+    dataIndex: 'count',
     render: (ingredientsCount) => <Format>{ingredientsCount}</Format>,
-    sorter: (a, b) => a.ingredientsCount - b.ingredientsCount,
+    sorter: (a, b) => a.count - b.count,
   },
   {
     title: 'Цена ингредиента',

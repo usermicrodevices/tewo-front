@@ -147,12 +147,12 @@ class PrimeCost extends Table {
     filters.isShowSearch = false;
     filters.set('device_date', SemanticRanges.prw30Days.resolver());
 
-    const i = { v: 0 };
+    const i = { v: false };
     super(declareColumns(session), (limit, offset, search) => {
       if (i.v) {
         this.chartData = undefined;
       }
-      i.v += 1;
+      i.v = true;
       return getPrimecost(session, (chartData) => {
         this.chartData = chartData;
       })(limit, offset, search);

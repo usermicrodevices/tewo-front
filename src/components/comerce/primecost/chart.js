@@ -9,6 +9,7 @@ import NoData from 'elements/noData';
 import DaterangeTitle from 'elements/chart/daterangeTitle';
 import locale from 'elements/chart/locale';
 import Loader from 'elements/loader';
+import { FORMAT } from 'elements/format';
 
 const PrimecostChart = inject('table')(observer(({
   size, table,
@@ -20,6 +21,19 @@ const PrimecostChart = inject('table')(observer(({
   if (categories.length === 0) {
     return <NoData noMargin title="Недостаточно данных для построения графика" />;
   }
+
+  const sums = [];
+  for (const { data } of Object.values(series)) {
+    while (sums.length < data.length) {
+      sums.push(0);
+    }
+    for (const [id, v] of data.entries()) {
+      sums[id] += v;
+    }
+  }
+  const max = Math.max(...sums);
+
+  const formatter = (v) => FORMAT.format(v.toFixed(0));
 
   const data = {
     colors,
@@ -43,12 +57,19 @@ const PrimecostChart = inject('table')(observer(({
     },
     dataLabels: {
       enabled: true,
+      formatter: (v) => {
+        if (v < max / 12) {
+          return '';
+        }
+        return formatter(v);
+      },
     },
     stroke: {
       width: 2,
     },
     xaxis: {
       categories,
+      labels: { formatter },
     },
     yaxis: {
       title: {

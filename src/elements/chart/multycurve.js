@@ -60,7 +60,6 @@ const rangesUnion = (lhs, rhs) => ({
 const ClearanceChart = ({
   size, x, y, y1, y2,
 }) => {
-  console.log('it\'s me!');
   if (!Array.isArray(x) || !Array.isArray(y) || x.length <= 1 || y.length === 0) {
     return <NoData noMargin title="Недостаточно данных для построения графика" />;
   }
