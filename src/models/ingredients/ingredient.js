@@ -42,6 +42,10 @@ class Ingridient extends Datum {
     return currency ? currency.name : currency;
   }
 
+  @computed get drinksId() {
+    return this.session.drinks.getByIngredient(this.id).map(({ id }) => id);
+  }
+
   get editable() {
     return {
       name: {

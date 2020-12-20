@@ -1,5 +1,5 @@
 /* eslint class-methods-use-this: off */
-import { observable, computed, action } from 'mobx';
+import { observable, action } from 'mobx';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
@@ -66,7 +66,20 @@ class Ingridients extends Table {
   };
 
   constructor(session) {
-    super(COLUMNS, getIngredients(session), new Filters({}));
+    super(COLUMNS, getIngredients(session), new Filters({
+      companyId: {
+        type: 'singleselector',
+        title: 'Компания',
+        apply: (general, data) => general(data.companyId),
+        selector: () => session.companies.selector,
+      },
+      drinksId: {
+        type: 'selector',
+        title: 'Напиток',
+        apply: (general, data) => data.drinksId.findIndex((drinkId) => general(drinkId)) >= 0,
+        selector: () => session.drinks.selector,
+      },
+    }));
     this.session = session;
   }
 
