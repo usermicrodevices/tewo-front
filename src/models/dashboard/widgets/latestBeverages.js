@@ -1,28 +1,41 @@
-import { computed } from 'mobx';
+import { computed, observable, reaction } from 'mobx';
+import { getBeverages } from 'services/beverage';
 
 class LastBeverages {
   session;
 
   generic;
 
+  @observable beverages;
+
   constructor(settings, session) {
     this.generic = settings;
     this.session = session;
 
+    reaction(() => this.generic.salePointsId, () => {
+      this.beverages = undefined;
+      this.update();
+    });
     this.update();
   }
 
   @computed get isLoaded() {
-    return this.session.beverages.isLoaded;
+    return typeof this.beverages !== 'undefined';
   }
 
   @computed get rows() {
-    const pointsSet = this.generic.salePointsId === null ? { has: () => true } : new Set(this.generic.salePointsId);
-    return this.session.beverages.rawData.filter(({ salePointId }) => pointsSet.has(salePointId)).slice(0, 8);
+    return this.beverages;
   }
 
   update = () => {
-    this.session.beverages.validate();
+    const { salePointsId } = this.generic;
+    if (typeof salePointsId === 'undefined') {
+      return;
+    }
+    getBeverages(this.session)(8, 0, (Array.isArray(salePointsId) && salePointsId.length > 0) ? `device__sale_point__id__in=${salePointsId.join()}` : '')
+      .then(({ results }) => {
+        this.beverages = results;
+      });
   };
 }
 

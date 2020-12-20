@@ -172,7 +172,7 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     excludedDateRandes: new Set(),
     isHaveDateFilter: false,
     isHavePointsFilter: true,
-    tickDuration: 3600,
+    tickDuration: 20,
     widget: LatestBeveragesWidget,
     model: LatestBeveragesModel,
   },
