@@ -31,6 +31,14 @@ class EventType extends Datum {
     this.session = session;
   }
 
+  @computed get reactionTimeMinutes() {
+    return this.reactionTime / 60;
+  }
+
+  set reactionTimeMinutes(v) {
+    this.reactionTime = v * 60;
+  }
+
   @computed get reactionTimeText() {
     return humanizeSeconds(this.reactionTime);
   }
@@ -48,8 +56,8 @@ class EventType extends Datum {
   }
 
   editable = {
-    reactionTime: {
-      type: 'seconds',
+    reactionTimeMinutes: {
+      type: 'miutes',
     },
     color: {
       type: 'color',
@@ -69,7 +77,7 @@ class EventType extends Datum {
         value: this.name,
       },
       {
-        dataIndex: 'reactionTime',
+        dataIndex: 'reactionTimeMinutes',
         title: 'Время реакции',
         value: this.reactionTimeText,
       },

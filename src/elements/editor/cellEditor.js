@@ -49,13 +49,13 @@ const CellEditor = ({
         </Form.Item>
       );
     }
-    case 'seconds': {
+    case 'miutes': {
       return (
         <div className={classes.minutes}>
           <Form.Item name={name}>
             <InputNumber />
           </Form.Item>
-          <span>секунд</span>
+          <span>минут</span>
         </div>
       );
     }
