@@ -229,30 +229,29 @@ const getDeviceTypes = (acceptor) => get('/refs/device_types').then((json) => {
 const getVoltage = (deviceId, daterange) => {
   const dateRangeArg = daterangeToArgs(daterange, 'device_date');
   const step = dateRangeArg === '' ? 86400 : Math.max(60, ...[3600, 86400].filter((s) => (daterange[1] - daterange[0]) / s / 1000 > 10));
-  return get(`/data/counters/pcb_tds/?step=${step}&device=${deviceId}${dateRangeArg}`)
+  return get(`/data/counters/pcb_voltage/?step=${step}&device=${deviceId}${dateRangeArg}`)
     .then((result) => {
       const mustBe = {
         device_date: 'date',
         device_id: 'number',
-        pcb_tds1: 'number',
+        pcb_v1: 'array',
+        pcb_v2: 'array',
+        pcb_v3: 'array',
       };
-      for (const json of result) {
-        checkData(json, mustBe);
+      for (const item of result) {
+        checkData(item, mustBe);
       }
       const isRangeGiven = isDateRange(daterange);
       if (!isRangeGiven && result.length === 0) {
         return [];
       }
-      const finalDateRange = isRangeGiven
-        ? daterange
-        : [moment(result[0].device_date), moment(result[result.length - 1].device_date)];
-      return [...alineDates(
-        finalDateRange,
-        step,
-        result,
-        (item) => ({ voltage: item ? item.pcb_tds1 : 0 }),
-        'device_date',
-      )];
+
+      return result.map((item) => ({
+        moment: moment(item.device_date),
+        pcbV1: item.pcb_v1,
+        pcbV2: item.pcb_v2,
+        pcbV3: item.pcb_v3,
+      }));
     });
 };
 
