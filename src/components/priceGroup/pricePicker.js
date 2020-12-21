@@ -25,7 +25,7 @@ const PricePicker = ({
   return (
     <div>
       <div className={classes.inputs}>
-        <Input allowClear prefix={<Icon name="search-outline" />} value={searchText} onChange={({ target }) => { setSearch(target.value); }} />
+        <Input placeholder="Поиск" allowClear prefix={<Icon name="search-outline" />} value={searchText} onChange={({ target }) => { setSearch(target.value); }} />
       </div>
       <SelectableTable
         className={classes.table}

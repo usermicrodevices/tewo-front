@@ -22,6 +22,10 @@
     display: flex;
     justify-content: space-between;
 
+    .pierange {
+      margin-top: -30px;
+    }
+
     .list {
       display: flex;
       flex-direction: column;

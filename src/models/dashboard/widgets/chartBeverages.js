@@ -14,23 +14,23 @@ class ChartBeverages {
   };
 
   @computed({ keepAlive: true }) get labels() {
-    return this.beveragesStats.xSeria ? this.beveragesStats.xSeria.map((v) => +v) : [];
+    return this.beveragesStats?.xSeria ? this.beveragesStats.xSeria.map((v) => +v) : [];
   }
 
   @computed({ keepAlive: true }) get isLoaded() {
-    return Boolean(this.beveragesStats && this.beveragesStats.isSeriesLoaded);
+    return Boolean(this.beveragesStats && this.beveragesStats?.isSeriesLoaded);
   }
 
   @computed({ keepAlive: true }) get chartData() {
-    return this.beveragesStats.beveragesSeriaCur;
+    return this.beveragesStats?.beveragesSeriaCur;
   }
 
   @computed({ keepAlive: true }) get currentBeverages() {
-    return this.beveragesStats.beveragesCur;
+    return this.beveragesStats?.beveragesCur;
   }
 
   @computed({ keepAlive: true }) get beveragesDiff() {
-    return this.beveragesStats.beveragesDiff;
+    return this.beveragesStats?.beveragesDiff;
   }
 
   constructor(settings, session) {

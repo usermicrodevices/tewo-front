@@ -24,6 +24,10 @@
 .details {
   padding-left: 16px;
   background-color: #FBFBFB;
+  padding-bottom: 10px;
+  :global(.ant-table-wrapper) {
+    padding-bottom: 10px;
+  }
   .detailschild>td {
     :global .ant-table-wrapper:only-child .ant-table {
       margin-left: 0px;

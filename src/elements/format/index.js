@@ -70,4 +70,4 @@ const Format = ({
   return <Tooltip title={txt}>{`${txt.slice(0, symbolsLimit - 2).trim()}…`}</Tooltip>;
 };
 
-export default Format;
+export { Format as default, FORMAT };

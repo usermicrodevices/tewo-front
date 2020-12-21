@@ -41,7 +41,7 @@ class Details {
 
   devicesPath = deviceRout.path;
 
-  imputsManager = new DetailsProps(STORAGE_KEY);
+  imputsManager;
 
   @computed get salesTop() {
     if (!Array.isArray(this.salesTopData)) {
@@ -120,6 +120,8 @@ class Details {
     this.session = session;
     const myId = me.id;
     this.me = me;
+
+    this.imputsManager = new DetailsProps(`${STORAGE_KEY}-${myId}`);
 
     const updateSalesTop = () => {
       this.salesTopData = null;

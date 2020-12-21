@@ -25,6 +25,19 @@ class Settings {
     return this.session.points.getSubset(new Set(salePontsFilter));
   }
 
+  @computed get isHaveExplicitCompaniesFilter() {
+    const salePontsFilter = this.settings.get('salePontsFilter');
+    return Array.isArray(salePontsFilter) && salePontsFilter.length > 0;
+  }
+
+  @computed get companies() {
+    const companiesFilter = this.settings.get('companiesFilter');
+    if (!Array.isArray(companiesFilter) || companiesFilter.length === 0) {
+      return null;
+    }
+    return this.session.companies.getSubset(new Set(companiesFilter));
+  }
+
   @computed get salePointsId() {
     const salePontsFilter = this.settings.get('salePontsFilter');
     const companiesFilter = this.settings.get('companiesFilter');

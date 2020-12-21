@@ -60,7 +60,7 @@ class Details {
     return this.waterQuality.map(({ moment: m }) => m);
   }
 
-  imputsManager = new DetailsProps(STORAGE_KEY);
+  imputsManager;
 
   @computed get xaxis() {
     const [begin, end] = [moment(), moment().add(this.waterQuality.length, 'day')];
@@ -76,6 +76,7 @@ class Details {
 
   constructor(me) {
     this.me = me;
+    this.imputsManager = new DetailsProps(`${STORAGE_KEY}-${me.id}`);
 
     const updateDateRelatedData = () => {
       this.waterQuality = undefined;

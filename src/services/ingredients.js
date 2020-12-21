@@ -96,6 +96,8 @@ const getIngredientsConsumption = (session) => (_, __, search) => getBeveragesDe
         }
         const drink = ingredient.details[drinkId];
         drink.ingredientsCount += ingredientData.count;
+        drink.drinksCount += drinkData.count;
+        drink.earn += drinkData.sum;
       }
     }
   }

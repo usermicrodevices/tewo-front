@@ -4,6 +4,7 @@ import { withSize } from 'react-sizeme';
 
 import colors from 'themes/chart';
 import NoData from 'elements/noData';
+import { FORMAT } from 'elements/format';
 
 import locale from './locale';
 import style from './style.module.scss';
@@ -11,7 +12,7 @@ import style from './style.module.scss';
 const LONG_LIMIT = 15;
 
 const longCrop = (str) => {
-  if (str.length > LONG_LIMIT) {
+  if (typeof str === 'string' && str.length > LONG_LIMIT) {
     return `${str.slice(0, LONG_LIMIT - 2).trim()}…`;
   }
   return str;
@@ -23,7 +24,7 @@ const Barchart = ({
   if (!Array.isArray(x) || !Array.isArray(y) || x.length <= 1) {
     return <NoData noMargin title="Недостаточно данных для построения графика" />;
   }
-  const categories = x.map(longCrop);
+  const categories = x;
   const series = [{
     name: yAxis,
     data: y,
@@ -42,6 +43,12 @@ const Barchart = ({
       ...locale,
     },
 
+    tooltip: {
+      x: {
+        formatter: (id) => x[id - 1],
+      },
+    },
+
     plotOptions: {
       bar: {
         columnWidth: '50%',
@@ -56,6 +63,7 @@ const Barchart = ({
     xaxis: {
       labels: {
         rotate: -45,
+        formatter: longCrop,
       },
       categories,
       tickPlacement: 'on',
@@ -63,6 +71,9 @@ const Barchart = ({
     yaxis: {
       title: {
         text: yAxis,
+      },
+      labels: {
+        formatter: (v) => FORMAT.format(v.toFixed(0)),
       },
     },
     legend: {

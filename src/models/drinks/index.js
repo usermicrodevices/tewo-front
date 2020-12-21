@@ -119,6 +119,13 @@ class Drinks extends Table {
     return this.rawData.filter(({ id }) => set.has(id));
   }
 
+  getByIngredient(ingredientId) {
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    return this.rawData.filter(({ recipe }) => new Set(recipe.map(({ id }) => id)).has(ingredientId));
+  }
+
   update = applyDrink;
 
   @action create() {

@@ -26,13 +26,6 @@ class SalesRow {
     return this.detailsData;
   }
 
-  @computed get detailsRowsCount() {
-    if (!this.isDetailsLoaded) {
-      return undefined;
-    }
-    return this.details.rows.length || 3;
-  }
-
   @computed get isDetailsLoaded() {
     return this.details.isLoaded;
   }

@@ -17,18 +17,26 @@ import { isHaveDateFilter } from './settingsEditor';
 
 import classes from './item.module.scss';
 
-const SubTitle = ({ salePoints }) => {
-  if (!Array.isArray(salePoints) || salePoints.length === 0) {
+const intoText = (items, plur) => {
+  if (!Array.isArray(items) || items.length === 0) {
     return null;
   }
-  const { name } = salePoints[0];
-  if (salePoints.length === 1) {
-    return name;
+  const { name } = items[0];
+  if (items.length === 1) {
+    return <Typography.Caption>{name}</Typography.Caption>;
   }
-  const more = salePoints.length - 1;
-  const text = `${name} и ещё ${more} ${plural(more, ['объект', 'объектов', 'объекта'])}`;
+  const more = items.length - 1;
+  const text = `${name} и ещё ${more} ${plural(more, plur)}`;
 
   return <Typography.Caption>{text}</Typography.Caption>;
+};
+
+const SubTitle = ({ settings }) => {
+  const { salePoints, isHaveExplicitCompaniesFilter, companies } = settings;
+  if (!isHaveExplicitCompaniesFilter) {
+    return intoText(companies, ['компания', 'компаний', 'компании']);
+  }
+  return intoText(salePoints, ['объект', 'объектов', 'объекта']);
 };
 
 const Item = ({
@@ -49,7 +57,7 @@ const Item = ({
             <div className={classes.text}>
               <Typography.Title level={4}>{item.title}</Typography.Title>
               <div className={classes.subtitle}>
-                <SubTitle salePoints={item.storage.generic.salePoints} />
+                <SubTitle settings={item.storage.generic} />
               </div>
             </div>
           </div>

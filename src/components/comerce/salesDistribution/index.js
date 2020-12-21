@@ -48,7 +48,7 @@ const SalesDistrib = ({
       <AntdCatd className={classes.chart}>
         <div className={classes.kernel}>
           <div>
-            <DaterangeTitle announce="Период" range={filter.get('device_date')} />
+            <DaterangeTitle className={classes.pierange} announce="Период" range={filter.get('device_date')} />
             <Pie
               series={series}
               width={382}

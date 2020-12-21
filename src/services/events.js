@@ -125,7 +125,12 @@ const form = (data) => {
   const json = {};
   const renamer = new Map(Object.entries(TYPES_RENAMER).map(([dataName, jsonName]) => [jsonName, dataName]));
   for (const [key, value] of Object.entries(data)) {
-    json[renamer.get(key)] = value;
+    if (renamer.has(key)) {
+      json[renamer.get(key)] = value;
+    }
+  }
+  if (data.reactionTimeMinutes) {
+    json.reaction_time = data.reactionTimeMinutes * 60;
   }
   return json;
 };

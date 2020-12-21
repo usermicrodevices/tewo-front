@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Button, Popconfirm } from 'antd';
 import { EditOutlined, DeleteOutlined, DownOutlined } from '@ant-design/icons';
+import { SizeMe } from 'react-sizeme';
 
 import Loader from 'elements/loader';
 import classNames from 'classnames';
@@ -16,7 +17,7 @@ const SCROLL_PANE_WIDTH = 25;
 const MAX_ROWS_AMOUNT = 620000;
 
 const Row = (
-  data, columns, freshItems, rowFunc, columnWidth, actions, onRowClick, openedRows,
+  data, columns, freshItems, rowFunc, columnWidth, actions, onRowClick, openedRows, setHeightOfExpanded,
 ) => withRouter(observer(({ index: rowIndex, style, history: { push } }) => {
   const index = rowFunc(rowIndex);
   const rowData = data[index];
@@ -37,6 +38,7 @@ const Row = (
     <div
       style={style}
     >
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
       <div
         className={classNames(
           rowData.className,
@@ -93,7 +95,13 @@ const Row = (
         )}
       </div>
       {openedRows?.has(index) && (
-        <actions.detailsWidget columnWidth={columnWidth} index={index} item={rowData} />
+        <SizeMe
+          monitorHeight
+          render={({ size: { height } }) => {
+            setHeightOfExpanded(index, height);
+            return <actions.detailsWidget columnWidth={columnWidth} index={index} item={rowData} />;
+          }}
+        />
       )}
     </div>
   );

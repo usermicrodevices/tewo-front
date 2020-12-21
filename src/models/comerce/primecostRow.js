@@ -9,16 +9,8 @@ class PrimeCostRow {
 
   expanded = observable.map();
 
-  @observable smallScreenAddition;
-
   @action setExpanded(expanded, parent) {
     this.expanded.set(parent, expanded);
-  }
-
-  @action setSmallScreenAffition(value) {
-    if (this.smallScreenAddition !== value) {
-      this.smallScreenAddition = value;
-    }
   }
 
   constructor(cityId, data, session) {
@@ -81,27 +73,6 @@ class PrimeCostRow {
         };
       }),
     }));
-  }
-
-  @computed get detailsRowsCount() {
-    let result = Object.keys(this.data.details).length;
-    const rootExpander = new Set(this.expanded.get());
-    for (const [parent, keys] of this.expanded.entries()) {
-      if (typeof parent === 'undefined' || rootExpander.has(parent)) {
-        const father = (
-          typeof parent === 'undefined'
-            ? this.data
-            : this.data.details[parent]
-        ).details;
-        for (const key of keys) {
-          result += Object.entries(father[key].details).length + 1;
-          if (this.smallScreenAddition && typeof parent !== 'undefined') {
-            result += 0.5;
-          }
-        }
-      }
-    }
-    return result;
   }
 }
 
