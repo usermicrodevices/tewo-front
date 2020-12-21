@@ -31,30 +31,29 @@ class Details {
   @observable lastClearances = [];
 
   @computed get voltageSeries() {
-    const { minPower, maxPower } = { minPower: 220, maxPower: 240 };
+    function createMapRangeBar(rangeKey, dateKey) {
+      return function mapRangeBar(item) {
+        return {
+          x: item[dateKey].format(),
+          y: item[rangeKey],
+        };
+      };
+    }
+
     return [
       {
-        data: this.voltage.map(({ voltage }) => voltage),
-        name: 'Напряжение',
-        axis: 0,
+        data: this.voltage.map(createMapRangeBar('pcbV1', 'moment')),
+        name: 'L1',
       },
       {
-        name: `Мин. (${minPower})`,
-        type: 'line',
-        data: new Array(this.voltage.length).fill(minPower),
-        axis: 0,
+        data: this.voltage.map(createMapRangeBar('pcbV2', 'moment')),
+        name: 'L2',
       },
       {
-        name: `Макс. (${maxPower})`,
-        type: 'line',
-        data: new Array(this.voltage.length).fill(maxPower),
-        axis: 0,
+        data: this.voltage.map(createMapRangeBar('pcbV3', 'moment')),
+        name: 'L3',
       },
     ];
-  }
-
-  @computed get voltageXSeria() {
-    return this.voltage.map(({ moment: m }) => m);
   }
 
   @computed get waterQualityXSeria() {
