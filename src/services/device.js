@@ -285,7 +285,7 @@ const getWaterQuality = (deviceId, daterange) => {
     });
 };
 
-const QR_BEVERAGE_PAYMENT_TYPE = 5;
+const QR_BEVERAGE_PAYMENT_TYPE = 4;
 
 const getQR = (deviceId, daterange) => {
   const dangeart = daterangeToArgs(daterange, 'device_date');

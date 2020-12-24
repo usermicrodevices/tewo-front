@@ -55,7 +55,6 @@ class Datum {
         const isNew = this.id === null;
         transaction(() => {
           for (const [key, value] of Object.entries(newData)) {
-            console.log(this[key], '=>', value);
             this[key] = value;
           }
         });

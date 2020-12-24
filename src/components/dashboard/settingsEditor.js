@@ -36,7 +36,6 @@ const SettingsEditor = inject(({ grid, session }) => ({ grid, session }))(observ
     excludedDateRandes: new Set([]),
   };
   const setType = (newType) => {
-    console.log(WIDGETS_ADDITIONAL_INFORMATION, newType);
     const newTypeInfo = WIDGETS_ADDITIONAL_INFORMATION[newType];
     justSetType(newType);
     if (newTypeInfo.defaultDateRange !== null) {

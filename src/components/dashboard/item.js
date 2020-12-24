@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { inject, observer } from 'mobx-react';
+import { inject, Observer, observer } from 'mobx-react';
 import {
   Button, Card, Tooltip, Dropdown, Space,
 } from 'antd';
@@ -31,13 +31,13 @@ const intoText = (items, plur) => {
   return <Typography.Caption>{text}</Typography.Caption>;
 };
 
-const SubTitle = ({ settings }) => {
+const SubTitle = observer(({ settings }) => {
   const { salePoints, isHaveExplicitCompaniesFilter, companies } = settings;
   if (!isHaveExplicitCompaniesFilter) {
     return intoText(companies, ['компания', 'компаний', 'компании']);
   }
   return intoText(salePoints, ['объект', 'объектов', 'объекта']);
-};
+});
 
 const Item = ({
   children, item, className, style, onMouseDown, onMouseUp, onTouchEnd, grid,

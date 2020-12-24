@@ -30,6 +30,9 @@ const PrimecostChart = inject('table')(observer(({
     for (const [id, v] of data.entries()) {
       sums[id] += v;
     }
+    for (let i = 0; i < data.length; i += 1) {
+      data[i] = Math.round(data[i]);
+    }
   }
   const max = Math.max(...sums);
 
