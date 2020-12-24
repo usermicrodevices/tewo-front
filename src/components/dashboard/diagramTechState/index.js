@@ -13,7 +13,7 @@ const Diagram = ({ value, amount, label }) => (
       strokeColor="#FABC5F"
       type="circle"
       percent={value / amount * 100}
-      format={() => (amount ? `${value}/${amount}` : <Loader />)}
+      format={() => (amount ? `${value || 0}/${amount || 0}` : <Loader />)}
     />
     <Typography.Text className={classes.label}>{label}</Typography.Text>
   </div>

@@ -235,11 +235,12 @@ const getDashboardWidgetsInfo = () => get('/refs/widget_references/').then((resu
     checkData(json, mustBe);
     if (!(json.uid in WIDGETS_ADDITIONAL_INFORMATION)) {
       apiCheckConsole.warn('не реализован виджет', `${json.uid}: ${json.name}`);
+    } else {
+      types[json.uid] = {
+        title: json.name,
+        description: json.description,
+      };
     }
-    types[json.uid] = {
-      title: json.name,
-      description: json.description,
-    };
   }
   for (const key of Object.keys(WIDGETS_ADDITIONAL_INFORMATION)) {
     if (!(key in types)) {

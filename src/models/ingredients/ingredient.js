@@ -1,6 +1,8 @@
 import Datum from 'models/datum';
 import { computed, observable } from 'mobx';
 
+import { FORMAT } from 'elements/format';
+
 class Ingridient extends Datum {
   @observable id = null;
 
@@ -83,7 +85,7 @@ class Ingridient extends Datum {
       {
         dataIndex: 'cost',
         title: 'Цена за единицу',
-        value: this.cost,
+        value: FORMAT.format(this.cost.toString()),
       },
       {
         dataIndex: 'dimension',

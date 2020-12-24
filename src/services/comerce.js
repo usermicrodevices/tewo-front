@@ -167,6 +167,7 @@ const getPrimecost = (session, chartDataAcceptor) => (_, __, search) => Promise.
     const sophiesticatedData = {
       earn: cityEarn,
       margin: cityEarn - cityCost,
+      cost: cityCost,
       id: parseInt(cityId, 10),
       details,
     };
