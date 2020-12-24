@@ -46,7 +46,7 @@ class Device extends Datum {
   session;
 
   get isOn() {
-    return this.status === 0;
+    return this.status === 1;
   }
 
   get isInactive() {
