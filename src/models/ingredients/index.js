@@ -4,6 +4,7 @@ import { observable, action } from 'mobx';
 import Table from 'models/table';
 import Filters from 'models/filters';
 import { getIngredients, applyIngredient, deleteIngredient } from 'services/ingredients';
+import { FORMAT } from 'elements/format';
 
 import Ingredient from './ingredient';
 
@@ -25,6 +26,7 @@ const COLUMNS = {
     isVisibleByDefault: true,
     title: 'Цена за единицу',
     grow: 3,
+    format: (v) => (typeof v === 'number' ? FORMAT.format(v.toString()) : undefined),
     sortDirections: 'both',
   },
   currencyName: {
