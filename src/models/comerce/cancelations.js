@@ -116,7 +116,7 @@ class Sales extends Table {
         axis: 0,
       },
       {
-        data: [...new Array(this.whole.length - this.canceled.length).fill(0), ...this.canceled.beveragesSeria],
+        data: [...new Array(Math.max(0, (this.whole.length - this.canceled.length) || 0)).fill(0), ...this.canceled.beveragesSeria],
         name: 'Отменённых наливов',
         width: 2,
         axis: 1,
