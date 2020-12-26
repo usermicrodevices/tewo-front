@@ -6,42 +6,15 @@ import Table from 'models/table';
 import { getEventsClearancesChart, getDetergrnts } from 'services/events';
 import { DECLARE_DEVICE_FILTERS } from 'models/devices';
 import { daterangeToArgs, SemanticRanges } from 'utils/date';
-
-const declareColumns = () => ({
-  companyName: {
-    isVisibleByDefault: true,
-    title: 'Компания',
-    grow: 1,
-  },
-  cityName: {
-    isVisibleByDefault: true,
-    title: 'Город',
-    grow: 1,
-  },
-  salePointName: {
-    isVisibleByDefault: true,
-    title: 'Объект',
-    grow: 1,
-  },
-  name: {
-    isVisibleByDefault: true,
-    title: 'Оборудование',
-    grow: 1,
-  },
-  clearanceDate: {
-    isVisibleByDefault: true,
-    title: 'Посл. очистка',
-    grow: 1,
-    sortDirections: 'both',
-    isDefaultSort: true,
-    isAsyncorder: true,
-  },
-});
+import { getLastCleanings } from 'services/device';
+import Format from 'elements/format';
 
 class Cleans extends Table {
   @observable cleans;
 
   @observable stats = {};
+
+  @observable lastCleans = new Map();
 
   constructor(session) {
     const filters = new Filters({
@@ -57,7 +30,44 @@ class Cleans extends Table {
 
     filters.isShowSearch = false;
 
-    super(declareColumns(session), () => (
+    const columns = {
+      companyName: {
+        isVisibleByDefault: true,
+        title: 'Компания',
+        grow: 1,
+      },
+      cityName: {
+        isVisibleByDefault: true,
+        title: 'Город',
+        grow: 1,
+      },
+      salePointName: {
+        isVisibleByDefault: true,
+        title: 'Объект',
+        grow: 1,
+      },
+      name: {
+        isVisibleByDefault: true,
+        title: 'Оборудование',
+        grow: 1,
+      },
+      lastClean: {
+        isVisibleByDefault: true,
+        transform: (_, { id }) => {
+          if (this.lastCleans.size === 0) {
+            return undefined;
+          }
+          return this.lastCleans.get(id) || null;
+        },
+        title: 'Посл. очистка',
+        grow: 1,
+        sortDirections: 'both',
+        isDefaultSort: true,
+        isAsyncorder: true,
+      },
+    };
+
+    super(columns, () => (
       when(() => session.devices.isLoaded).then(() => {
         this.cleans = undefined;
         this.stats = {};
@@ -98,6 +108,8 @@ class Cleans extends Table {
         };
       })
     ), filters);
+
+    getLastCleanings().then((result) => { this.lastCleans = result; });
   }
 
   toString() {

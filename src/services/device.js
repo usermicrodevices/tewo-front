@@ -292,6 +292,19 @@ const getQR = (deviceId, daterange) => {
   return getBeverages()(1, 0, `device__id=${deviceId}&operation__id=${QR_BEVERAGE_PAYMENT_TYPE}${dangeart}`).then(({ count }) => count);
 };
 
+const getLastCleanings = () => get('data/events/last_cleanings/').then((json) => {
+  const result = new Map();
+  if (typeof json !== 'object' || json === null) {
+    apiCheckConsole.error('last_cleanings ожидается объект, получено ', json);
+    return new Map();
+  }
+  for (const [id, date] of Object.entries(json)) {
+    checkData({ date }, { date: 'date' });
+    result.set(parseInt(id, 10), moment(date));
+  }
+  return result;
+});
+
 export {
-  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice, getDeviceTypes, getVoltage, getWaterQuality, getQR,
+  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice, getDeviceTypes, getVoltage, getWaterQuality, getQR, getLastCleanings,
 };

@@ -26,7 +26,7 @@ const COLUMNS = {
     isVisibleByDefault: true,
     title: 'Цена за единицу',
     grow: 3,
-    format: (v) => (typeof v === 'number' ? FORMAT.format(v.toString()) : undefined),
+    transform: (v) => (typeof v === 'number' ? FORMAT.format(v.toString()) : undefined),
     sortDirections: 'both',
   },
   currencyName: {
