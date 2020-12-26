@@ -3,6 +3,7 @@ import { DatePicker } from 'antd';
 import moment from 'moment';
 
 import Typography from 'elements/typography';
+import { isDateRange } from 'utils/date';
 
 import style from './style.module.scss';
 
@@ -18,6 +19,12 @@ const DatergangePicker = ({
 }) => {
   const quartalStart = moment().startOf('year').add(Math.floor(moment().month() / 3) * 3, 'month');
   const halfAYearStart = moment().startOf('year').add(Math.floor(moment().month() / 6) * 6, 'month');
+  const realOnChange = (v) => {
+    if (isDateRange(v) && !showTime) {
+      return onChange([v[0].startOf('day'), v[1].endOf('day')]);
+    }
+    return onChange(v);
+  };
   return (
     <div className={style.space}>
       <Typography.Text>{ `${title}:` }</Typography.Text>
@@ -42,7 +49,7 @@ const DatergangePicker = ({
           [`${moment().format('YYYY')} год`]: [moment().startOf('year'), moment().endOf('year')],
           [`${moment().subtract(1, 'year').format('YYYY')} год`]: [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
         }}
-        onChange={onChange}
+        onChange={realOnChange}
         value={value}
       />
     </div>
