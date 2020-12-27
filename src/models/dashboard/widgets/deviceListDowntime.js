@@ -81,6 +81,7 @@ class DeviceListOff {
           sum,
           details: detailsList,
         },
+        id: pointId,
         key: pointId,
       };
     });
