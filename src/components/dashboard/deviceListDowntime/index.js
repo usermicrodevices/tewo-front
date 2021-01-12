@@ -46,8 +46,8 @@ const overlay = (details) => (
   <Menu>
     { details.map(({ eventTypeName, eventTypeId, value }) => (
       <div className={classes.row} key={eventTypeId}>
-        <div><Text><Format>{eventTypeName}</Format></Text></div>
-        <div><Text><Format>{formatDuration(moment.duration(value, 'millisecond'))}</Format></Text></div>
+        <div className={classes.label}><Text><Format>{eventTypeName}</Format></Text></div>
+        <div className={classes.text}><Text><Format>{formatDuration(moment.duration(value, 'millisecond'))}</Format></Text></div>
       </div>
     ))}
   </Menu>
