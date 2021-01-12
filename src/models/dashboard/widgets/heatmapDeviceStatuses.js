@@ -9,7 +9,7 @@ const getStateForDevice = (device) => {
     return 3;
   }
 
-  if (device.isNeedTechService || device.isHasOverlocPPM || device.isHaveOverdueTasks) {
+  if (device.isNeedTechService) {
     return 2;
   }
 

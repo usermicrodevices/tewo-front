@@ -15,7 +15,7 @@ export const legend = [
   {
     from: 2,
     to: 2,
-    name: 'Требует внимания',
+    name: 'Требуется обслуживание',
     color: '#FFB200',
   },
   {
