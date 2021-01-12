@@ -113,10 +113,10 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
   diagramSalePointsBeveragesRate: {
     rowSpan: 124,
     colSpan: 2,
-    defaultDateRange: null,
+    defaultDateRange: 'prw7Days',
     excludedDateRandes: new Set([]),
     isHaveDateFilter: true,
-    isHavePointsFilter: false,
+    isHavePointsFilter: true,
     tickDuration: 600,
     widget: DiagramSalePointsBeveragesRateWidget,
     model: DiagramSalePointsBeveragesRateModel,

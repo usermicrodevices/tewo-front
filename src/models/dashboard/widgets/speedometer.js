@@ -31,7 +31,8 @@ class Speedometr {
       return;
     }
 
-    this.session.points.getBeveragesSpeed(this.generic.salePointsId || []).then((value) => { this.value = value; });
+    this.session.points.getBeveragesSpeed(this.generic.salePointsId || [])
+      .then((value) => { this.value = value; });
   }
 }
 
