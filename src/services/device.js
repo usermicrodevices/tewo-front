@@ -29,6 +29,7 @@ const RENAMER = {
   tech: 'isNeedTechService',
   sync_date: 'priceSyncDate',
   status: 'status',
+  description: 'description',
 };
 
 function converter(json, acceptor) {
@@ -56,6 +57,7 @@ function converter(json, acceptor) {
       maintenance: 'date',
       lastoff: 'date',
       sync_date: 'date',
+      description: 'string',
     },
   )) {
     apiCheckConsole.error(`Неожиданный ответ по адресу ${LOCATION}`, json);

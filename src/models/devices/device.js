@@ -37,6 +37,8 @@ class Device extends Datum {
 
   @observable priceSyncDate;
 
+  @observable description;
+
   status;
 
   detailsData = null;
@@ -241,7 +243,7 @@ class Device extends Datum {
       {
         dataIndex: 'description',
         title: 'Описание',
-        value: null,
+        value: this.description,
       },
       {
         dataIndex: 'ingredients',

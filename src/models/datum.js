@@ -36,6 +36,7 @@ class Datum {
       'not all keys from update data is expected in object',
       this,
       data,
+      Object.keys(data).filter((key) => typeof this[key] === 'undefined'),
     );
 
     const genericValidationResult = this.genericValidation(data);
