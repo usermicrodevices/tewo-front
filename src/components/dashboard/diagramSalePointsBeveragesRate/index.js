@@ -48,7 +48,7 @@ const BeveragesRateDiagram = inject(({ session, storage }) => ({ session, storag
         ))}
         <div />
         <div className={style.labels}>
-          { [0, 1, 2].map((v) => <div>{maxValue / 2 * v}</div>)}
+          { [0, 1, 2].map((v) => <div key={v}>{maxValue / 2 * v}</div>)}
         </div>
       </div>
       <Switch

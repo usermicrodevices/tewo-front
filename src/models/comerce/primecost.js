@@ -23,7 +23,7 @@ const declareColumns = () => ({
   },
   margin: {
     isVisibleByDefault: true,
-    title: 'Маржа',
+    title: 'Прибыль',
     grow: 3,
     sortDirections: 'both',
     isDefaultSort: true,

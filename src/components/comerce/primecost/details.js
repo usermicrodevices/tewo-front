@@ -21,7 +21,7 @@ const columns = (width) => [
     sorter: (a, b) => a.earn - b.earn,
   },
   {
-    title: 'Маржа',
+    title: 'Прибыль',
     dataIndex: 'margin',
     render: (margin) => <Format isCost>{margin}</Format>,
     width: width[2],
@@ -58,7 +58,7 @@ const drinkColumns = (width) => [
     sorter: (a, b) => a.earn - b.earn,
   },
   {
-    title: 'Маржа',
+    title: 'Прибыль',
     dataIndex: 'margin',
     render: (margin) => <Format isCost>{margin}</Format>,
     width: width[2] / 3,

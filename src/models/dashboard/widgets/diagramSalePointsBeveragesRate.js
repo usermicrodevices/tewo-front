@@ -14,6 +14,7 @@ class DiagramSalePointsBeveragesRate {
       return undefined;
     }
     const result = {};
+
     for (const [salePointId, values] of Object.entries(this.data)) {
       let beverageSum = 0;
       for (const { beverages } of values) {
@@ -29,14 +30,21 @@ class DiagramSalePointsBeveragesRate {
     this.session = session;
 
     const update = () => {
+      if (this.generic.salePointsId === undefined) {
+        return;
+      }
+
       this.data = undefined;
       getBeveragesSalePointsStats(
         this.generic.dateRange,
         86400,
+        this.generic.salePointsId,
       ).then((result) => { this.data = result; });
     };
-    reaction(() => this.generic.dateRange, update);
     update();
+
+    reaction(() => this.generic.dateRange, update);
+    reaction(() => this.generic.salePointsId, update);
   }
 }
 
