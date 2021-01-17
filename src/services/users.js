@@ -91,6 +91,7 @@ export function getRoles(map) {
           id: 'number',
           value: 'string',
           description: 'string',
+          weight: 'number',
         }, { mobile: 'string', group: 'number' })) {
           apiCheckConsole.error(`Неожиданные данные для ролей ${ROLES_LOCATION}`, datum);
         }

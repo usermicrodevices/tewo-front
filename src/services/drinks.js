@@ -35,9 +35,9 @@ const transform = (json, acceptor) => {
       name: 'string',
       company: 'number',
       cooking_time: 'number',
-      code_ext: 'string',
     }, {
       nds: 'number',
+      code_ext: 'string',
     },
   )) {
     apiCheckConsole.error(`Неожиданный ответ по адресу ${LOCATION}`, json);

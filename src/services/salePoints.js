@@ -35,6 +35,7 @@ const SHUILD_BE = {
   company: 'number',
   created_date: 'date',
   opened_tasks: 'boolean',
+  status_reference: 'number',
 };
 
 const MAY_BE = {
