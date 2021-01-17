@@ -130,7 +130,7 @@ class Sales extends Table {
 
     filters.salesDetails = (pointId) => salesDetails(pointId, filters);
 
-    super(declareColumns(session), salesLoader(session, filters, (prw, cur) => {
+    super(declareColumns(session), salesLoader(session, filters, (cur, prw) => {
       this.chart = { prw, cur };
     }), filters);
   }
