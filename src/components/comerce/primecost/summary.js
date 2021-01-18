@@ -34,14 +34,14 @@ const Summary = ({ table }) => {
         <Row earn={summary.earn} cost={summary.cost} margin={summary.margin} />
       </div>
       <div className={classes.top}>
-        <div className={classes.title}><Typography.Title level={4}>Топ 5 напитков по прибыли</Typography.Title></div>
+        <div className={classes.title}><Typography.Title level={4}>Рейтинг напитков по прибыли</Typography.Title></div>
         <div>
           {
-            top.slice(0, 5).map(({
+            top.map(({
               id, name, earn, cost, margin,
             }, index) => (
               <div key={id}>
-                <div className={classes.name}><Typography.Text>{`${index + 1} ${name}`}</Typography.Text></div>
+                <div className={classes.name}><Typography.Text>{`${index + 1}. ${name}`}</Typography.Text></div>
                 <Row earn={earn} cost={cost} margin={margin} />
               </div>
             ))

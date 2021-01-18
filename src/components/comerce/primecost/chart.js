@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Card } from 'antd';
+import { Card, Space } from 'antd';
 import Chart from 'react-apexcharts';
 import { withSize } from 'react-sizeme';
 
@@ -10,6 +10,7 @@ import DaterangeTitle from 'elements/chart/daterangeTitle';
 import locale from 'elements/chart/locale';
 import Loader from 'elements/loader';
 import { FORMAT } from 'elements/format';
+import Typography from 'elements/typography';
 
 const PrimecostChart = inject('table')(observer(({
   size, table,
@@ -102,7 +103,10 @@ const Wrap = withSize()(inject('table')(observer(({
   size: { width }, table,
 }) => (
   <Card>
-    <DaterangeTitle announce="Период" range={table.filter.get('device_date')} />
+    <Space size={32}>
+      <Typography.Title level={3}>Топ 6 напитков по прибыли</Typography.Title>
+      <DaterangeTitle announce="Период" range={table.filter.get('device_date')} />
+    </Space>
     <PrimecostChart size={{ width: width - 50, height: 403 }} />
   </Card>
 ))));
