@@ -76,6 +76,8 @@ class PriceGroupOverview extends React.Component {
         onCancel={this.onCancel}
         onOk={onOk}
         width={800}
+        transitionName=""
+        maskTransitionName=""
       >
         { children }
       </Modal>
