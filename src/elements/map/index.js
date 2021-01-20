@@ -110,7 +110,7 @@ const YMapContainer = observer(({
       {filter && (
         <Provider filter={filter}>
           <ActionsContainer position="topRight">
-            <Dropdown overlay={<Filters />} trigger={['hover']} placement="bottomRight">
+            <Dropdown overlay={<Filters />} trigger={['click']} placement="bottomRight">
               <Button
                 type={filter.search !== '' ? 'primary' : 'default'}
                 icon={<FilterOutlined />}

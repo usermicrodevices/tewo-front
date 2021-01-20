@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { get } from 'utils/request';
+import { get, blob } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import {
   daterangeToArgs, isDateRange, alineDates, momentToArg,
@@ -88,6 +88,8 @@ const getBeverageOperations = (map) => get('refs/operations/').then((data) => {
   }
   return map;
 });
+
+const exportBeverages = (filter = '') => blob(`/data/beverages/xlsx/${filter !== '' ? `?${filter}` : filter}`);
 
 const getBeveragesStats = (daterange, filters, step) => {
   const rangeArg = daterangeToArgs(daterange, 'device_date') || `&device_date__gt=${momentToArg(moment(1))}`;
@@ -226,6 +228,7 @@ const getBeveragesDense = (search) => {
 
 export {
   getBeverages,
+  exportBeverages,
   getBeverageOperations,
   getBeveragesStats,
   getBeveragesSalePointsStats,

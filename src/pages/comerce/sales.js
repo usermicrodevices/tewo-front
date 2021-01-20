@@ -1,8 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { observer, inject, Provider } from 'mobx-react';
-import { Button, Space } from 'antd';
-import { DownloadOutlined } from '@ant-design/icons';
+import { Space } from 'antd';
 
 import SubPage from 'elements/subpage';
 import Typography from 'elements/typography';
@@ -37,7 +36,6 @@ class Sales extends React.Component {
           Аналитика продаж
         </Typography.Title>
         <Space>
-          <Button disabled icon={<DownloadOutlined />}>Экспорт Excel</Button>
           { <div style={{ display: isDistribution ? 'none' : 'block' }}><Provider filter={model.filter}><FiltersButton /></Provider></div> }
           { <div style={{ display: isDistribution ? 'block' : 'none' }}><Provider filter={distributionModel.filter}><FiltersButton /></Provider></div> }
         </Space>
