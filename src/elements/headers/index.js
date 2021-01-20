@@ -11,6 +11,7 @@ import Icon from 'elements/icon';
 import Typography from 'elements/typography';
 import HTMLEntity from 'elements/htmlEntity';
 import ColumnsPicker from 'elements/table/columnsPicker';
+import ExportButton from 'elements/exportButton';
 
 import styles from './style.module.scss';
 
@@ -114,8 +115,11 @@ const TableHeader = inject('table')(observer(({ title, table, customButtons }) =
   const { filter } = table;
   const { filters } = filter;
   const isHaveFilters = Object.keys(filters).length !== 0;
+  const isHaveExport = Boolean(table.exporter);
+
   const onReorder = (columns) => { table.reorderColumns(columns); };
   const onColumnsPicked = (pickedColumns) => { table.visibleColumns = pickedColumns; };
+
   return (
     <div className={styles.head}>
       <Space size={16} className={styles.actions}>
@@ -130,7 +134,12 @@ const TableHeader = inject('table')(observer(({ title, table, customButtons }) =
         <Space>
           { customButtons || (
             <>
-              <Dropdown overlay={<ColumnsPicker onReorder={onReorder} onChange={onColumnsPicked} visibleColumns={table.visibleColumns} />} placement="bottomLeft">
+              { isHaveExport && <ExportButton text="Экспорт Excel" exporter={table.exporter} />}
+              <Dropdown
+                trigger={['click']}
+                overlay={<ColumnsPicker onReorder={onReorder} onChange={onColumnsPicked} visibleColumns={table.visibleColumns} />}
+                placement="bottomLeft"
+              >
                 <Button icon={<Icon name="more-vertical-outline" />}>Колонки</Button>
               </Dropdown>
               { isHaveFilters && <FiltersButton />}

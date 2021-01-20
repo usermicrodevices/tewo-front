@@ -16,7 +16,7 @@ const request = () => axios.create({
   })(),
 });
 
-const get = (endpoint) => request().get(endpoint).then(({ data }) => data);
+const get = (endpoint, config) => request().get(endpoint, config).then(({ data }) => data);
 
 const post = (endpoint, data) => request().post(endpoint, data).then(({ data: result }) => result);
 
@@ -24,6 +24,8 @@ const patch = (endpoint, data) => request().patch(endpoint, data).then(({ data: 
 
 const del = (endpoint) => request().delete(endpoint).then(({ data: result }) => result);
 
+const blob = (endpoint) => get(endpoint, { responseType: 'blob' });
+
 export {
-  get, post, patch, del, BEARER_KEY,
+  get, post, patch, del, blob, BEARER_KEY,
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Card as AntCard } from 'antd';
-import { DownloadOutlined } from '@ant-design/icons';
+import { Card as AntCard } from 'antd';
 
 import SummaryCard from 'elements/card/summary';
 import { TableHeader } from 'elements/headers';
@@ -31,7 +30,6 @@ const Cleans = ({ table }) => {
         title="Расход чистящих средств"
         customButtons={(
           <>
-            <Button disabled icon={<DownloadOutlined />}>Экспорт Excel</Button>
             <FiltersButton />
           </>
         )}

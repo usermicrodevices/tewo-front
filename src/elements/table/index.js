@@ -49,7 +49,13 @@ class TableComponent extends React.Component {
         { !isHideTitleRow && (
           <div className={style.buttons}>
             { isShowSearch && <Input placeholder="Поиск" allowClear prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} /> }
-            <p>{`${plural(data.length, ['Доступна', 'Доступно', 'Доступно'])} ${Format({ children: data.length })} ${plural(data.length, ['запись', 'записей', 'записи'])}`}</p>
+            <p>
+              {plural(data.length, ['Доступна', 'Доступно', 'Доступно'])}
+              {' '}
+              {Format({ children: data.length })}
+              {' '}
+              {plural(data.length, ['запись', 'записей', 'записи'])}
+            </p>
           </div>
         )}
         <Header columnWidth={columnWidth} />
