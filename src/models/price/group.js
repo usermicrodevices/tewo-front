@@ -113,11 +113,11 @@ class PriceGroup extends Datum {
   }
 
   @computed get conceptionName() {
-    return this.conception?.name;
+    return this.conception ? this.conception.name : null;
   }
 
   @computed get conceptionExtPLU() {
-    return this.conception?.extPLU;
+    return this.conception ? this.conception.extPLU : null;
   }
 
   @computed get editable() {
