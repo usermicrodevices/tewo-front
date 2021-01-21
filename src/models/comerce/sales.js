@@ -58,8 +58,8 @@ class Sales extends Table {
       };
     }
     return {
-      cur: this.chart?.cur.sales / 100,
-      prw: this.chart?.prw.sales / 100,
+      cur: this.chart?.cur.sales,
+      prw: this.chart?.prw.sales,
     };
   }
 

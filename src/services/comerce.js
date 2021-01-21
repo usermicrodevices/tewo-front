@@ -41,7 +41,7 @@ const joinToChart = (data) => {
         }
         const itm = result.get(moment);
         itm.beverages += total;
-        itm.sales += sum;
+        itm.sales += sum / 100;
       }
     }
   }
