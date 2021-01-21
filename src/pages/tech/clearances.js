@@ -91,7 +91,7 @@ class Clearances extends React.Component {
     }
     return (
       <Provider table={model} filter={model.filter}>
-        <TableHeader title="История очисток" />
+        <TableHeader title="Журнал очисток" />
         <div className={classes.grid}>
           <Calendar />
           <Stats />
