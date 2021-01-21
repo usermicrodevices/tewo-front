@@ -22,12 +22,14 @@ const DeviceTitleAction = withRouter(inject(({ element, session }) => ({ element
     salePointLocation,
     salePointAddress,
     salePointId,
+    isFavorite,
   },
 }) => (
   <div className={style.actions}>
-    <Space>
+    <Space size={8}>
       <Location location={salePointLocation} address={salePointAddress} />
       <DeviceStatus isOn={isOn} announce="Статус" />
+      <div>В избранном: {isFavorite ? 'да': 'нет'}</div>
     </Space>
     <Space>
       <Button onClick={() => history.push(events.getPathForDevice(id))}>События</Button>
