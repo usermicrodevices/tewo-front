@@ -38,7 +38,7 @@ const DiagramTechState = inject('storage')(observer(({
       value={offDevicesAmount}
       color="rgb(245,110,100)"
       link={`${salePointsRout.path}?isHaveDisabledEquipment__exact=1`}
-      label="Выключенное оборудование"
+      label="Оборудование выключено"
     />
     <Diagram
       amount={devicesAmount}

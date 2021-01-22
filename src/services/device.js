@@ -95,6 +95,7 @@ const getDevices = (session) => () => new Promise((resolve, reject) => {
           has_overloc_ppm: 'boolean',
           need_tech_service: 'boolean',
           opened_tasks: 'boolean',
+          iterations_to: 'number',
         })) {
           addition.set(json.id, {
             downtime: json.downtime,
