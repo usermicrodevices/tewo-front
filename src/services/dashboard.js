@@ -36,6 +36,8 @@ import MapWidget from 'components/dashboard/map';
 import MapWidgetModel from 'models/dashboard/widgets/map';
 import ChartCostWidget from 'components/dashboard/chartCost';
 import ChartCostModel from 'models/dashboard/widgets/chartCost';
+import DiagramIngredientsUsageWidget from 'components/dashboard/diagramIngredientsUsage';
+import DiagramIngredientsUsageModel from 'models/dashboard/widgets/diagramIngredientsUsage';
 
 /**
  *
@@ -228,6 +230,15 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     excludedDateRandes: new Set([]),
     widget: ChartCostWidget,
     model: ChartCostModel,
+  },
+  diagramIngredientsUsage: {
+    rowSpan: 116,
+    colSpan: 1,
+    isHaveDateFilter: true,
+    isHavePointsFilter: true,
+    excludedDateRandes: new Set([]),
+    widget: DiagramIngredientsUsageWidget,
+    model: DiagramIngredientsUsageModel,
   },
 };
 
