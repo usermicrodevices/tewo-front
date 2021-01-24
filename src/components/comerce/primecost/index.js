@@ -28,7 +28,7 @@ const Cleans = ({ table: { chart, filter } }) => (
       <Card>
         <Space size={32}>
           <Typography.Title level={3}>Топ 6 напитков по прибыли</Typography.Title>
-          <DaterangeTitle announce="Период" range={table.filter.get('device_date')} />
+          <DaterangeTitle announce="Период" range={filter.get('device_date')} />
         </Space>
         <Chart chart={chart} />
       </Card>
