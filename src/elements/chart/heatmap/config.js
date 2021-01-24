@@ -32,6 +32,9 @@ export const getHeatmapOptions = ({
     events: {
       dataPointSelection: onSelect,
     },
+    animations: {
+      enabled: false,
+    },
   },
   plotOptions: {
     heatmap: {

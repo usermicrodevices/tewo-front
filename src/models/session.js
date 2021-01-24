@@ -26,6 +26,8 @@ import Conceptions from './conceptions';
 import DashboardModel from './dashboard';
 
 class Session {
+  user = null; // will set in AuthorizedRouter
+
   operations = new Operations();
 
   locations = new Locations();

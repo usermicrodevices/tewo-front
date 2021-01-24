@@ -53,7 +53,7 @@ class FavoriteObjects {
       label: resolver[salePointId] || {
         stateColor: 'rgba(0,0,0,0)', name: undefined,
       },
-    }));
+    })).sort((sp1, sp2) => sp2.beverages - sp1.beverages);
   }
 
   update = () => {
@@ -66,7 +66,12 @@ class FavoriteObjects {
           this.generic.dateRange,
           86400,
           favorites.map(({ id }) => id),
-        ).then((result) => { this.data = result; });
+        ).then((result) => {
+          this.data = {
+            ...favorites.reduce((acc, salePoint, index) => ({ ...acc, [salePoint.id]: [] }), {}),
+            ...result,
+          };
+        });
       }
     });
   };

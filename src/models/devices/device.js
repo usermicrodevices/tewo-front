@@ -51,6 +51,10 @@ class Device extends Datum {
     return this.status === 1;
   }
 
+  get isOff() {
+    return this.status === 0;
+  }
+
   get isInactive() {
     return this.status === -1;
   }

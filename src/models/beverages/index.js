@@ -1,10 +1,14 @@
 /* eslint class-methods-use-this: off */
+import moment from 'moment';
+
 import Table from 'models/table';
 import Filters from 'models/filters';
-import { getBeverages } from 'services/beverage';
+import Exporter from 'models/exporter';
+import { getBeverages, exportBeverages } from 'services/beverage';
 import { typeNameToIcon, canceledIcon } from 'elements/beverageIcons';
 import { beverage as beverageRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { daterangeToArgs } from 'utils/date';
+import plural from 'utils/plural';
 import { tableItemLink } from 'elements/table/trickyCells';
 
 const declareColumns = (session) => ({
@@ -123,12 +127,28 @@ const declareFilters = (session) => ({
 class Beverages extends Table {
   chart = null;
 
+  exporter = null;
+
   session;
 
   constructor(session) {
     super(declareColumns(session), getBeverages(session), new Filters(declareFilters(session)));
     this.session = session;
     this.filter.isShowSearch = false;
+
+    this.exporter = new Exporter(exportBeverages, this.filter, {
+      checkDisable: () => !this.filter.data.has('device_date') || this.data.length === 0,
+      generateFilename: () => `Экспорт_Наливов_${decodeURIComponent(this.filter.search)}__${moment().format('DD-MM-YYYYTHH:mm:ss')}`,
+      generateConfirmMessage: () => {
+        const dateFormat = 'DD.MM.YYYY HH:mm';
+        const count = this.data.length;
+        const dateRange = this.filter.data.get('device_date');
+        const dateStart = dateRange[0].format(dateFormat);
+        const dateEnd = dateRange[1].format(dateFormat);
+
+        return `Выгрузить ${count} ${plural(count, ['запись', 'записи', 'записей'])} по наливам с ${dateStart} по ${dateEnd}?`;
+      },
+    });
   }
 
   toString() {

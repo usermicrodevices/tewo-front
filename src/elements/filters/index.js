@@ -72,7 +72,7 @@ const Filters = inject('filter')(observer(({ filter }) => (
 )));
 
 const FiltersButton = inject('filter')(observer(({ filter }) => (
-  <Dropdown overlay={<Filters />} placement="bottomLeft">
+  <Dropdown trigger={['click']} overlay={<Filters />} placement="bottomLeft">
     <Button
       type={filter.search !== '' ? 'primary' : 'default'}
       icon={<FilterOutlined />}

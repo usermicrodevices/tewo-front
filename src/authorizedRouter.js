@@ -18,7 +18,9 @@ class AuthorizedRouter extends React.Component {
   constructor(props) {
     super(props);
     const { user } = props.auth;
+
     user.session = this.session;
+    this.session.user = user;
   }
 
   static getDerivedStateFromError(error) {

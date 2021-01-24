@@ -16,7 +16,7 @@ class DiagramTechState {
     if (!Array.isArray(this.generic.devices)) {
       return undefined;
     }
-    return this.generic.devices.filter(({ isOn }) => !isOn).length;
+    return this.generic.devices.filter(({ isOff }) => isOff).length;
   }
 
   @computed get devicesServceRequiredAmount() {

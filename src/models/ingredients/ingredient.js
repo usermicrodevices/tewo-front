@@ -85,7 +85,7 @@ class Ingridient extends Datum {
       {
         dataIndex: 'cost',
         title: 'Цена за единицу',
-        value: FORMAT.format(this.cost.toString()),
+        value: FORMAT.format(this.cost?.toString()),
       },
       {
         dataIndex: 'dimension',

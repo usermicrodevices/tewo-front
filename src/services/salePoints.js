@@ -114,11 +114,14 @@ const getSalePoints = (session) => () => new Promise((resolve, reject) => {
     } else {
       for (const datum of json) {
         checkData(datum, FAVORITES_SHOULDBE);
-        for (const pointId of datum.salepoints) {
-          if (typeof pointId !== 'number') {
-            apiCheckConsole.error(`${FAVORITES_LOCATION} salepoins получен ${typeof json}, ожидается число`, datum);
-          } else {
-            favoritePoints.add(pointId);
+
+        if (datum.owner === session.user.id) {
+          for (const pointId of datum.salepoints) {
+            if (typeof pointId !== 'number') {
+              apiCheckConsole.error(`${FAVORITES_LOCATION} salepoins получен ${typeof json}, ожидается число`, datum);
+            } else {
+              favoritePoints.add(pointId);
+            }
           }
         }
       }
