@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { when } from 'mobx';
 
 import { get } from 'utils/request';
 import checkData from 'utils/dataCheck';
@@ -224,11 +225,73 @@ const getBeveragesDense = (search) => {
   });
 };
 
+const beveragesDenseToPrimeCostChartChar = (session, chartData) => {
+  const DRINKS_AMOUNT = 6;
+  const result = {};
+  for (const drinks of chartData.values()) {
+    for (const [drinkId, drink] of drinks.entries()) {
+      if (!(drinkId in result)) {
+        result[drinkId] = {
+          name: session.drinks.get(drinkId)?.name,
+          margin: 0,
+          data: {},
+        };
+      }
+      const datum = result[drinkId];
+      datum.margin += drink.sum;
+      for (const [ingredientId, { cost }] of drink.ingredients.entries()) {
+        datum.data[ingredientId] = (datum.data[ingredientId] || 0) + cost;
+        datum.margin -= cost;
+      }
+    }
+  }
+  const orderedResult = Object.entries(result).sort(([, { margin: a }], [, { margin: b }]) => b - a).slice(0, DRINKS_AMOUNT);
+  const categories = orderedResult.slice(0, DRINKS_AMOUNT).map(([drinkId]) => session.drinks.get(parseInt(drinkId, 10))?.name);
+  const usedIngredientsSet = new Set();
+  for (const [, { data }] of orderedResult) {
+    for (const ingredientId of Object.keys(data)) {
+      usedIngredientsSet.add(parseInt(ingredientId, 10));
+    }
+  }
+  const usedIngredientsIds = [...usedIngredientsSet.values()];
+  const series = usedIngredientsIds.map((id) => ({
+    name: session.ingredients.get(id)?.name,
+    data: new Array(orderedResult.length),
+  }));
+  series.push({
+    name: 'Прибыль',
+    data: new Array(orderedResult.length),
+  });
+  for (const [ingredientIndex, ingredientId] of usedIngredientsIds.entries()) {
+    const seria = series[ingredientIndex];
+    for (const [drinkIndex, [, { data }]] of orderedResult.entries()) {
+      seria.data[drinkIndex] = data[ingredientId] || 0;
+    }
+  }
+  for (const [drinkIndex, [, { margin }]] of orderedResult.entries()) {
+    series[series.length - 1].data[drinkIndex] = margin;
+  }
+  return {
+    categories,
+    series,
+  };
+};
+
+const getBeveragesDenseChart = (search, session) => Promise.all([
+  getBeveragesDense(search),
+  when(() => session.drinks.isLoaded),
+  when(() => session.ingredients.isLoaded),
+]).then(([chartData]) => (
+  beveragesDenseToPrimeCostChartChar(session, chartData)
+));
+
 export {
   getBeverages,
   getBeverageOperations,
   getBeveragesStats,
   getBeveragesSalePointsStats,
   getBeveragesDense,
+  beveragesDenseToPrimeCostChartChar,
+  getBeveragesDenseChart,
   BEVERAGES_SALE_POINTS_STATS,
 };
