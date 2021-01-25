@@ -97,6 +97,9 @@ const ScalebleChart = ({
     xaxis: {
       categories,
       type: 'datetime',
+      labels: {
+        datetimeUTC: false,
+      },
     },
     yaxis,
     tooltip: {
@@ -131,6 +134,9 @@ const ScalebleChart = ({
     xaxis: {
       categories,
       type: 'datetime',
+      labels: {
+        datetimeUTC: false,
+      },
       tooltip: {
         enabled: false,
       },
