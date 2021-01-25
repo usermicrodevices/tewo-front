@@ -35,6 +35,7 @@ function getChartOptions({ labels, color }) {
       },
       labels: {
         show: false,
+        datetimeUTC: false,
       },
     },
     yaxis: {

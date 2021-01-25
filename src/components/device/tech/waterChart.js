@@ -31,6 +31,9 @@ const WaterChart = ({ size, element: { details } }) => {
     },
     xaxis: {
       categories: dates.map((d) => d.format('D MMM HH:mm')),
+      labels: {
+        datetimeUTC: false,
+      },
     },
     yaxis: {
       axisTicks: {

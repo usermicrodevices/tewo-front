@@ -118,6 +118,9 @@ const ClearanceChart = ({
     xaxis: {
       categories,
       type: 'datetime',
+      labels: {
+        datetimeUTC: false,
+      },
     },
     yaxis,
     legend: {
