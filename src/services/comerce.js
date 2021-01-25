@@ -10,7 +10,7 @@ import apiCheckConsole from 'utils/console';
 import PrimeCostRow from 'models/comerce/primecostRow';
 
 import { getSalesTop } from './salePoints';
-import { BEVERAGES_SALE_POINTS_STATS, getBeveragesDense } from './beverage';
+import { BEVERAGES_SALE_POINTS_STATS, getBeveragesDense, beveragesDenseToPrimeCostChartChar } from './beverage';
 
 const sumRow = (arr) => {
   const result = {
@@ -60,6 +60,7 @@ const salesLoader = (session, filter, commitChartData) => () => {
   const prwRange = isDateRange(curRange) ? stepToPast(curRange) : [];
   const search = filter.searchSkip(new Set(['device_date']));
   /*
+  // Отладочный генератор ответа
   if (process.env.NODE_ENV !== 'production') {
     const count = 110;
     return Promise.resolve({
@@ -106,77 +107,83 @@ const salesDetails = (salePointId, filter) => {
   );
 };
 
-const getPrimecost = (session, chartDataAcceptor) => (_, __, search) => Promise.all([
-  when(() => session.points.isLoaded).then(() => session.points.rawData),
-  getBeveragesDense(search).then((response) => {
-    chartDataAcceptor(response);
-    return response;
-  }),
-]).then(([salePoints, response]) => {
-  chartDataAcceptor(response);
-  const map = {};
-  for (const { id: pointId, cityId } of salePoints.filter(({ id }) => response.has(id))) {
-    if (!(cityId in map)) {
-      map[cityId] = {};
+const getPrimecost = (session, chartDataAcceptor) => (_, __, search) => {
+  const dense = getBeveragesDense(search);
+  Promise.all([
+    dense,
+    when(() => session.drinks.isLoaded),
+    when(() => session.ingredients.isLoaded),
+  ]).then(([response]) => {
+    chartDataAcceptor(beveragesDenseToPrimeCostChartChar(session, response));
+  });
+  return Promise.all([
+    when(() => session.points.isLoaded).then(() => session.points.rawData),
+    dense,
+  ]).then(([salePoints, response]) => {
+    const map = {};
+    for (const { id: pointId, cityId } of salePoints.filter(({ id }) => response.has(id))) {
+      if (!(cityId in map)) {
+        map[cityId] = {};
+      }
+      map[cityId][pointId] = response.get(pointId);
     }
-    map[cityId][pointId] = response.get(pointId);
-  }
-  const results = Object.entries(map).map(([cityId, data]) => {
-    let cityEarn = 0;
-    let cityCost = 0;
-    const details = {};
-    for (const [salePointId, drinks] of Object.entries(data)) {
-      let pointEarn = 0;
-      let pointCost = 0;
-      const granddetails = {};
-      for (const [drinkId, drinkData] of drinks.entries()) {
-        const {
-          count,
-          sum,
-          ingredients,
-        } = drinkData;
-        let drinkCost = 0;
-        const ingredientsResult = {};
-        for (const [ingredientId, ingredient] of ingredients.entries()) {
-          ingredientsResult[ingredientId] = {
-            ...ingredient,
-            id: ingredientId,
+    const results = Object.entries(map).map(([cityId, data]) => {
+      let cityEarn = 0;
+      let cityCost = 0;
+      const details = {};
+      for (const [salePointId, drinks] of Object.entries(data)) {
+        let pointEarn = 0;
+        let pointCost = 0;
+        const granddetails = {};
+        for (const [drinkId, drinkData] of drinks.entries()) {
+          const {
+            count,
+            sum,
+            ingredients,
+          } = drinkData;
+          let drinkCost = 0;
+          const ingredientsResult = {};
+          for (const [ingredientId, ingredient] of ingredients.entries()) {
+            ingredientsResult[ingredientId] = {
+              ...ingredient,
+              id: ingredientId,
+            };
+            drinkCost += ingredient.cost;
+          }
+          pointEarn += sum;
+          pointCost += drinkCost;
+          granddetails[drinkId] = {
+            earn: sum,
+            cost: drinkCost,
+            margin: sum - drinkCost,
+            count,
+            id: drinkId,
+            details: ingredientsResult,
           };
-          drinkCost += ingredient.cost;
         }
-        pointEarn += sum;
-        pointCost += drinkCost;
-        granddetails[drinkId] = {
-          earn: sum,
-          cost: drinkCost,
-          margin: sum - drinkCost,
-          count,
-          id: drinkId,
-          details: ingredientsResult,
+        cityEarn += pointEarn;
+        cityCost += pointCost;
+        details[salePointId] = {
+          earn: pointEarn,
+          margin: pointEarn - pointCost,
+          id: parseInt(salePointId, 10),
+          details: granddetails,
         };
       }
-      cityEarn += pointEarn;
-      cityCost += pointCost;
-      details[salePointId] = {
-        earn: pointEarn,
-        margin: pointEarn - pointCost,
-        id: parseInt(salePointId, 10),
-        details: granddetails,
+      const sophiesticatedData = {
+        earn: cityEarn,
+        margin: cityEarn - cityCost,
+        cost: cityCost,
+        id: parseInt(cityId, 10),
+        details,
       };
-    }
-    const sophiesticatedData = {
-      earn: cityEarn,
-      margin: cityEarn - cityCost,
-      cost: cityCost,
-      id: parseInt(cityId, 10),
-      details,
+      return new PrimeCostRow(parseInt(cityId, 10), sophiesticatedData, session);
+    });
+    return {
+      count: results.length,
+      results,
     };
-    return new PrimeCostRow(parseInt(cityId, 10), sophiesticatedData, session);
   });
-  return {
-    count: results.length,
-    results,
-  };
-});
+};
 
 export { salesLoader, salesDetails, getPrimecost };

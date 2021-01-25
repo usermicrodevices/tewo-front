@@ -45,7 +45,7 @@ class Sales extends Table {
   constructor(session) {
     const filters = new Filters({
       device_date: {
-        type: 'datetimerange',
+        type: 'daterange',
         title: 'Момент налива',
         apply: (general, data) => general(data.deviceDate),
       },

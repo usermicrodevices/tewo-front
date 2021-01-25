@@ -15,7 +15,11 @@ const PricePicker = ({
   const search = searchText.toLowerCase();
 
   const ds = session.drinks.isLoaded ? session.drinks.rawData
-    .filter(({ name, id }) => !skipSet.has(id) && name.toLowerCase().indexOf(search) >= 0)
+    .filter(({ name, id, companyId }) => (
+      !skipSet.has(id)
+      && name.toLowerCase().indexOf(search) >= 0
+      && companyId === element.companyId
+    ))
     .map(({ id, name, plu }) => ({
       key: id,
       name,

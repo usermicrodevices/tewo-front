@@ -92,6 +92,7 @@ const getDevices = (session) => () => new Promise((resolve, reject) => {
           id: 'number',
           downtime: 'number',
           has_off_devices: 'boolean',
+          iterations_to: 'number',
           has_overloc_ppm: 'boolean',
           need_tech_service: 'boolean',
           opened_tasks: 'boolean',
@@ -113,8 +114,12 @@ const getDevices = (session) => () => new Promise((resolve, reject) => {
   Promise.all([general, external]).then(([devices, addition]) => {
     transaction(() => {
       for (const device of devices) {
-        for (const [key, value] of Object.entries(addition.get(device.id))) {
-          device[key] = value;
+        if (addition.has(device.id)) {
+          for (const [key, value] of Object.entries(addition.get(device.id))) {
+            device[key] = value;
+          }
+        } else {
+          apiCheckConsole.error(`Пропущена добавка для устройства ${device.id}`, addition, devices);
         }
       }
     });

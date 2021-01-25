@@ -15,21 +15,15 @@ const capitalize = (s) => {
 };
 
 const DatergangePicker = ({
-  title, value, onChange, showTime,
+  title, value, onChange,
 }) => {
   const quartalStart = moment().startOf('year').add(Math.floor(moment().month() / 3) * 3, 'month');
   const halfAYearStart = moment().startOf('year').add(Math.floor(moment().month() / 6) * 6, 'month');
-  const realOnChange = (v) => {
-    if (isDateRange(v) && !showTime) {
-      return onChange([v[0].startOf('day'), v[1].endOf('day')]);
-    }
-    return onChange(v);
-  };
+  const realOnChange = (v) => onChange([v[0].startOf('day'), v[1].endOf('day')]);
   return (
     <div className={style.space}>
       <Typography.Text>{ `${title}:` }</Typography.Text>
       <RangePicker
-        showTime={showTime}
         placeholder={['с', 'по']}
         ranges={{
           Сегодня: [moment().startOf('day'), moment().endOf('day')],

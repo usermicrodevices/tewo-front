@@ -1,24 +1,20 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
-import { Card, Space } from 'antd';
 import Chart from 'react-apexcharts';
 import { withSize } from 'react-sizeme';
 
 import colors from 'themes/chart';
 import NoData from 'elements/noData';
-import DaterangeTitle from 'elements/chart/daterangeTitle';
 import locale from 'elements/chart/locale';
 import Loader from 'elements/loader';
 import { FORMAT } from 'elements/format';
-import Typography from 'elements/typography';
 
-const PrimecostChart = inject('table')(observer(({
-  size, table,
+const PrimecostChart = ({
+  size, chart,
 }) => {
-  if (typeof table.chart === 'undefined') {
+  if (typeof chart === 'undefined') {
     return <Loader size="large" />;
   }
-  const { categories, series } = table.chart;
+  const { categories, series } = chart;
   if (categories.length === 0) {
     return <NoData noMargin title="Недостаточно данных для построения графика" />;
   }
@@ -97,18 +93,12 @@ const PrimecostChart = inject('table')(observer(({
       options={data}
     />
   );
-}));
+};
 
-const Wrap = withSize()(inject('table')(observer(({
-  size: { width }, table,
+const Wrap = withSize()(({
+  size: { width }, chart,
 }) => (
-  <Card>
-    <Space size={32}>
-      <Typography.Title level={3}>Топ 6 напитков по прибыли</Typography.Title>
-      <DaterangeTitle announce="Период" range={table.filter.get('device_date')} />
-    </Space>
-    <PrimecostChart size={{ width: width - 50, height: 403 }} />
-  </Card>
-))));
+  <PrimecostChart size={{ width: width - 50, height: 403 }} chart={chart} />
+));
 
 export default Wrap;

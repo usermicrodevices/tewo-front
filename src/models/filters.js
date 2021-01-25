@@ -106,7 +106,6 @@ const FILTER_TYPES = {
     isNullValue: (value) => typeof value !== 'string' || value === '',
   },
   daterange: DATE_RANGE_TYPE,
-  datetimerange: DATE_RANGE_TYPE,
   costrange: {
     operators: ['gte', 'lte'],
     convertor: (v) => v,
