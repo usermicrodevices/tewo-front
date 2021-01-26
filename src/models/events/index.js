@@ -1,8 +1,14 @@
 /* eslint class-methods-use-this: off */
+import moment from 'moment';
+
 import { daterangeToArgs, SemanticRanges } from 'utils/date';
+import plural from 'utils/plural';
 import Table from 'models/table';
 import Filters from 'models/filters';
-import { getEvents, getEventsClearancesChart, getClearances } from 'services/events';
+import Exporter from 'models/exporter';
+import {
+  getEvents, getEventsClearancesChart, getClearances, exportEvents,
+} from 'services/events';
 import colorizedCell from 'elements/table/colorizedCell';
 import { eventsLog as eventsLogRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { tableItemLink, durationCell } from 'elements/table/trickyCells';
@@ -123,11 +129,27 @@ const declareFilters = (session) => ({
 class Events extends Table {
   session;
 
+  exporter = null;
+
   constructor(session) {
     const filters = new Filters(declareFilters(session));
     super(declareColumns(), getEvents(session), filters);
     this.filter.isShowSearch = false;
     this.session = session;
+
+    this.exporter = new Exporter(exportEvents, this.filter, {
+      checkDisable: () => !this.filter.data.has('open_date') || this.data.length === 0,
+      generateFilename: () => `Экспорт_Событий_${decodeURIComponent(this.filter.search)}__${moment().format('DD-MM-YYYYTHH:mm:ss')}`,
+      generateConfirmMessage: () => {
+        const dateFormat = 'DD.MM.YYYY HH:mm';
+        const count = this.data.length;
+        const dateRange = this.filter.data.get('open_date');
+        const dateStart = dateRange[0].format(dateFormat);
+        const dateEnd = dateRange[1].format(dateFormat);
+
+        return `Выгрузить ${count} ${plural(count, ['запись', 'записи', 'записей'])} по событиям с ${dateStart} по ${dateEnd}?`;
+      },
+    });
   }
 
   toString() {

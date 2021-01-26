@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { get, patch } from 'utils/request';
+import { get, patch, blob } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import apiCheckConsole from 'utils/console';
 
@@ -71,6 +71,8 @@ const getEvents = (session) => (limit, offset = 0, filter = '') => {
     };
   });
 };
+
+const exportEvents = (filter = '') => blob(`/data/events/xlsx/${filter !== '' ? `?${filter}` : filter}`);
 
 const getClearances = (session) => (limit, offset = 0, filter = '') => (
   getEvents(session)(limit, offset, `event_reference__id=${TECH_CLEARANCE_EVENT_ID}${filter !== '' ? `&${filter}` : filter}`)
@@ -271,4 +273,5 @@ const getEventPriorities = (acceptor) => get('refs/event_priorities/').then(((da
 
 export {
   getEvents, getEventTypes, getEventsClearancesChart, getClearances, getDetergrnts, getOverdued, getDowntimes, getEventPriorities, patchEventType,
+  exportEvents,
 };
