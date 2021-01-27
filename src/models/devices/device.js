@@ -68,7 +68,7 @@ class Device extends Datum {
       name: {
         type: 'text',
       },
-      deviceModelName: {
+      deviceModelId: {
         type: 'selector',
         selector: this.session.deviceModels.selector,
       },
@@ -235,7 +235,7 @@ class Device extends Datum {
         value: null,
       },
       {
-        dataIndex: 'deviceModelName',
+        dataIndex: 'deviceModelId',
         title: 'Модель',
         value: this.deviceModelName,
       },
