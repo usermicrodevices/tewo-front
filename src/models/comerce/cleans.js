@@ -4,10 +4,40 @@ import { observable, when } from 'mobx';
 import Filters from 'models/filters';
 import Table from 'models/table';
 import { getEventsClearancesChart, getDetergrnts } from 'services/events';
-import { DECLARE_DEVICE_FILTERS } from 'models/devices';
 import { daterangeToArgs, SemanticRanges } from 'utils/date';
 import { getLastCleanings } from 'services/device';
-import Format from 'elements/format';
+
+const declareFilters = (session) => ({
+  companyId: {
+    type: 'selector',
+    title: 'Компания',
+    apply: (general, data) => general(data.companyId),
+    selector: () => session.companies.selector,
+  },
+  salePointId: {
+    type: 'selector',
+    title: 'Объект',
+    apply: (general, data) => general(data.salePointId),
+    selector: () => session.points.selector,
+  },
+  deviceModelName: {
+    type: 'selector',
+    title: 'Модель оборудования',
+    apply: (general, data) => general(data.deviceModelId),
+    selector: () => session.deviceModels.selector,
+  },
+  isOn: {
+    type: 'checkbox',
+    title: 'Только включенное оборудование',
+    apply: (_, data) => data.isOn !== false,
+    passiveValue: false,
+  },
+  clearanceDate: {
+    type: 'daterange',
+    title: 'Дата очистки',
+    apply: () => true,
+  },
+});
 
 class Cleans extends Table {
   @observable cleans;
@@ -17,14 +47,7 @@ class Cleans extends Table {
   @observable lastCleans = new Map();
 
   constructor(session) {
-    const filters = new Filters({
-      ...DECLARE_DEVICE_FILTERS(session),
-      clearanceDate: {
-        type: 'daterange',
-        title: 'Время очистки',
-        apply: () => true,
-      },
-    });
+    const filters = new Filters(declareFilters(session));
 
     filters.set('clearanceDate', SemanticRanges.prw30Days.resolver());
 
