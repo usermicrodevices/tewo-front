@@ -79,8 +79,14 @@ const ClearanceChart = ({
       yaxis.push(provideAxis(true, y2.decimalsInFloat, 'y2', y2.text));
       ranges[axis] = range(data);
     } else {
-      const seriesName = yLeft === axis ? 'y1' : 'y2';
+      const isLeft = yLeft === axis;
+      const seriesName = isLeft ? 'y1' : 'y2';
+      const axisConfig = isLeft
+        ? provideAxis(false, y1.decimalsInFloat, 'y1', y1.text)
+        : provideAxis(true, y2.decimalsInFloat, 'y2', y2.text);
+
       yaxis.push({
+        ...axisConfig,
         show: false,
         zoomEnabled: false,
         seriesName,
