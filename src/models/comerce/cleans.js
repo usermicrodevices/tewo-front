@@ -3,7 +3,7 @@ import { observable, when } from 'mobx';
 
 import Filters from 'models/filters';
 import Table from 'models/table';
-import { getEventsClearancesChart, getDetergrnts } from 'services/events';
+import { getEventsClearancesChart, getDetergents } from 'services/events';
 import { daterangeToArgs, SemanticRanges } from 'utils/date';
 import { getLastCleanings } from 'services/device';
 
@@ -87,6 +87,7 @@ class Cleans extends Table {
         sortDirections: 'both',
         isDefaultSort: true,
         isAsyncorder: true,
+        isTransformInSort: true,
       },
     };
 
@@ -123,7 +124,7 @@ class Cleans extends Table {
 
         const deviceFilter = devicesFilter.length > 0 ? `device__id${devicesFilter.length > 1 ? '__in' : ''}=${devicesFilter}` : '';
         const dateFilter = daterangeToArgs(daterange, 'open_date');
-        getDetergrnts(deviceFilter ? `${deviceFilter}${dateFilter}` : dateFilter.slice(1))
+        getDetergents(deviceFilter ? `${deviceFilter}${dateFilter}` : dateFilter.slice(1))
           .then((stats) => { this.stats = stats; });
         return {
           count: results.length,

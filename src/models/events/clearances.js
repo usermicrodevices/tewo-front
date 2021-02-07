@@ -3,7 +3,7 @@ import { observable, reaction } from 'mobx';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
-import { getClearances, getDetergrnts } from 'services/events';
+import { getClearances, getDetergents } from 'services/events';
 import { tableItemLink, durationCell } from 'elements/table/trickyCells';
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
 
@@ -99,7 +99,7 @@ class Clearances extends Table {
 
     const update = () => {
       this.stats = {};
-      getDetergrnts(filters.search).then((stats) => { this.stats = stats; });
+      getDetergents(filters.search).then((stats) => { this.stats = stats; });
     };
 
     reaction(() => filters.search, update);

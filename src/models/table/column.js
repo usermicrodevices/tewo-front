@@ -25,6 +25,8 @@ class Column {
 
   suffix;
 
+  isTransformInSort;
+
   constructor(key, data) {
     const mustBe = {
       title: 'any',
@@ -40,6 +42,7 @@ class Column {
       filter: 'object',
       isDefaultSort: 'boolean',
       suffix: 'string',
+      isTransformInSort: 'boolean',
     };
     const additionalCheck = {
       title: (d) => typeof d === 'string' || React.isValidElement(d),
@@ -123,6 +126,7 @@ class Column {
     this.transform = data.transform || ((v) => v);
     this.filter = data.filter || null;
     this.suffix = data.suffix;
+    this.isTransformInSort = data.isTransformInSort || false;
     if (this.filter) {
       this.filter.type = this.filter.type.toLowerCase();
     }

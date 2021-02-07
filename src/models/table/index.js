@@ -158,9 +158,11 @@ class Table {
 
   @computed get sortPredicate() {
     const { sort: { column } } = this;
+    const columnData = this.allColumns.find(({ key }) => key === column);
+    const transform = columnData?.isTransformInSort ? (v) => columnData.transform(v[column], v) : (v) => v[column];
     return (datumA, datumB) => {
-      const valA = datumA[column];
-      const valB = datumB[column];
+      const valA = transform(datumA);
+      const valB = transform(datumB);
       if (typeof valA === 'string') {
         if (typeof valB !== 'string') {
           return -1;

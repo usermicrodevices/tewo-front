@@ -214,7 +214,7 @@ const getEventsClearancesChart = (deviceId, daterange) => {
   });
 };
 
-const getDetergrnts = (filter) => {
+const getDetergents = (filter) => {
   const location = `/data/events/detergent/${filter ? `?${filter}` : ''}`;
   return get(location).then((json) => {
     const errorResponse = {
@@ -272,6 +272,6 @@ const getEventPriorities = (acceptor) => get('refs/event_priorities/').then(((da
 }));
 
 export {
-  getEvents, getEventTypes, getEventsClearancesChart, getClearances, getDetergrnts, getOverdued, getDowntimes, getEventPriorities, patchEventType,
+  getEvents, getEventTypes, getEventsClearancesChart, getClearances, getDetergents, getOverdued, getDowntimes, getEventPriorities, patchEventType,
   exportEvents,
 };
