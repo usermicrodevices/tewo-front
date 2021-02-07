@@ -29,11 +29,14 @@ const DevicePicker = ({ element, session, onSelect }) => {
     }) => ({
       key: id, name, salePointName, priceGroupName,
     })) : undefined;
+  const salePointsSelector = (session.points.rawData || [])
+    .filter(({ companyId }) => companyId === element.companyId)
+    .map(({ id, name }) => [id, name]);
   return (
     <div>
       <div className={classes.inputs}>
         <Input placeholder="Поиск" allowClear prefix={<Icon name="search-outline" />} value={searchText} onChange={({ target }) => setSearch(target.value)} />
-        <Select title="Объект" value={points} onChange={setSalePoint} selector={session.points.selector} />
+        <Select title="Объект" value={points} onChange={setSalePoint} selector={salePointsSelector} />
       </div>
       <SelectableTable
         className={classes.table}

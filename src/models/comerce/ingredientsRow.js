@@ -42,6 +42,7 @@ class IngredientsRow {
       key: drinkId,
       name: this.session.drinks.get(parseInt(drinkId, 10))?.name,
       ...detail,
+      earn: detail.ingredientsCount * this.cost,
     }));
   }
 }
