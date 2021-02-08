@@ -153,6 +153,10 @@ class Details {
   @computed get isWaterQualified() {
     return Array.isArray(this.waterQuality) && this.waterQuality.findIndex(({ quality }) => quality !== 0) >= 0;
   }
+
+  @computed get mileage() {
+    return this.me.mileage;
+  }
 }
 
 export default Details;
