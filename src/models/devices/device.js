@@ -31,6 +31,8 @@ class Device extends Datum {
 
   @observable isHasOverlocPPM;
 
+  @observable mileage;
+
   @observable isNeedTechService;
 
   @observable isHaveOverdueTasks;

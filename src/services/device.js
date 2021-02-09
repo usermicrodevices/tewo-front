@@ -96,13 +96,13 @@ const getDevices = (session) => () => new Promise((resolve, reject) => {
           has_overloc_ppm: 'boolean',
           need_tech_service: 'boolean',
           opened_tasks: 'boolean',
-          iterations_to: 'number',
         })) {
           addition.set(json.id, {
             downtime: json.downtime,
             isHasOverlocPPM: json.has_overloc_ppm,
             isNeedTechService: json.need_tech_service,
             isHaveOverdueTasks: json.opened_tasks,
+            mileage: json.iterations_to,
           });
         }
       }
