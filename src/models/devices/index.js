@@ -30,6 +30,12 @@ const COLUMNS = {
     grow: 3,
     transform: (_, datum, width) => tableItemLink(datum.salePointName, `${salePointsRout.path}/${datum.salePointId}`, width),
   },
+  companyName: {
+    isVisibleByDefault: true,
+    title: 'Компания',
+    grow: 2,
+    sortDirections: 'both',
+  },
   controller: {
     isVisibleByDefault: true,
     title: 'ID контроллера',

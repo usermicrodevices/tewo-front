@@ -1,7 +1,8 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 
-import Datum from 'models/datum';
 import * as routes from 'routes';
+import Datum from 'models/datum';
+import { deleteFavorite, addFavorite } from 'services/salePoints';
 
 import Details from './details';
 
@@ -272,6 +273,18 @@ class SalePoint extends Datum {
       return company;
     }
     return company.name;
+  }
+
+  @action.bound toggleFavorite() {
+    if (this.isFavorite) {
+      deleteFavorite(this.id)
+        .then(() => { this.isFavorite = false; })
+        .catch(() => { this.isFavorite = true; });
+    } else {
+      addFavorite(this.id)
+        .then(() => { this.isFavorite = true; })
+        .catch(() => { this.isFavorite = false; });
+    }
   }
 
   constructor(session) {
