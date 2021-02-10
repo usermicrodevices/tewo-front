@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 
 import Format from 'elements/format';
 import Badge from 'elements/badged';
@@ -13,7 +14,11 @@ const TableWidget = tableWidget([
   {
     title: 'Название объекта',
     dataIndex: 'label',
-    render: ({ stateColor, name }) => <Badge size={8} stateColor={stateColor}><Format>{name}</Format></Badge>,
+    render: ({ stateColor, name, path }) => (
+      <Badge size={8} stateColor={stateColor}>
+        <Link to={path}><Format>{name}</Format></Link>
+      </Badge>
+    ),
   },
   {
     title: 'Кол-во наливов',
