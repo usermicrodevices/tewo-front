@@ -159,12 +159,12 @@ const getStats = (id) => get(`${LOCATION}${id}/stats/`).then((json) => {
     downtime: 'number',
     forecast_date: 'date',
     has_overloc_ppm: 'boolean',
-    iterations: 'number',
-    iterations_to: 'number',
+    iterations: 'number', // кол-во циклов на 1 ТО
+    iterations_to: 'number', // общий пробег машины
+    remain_iterations_to: 'number', // сколько осталось циклов до ТО
     need_tech_service: 'boolean',
     overdue_tasks: 'number',
     ppm: 'number',
-    remain_iterations_to: 'number',
     sum: 'number',
     sum_prev: 'number',
     sync_date: 'date',
@@ -190,7 +190,7 @@ const getStats = (id) => get(`${LOCATION}${id}/stats/`).then((json) => {
     ppm:               'waterQualityMetric',
     remain_iterations_to: 'techServicesRemain',
     iterations:           'techServicesWhole',
-    iterations_to:        'techServicesDid',
+    iterations_to:        'techServicesMileage',
     sum:               'salesLastDayAmount',
     sum_prev:          'salesPrewDayAmount',
   };
@@ -200,7 +200,7 @@ const getStats = (id) => get(`${LOCATION}${id}/stats/`).then((json) => {
   }
   result.waterQualityMetric = result.isHaveWaterQualityMetric ? result.waterQualityMetric : null;
   result.techServiceForecastDate = moment(result.techServiceForecastDate);
-  result.techServicesPercentage = result.techServicesDid / result.techServicesWhole * 100;
+  result.techServicesPercentage = (result.techServicesWhole - result.techServicesRemain) / result.techServicesWhole * 100;
   return result;
 });
 

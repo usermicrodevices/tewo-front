@@ -18,7 +18,7 @@ const Condition = ({
     },
   },
 }) => {
-  const techServicesLeft = stats ? stats.techServicesWhole - stats.techServicesDid : 0;
+  const techServicesLeft = stats ? stats.techServicesRemain : 0;
 
   return (
     <Card className={style.condition}>
