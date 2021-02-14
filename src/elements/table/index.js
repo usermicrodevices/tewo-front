@@ -38,6 +38,8 @@ class TableComponent extends React.Component {
         columns,
         actions,
         isHideTitleRow,
+        isStickyTHead,
+        isStickyRow,
       },
       filter: { searchText, isShowSearch },
       size,
@@ -45,7 +47,7 @@ class TableComponent extends React.Component {
     } = this.props;
     const columnWidth = calculateColumnWidth(size.width, columns.map(({ width }) => width), actions);
     return (
-      <div className={classnames(className, style.whole)}>
+      <div className={classnames(className, style.whole, isStickyTHead && style['sticky-thead'], isStickyRow && style['sticky-row'])}>
         { !isHideTitleRow && (
           <div className={style.buttons}>
             { isShowSearch && <Input placeholder="Поиск" allowClear prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} /> }
