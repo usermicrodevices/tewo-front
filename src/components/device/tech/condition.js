@@ -11,8 +11,14 @@ import genericStyle from '../genericStyle.module.scss';
 
 const DATE_FORMAT = 'DD.MM.YY';
 
-const Condition = ({ element: { details: { stats, lastService, clearancesAmount } } }) => {
-  const techServicesLeft = stats ? stats.techServicesWhole - stats.techServicesDid : 0;
+const Condition = ({
+  element: {
+    details: {
+      stats, lastService, clearancesAmount, mileage,
+    },
+  },
+}) => {
+  const techServicesLeft = stats ? stats.techServicesRemain : 0;
 
   return (
     <Card className={style.condition}>
@@ -27,20 +33,24 @@ const Condition = ({ element: { details: { stats, lastService, clearancesAmount 
           label="осталось циклов до ТО"
         />
         <Badge
-          value={lastService && lastService.format(DATE_FORMAT)}
-          label="дата предыдущего ТО"
+          value={mileage}
+          label="пробег"
+        />
+        <Badge
+          value={clearancesAmount}
+          label="очисток за 7 дней"
         />
         <Badge
           value={techServicesLeft ? stats && stats.techServiceForecastDate.format(DATE_FORMAT) : 'Требуется ТО'}
           label="прогнозируемая дата ТО"
         />
         <Badge
-          value={stats && stats.waterQualityMetric}
-          label="жесткость воды"
+          value={lastService && lastService.format(DATE_FORMAT)}
+          label="дата предыдущего ТО"
         />
         <Badge
-          value={clearancesAmount}
-          label="очисток за 7 дней"
+          value={stats && stats.waterQualityMetric}
+          label="жесткость воды"
         />
       </div>
     </Card>

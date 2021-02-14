@@ -30,6 +30,12 @@ const COLUMNS = {
     grow: 3,
     transform: (_, datum, width) => tableItemLink(datum.salePointName, `${salePointsRout.path}/${datum.salePointId}`, width),
   },
+  companyName: {
+    isVisibleByDefault: true,
+    title: 'Компания',
+    grow: 2,
+    sortDirections: 'both',
+  },
   controller: {
     isVisibleByDefault: true,
     title: 'ID контроллера',
@@ -37,19 +43,25 @@ const COLUMNS = {
     sortDirections: 'both',
   },
   serial: {
-    isVisibleByDefault: true,
+    isVisibleByDefault: false,
     title: 'Серийный номер',
     grow: 3,
     sortDirections: 'both',
   },
   timeZone: {
-    isVisibleByDefault: true,
+    isVisibleByDefault: false,
     title: 'Временная зона',
     grow: 3,
     sortDirections: 'both',
   },
-  deviceModelType: {
+  mileage: {
     isVisibleByDefault: true,
+    title: 'Пробег',
+    grow: 3,
+    sortDirections: 'both',
+  },
+  deviceModelType: {
+    isVisibleByDefault: false,
     title: 'Тип оборудования',
     grow: 3,
     sortDirections: 'both',
@@ -67,7 +79,7 @@ const COLUMNS = {
     sortDirections: 'both',
   },
   setupDate: {
-    isVisibleByDefault: true,
+    isVisibleByDefault: false,
     title: 'Дата монтажа',
     width: 189,
     sortDirections: 'both',

@@ -1,14 +1,16 @@
 /* eslint no-param-reassign: off */
 import { transaction } from 'mobx';
 import moment from 'moment';
-import apiCheckConsole from 'utils/console';
 
+import SalePoint from 'models/salePoints/salePoint';
+
+import apiCheckConsole from 'utils/console';
 import {
   get, post, patch, del,
 } from 'utils/request';
-import SalePoint from 'models/salePoints/salePoint';
 import checkData from 'utils/dataCheck';
 import { daterangeToArgs, SemanticRanges, SmallSemanticRanges } from 'utils/date';
+
 import { getEvents } from './events';
 import { getBeveragesStats } from './beverage';
 
@@ -216,6 +218,10 @@ const getBeveragesSpeed = (pointsId) => (
 
 const deleteSalePoint = (id) => del(`${LOCATION}${id}`);
 
+const addFavorite = (id) => post(`${LOCATION}${id}/favorite/`);
+
+const deleteFavorite = (id) => del(`${LOCATION}${id}/favorite/`);
+
 export {
   applySalePoint,
   getSalePoints,
@@ -225,4 +231,6 @@ export {
   getSalePointLastDaysBeverages,
   getBeveragesSpeed,
   deleteSalePoint,
+  addFavorite,
+  deleteFavorite,
 };
