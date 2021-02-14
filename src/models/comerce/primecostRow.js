@@ -66,7 +66,7 @@ class PrimeCostRow {
               ingredientAmount,
               ingredientCost: ingredient?.cost,
               drinkCost: isFinite(drinkCost) ? drinkCost : undefined,
-              measure: ingredient.dimension,
+              measureUnit: ingredient.measureUnit,
               ...ingredientData,
             };
           }),

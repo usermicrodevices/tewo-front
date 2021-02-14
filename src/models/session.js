@@ -24,11 +24,14 @@ import Currencies from './currencies';
 import NDS from './nds';
 import Conceptions from './conceptions';
 import DashboardModel from './dashboard';
+import Units from './units';
 
 class Session {
   user = null; // will set in AuthorizedRouter
 
   operations = new Operations();
+
+  units = new Units();
 
   locations = new Locations();
 

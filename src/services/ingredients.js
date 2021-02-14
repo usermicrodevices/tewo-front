@@ -13,9 +13,9 @@ const LOCATION = '/refs/ingredients/';
 const RENAMER = {
   id: 'id',
   name: 'name',
-  dimension: 'dimension',
   company: 'companyId',
   cost: 'cost',
+  unit: 'unitId',
 };
 
 const form = (data) => {
@@ -37,7 +37,6 @@ const transform = (json, acceptor) => {
       cost: 'number',
     },
     {
-      dimension: 'string',
       unit: 'string',
     },
   )) {

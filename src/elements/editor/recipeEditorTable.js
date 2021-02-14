@@ -36,7 +36,7 @@ const RecipeEditroTable = ({ data, isEdditing }) => {
     name: ingredient ? ingredient.name : ingredient,
     amount,
     selector,
-    measure: ingredient ? ingredient.dimension : ingredient,
+    measureUnit: ingredient ? ingredient.measureUnit : ingredient,
   }));
 
   const { ingredientsSelector } = data;
@@ -82,7 +82,7 @@ const RecipeEditroTable = ({ data, isEdditing }) => {
       render: isEdditing ? inputRenderer : fotmater,
     },
     {
-      dataIndex: 'measure',
+      dataIndex: 'measureUnit',
       title: 'Ед. изм.',
       render: fotmater,
     },

@@ -75,8 +75,8 @@ const ingredientColumns = (width) => [
   },
   {
     title: 'Ед. изм.',
-    dataIndex: 'measure',
-    render: (measure) => <Format>{measure}</Format>,
+    dataIndex: 'measureUnit',
+    render: (measureUnit) => <Format>{measureUnit}</Format>,
   },
   {
     title: 'Кол-во на 1 порцию',
