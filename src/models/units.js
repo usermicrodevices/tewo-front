@@ -1,3 +1,5 @@
+import { computed } from 'mobx';
+
 import getUnits from 'services/units';
 
 class Units extends Map {
@@ -5,6 +7,10 @@ class Units extends Map {
     super();
 
     getUnits(this);
+  }
+
+  @computed get selector() {
+    return [...this.entries()].map(([id, { name }]) => [id, name]);
   }
 }
 
