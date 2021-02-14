@@ -35,7 +35,7 @@ const COLUMNS = {
     grow: 2,
     sortDirections: 'both',
   },
-  dimension: {
+  measureUnit: {
     isVisibleByDefault: true,
     title: 'Единица измерения',
     grow: 2,

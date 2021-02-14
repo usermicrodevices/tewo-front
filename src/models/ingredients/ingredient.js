@@ -8,11 +8,11 @@ class Ingridient extends Datum {
 
   @observable name = null;
 
-  @observable dimension = null;
-
   @observable companyId = null;
 
   @observable cost = null;
+
+  @observable unitId = null;
 
   session;
 
@@ -20,6 +20,10 @@ class Ingridient extends Datum {
     super(session.ingredients.update);
 
     this.session = session;
+  }
+
+  @computed get measureUnit() {
+    return this.session.units.get(this.unitId)?.name || null;
   }
 
   @computed get company() {

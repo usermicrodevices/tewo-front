@@ -21,8 +21,8 @@ class IngredientsRow {
     return this.ingredient?.name;
   }
 
-  @computed get measure() {
-    return this.ingredient?.dimension;
+  @computed get measureUnit() {
+    return this.ingredient?.measureUnit;
   }
 
   @computed get count() {

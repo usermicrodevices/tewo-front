@@ -14,7 +14,7 @@ const declareColumns = () => ({
     title: 'Ингредиент',
     grow: 3,
   },
-  measure: {
+  measureUnit: {
     isVisibleByDefault: true,
     title: 'Ед. измерения',
     width: 140,
