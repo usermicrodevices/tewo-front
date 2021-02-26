@@ -1,6 +1,8 @@
 import moment from 'moment';
 
-import { get, patch, blob } from 'utils/request';
+import {
+  get, patch, post, blob,
+} from 'utils/request';
 import checkData from 'utils/dataCheck';
 import apiCheckConsole from 'utils/console';
 
@@ -149,6 +151,8 @@ const getEventTypes = (session) => () => get(TYPES_LOCATION).then((results) => {
 
 const patchEventType = (id, data) => patch(`${TYPES_LOCATION}${id}`, form(data)).then((josn) => transform(josn, {}));
 
+const patchCustomEventType = (id, data) => post(`${TYPES_LOCATION}${id}/custom/`, form(data)).then((josn) => transform(josn, {}));
+
 const getEventsClearancesChart = (deviceId, daterange) => {
   const args = (() => {
     if (!Array.isArray(deviceId)) {
@@ -273,5 +277,5 @@ const getEventPriorities = (acceptor) => get('refs/event_priorities/').then(((da
 
 export {
   getEvents, getEventTypes, getEventsClearancesChart, getClearances, getDetergents, getOverdued, getDowntimes, getEventPriorities, patchEventType,
-  exportEvents,
+  exportEvents, patchCustomEventType,
 };

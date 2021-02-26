@@ -3,7 +3,7 @@ import { observable, computed } from 'mobx';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
-import { getEventTypes, patchEventType } from 'services/events';
+import { getEventTypes, patchCustomEventType } from 'services/events';
 import colorizedCell from 'elements/table/colorizedCell';
 
 const declareColumns = () => ({
@@ -89,7 +89,7 @@ class EventTypes extends Table {
     return this.rawData.find(({ id }) => id === typeId);
   }
 
-  update = patchEventType;
+  update = patchCustomEventType;
 }
 
 export default EventTypes;
