@@ -20,7 +20,9 @@ class DeviceListOff {
   @computed get rows() {
     const pointsSet = this.generic.salePointsId === null ? { has: () => true } : new Set(this.generic.salePointsId);
     const offDevices = this.session.devices.rawData.filter(
-      ({ salePointId, isOn, isInactive }) => !isOn && !isInactive && pointsSet.has(salePointId),
+      ({
+        salePointId, isOff, stopDate,
+      }) => stopDate && isOff && pointsSet.has(salePointId),
     );
     return offDevices.map((e) => ({
       salePoint: e.salePoint,

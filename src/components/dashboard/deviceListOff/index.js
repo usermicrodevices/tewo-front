@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import Format from 'elements/format';
 import Loader from 'elements/loader';
@@ -12,7 +13,11 @@ const FavoriteObjects = tableWidget([
     title: 'Название объекта',
     dataIndex: 'salePoint',
     render: (point) => (
-      point ? <Badge size={8}><Format>{point.name}</Format></Badge> : <Loader />
+      point ? (
+        <Badge size={8}>
+          <Link to={point.path}><Format>{point.name}</Format></Link>
+        </Badge>
+      ) : <Loader />
     ),
     sorter: (a, b) => {
       if (a.salePoint && b.salePoint) {
