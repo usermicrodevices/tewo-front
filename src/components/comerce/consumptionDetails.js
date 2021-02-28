@@ -30,7 +30,12 @@ const columns = (width) => [
   {
     title: 'Сумма',
     dataIndex: 'earn',
-    render: (earn) => <Format>{earn}</Format>,
+    render: (earn) => (
+      <span>
+        <Format>{earn}</Format>
+        ₽
+      </span>
+    ),
     width: width[4],
     sorter: (a, b) => a.earn - b.earn,
   },

@@ -111,6 +111,8 @@ class PrimeCost extends Table {
 
   get isImpossibleToBeSync() { return true; }
 
+  get isStickyTHead() { return true; }
+
   actions = {
     isVisible: true,
     detailsWidget: Details,

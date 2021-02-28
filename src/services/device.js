@@ -24,6 +24,7 @@ const RENAMER = {
   serial: 'serial',
   device_model: 'deviceModelId',
   price_group: 'priceGroupId',
+  maintenance: 'maintenanceDate',
   tz: 'timeZone',
   lastoff: 'stopDate',
   tech: 'isNeedTechService',
@@ -64,7 +65,7 @@ function converter(json, acceptor) {
   }
   for (const [jsonName, modelName] of Object.entries(RENAMER)) {
     if (modelName.indexOf('Date') >= 0) {
-      acceptor[modelName] = moment(json[jsonName]);
+      acceptor[modelName] = json[jsonName] && moment(json[jsonName]);
     } else {
       acceptor[modelName] = json[jsonName];
     }

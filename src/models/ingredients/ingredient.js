@@ -23,7 +23,7 @@ class Ingridient extends Datum {
   }
 
   @computed get measureUnit() {
-    return this.session.units.get(this.unitId)?.name || null;
+    return this.session.units.get(this.unitId)?.label || null;
   }
 
   @computed get company() {
@@ -62,8 +62,9 @@ class Ingridient extends Datum {
         type: 'number',
         isRequired: true,
       },
-      dimension: {
-        type: 'text',
+      unitId: {
+        type: 'selector',
+        selector: this.session.units.selector,
         isRequired: true,
       },
       companyId: {
@@ -92,9 +93,9 @@ class Ingridient extends Datum {
         value: FORMAT.format(this.cost?.toString()),
       },
       {
-        dataIndex: 'dimension',
+        dataIndex: 'unitId',
         title: 'Единица измерения',
-        value: this.dimension,
+        value: this.measureUnit,
       },
       {
         dataIndex: 'companyId',

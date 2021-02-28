@@ -29,9 +29,11 @@ class Device extends Datum {
 
   @observable downtime;
 
-  @observable isHasOverlocPPM;
-
   @observable mileage;
+
+  @observable maintenanceDate;
+
+  @observable isHasOverlocPPM;
 
   @observable isNeedTechService;
 

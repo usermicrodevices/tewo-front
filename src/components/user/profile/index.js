@@ -1,6 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Card, Button } from 'antd';
+import {
+  Card, Button, Space, Popconfirm,
+} from 'antd';
 
 import Editor from 'elements/editor';
 import Typography from 'elements/typography';
@@ -21,9 +23,18 @@ function Profile({ auth }) {
           <Typography.Text><Greating hours={(new Date()).getHours()} /></Typography.Text>
           <Typography.Title level={2}>{auth.user.name}</Typography.Title>
 
-          <div className={styles.actions}>
+          <Space className={styles.actions}>
             <Button onClick={auth.user.showChangePassword}>Сменить пароль</Button>
-          </div>
+            <Popconfirm
+              overlayStyle={{ width: 300 }}
+              onConfirm={auth.clear}
+              title="Вы уверены, что хотите сбросить сессию? Настройки пользователя, дашборда и таблиц будут сброшены, без возможности восстановления."
+              okText="Да"
+              cancelText="Нет"
+            >
+              <Button danger>Сбрость сессию</Button>
+            </Popconfirm>
+          </Space>
         </section>
       </header>
 

@@ -1,4 +1,7 @@
-@import 'src/themes/constants';
+@import "src/themes/constants";
+
+$initial-sticky-offset: -2px;
+$sticky-row-height: 45px;
 
 .whole {
   display: flex;
@@ -21,13 +24,13 @@
     border-bottom: 1px solid #e8e8e8;
 
     &:hover {
-      .hidehover>* {
+      .hidehover > * {
         opacity: 1;
       }
       background-color: #fafafa;
     }
 
-    .hidehover>* {
+    .hidehover > * {
       opacity: 0;
     }
 
@@ -53,7 +56,7 @@
       display: flex;
       align-items: center;
 
-      >:first-child {
+      > :first-child {
         margin-left: -5px;
         margin-right: 5px;
       }
@@ -81,11 +84,58 @@
       &:hover {
         background-color: #f0f0f0;
       }
-      &>div {
+      & > div {
         user-select: none;
         display: flex;
         justify-content: flex-start;
         align-items: center;
+      }
+    }
+  }
+
+  &.sticky-thead {
+    :global {
+      // We need to sticky <th> not <thead> (https://css-tricks.com/position-sticky-and-table-headers/)
+      .ant-table-thead > tr > th {
+        position: sticky;
+        z-index: 1;
+      }
+
+      .ant-table-thead > tr > th {
+        top: $initial-sticky-offset;
+      }
+
+      .ant-table-content .ant-table-content .ant-table-thead > tr > th {
+        top: $initial-sticky-offset + $sticky-row-height;
+      }
+
+      .ant-table-content .ant-table-content .ant-table-content .ant-table-thead > tr > th {
+        top: $initial-sticky-offset + $sticky-row-height * 2;
+      }
+    }
+  }
+
+  &.sticky-row {
+    .row {
+      position: sticky;
+      top: $initial-sticky-offset;
+      z-index: 2;
+      background: white;
+    }
+  }
+
+  &.sticky-row.sticky-thead {
+    :global {
+      .ant-table-thead > tr > th {
+        top: $initial-sticky-offset + $sticky-row-height;
+      }
+
+      .ant-table-content .ant-table-content .ant-table-thead > tr > th {
+        top: $initial-sticky-offset + $sticky-row-height * 2;
+      }
+
+      .ant-table-content .ant-table-content .ant-table-content .ant-table-thead > tr > th {
+        top: $initial-sticky-offset + $sticky-row-height * 3;
       }
     }
   }

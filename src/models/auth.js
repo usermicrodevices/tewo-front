@@ -30,7 +30,13 @@ class Auth {
 
   @action logout() {
     this.user = null;
+    localStorage.removeItem(BEARER_KEY);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  @action clear() {
     localStorage.clear();
+    window.location.reload();
   }
 
   @action login(data) {

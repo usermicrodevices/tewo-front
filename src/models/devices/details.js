@@ -141,13 +141,7 @@ class Details {
   }
 
   @computed get lastService() {
-    if (!Array.isArray(this.serviceEvents)) {
-      return undefined;
-    }
-    if (this.serviceEvents.length === 0) {
-      return null;
-    }
-    return this.serviceEvents[this.serviceEvents.length - 1].openDate;
+    return this.me.maintenanceDate;
   }
 
   @computed get isWaterQualified() {
