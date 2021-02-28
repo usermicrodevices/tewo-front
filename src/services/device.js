@@ -313,6 +313,12 @@ const getLastCleanings = () => get('data/events/last_cleanings/').then((json) =>
   return result;
 });
 
+const getUncleaned = () => get('refs/devices/uncleaned/').then((json) => (
+  Array.isArray(json)
+    ? json.filter((note) => checkData(note, { id: 'number', beverages: 'number' }))
+    : []
+));
+
 export {
-  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice, getDeviceTypes, getVoltage, getWaterQuality, getQR, getLastCleanings,
+  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice, getDeviceTypes, getVoltage, getWaterQuality, getQR, getLastCleanings, getUncleaned,
 };

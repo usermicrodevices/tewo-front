@@ -38,6 +38,8 @@ import ChartCostWidget from 'components/dashboard/chartCost';
 import ChartCostModel from 'models/dashboard/widgets/chartCost';
 import DiagramIngredientsUsageWidget from 'components/dashboard/diagramIngredientsUsage';
 import DiagramIngredientsUsageModel from 'models/dashboard/widgets/diagramIngredientsUsage';
+import DeviceListAwaitingCleaningWidget from 'components/dashboard/deviceListAwaitingCleaning';
+import DeviceListAwaitingCleaningModel from 'models/dashboard/widgets/deviceListAwaitingCleaning';
 
 /**
  *
@@ -239,6 +241,16 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     excludedDateRandes: new Set([]),
     widget: DiagramIngredientsUsageWidget,
     model: DiagramIngredientsUsageModel,
+  },
+  deviceListAwaitingCleaning: {
+    rowSpan: 93,
+    colSpan: 2,
+    excludedDateRandes: new Set([]),
+    isHaveDateFilter: true,
+    isHavePointsFilter: true,
+    tickDuration: 3600,
+    widget: DeviceListAwaitingCleaningWidget,
+    model: DeviceListAwaitingCleaningModel,
   },
 };
 
