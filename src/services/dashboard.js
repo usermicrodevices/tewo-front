@@ -40,6 +40,8 @@ import DiagramIngredientsUsageWidget from 'components/dashboard/diagramIngredien
 import DiagramIngredientsUsageModel from 'models/dashboard/widgets/diagramIngredientsUsage';
 import DeviceListAwaitingCleaningWidget from 'components/dashboard/deviceListAwaitingCleaning';
 import DeviceListAwaitingCleaningModel from 'models/dashboard/widgets/deviceListAwaitingCleaning';
+import DeviceListDisabledWidget from 'components/dashboard/deviceListDisabled';
+import DeviceListDisabledModel from 'models/dashboard/widgets/deviceListDisabled';
 
 /**
  *
@@ -251,6 +253,16 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     tickDuration: 3600,
     widget: DeviceListAwaitingCleaningWidget,
     model: DeviceListAwaitingCleaningModel,
+  },
+  deviceListDisabled: {
+    rowSpan: 93,
+    colSpan: 2,
+    excludedDateRandes: new Set([]),
+    isHaveDateFilter: true,
+    isHavePointsFilter: true,
+    tickDuration: 3600,
+    widget: DeviceListDisabledWidget,
+    model: DeviceListDisabledModel,
   },
 };
 

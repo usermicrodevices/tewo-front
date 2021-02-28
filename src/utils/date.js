@@ -146,6 +146,33 @@ const SmallSemanticRanges = {
   },
 };
 
+const formatDuration = (duration) => {
+  const parts = [
+    duration.years(),
+    duration.months(),
+    duration.days(),
+    duration.hours(),
+    duration.minutes(),
+    duration.seconds(),
+  ];
+  const resolvers = [
+    ['год', 'лет', 'года'],
+    ['месяц', 'месяцев', 'месяца'],
+    ['день', 'дней', 'дня'],
+    ['час', 'часов', 'часа'],
+    ['минута', 'минут', 'минуты'],
+    ['секунда', 'секунд', 'секунды'],
+  ];
+  const result = [];
+  let i = parts.findIndex((v) => v);
+  if (i >= 0) {
+    for (; i < parts.length; i += 1) {
+      result.push(`${parts[i]} ${plural(parts[i], resolvers[i])}`);
+    }
+  }
+  return result.join(', ') || 'Меньше секунды';
+};
+
 export {
-  daterangeToArgs, momentToArg, isDateRange, stepToPast, humanizeSeconds, alineDates, SemanticRanges, SmallSemanticRanges,
+  daterangeToArgs, momentToArg, isDateRange, stepToPast, humanizeSeconds, alineDates, SemanticRanges, SmallSemanticRanges, formatDuration,
 };

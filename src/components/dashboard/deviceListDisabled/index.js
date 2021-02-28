@@ -1,3 +1,10 @@
+import React from 'react';
+import { Typography } from 'antd';
+import moment from 'moment';
+
+import { formatDuration } from 'utils/date';
+import Format from 'elements/format';
+
 import tableWidget from '../tableWidget';
 
 const localeComparator = (field) => (a, b) => {
@@ -19,10 +26,17 @@ const FavoriteObjects = tableWidget([
     sorter: localeComparator('name'),
   },
   {
-    title: 'Наливов перед выключением',
-    dataIndex: 'beverages',
-    sorter: (a, b) => a.beverages - b.beverages || a.key - b.key,
-    sortOrder: 'ascend',
+    title: 'Длительность',
+    dataIndex: 'unused',
+    sorter: (a, b) => a.unused - b.unused || a.key - b.key,
+    render: (unused) => (
+      <Typography.Text>
+        <Format>
+          {formatDuration(moment.duration(unused, 'millisecond'))}
+        </Format>
+      </Typography.Text>
+    ),
+    sortOrder: 'descend',
   },
 ]);
 

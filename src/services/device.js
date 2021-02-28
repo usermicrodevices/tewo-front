@@ -319,6 +319,13 @@ const getUncleaned = () => get('refs/devices/uncleaned/').then((json) => (
     : []
 ));
 
+const getDisabled = () => get('refs/devices/unused/').then((json) => (
+  Array.isArray(json)
+    ? json.filter((note) => checkData(note, { id: 'number', unused: 'number' }))
+      .map(({ id, unused }) => ({ id, unused: unused * 1000 }))
+    : []
+));
+
 export {
-  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice, getDeviceTypes, getVoltage, getWaterQuality, getQR, getLastCleanings, getUncleaned,
+  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice, getDeviceTypes, getVoltage, getWaterQuality, getQR, getLastCleanings, getUncleaned, getDisabled,
 };
