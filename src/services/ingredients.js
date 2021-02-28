@@ -37,7 +37,8 @@ const transform = (json, acceptor) => {
       cost: 'number',
     },
     {
-      unit: 'string',
+      dimension: 'string',
+      unit: 'number',
     },
   )) {
     apiCheckConsole.error(`Неожиданный ответ по адресу ${LOCATION}`, json);

@@ -29,6 +29,7 @@ class DeviceListOff {
         name: device?.name,
         salePointName: device?.salePointName,
         beverages,
+        key: id,
       };
     });
   }

@@ -29,6 +29,7 @@ class DeviceListDisabled {
         name: device?.name,
         salePointName: device?.salePointName,
         unused,
+        key: id,
       };
     });
   }
