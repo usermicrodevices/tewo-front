@@ -11,10 +11,6 @@ class DeviceListDisabled {
     this.generic = settings;
     this.session = session;
 
-    reaction(() => [this.generic.salePointsId, this.generic.dateRange], () => {
-      this.data = undefined;
-      this.update();
-    });
     this.update();
   }
 
@@ -23,7 +19,8 @@ class DeviceListDisabled {
   }
 
   @computed get rows() {
-    return this.data.map(({ id, unused }) => {
+    const pointsSet = this.generic.salePointsId === null ? { has: () => true } : new Set(this.generic.salePointsId);
+    return this.data.filter(({ id }) => pointsSet.has(id)).map(({ id, unused }) => {
       const device = this.session.devices.get(id);
       return {
         name: device?.name,
