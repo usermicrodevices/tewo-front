@@ -6,12 +6,12 @@ import Heatmap from 'elements/chart/heatmap';
 import Loader from 'elements/loader';
 import DeviceInfoModal from './deviceInfoModal';
 
-import { createTooltip, legend, getItemFromChartEvent } from './utils';
+import { createTooltip, getItemFromChartEvent } from './configuration';
 import classnames from './index.module.scss';
 
-const Chart = withSize()(inject('storage')(observer(({ storage, size }) => {
+const HeaetmapDevices = withSize()(inject('storage')(observer(({ storage }) => {
   const {
-    isLoaded, chartData, isSelectedVisible, setSelected, selectedDevice,
+    isLoaded, chartData, isSelectedVisible, setSelected, selectedDevice, legend,
   } = storage;
   const tooltip = useCallback(createTooltip({ chartData }), [chartData]);
   const onCancel = useCallback(() => setSelected(null), []);
@@ -47,4 +47,4 @@ const Chart = withSize()(inject('storage')(observer(({ storage, size }) => {
   );
 })));
 
-export default Chart;
+export default HeaetmapDevices;
