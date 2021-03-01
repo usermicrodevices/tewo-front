@@ -36,7 +36,7 @@ const FavoriteObjects = tableWidget([
         </Format>
       </Typography.Text>
     ),
-    sortOrder: 'descend',
+    defaultSortOrder: 'descend',
   },
 ]);
 

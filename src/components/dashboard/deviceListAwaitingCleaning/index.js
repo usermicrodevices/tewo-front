@@ -22,7 +22,7 @@ const FavoriteObjects = tableWidget([
     title: 'Наливов перед выключением',
     dataIndex: 'beverages',
     sorter: (a, b) => a.beverages - b.beverages || a.key - b.key,
-    sortOrder: 'ascend',
+    defaultSortOrder: 'ascend',
   },
 ]);
 
