@@ -38,6 +38,9 @@ export const getHeatmapOptions = ({
   },
   plotOptions: {
     heatmap: {
+      shadeIntensity: 0.9,
+      radius: 0,
+      reverseNegativeShades: true,
       colorScale: {
         ranges: legend,
       },

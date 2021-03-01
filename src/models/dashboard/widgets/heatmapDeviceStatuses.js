@@ -1,5 +1,32 @@
 import { computed, observable, action } from 'mobx';
 
+const LEGEND = [
+  {
+    from: 1,
+    to: 1,
+    name: 'Активно',
+    color: '#00A100',
+  },
+  {
+    from: 2,
+    to: 2,
+    name: 'Требуется обслуживание',
+    color: '#FFB200',
+  },
+  {
+    from: 3,
+    to: 3,
+    name: 'Выключено',
+    color: '#ed3333',
+  },
+  {
+    from: 4,
+    to: 4,
+    name: 'Неактивно',
+    color: '#a1a3a5',
+  },
+];
+
 const getStateForDevice = (device) => {
   if (device.isInactive) {
     return 4;
@@ -22,6 +49,8 @@ class HeatmapDeviceStatuses {
   session;
 
   @observable selected = null;
+
+  legend = LEGEND;
 
   constructor(settings, session) {
     this.generic = settings;

@@ -327,6 +327,15 @@ const getDisabled = () => get('refs/devices/unused/').then((json) => (
     : []
 ));
 
+const getCleaningsCount = (dateRange) => {
+  const dangeart = daterangeToArgs(dateRange, 'open_date');
+  const url = `/data/events/points_cleanings/?${dangeart}`;
+
+  return get(url).then((json) => json);
+};
+
 export {
-  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice, getDeviceTypes, getVoltage, getWaterQuality, getQR, getLastCleanings, getUncleaned, getDisabled,
+  getDevices, getDeviceModels, getStats, getSalesChart,
+  applyDevice, getDeviceTypes, getVoltage, getWaterQuality, getQR, getLastCleanings, getUncleaned, getDisabled,
+  getCleaningsCount,
 };
