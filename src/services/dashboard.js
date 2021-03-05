@@ -248,8 +248,8 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     model: ChartCostModel,
   },
   diagramIngredientsUsage: {
-    rowSpan: 116,
-    colSpan: 1,
+    rowSpan: 76,
+    colSpan: 2,
     isHaveDateFilter: true,
     isHavePointsFilter: true,
     excludedDateRandes: new Set([]),

@@ -23,7 +23,7 @@ const DiagramIngredientsUsage = inject('storage')(observer(({
           <div className={classes.label}><Format>{label}</Format></div>
           <div className={classes.value}>
             <Format>{count}</Format>
-            {` ${measure}`}
+            {measure ? ` ${measure}` : ''}
           </div>
         </div>
       ))}
