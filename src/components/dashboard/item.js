@@ -62,7 +62,7 @@ const Item = ({
             </div>
           </div>
           <div className={classes.toolbar}>
-            <Tooltip placement="top" title={item.description}><Button type="text" icon={<QuestionCircleOutlined />} /></Tooltip>
+            <Tooltip placement="top" title={<div dangerouslySetInnerHTML={{ __html: item.description }} />}><Button type="text" icon={<QuestionCircleOutlined />} /></Tooltip>
             <Button type="text" onClick={() => grid.editSettings(item.uid)} icon={<SettingOutlined />} />
             <Button type="text" onClick={() => grid.remove(item.uid)} icon={<CloseOutlined />} />
           </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 
-import { Pie, PIE_COLORS } from 'elements/chart/pie';
+import { PIE_COLORS } from 'elements/chart/pie';
 import Loader from 'elements/loader';
 import Format from 'elements/format';
 
