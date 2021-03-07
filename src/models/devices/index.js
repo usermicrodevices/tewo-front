@@ -6,7 +6,9 @@ import { computed } from 'mobx';
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
 import {
-  getDevices, getStats, getSalesChart, applyDevice, getVoltage, getWaterQuality, getQR, getUncleaned, getDisabled,
+  getDevices, getStats, getSalesChart, applyDevice,
+  getVoltage, getWaterQuality, getQR, getUncleaned, getDisabled,
+  getCleaningsCount,
 } from 'services/device';
 
 const COLUMNS = {
@@ -207,6 +209,8 @@ class Devices extends Table {
   getStats = getStats;
 
   getSalesChart = getSalesChart;
+
+  getCleaningsCount = getCleaningsCount;
 
   applyDevice = applyDevice;
 

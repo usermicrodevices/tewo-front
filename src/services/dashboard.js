@@ -8,8 +8,9 @@ import OverviewWidget from 'components/dashboard/statistic';
 import OverviewModel from 'models/dashboard/widgets/statistic';
 import ChartBeveragesSalesWidget from 'components/dashboard/chartBeveragesSales';
 import ChartBeveragesSalesModel from 'models/dashboard/widgets/chartBeveragesSales';
-import HeatmapDeviceStatusesWidget from 'components/dashboard/heatmapDeviceStatuses';
+import HeatmapDevices from 'components/dashboard/heatmapDevices';
 import HeatmapDeviceStatusesModel from 'models/dashboard/widgets/heatmapDeviceStatuses';
+import HeatmapClearancesModel from 'models/dashboard/widgets/heatmapClearances';
 import DiagramTechStateWidget from 'components/dashboard/diagramTechState';
 import DiagramTechStateModel from 'models/dashboard/widgets/diagramTechState';
 import DiagramPopularityWidget from 'components/dashboard/diagramPopularity';
@@ -93,8 +94,19 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     isHaveDateFilter: false,
     isHavePointsFilter: true,
     tickDuration: 350,
-    widget: HeatmapDeviceStatusesWidget,
+    widget: HeatmapDevices,
     model: HeatmapDeviceStatusesModel,
+  },
+  heatmapClearances: {
+    rowSpan: 76,
+    colSpan: 2,
+    defaultDateRange: 'prw7Days',
+    excludedDateRandes: new Set([]),
+    isHaveDateFilter: true,
+    isHavePointsFilter: true,
+    tickDuration: 350,
+    widget: HeatmapDevices,
+    model: HeatmapClearancesModel,
   },
   diagramTechState: {
     rowSpan: 71,
@@ -236,8 +248,8 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     model: ChartCostModel,
   },
   diagramIngredientsUsage: {
-    rowSpan: 116,
-    colSpan: 1,
+    rowSpan: 76,
+    colSpan: 2,
     isHaveDateFilter: true,
     isHavePointsFilter: true,
     excludedDateRandes: new Set([]),

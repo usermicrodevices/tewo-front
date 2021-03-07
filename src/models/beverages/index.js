@@ -1,14 +1,15 @@
 /* eslint class-methods-use-this: off */
+import React from 'react';
 import moment from 'moment';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
 import Exporter from 'models/exporter';
-import { getBeverages, exportBeverages } from 'services/beverage';
-import { typeNameToIcon, canceledIcon } from 'elements/beverageIcons';
 import { beverage as beverageRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { daterangeToArgs } from 'utils/date';
 import plural from 'utils/plural';
+import { getBeverages, exportBeverages } from 'services/beverage';
+import { OperationIcon, canceledIcon } from 'elements/beverageIcons';
 import { tableItemLink } from 'elements/table/trickyCells';
 
 const declareColumns = (session) => ({
@@ -57,12 +58,12 @@ const declareColumns = (session) => ({
     grow: 1,
     sortDirections: 'both',
   },
-  operationName: {
+  operationId: {
     isVisibleByDefault: true,
     title: 'Операция',
     grow: 1,
     sortDirections: 'both',
-    transform: (name) => typeNameToIcon(name),
+    transform: (operationId, datum) => <OperationIcon id={operationId} description={datum.operationName} />,
   },
   saleSum: {
     isVisibleByDefault: true,
