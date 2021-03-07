@@ -107,7 +107,7 @@ const declareFilters = (session) => ({
   drink__id: {
     type: 'selector',
     title: 'Напиток',
-    apply: (general, data) => general(data.drink),
+    apply: (general, data) => general(data.drinkId),
     selector: () => session.drinks.selector,
   },
   operation__id: {
