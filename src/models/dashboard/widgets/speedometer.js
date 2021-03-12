@@ -34,6 +34,10 @@ class Speedometr {
     this.session.points.getBeveragesSpeed(this.generic.salePointsId || [])
       .then((value) => { this.value = value; });
   }
+
+  update() {
+    this.updateValue();
+  }
 }
 
 export default Speedometr;
