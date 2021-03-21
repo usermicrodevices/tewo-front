@@ -7,6 +7,7 @@ import NoData from 'elements/noData';
 
 import locale from './locale';
 import style from './style.module.scss';
+import moment from 'moment';
 
 const LENGTH_LIMIT = 27;
 
@@ -70,6 +71,27 @@ const ScalebleChart = ({
       };
     }
   }
+  let tooltip;
+  if (moment.isMoment(x[0])) {
+    tooltip = {
+      custom(args) {
+        const { dataPointIndex, series: reduced } = args;
+        return `
+          <div class="apexcharts-tooltip-title" style="font-family: Inter; font-size: 12px;">${x[dataPointIndex].format('D MMMM')}</div>
+          ${reduced.map((values, seriesIndex) => `
+            <div class="apexcharts-tooltip-series-group apexcharts-active" style="display: flex;">
+              <span class="apexcharts-tooltip-marker" style="background-color: ${colors[seriesIndex]};"></span>
+              <div class="apexcharts-tooltip-text" style="font-family: Inter; font-size: 12px;">
+                <div class="apexcharts-tooltip-y-group">
+                  <span class="apexcharts-tooltip-text-label">${(seriesIndex && x.prw ? x.prw : x)[dataPointIndex].format('D MMMM YYYY')}: </span>
+                  <span class="apexcharts-tooltip-text-value">${values[dataPointIndex]}</span>
+                </div>
+              </div>
+            </div>
+          `).join('')}`;
+      },
+    };
+  }
   const data = {
     chart: {
       type: 'line',
@@ -107,6 +129,7 @@ const ScalebleChart = ({
       x: {
         show: true,
       },
+      ...tooltip,
     },
     legend: {
       horizontalAlign: 'left',
