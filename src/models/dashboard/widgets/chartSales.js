@@ -37,15 +37,20 @@ class ChartSales {
     this.generic = settings;
     this.session = session;
 
-    const updateValue = () => {
-      if (typeof this.generic.salePointsId === 'undefined') {
-        return;
-      }
-      this.properties.dateRange = this.generic.dateRange;
-      this.beveragesStats = new BeveragesStatsPair((dateRange) => session.points.getSalesChart(this.generic.salePointsId, dateRange), this.properties);
-    };
-    updateValue();
-    reaction(() => [this.generic.salePointsId, this.generic.dateRange], updateValue);
+    this.updateValue();
+    reaction(() => [this.generic.salePointsId, this.generic.dateRange], this.updateValue);
+  }
+
+  updateValue = () => {
+    if (typeof this.generic.salePointsId === 'undefined') {
+      return;
+    }
+    this.properties.dateRange = this.generic.dateRange;
+    this.beveragesStats = new BeveragesStatsPair((dateRange) => this.session.points.getSalesChart(this.generic.salePointsId, dateRange), this.properties);
+  };
+
+  update() {
+    this.updateValue();
   }
 }
 
