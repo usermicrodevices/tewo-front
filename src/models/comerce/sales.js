@@ -81,6 +81,7 @@ class Sales extends Table {
     }
     const visibleCurves = new Set(this.properties.visibleCurves);
     const series = SALES_DATA_TYPES.filter(({ value }) => visibleCurves.has(value) && typeof this[value] !== 'undefined');
+    console.log(SALES_DATA_TYPES, series);
     return series.map(({ label, value, axis }) => ({ data: this[value], name: label, axis }));
   }
 

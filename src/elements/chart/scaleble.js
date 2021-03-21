@@ -48,25 +48,25 @@ const ScalebleChart = ({
   const series = y.map(({ name, data }) => ({ name, data, type: 'line' }));
   const isHaveOverviewChart = x.length > LENGTH_LIMIT;
   const axes = new Map();
-  y.forEach(({ axis }, id) => {
+  y.forEach(({ axis, name }, id) => {
     if (!axes.has(axis)) {
-      axes.set(axis, []);
+      axes.set(axis, { name, series: [] });
     }
-    axes.get(axis).push(id);
+    axes.get(axis).series.push(id);
   });
-  if (axes.size !== 1 && axes.size !== 2) {
+  if (!new Set([1, 2]).has(axes.size)) {
     console.error('wrong axes amount');
   }
   const yaxisSides = new Map([...axes.keys()].map((key, id) => [key, provideAxis(id === 0 ? y1 : y2, `y${id}`, id === 1)]));
   const yaxis = y.map(({ axis }) => axis);
-  for (const [side, itms] of axes.entries()) {
+  for (const [side, { name, series: itms }] of axes.entries()) {
     const richAxis = yaxisSides.get(side);
     yaxis[itms[0]] = richAxis;
     for (const idx of itms.slice(1)) {
       yaxis[idx] = {
         show: false,
         zoomEnabled: false,
-        seriesName: richAxis.seriesName,
+        seriesName: name,
       };
     }
   }
