@@ -99,6 +99,7 @@ class BeveragesStatsPair {
     if (!this.isSeriesLoaded) {
       return null;
     }
+    this.cur.xSeria.prw = this.prw.xSeria;
     return this.cur.xSeria;
   }
 }
