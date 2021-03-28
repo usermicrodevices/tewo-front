@@ -1,0 +1,66 @@
+/* eslint class-methods-use-this: off */
+import Table from 'models/table';
+import Filter from 'models/filters';
+import { when } from 'mobx';
+
+import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
+import { tableItemLink } from 'elements/table/trickyCells';
+
+import { DECLARE_DEVICE_FILTERS } from '../index';
+import Device from './device';
+
+const getDevices = (session) => () => when(() => session.devices.isLoaded).then(() => {
+  return {
+    count: session.devices.rawData.length,
+    results: session.devices.rawData.map((device) => new Device(session, device)),
+  };
+});
+
+const COLUMNS = {
+  serial: {
+    isVisibleByDefault: true,
+    title: 'Серийный номер',
+    grow: 3,
+    sortDirections: 'both',
+  },
+  name: {
+    isDefaultSort: true,
+    isVisibleByDefault: true,
+    title: 'Название',
+    grow: 3,
+    sortDirections: 'both',
+    transform: (_, datum, width) => tableItemLink(datum.name, `${devicesRout.path}/${datum.id}`, width),
+  },
+  salePointName: {
+    isVisibleByDefault: true,
+    title: 'Объект',
+    grow: 3,
+    transform: (_, datum, width) => tableItemLink(datum.salePointName, `${salePointsRout.path}/${datum.salePointId}`, width),
+  },
+  companyName: {
+    isVisibleByDefault: true,
+    title: 'Компания',
+    grow: 2,
+    sortDirections: 'both',
+  },
+  packages: {
+    isVisibleByDefault: true,
+    title: 'Пакеты',
+    grow: 3,
+  },
+};
+
+class Devices extends Table {
+  get isImpossibleToBeAsync() { return true; }
+
+  constructor(session) {
+    const filter = new Filter(DECLARE_DEVICE_FILTERS(session));
+    super(COLUMNS, getDevices(session), filter);
+  }
+
+  toString() {
+    return 'devicesUpdate';
+  }
+}
+
+export default Devices;
