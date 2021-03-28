@@ -19,6 +19,7 @@ import {
   cancellations,
   ingredientsConsumption,
   primecost,
+  deviceUpdate,
 } from 'routes';
 
 class MenuItem {
@@ -90,6 +91,10 @@ const items = [
       {
         text: 'Журнал очисток',
         act: cleansLog,
+      },
+      {
+        text: 'Обновление оборудования',
+        act: deviceUpdate,
       },
     ],
   ),
