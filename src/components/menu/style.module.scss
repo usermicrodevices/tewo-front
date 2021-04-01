@@ -48,8 +48,9 @@ $icon-size: 34px;
     }
 
     :global(.anticon),
-    :global(.ant-menu-submenu > .ant-menu-submenu-title .anticon) {
-      font-size: 34px;
+    :global(.ant-menu-submenu > .ant-menu-submenu-title .anticon),
+    :global(.anticon > svg)  {
+      font-size: $icon-size;
     }
 
     :global(.ant-menu-selected::after),
