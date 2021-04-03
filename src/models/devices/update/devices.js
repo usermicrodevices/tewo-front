@@ -3,7 +3,11 @@ import Table from 'models/table';
 import Filter from 'models/filters';
 import { when } from 'mobx';
 
-import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
+import {
+  devices as devicesRout,
+  salePoints as salePointsRout,
+  deviceUpdate as deviceUpdateRout,
+} from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
 
 import { DECLARE_DEVICE_FILTERS } from '../index';
@@ -22,6 +26,7 @@ const COLUMNS = {
     title: 'Серийный номер',
     grow: 3,
     sortDirections: 'both',
+    transform: (_, datum, width) => tableItemLink(datum.serial, `${deviceUpdateRout.path}/${datum.id}`, width),
   },
   name: {
     isDefaultSort: true,
