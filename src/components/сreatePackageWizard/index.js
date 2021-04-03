@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Modal } from 'antd';
 
+import plural from 'utils/plural';
 import SelectableTable from 'elements/table/selectableTable';
 
 import classNames from './css.module.scss';
@@ -22,10 +23,9 @@ const Wizard = inject('packagesHolder')(observer(({ packagesHolder }) => {
     }
     setStage(0);
   };
-  const okText = ['Далее', 'Загрузить'];
-  const okType = ['default', 'primary'];
-  const cancelText = ['Отмена', 'Назад'];
+  const selectedDevicesCount = packagesHolder.newPackage?.devices?.size;
   const onSelectDevice = (devices) => {
+    // eslint-disable-next-line no-param-reassign
     packagesHolder.newPackage.devices = devices;
   };
   const ds = packagesHolder.devices.isLoaded ? packagesHolder.devices.rawData
@@ -39,6 +39,12 @@ const Wizard = inject('packagesHolder')(observer(({ packagesHolder }) => {
     }) => ({
       key: id, name, salePointName, serial, companyName,
     })) : undefined;
+  const okText = [
+    selectedDevicesCount ? 'Далее' : 'Устройства не выбраны',
+    `Загрузить на ${plural(selectedDevicesCount, ['устройство', 'устройства', 'устройства'])} (${selectedDevicesCount} / ${ds?.length})`,
+  ];
+  const okType = ['default', 'primary'];
+  const cancelText = ['Отмена', 'Назад'];
   return (
     <Modal
       title="Загрузка пакета"
@@ -48,6 +54,7 @@ const Wizard = inject('packagesHolder')(observer(({ packagesHolder }) => {
       okText={okText[stage]}
       okType={okType[stage]}
       cancelText={cancelText[stage]}
+      okButtonProps={{ disabled: selectedDevicesCount === 0 }}
       width="80vw"
       bodyStyle={{
         maxHeight: '80vh',

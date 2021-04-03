@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, Provider, observer } from 'mobx-react';
 import { Space, Button } from 'antd';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Route } from 'react-router-dom';
 
 import Icon from 'elements/icon';
 import SubPage from 'elements/subpage';
@@ -11,6 +11,7 @@ import DeviceUpdateModel from 'models/devices/update';
 import Table from 'elements/table';
 import Card from 'elements/card';
 import CreatePackageWizard from 'components/сreatePackageWizard';
+import DeviceUpdates from 'components/deviceUpdates';
 
 @withRouter
 @inject('session')
@@ -30,7 +31,7 @@ class DeviceUpdate extends React.Component {
     if (model === null) {
       return null;
     }
-    const { location } = this.props;
+    const { location, match } = this.props;
     const isSessions = location.pathname.indexOf('sessions') >= 0;
 
     const title = (
@@ -69,6 +70,17 @@ class DeviceUpdate extends React.Component {
               </Provider>
             ),
           },
+        ]}
+        routTransformer={(routs) => [
+          routs[0],
+          (
+            <Route key="id" path={`${match.path}/:id`}>
+              <Card>
+                <DeviceUpdates />
+              </Card>
+            </Route>
+          ),
+          routs[1],
         ]}
         title={title}
       />
