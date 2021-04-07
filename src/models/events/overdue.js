@@ -52,7 +52,7 @@ const declareColumns = () => ({
   },
   duration: {
     isVisibleByDefault: true,
-    title: 'Время исправления',
+    title: 'Время отклика',
     grow: 1,
     transform: (duration) => moment.duration(duration, 'second').humanize(),
     sortDirections: 'both',
