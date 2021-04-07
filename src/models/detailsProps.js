@@ -29,7 +29,10 @@ const SALES_DATA_TYPES = [
   },
 ];
 
-const SALES_CHART_LABELS = [{ text: 'Наливов в день', decimalsInFloat: 0 }, { text: 'Динамика продаж, ₽', decimalsInFloat: 2 }];
+const SALES_CHART_LABELS = [
+  { text: 'Наливов в день, шт.', decimalsInFloat: 0, tooltipUnit: 'шт.' },
+  { text: 'Динамика продаж, ₽', decimalsInFloat: 2, tooltipUnit: '₽' },
+];
 
 const DEFAUL_CURVES = SALES_DATA_TYPES.filter(({ axis }) => axis).map(({ value }) => value);
 

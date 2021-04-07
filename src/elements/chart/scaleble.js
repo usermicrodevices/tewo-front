@@ -1,13 +1,13 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { withSize } from 'react-sizeme';
+import moment from 'moment';
 
 import colors from 'themes/chart';
 import NoData from 'elements/noData';
 
 import locale from './locale';
 import style from './style.module.scss';
-import moment from 'moment';
 
 const LENGTH_LIMIT = 27;
 
@@ -84,7 +84,7 @@ const ScalebleChart = ({
               <div class="apexcharts-tooltip-text" style="font-family: Inter; font-size: 12px;">
                 <div class="apexcharts-tooltip-y-group">
                   <span class="apexcharts-tooltip-text-label">${(seriesIndex && x.prw ? x.prw : x)[dataPointIndex].format('D MMMM YYYY')}: </span>
-                  <span class="apexcharts-tooltip-text-value">${values[dataPointIndex]}</span>
+                  <span class="apexcharts-tooltip-text-value">${values[dataPointIndex]} ${y1.tooltipUnit || ''}</span>
                 </div>
               </div>
             </div>

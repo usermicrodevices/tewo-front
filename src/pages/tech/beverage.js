@@ -9,7 +9,7 @@ const Beverage = () => (
     refreshInterval={beveragesAndEventsUpdateFrequency}
     storageName="beverages"
     isHaveNotOverview
-    tableTitle="Наливы"
+    tableTitle="Журнал наливов"
   />
 );
 
