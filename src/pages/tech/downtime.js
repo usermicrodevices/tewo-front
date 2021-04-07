@@ -71,7 +71,7 @@ class Downtime extends React.Component {
           <Chart />
         </Card>
         <Card className={classes.table}>
-          <Typography.Title level={3}>Время исправления событий</Typography.Title>
+          <Typography.Title level={3}>Время отклика на событие</Typography.Title>
           <Table />
         </Card>
       </Provider>

@@ -27,7 +27,7 @@ const declareColumns = (session) => ({
   },
   deviceDate: {
     isVisibleByDefault: true,
-    title: 'Момент налива',
+    title: 'Время налива',
     isDefaultSort: true,
     width: 189,
     sortDirections: 'both',
@@ -60,7 +60,7 @@ const declareColumns = (session) => ({
   },
   operationId: {
     isVisibleByDefault: true,
-    title: 'Операция',
+    title: 'Тип оплаты',
     grow: 1,
     sortDirections: 'both',
     transform: (operationId, datum) => <OperationIcon id={operationId} description={datum.operationName} />,
@@ -75,7 +75,7 @@ const declareColumns = (session) => ({
   },
   canceled: {
     isVisibleByDefault: true,
-    title: 'Отменена',
+    title: 'Отменен',
     width: 80,
     transform: (v) => (v ? canceledIcon : ''),
   },
@@ -84,7 +84,7 @@ const declareColumns = (session) => ({
 const declareFilters = (session) => ({
   device_date: {
     type: 'daterange',
-    title: 'Момент налива',
+    title: 'Время налива',
     apply: (general, data) => general(data.deviceDate),
   },
   device__sale_point__company__id: {
