@@ -24,6 +24,11 @@ $icon-size: 34px;
     transition: none;
   }
 
+  // Disable menu icon double margin
+  :global(.ant-menu-item .anticon svg) {
+    margin-right: 0;
+  }
+
   @include mobile {
     top: 56px;
     position: fixed;
