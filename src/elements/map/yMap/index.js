@@ -95,9 +95,13 @@ function YMap({
     };
   }, [onInfoShow]);
 
-  useImperativeHandle(fRef, () => ({
-    fitToViewport: () => mapRef.current && mapRef.current.container.fitToViewport(),
-  }));
+  const setCenter = useCallback(() => {
+    setTimeout(() => {
+      if (mapRef.current && mapRef.current.geoObjects && mapRef.current.geoObjects.getBounds()) {
+        mapRef.current.setBounds(mapRef.current.geoObjects.getBounds(), { checkZoomRange: true, zoomMargin: 9 });
+      }
+    }, 500);
+  }, []);
 
   const initInstanceRef = useCallback((map) => {
     if (map && mapRef.current !== map) {
@@ -109,7 +113,12 @@ function YMap({
         }
       });
     }
-  }, []);
+  }, [onZoom]);
+
+  useImperativeHandle(fRef, () => ({
+    fitToViewport: () => mapRef.current && mapRef.current.container.fitToViewport(),
+    setCenter,
+  }));
 
   return (
     <YMaps
