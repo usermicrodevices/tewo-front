@@ -14,19 +14,19 @@ const Wizard = inject('packagesHolder')(observer(({ packagesHolder }) => {
       setStage(1);
       return;
     }
-    packagesHolder.submitNewPackage();
+    packagesHolder.submitNewPacket();
   };
   const onPrew = () => {
     if (stage === 0) {
-      packagesHolder.clearNewPackage();
+      packagesHolder.clearNewPacket();
       return;
     }
     setStage(0);
   };
-  const selectedDevicesCount = packagesHolder.newPackage?.devices?.size;
+  const selectedDevicesCount = packagesHolder.newPacket?.devices?.size;
   const onSelectDevice = (devices) => {
     // eslint-disable-next-line no-param-reassign
-    packagesHolder.newPackage.devices = devices;
+    packagesHolder.newPacket.devices = devices;
   };
   const ds = packagesHolder.devices.isLoaded ? packagesHolder.devices.rawData
     .filter(({
@@ -48,7 +48,7 @@ const Wizard = inject('packagesHolder')(observer(({ packagesHolder }) => {
   return (
     <Modal
       title="Загрузка пакета"
-      visible={packagesHolder.newPackage !== null}
+      visible={packagesHolder.newPacket !== null}
       onOk={onNext}
       onCancel={onPrew}
       okText={okText[stage]}

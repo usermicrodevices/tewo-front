@@ -9,14 +9,13 @@ import Loader from 'elements/loader';
 import initRowsRenderer from './row';
 import classes from './index.module.scss';
 
-const DeviceUpdates = ({
+const packeges = ({
   size: { width, height },
   match: { params: { id } },
   session: { devices },
 }) => {
   const { rowsCount, renderer } = initRowsRenderer(width, 1000);
   const device = devices.get(parseInt(id, 10));
-  console.log(devices, device);
   if (typeof device === 'undefined') {
     return (
       <div className={classes.loader}>
@@ -38,4 +37,4 @@ const DeviceUpdates = ({
   );
 };
 
-export default withSize({ monitorHeight: true })(withRouter(inject('session')(observer(DeviceUpdates))));
+export default withSize({ monitorHeight: true })(withRouter(inject('session')(observer(packeges))));

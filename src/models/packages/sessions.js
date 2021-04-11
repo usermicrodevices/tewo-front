@@ -2,8 +2,11 @@
 import Table from 'models/table';
 import Filter from 'models/filters';
 
-import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
+import {
+  deviceUpdate as deviceUpdateRout,
+} from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
+import { getSessions } from 'services/packages';
 
 const COLUMNS = {
   id: {
@@ -18,28 +21,27 @@ const COLUMNS = {
     title: 'Название пакета',
     grow: 3,
     sortDirections: 'both',
-    transform: (_, datum, width) => tableItemLink(datum.name, `${devicesRout.path}/${datum.id}`, width),
+    transform: (_, datum, width) => tableItemLink(datum.name, `${deviceUpdateRout.path}/${datum.id}`, width),
   },
-  salePointName: {
+  version: {
     isVisibleByDefault: true,
     title: 'Версия пакета',
     grow: 3,
-    transform: (_, datum, width) => tableItemLink(datum.salePointName, `${salePointsRout.path}/${datum.salePointId}`, width),
   },
-  companyName: {
+  packetTypeName: {
     isVisibleByDefault: true,
     title: 'Тип пакета',
     grow: 2,
     sortDirections: 'both',
   },
-  controller: {
+  status: {
     isVisibleByDefault: true,
     title: 'Статус',
     grow: 3,
     sortDirections: 'both',
   },
-  serial: {
-    isVisibleByDefault: false,
+  created: {
+    isVisibleByDefault: true,
     title: 'Дата создания',
     grow: 3,
     sortDirections: 'both',
@@ -67,17 +69,21 @@ const declareFilters = (session) => ({
   },
 });
 
-class Packages extends Table {
+class Sessions extends Table {
   get isImpossibleToBeAsync() { return true; }
 
-  constructor(session) {
+  constructor(session, manager) {
     const filter = new Filter(declareFilters(session));
-    super(COLUMNS, () => Promise.resolve({ count: 0, results: [] }), filter);
+    super(COLUMNS, getSessions(session, manager), filter);
   }
 
   toString() {
-    return 'devicePackages';
+    return 'deviceSessions';
+  }
+
+  getByDeviceId(deviceId) {
+    return this.rawData.filter(({ devicesId }) => !!devicesId.find((id) => deviceId === id));
   }
 }
 
-export default Packages;
+export default Sessions;

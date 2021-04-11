@@ -10,15 +10,9 @@ import {
 } from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
 
-import { DECLARE_DEVICE_FILTERS } from '../index';
-import Device from './device';
-
-const getDevices = (session) => () => when(() => session.devices.isLoaded).then(() => {
-  return {
-    count: session.devices.rawData.length,
-    results: session.devices.rawData.map((device) => new Device(session, device)),
-  };
-});
+import { DECLARE_DEVICE_FILTERS } from 'models/devices';
+import { getDevices } from 'services/packages';
+import Packages from 'components/packages/subtable';
 
 const COLUMNS = {
   serial: {
@@ -48,7 +42,7 @@ const COLUMNS = {
     grow: 2,
     sortDirections: 'both',
   },
-  packages: {
+  packetsCount: {
     isVisibleByDefault: true,
     title: 'Пакеты',
     grow: 3,
@@ -58,14 +52,19 @@ const COLUMNS = {
 class Devices extends Table {
   get isImpossibleToBeAsync() { return true; }
 
-  constructor(session) {
+  constructor(session, manager) {
     const filter = new Filter(DECLARE_DEVICE_FILTERS(session));
-    super(COLUMNS, getDevices(session), filter);
+    super(COLUMNS, getDevices(session, manager), filter);
   }
 
   toString() {
     return 'devicesUpdate';
   }
+
+  actions = {
+    isVisible: true,
+    detailsWidget: Packages,
+  };
 }
 
 export default Devices;
