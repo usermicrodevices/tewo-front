@@ -235,7 +235,7 @@ class Filters {
       if (typeof data === 'undefined') {
         return true;
       }
-      if ('name' in data) {
+      if (typeof data.name === 'string') {
         if (data.name.toLowerCase().indexOf(this.searchText.toLowerCase()) < 0) {
           return false;
         }

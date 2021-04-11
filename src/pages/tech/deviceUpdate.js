@@ -7,11 +7,11 @@ import Icon from 'elements/icon';
 import SubPage from 'elements/subpage';
 import Typography from 'elements/typography';
 import { FiltersButton } from 'elements/filters';
-import DeviceUpdateModel from 'models/devices/update';
+import DeviceUpdateModel from 'models/packages';
 import Table from 'elements/table';
 import Card from 'elements/card';
 import CreatePackageWizard from 'components/сreatePackageWizard';
-import DeviceUpdates from 'components/deviceUpdates';
+import Packages from 'components/packages';
 
 @withRouter
 @inject('session')
@@ -44,7 +44,7 @@ class DeviceUpdate extends React.Component {
         </Space>
         <Space>
           { !isSessions && <div key="devices"><Provider filter={model.devices.filter}><FiltersButton /></Provider></div> }
-          { isSessions && <div key="packages"><Provider filter={model.packages.filter}><FiltersButton /></Provider></div> }
+          { isSessions && <div key="packages"><Provider filter={model.sessions.filter}><FiltersButton /></Provider></div> }
         </Space>
         <Provider filter={model.devices.filter} packagesHolder={model}><CreatePackageWizard /></Provider>
       </>
@@ -65,7 +65,7 @@ class DeviceUpdate extends React.Component {
             path: 'sessions',
             text: 'Сессии загрузки',
             widget: () => (
-              <Provider table={model.packages} filter={model.packages.filter}>
+              <Provider table={model.sessions} filter={model.sessions.filter}>
                 <Card><Table /></Card>
               </Provider>
             ),
@@ -76,7 +76,7 @@ class DeviceUpdate extends React.Component {
           (
             <Route key="id" path={`${match.path}/:id`}>
               <Card>
-                <DeviceUpdates />
+                <Packages />
               </Card>
             </Route>
           ),
