@@ -13,7 +13,15 @@ class Packet {
 
   @observable version;
 
-  session;
+  @computed get sessions() {
+    return this.manager.sessions.getByPacketId(this.id);
+  }
+
+  @computed get type() {
+    return this.manager.packetTypes.get(this.typeId);
+  }
+
+  webSession;
 
   manager;
 
@@ -25,7 +33,7 @@ class Packet {
     this.typeId = data.typeId;
     this.version = data.version;
 
-    this.session = session;
+    this.webSession = session;
     this.manager = manager;
   }
 }

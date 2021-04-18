@@ -45,7 +45,9 @@ const COLUMNS = {
   packetsCount: {
     isVisibleByDefault: true,
     title: 'Пакеты',
+    sortDirections: 'both',
     grow: 3,
+    defaultSortOrder: 'ascend',
   },
 };
 
@@ -59,6 +61,10 @@ class Devices extends Table {
 
   toString() {
     return 'devicesUpdate';
+  }
+
+  get(deviceId) {
+    return this.rawData.find(({ id }) => deviceId === id);
   }
 
   actions = {

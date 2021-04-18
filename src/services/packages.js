@@ -1,6 +1,6 @@
-import { when } from 'mobx';
+import { transaction, when } from 'mobx';
 import {
-  get, patch, post, del,
+  get, patch, post,
 } from 'utils/request';
 import moment from 'moment';
 import checkData from 'utils/dataCheck';
@@ -38,7 +38,7 @@ const getSessions = (session, manager) => () => get('/local_api/sessions/').then
       id: v.id,
       name: v.name,
       description: v.description,
-      devicesId: v.devices,
+      devices: v.devices,
       packetId: v.packet,
       created: moment(v.created_at),
       updated: v.updated_at ? moment(v.updated_at) : null,
@@ -71,14 +71,16 @@ const getPacketTypes = (acceptor) => get('/local_api/packet_types/').then((json)
     apiCheckConsole.warn('packet types array expected');
     return;
   }
-  for (const type of json) {
-    checkData(type, {
-      id: 'number',
-      name: 'string',
-      description: 'string',
-    });
-    acceptor.set(type.id, type);
-  }
+  transaction(() => {
+    for (const type of json) {
+      checkData(type, {
+        id: 'number',
+        name: 'string',
+        description: 'string',
+      });
+      acceptor.set(type.id, type);
+    }
+  });
 });
 
 const getSessionTypes = (acceptor) => get('/local_api/packet_types/').then((json) => {

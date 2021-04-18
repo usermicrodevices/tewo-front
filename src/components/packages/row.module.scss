@@ -1,6 +1,15 @@
+@import 'src/themes/constants';
+
 .row {
     display: flex;
-    > {
+    >div {
         flex-grow: 1;
+        margin: $generic-margin / 2;
+
+        :global(.ant-card-cover) {
+            padding: $generic-margin / 2;
+            max-height: 80px;
+            min-height: 60px;
+        }
     }
 }

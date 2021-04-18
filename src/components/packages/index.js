@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer, Provider } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import { withSize } from 'react-sizeme';
 import { FixedSizeList as List } from 'react-window';
 
@@ -11,23 +11,26 @@ import classes from './index.module.scss';
 
 const packeges = ({
   size: { width, height },
-  match: { params: { id } },
-  session: { devices },
+  match: { params: { id }, url },
+  manager,
 }) => {
-  const { rowsCount, renderer } = initRowsRenderer(width, 1000);
-  const device = devices.get(parseInt(id, 10));
-  if (typeof device === 'undefined') {
+  if (!manager.sessions.isLoaded) {
     return (
       <div className={classes.loader}>
         <Loader />
       </div>
     );
   }
+  const session = manager.sessions.get(parseInt(id, 10));
+  const { rowsCount, renderer } = initRowsRenderer(width, session.devices.length);
+  if (typeof session === 'undefined') {
+    return <Redirect to={url.split('/').slice(0, -1).join('/')} />;
+  }
   return (
-    <Provider device={device}>
+    <Provider uploadSession={session}>
       <List
         itemCount={rowsCount}
-        itemSize={100}
+        itemSize={170}
         width={width}
         height={height}
       >
@@ -37,4 +40,4 @@ const packeges = ({
   );
 };
 
-export default withSize({ monitorHeight: true })(withRouter(inject('session')(observer(packeges))));
+export default withSize({ monitorHeight: true })(withRouter(inject('manager')(observer(packeges))));

@@ -46,7 +46,7 @@ class DeviceUpdate extends React.Component {
           { !isSessions && <div key="devices"><Provider filter={model.devices.filter}><FiltersButton /></Provider></div> }
           { isSessions && <div key="packages"><Provider filter={model.sessions.filter}><FiltersButton /></Provider></div> }
         </Space>
-        <Provider filter={model.devices.filter} packagesHolder={model}><CreatePackageWizard /></Provider>
+        <Provider filter={model.devices.filter} packetsHolder={model}><CreatePackageWizard /></Provider>
       </>
     );
     return (
@@ -76,7 +76,9 @@ class DeviceUpdate extends React.Component {
           (
             <Route key="id" path={`${match.path}/:id`}>
               <Card>
-                <Packages />
+                <Provider manager={model}>
+                  <Packages />
+                </Provider>
               </Card>
             </Route>
           ),

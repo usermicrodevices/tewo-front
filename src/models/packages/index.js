@@ -3,11 +3,11 @@ import { observable } from 'mobx';
 import { postPackage } from 'services/packages';
 
 import Packets from './packets';
-import Packet from './packet';
 import Devices from './devices';
 import PacketTypes from './packetTypes';
 import SessionTypes from './sessionTypes';
 import Sessions from './sessions';
+import CreateSessionState from './createSessionState';
 
 class DeviceUpdate {
   devices;
@@ -22,7 +22,7 @@ class DeviceUpdate {
 
   sessionTypes = new SessionTypes();
 
-  @observable newPacket = null;
+  @observable newSession = null;
 
   constructor(session) {
     this.devices = new Devices(session, this);
@@ -32,18 +32,18 @@ class DeviceUpdate {
   }
 
   chreatePackage() {
-    this.newPackage = new Packet(this.session);
+    this.newSession = new CreateSessionState(this.session);
   }
 
-  submitNewPacket() {
-    postPackage(this.newPackage).then(() => {
-      this.packages.rawData.push(this.newPackage);
-      this.clearNewPacket();
+  submitnewSession() {
+    postPackage(this.newSession).then(() => {
+      this.packages.rawData.push(this.newSession);
+      this.clearNewSession();
     });
   }
 
-  clearNewPacket() {
-    this.newPacket = null;
+  clearNewSession() {
+    this.newSession = null;
   }
 }
 
