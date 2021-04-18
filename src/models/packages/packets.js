@@ -1,19 +1,25 @@
-import { observable } from 'mobx';
+import { observable, transaction } from 'mobx';
 import { getPackets } from 'services/packages';
 
-class Packets extends Map {
+class Packets {
   session;
 
   manager;
 
+  @observable isLoaded = false;
+
+  data = observable.map();
+
   constructor(session, manager) {
-    super();
     this.session = session;
     this.manager = manager;
     getPackets(session, manager).then((packets) => {
-      for (const packet of packets) {
-        this.set(packet.id, packet);
-      }
+      transaction(() => {
+        this.isLoaded = true;
+        for (const packet of packets) {
+          this.data.set(packet.id, packet);
+        }
+      });
     });
   }
 
@@ -26,9 +32,16 @@ class Packets extends Map {
   }
 
   getByDeviceId(deviceId) {
-    const sessions = this.manager.sessions.getByDeviceId(deviceId);
-    const packetsSet = new Set(sessions.map(({ packetId }) => packetId));
-    return [...this.values()].filter(({ id }) => packetsSet.has(id));
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    return [...this.data.values()].filter(
+      ({ sessions }) => new Set([].concat(...sessions.map(({ devicesId }) => [...devicesId.values()]))).has(deviceId),
+    );
+  }
+
+  get(packetId) {
+    return this.data.get(packetId);
   }
 }
 

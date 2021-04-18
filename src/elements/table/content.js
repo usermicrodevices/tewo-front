@@ -75,8 +75,11 @@ class Content extends React.Component {
       );
     }
     const onRowClick = actions.detailsWidget ? (index) => {
-      table.triggerOpenedRow(index);
-      this.forceUpdate();
+      const rowData = data[index];
+      if (typeof rowData.isHaveDetails === 'undefined' || rowData.isHaveDetails) {
+        table.triggerOpenedRow(index);
+        this.forceUpdate();
+      }
     } : () => {};
     return (
       <List

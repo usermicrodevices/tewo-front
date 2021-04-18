@@ -21,6 +21,8 @@ class Device {
 
   get salePointName() { return this.device.salePointName; }
 
+  get salePointId() { return this.device.salePointId; }
+
   get companyName() { return this.device.companyName; }
 
   @computed get isDetailsLoaded() {
@@ -28,14 +30,20 @@ class Device {
   }
 
   @computed get packetsCount() {
-    return `${this.detailsRows.length}`;
+    const { detailsRows } = this;
+    if (!Array.isArray(detailsRows)) {
+      return undefined;
+    }
+    return detailsRows.length;
+  }
+
+  @computed get isHaveDetails() {
+    const { detailsRows } = this;
+    return Array.isArray(detailsRows) && detailsRows.length > 0;
   }
 
   @computed get detailsRows() {
-    if (typeof this.manager.packets.getByDeviceId !== 'function') {
-      return [];
-    }
-    return this.manager.packets.getByDeviceId(this.id) || [];
+    return this.manager.packets.getByDeviceId(this.id);
   }
 }
 

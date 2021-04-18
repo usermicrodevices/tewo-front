@@ -7,28 +7,28 @@ import SelectableTable from 'elements/table/selectableTable';
 
 import classNames from './css.module.scss';
 
-const Wizard = inject('packagesHolder')(observer(({ packagesHolder }) => {
+const Wizard = inject('packetsHolder')(observer(({ packetsHolder }) => {
   const [stage, setStage] = useState(0);
   const onNext = () => {
     if (stage === 0) {
       setStage(1);
       return;
     }
-    packagesHolder.submitNewPacket();
+    packetsHolder.submitnewSession();
   };
   const onPrew = () => {
     if (stage === 0) {
-      packagesHolder.clearNewPacket();
+      packetsHolder.clearNewSession();
       return;
     }
     setStage(0);
   };
-  const selectedDevicesCount = packagesHolder.newPacket?.devices?.size;
+  const selectedDevicesCount = packetsHolder.newSession?.devices?.size;
   const onSelectDevice = (devices) => {
     // eslint-disable-next-line no-param-reassign
-    packagesHolder.newPacket.devices = devices;
+    packetsHolder.newSession.devices = devices;
   };
-  const ds = packagesHolder.devices.isLoaded ? packagesHolder.devices.rawData
+  const ds = packetsHolder.devices.isLoaded ? packetsHolder.devices.rawData
     .filter(({
       id, name, salePointName, serial, companyName,
     }) => (
@@ -48,7 +48,7 @@ const Wizard = inject('packagesHolder')(observer(({ packagesHolder }) => {
   return (
     <Modal
       title="Загрузка пакета"
-      visible={packagesHolder.newPacket !== null}
+      visible={packetsHolder.newSession !== null}
       onOk={onNext}
       onCancel={onPrew}
       okText={okText[stage]}

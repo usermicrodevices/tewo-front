@@ -74,7 +74,7 @@ const Row = (
           >
             { actions.detailsWidget && (
               <div className={styles.collapseicon} style={{ cursor: 'pointer', transform: `rotate(${openedRows?.has(index) ? 180 : 0}deg)` }}>
-                <DownOutlined />
+                { (typeof rowData.isHaveDetails === 'undefined' || rowData.isHaveDetails) && <DownOutlined />}
               </div>
             )}
             { typeof actions.onEdit === 'function' && (

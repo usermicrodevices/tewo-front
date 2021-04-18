@@ -10,10 +10,15 @@ const Row = (width, itemsCount) => {
     renderer: ({ index, style }) => (
       <div style={style} className={classes.row}>
         {
-          new Array(elementsInRow).fill(null).map((_, id) => (
-            // eslint-disable-next-line
-            <Item width={width / elementsInRow} id={id + index * elementsInRow} key={id} />
-          ))
+          new Array(elementsInRow).fill(null).map((_, id) => {
+            if (itemsCount <= index * elementsInRow + id) {
+              return <div style={{ minWidth: ELEMNT_MINIMUM_WIDTH }} />;
+            }
+            return (
+              // eslint-disable-next-line
+              <Item width={width / elementsInRow} id={id + index * elementsInRow} key={id} />
+            );
+          })
         }
       </div>
     ),

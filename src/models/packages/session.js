@@ -11,13 +11,17 @@ class Session {
 
   @observable description;
 
-  @observable devicesId;
+  @observable devices;
 
   @observable packetId;
 
   @observable created;
 
   @observable updated;
+
+  @computed get devicesId() {
+    return new Set(this.devices.map(({ id }) => id));
+  }
 
   @computed get packet() {
     return this.manager.packets.get(this.packetId);
@@ -42,7 +46,7 @@ class Session {
     this.id = data.id;
     this.name = data.name;
     this.description = data.description;
-    this.devicesId = data.devicesId;
+    this.devices = data.devices;
     this.packetId = data.packetId;
     this.created = data.created;
     this.updated = data.updated;

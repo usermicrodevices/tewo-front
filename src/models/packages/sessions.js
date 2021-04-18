@@ -82,7 +82,15 @@ class Sessions extends Table {
   }
 
   getByDeviceId(deviceId) {
-    return this.rawData.filter(({ devicesId }) => !!devicesId.find((id) => deviceId === id));
+    return this.rawData.filter(({ devicesId }) => devicesId.has(deviceId));
+  }
+
+  getByPacketId(packetIdForSearch) {
+    return this.rawData.filter(({ packetId }) => packetId === packetIdForSearch);
+  }
+
+  get(sessionId) {
+    return this.rawData.find(({ id }) => sessionId === id);
   }
 }
 
