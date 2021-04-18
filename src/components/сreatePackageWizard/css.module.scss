@@ -1,6 +1,14 @@
+.wrap :global(.ant-modal-body) {
+  display: flex;
+  justify-content: space-between;
 
-.table {
-  max-height: calc(80vh - 110px);
-  min-height: 500px;
-  overflow-y: auto;
+  >div {
+    width: calc(50% - 12px);
+  }
+
+  .table {
+    max-height: calc(80vh - 110px);
+    min-height: 500px;
+    overflow-y: auto;
+  }
 }

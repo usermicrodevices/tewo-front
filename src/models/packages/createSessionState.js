@@ -1,5 +1,7 @@
 import { observable } from 'mobx';
 
 export default class {
-  @observable devices = [];
+  @observable devices = new Set();
+
+  @observable packet = null;
 }

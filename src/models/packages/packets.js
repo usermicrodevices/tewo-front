@@ -1,4 +1,4 @@
-import { observable, transaction } from 'mobx';
+import { observable, transaction, computed } from 'mobx';
 import { getPackets } from 'services/packages';
 
 class Packets {
@@ -42,6 +42,10 @@ class Packets {
 
   get(packetId) {
     return this.data.get(packetId);
+  }
+
+  @computed get selector() {
+    return [...this.data.values()].map(({ id, name }) => [id, name]);
   }
 }
 

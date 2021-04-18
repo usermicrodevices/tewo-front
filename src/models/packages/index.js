@@ -35,7 +35,7 @@ class DeviceUpdate {
     this.newSession = new CreateSessionState(this.session);
   }
 
-  submitnewSession() {
+  submitNewSession() {
     postPackage(this.newSession).then(() => {
       this.packages.rawData.push(this.newSession);
       this.clearNewSession();
