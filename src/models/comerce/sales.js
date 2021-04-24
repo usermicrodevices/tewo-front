@@ -99,7 +99,7 @@ class Sales extends Table {
     const filters = new Filters({
       device_date: {
         type: 'daterange',
-        title: 'Момент налива',
+        title: 'Время налива',
         apply: (general, data) => general(data.deviceDate),
       },
       device__sale_point__company__id: {

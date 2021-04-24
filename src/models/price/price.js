@@ -49,7 +49,7 @@ class Price extends Datum {
   }
 
   @computed get nds() {
-    return this.drink?.nds;
+    return this.drink?.ndsName;
   }
 
   @computed get group() {

@@ -18,12 +18,15 @@ class LastEvents {
 
   @computed get rows() {
     const pointsSet = this.generic.salePointsId === null ? { has: () => true } : new Set(this.generic.salePointsId);
-    return this.session.events.rawData.filter(({ salePointId }) => pointsSet.has(salePointId)).slice(0, 6).map((e) => ({
-      eventName: e.eventName,
-      key: e.id,
-      salePoint: e.salePoint,
-      timeInfo: { openDate: e.openDate, closeDate: e.closeDate },
-    }));
+
+    return this.session.events.rawData
+      .filter((event) => event) // Временный фикс. Требуется найти причину почему в массиве rawData есть undefined TW-442
+      .filter(({ salePointId }) => pointsSet.has(salePointId)).slice(0, 6).map((e) => ({
+        eventName: e.eventName,
+        key: e.id,
+        salePoint: e.salePoint,
+        timeInfo: { openDate: e.openDate, closeDate: e.closeDate },
+      }));
   }
 
   update = () => {

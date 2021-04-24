@@ -49,7 +49,7 @@ function contacts() {
         apiCheckConsole.error(`${email} имеет не корректный формат email`);
         return defaultContacts;
       }
-      return { phone: `+7${phone.slice(1)}`, email };
+      return { phone, email };
     }).then(resolve).catch(() => { apiCheckConsole.error(`can't get ${path}`); resolve(defaultContacts); });
   });
 }

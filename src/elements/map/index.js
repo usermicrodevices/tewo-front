@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useState, useCallback, useRef,
+  useEffect, useState, useCallback, useRef, useLayoutEffect,
 } from 'react';
 import { Provider, observer } from 'mobx-react';
 import { Button, Dropdown } from 'antd';
@@ -9,8 +9,6 @@ import {
 
 import Filters from 'elements/filters';
 import Loader from 'elements/loader';
-
-import { getMapBoundaryOptions } from './utils';
 
 import YMap from './yMap';
 import ActionsContainer from './actions';
@@ -24,11 +22,9 @@ const useMapState = (points) => {
   const [mapState, setMapState] = useState({ zoom: undefined, center: undefined, isFullscreen: false });
   const mapRef = useRef(null);
 
-  useEffect(() => {
-    if (points && points.length && !mapState.zoom && !mapState.center) {
-      const { zoom, center } = getMapBoundaryOptions(points);
-
-      setMapState((state) => ({ ...state, zoom, center }));
+  useLayoutEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.setCenter();
     }
   }, [points]);
 
@@ -83,11 +79,11 @@ const YMapContainer = observer(({
 
   const onShowInfo = useCallback(({ id }) => {
     storage.showPointInfo(id);
-  }, []);
+  }, [storage]);
 
   const onHideInfo = useCallback(() => {
     storage.hidePointInfo();
-  }, []);
+  }, [storage]);
 
   if (!storage.isLoaded) {
     return <Loader />;
