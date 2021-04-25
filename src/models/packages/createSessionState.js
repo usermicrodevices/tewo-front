@@ -5,7 +5,7 @@ export default class {
 
   @observable packet = null;
 
-  @observable name = '';
+  @observable name = 'не введённое имя';
 
-  @observable description = '';
+  @observable description = 'не введённое описание';
 }
