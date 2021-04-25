@@ -2,7 +2,7 @@ import {
   observable, reaction, action, computed,
 } from 'mobx';
 
-const AVERAGE_DEVICE_SPEED = 30;
+const AVERAGE_DEVICE_SPEED = 8;
 
 class Speedometr {
   generic;

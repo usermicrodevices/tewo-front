@@ -179,7 +179,7 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     colSpan: 2,
     defaultDateRange: 'prw7Days',
     excludedDateRandes: new Set([]),
-    isHaveDateFilter: false,
+    isHaveDateFilter: true,
     isHavePointsFilter: false,
     tickDuration: 3600,
     widget: FavoriteObjectsWidget,

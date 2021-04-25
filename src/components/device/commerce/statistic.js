@@ -32,7 +32,7 @@ const Statistic = ({ element: { details } }) => (
       />
       <Badge
         value={typeof details.beveragesStats.salesCur === 'number' ? `${Format({ children: details.beveragesStats.salesCur })}₽` : details.beveragesStats.salesCur}
-        label="сумма денег"
+        label="сумма продаж"
       />
     </div>
   </Card>

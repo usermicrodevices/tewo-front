@@ -4,7 +4,6 @@ import Chart from 'react-apexcharts';
 function getChartOptions({ labels, color }) {
   return {
     chart: {
-      type: 'line',
       zoom: {
         enabled: false,
       },
@@ -54,7 +53,7 @@ function SimpleCurve({
 
   return (
     <Chart
-      type="line"
+      type="area"
       options={options}
       series={series}
       height="100%"

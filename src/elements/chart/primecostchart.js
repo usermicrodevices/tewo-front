@@ -31,9 +31,8 @@ const PrimecostChart = ({
       data[i] = Math.round(data[i]);
     }
   }
-  const max = Math.max(...sums);
 
-  const formatter = (v) => FORMAT.format(v.toFixed(0));
+  const formatter = (v) => `${v && FORMAT.format(v.toFixed(0))} ₽`;
 
   const data = {
     colors,
@@ -49,20 +48,13 @@ const PrimecostChart = ({
       },
       ...locale,
     },
-
     plotOptions: {
       bar: {
         horizontal: true,
       },
     },
     dataLabels: {
-      enabled: true,
-      formatter: (v) => {
-        if (v < max / 12) {
-          return '';
-        }
-        return formatter(v);
-      },
+      enabled: false,
     },
     stroke: {
       width: 2,
@@ -82,6 +74,11 @@ const PrimecostChart = ({
     legend: {
       horizontalAlign: 'left',
       offsetX: 40,
+    },
+    tooltip: {
+      y: {
+        formatter,
+      },
     },
   };
   return (

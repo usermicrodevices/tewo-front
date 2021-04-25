@@ -82,7 +82,7 @@ class Map {
     const { points } = this.session;
     const locations = points.rawData
       .filter(this.filters.predicate)
-      .filter(({ mapPoint }) => mapPoint !== null);
+      .filter(({ mapPoint, location }) => mapPoint !== null && location);
 
     return locations;
   }
