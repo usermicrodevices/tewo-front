@@ -25,6 +25,18 @@ class Device {
 
   get companyName() { return this.device.companyName; }
 
+  get deviceModelType() { return this.device.deviceModelType; }
+
+  get deviceModelName() { return this.device.deviceModelName; }
+
+  get setupDate() { return this.device.setupDate; }
+
+  get isNeedTechService() { return this.device.isNeedTechService; }
+
+  get isOn() { return this.device.isOn; }
+
+  @computed get companyId() { return this.device.companyId; }
+
   @computed get isDetailsLoaded() {
     return typeof this.detailsRows !== 'undefined';
   }

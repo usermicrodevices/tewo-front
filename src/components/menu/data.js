@@ -94,7 +94,10 @@ const items = [
       },
       {
         text: 'Обновление оборудования',
-        act: deviceUpdate,
+        act: {
+          ...deviceUpdate,
+          path: deviceUpdate.path[0],
+        },
       },
     ],
   ),

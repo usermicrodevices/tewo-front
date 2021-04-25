@@ -21,7 +21,7 @@ const COLUMNS = {
     title: 'Название пакета',
     grow: 3,
     sortDirections: 'both',
-    transform: (_, datum, width) => tableItemLink(datum.name, `${deviceUpdateRout.path}/${datum.id}`, width),
+    transform: (_, datum, width) => tableItemLink(datum.name, `${deviceUpdateRout.path[1]}/${datum.id}`, width),
   },
   version: {
     isVisibleByDefault: true,
