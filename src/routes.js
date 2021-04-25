@@ -65,7 +65,7 @@ const cleans = new Rout('/cleans', Cleans);
 const cancellations = new Rout('/cancellations', Cancellations);
 const ingredientsConsumption = new Rout('/consumption', IngredientsConsumption);
 const primecost = new Rout('/primecost', Primecost);
-const deviceUpdate = new Rout('/device_update', DeviceUpdate);
+const deviceUpdate = new Rout(['/device_update', '/session'], DeviceUpdate);
 
 const authorizedRoutes = [
   deviceUpdate,

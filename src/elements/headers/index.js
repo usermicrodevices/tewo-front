@@ -40,8 +40,7 @@ const GoBack = withRouter(
     return (
       <Typography.Link type="secondary" onClick={history.goBack}>
         <HTMLEntity code="&#x02039;" />
-        {' '}
-        Назад
+        {' Назад'}
       </Typography.Link>
     );
   },
@@ -67,7 +66,7 @@ const SubpageHeader = withRouter(({
       <div className={styles.titleRow}>
         { children }
       </div>
-      { menu.length > 0 && (
+      { Array.isArray(menu) && menu.length > 0 && (
         <div className={styles.submenu}>
           <Menu selectedKeys={menuItemKeyFromAction(menu, action === `${parseInt(action, 10)}` ? undefined : action)} mode="horizontal">
             { Array.isArray(menu)
