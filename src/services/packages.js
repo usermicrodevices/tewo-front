@@ -90,7 +90,7 @@ const getDevices = (session, manager) => () => when(() => session.devices.isLoad
   results: session.devices.rawData.map((device) => new Device(device, session, manager)),
 }));
 
-const postSession = (data, session, manager) => post('/local_api/sessions', {
+const postSession = (data, session, manager) => post('/local_api/sessions/', {
   name: data.name,
   description: data.description,
   packet: data.packet,
