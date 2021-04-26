@@ -8,11 +8,11 @@ import Loader from 'elements/loader';
 const RENAMER = {
   card: 'credit-card-outline',
   qr: 'grid-outline',
-  free: 'shake-outline',
+  free: 'minus-outline',
 };
 
 const OPERATION_ID_TO_ICON_NAME = {
-  1: 'loader-outline',
+  1: 'minus-outline',
   3: 'gift-outline',
   4: 'person-outline',
   5: 'grid-outline',
