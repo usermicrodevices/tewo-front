@@ -28,9 +28,9 @@ class AuthorizedPage extends React.Component {
             <Header />
           </div>
           <Menu />
-          <content>
+          <div className={style.content}>
             {children}
-          </content>
+          </div>
         </Provider>
       </div>
     );

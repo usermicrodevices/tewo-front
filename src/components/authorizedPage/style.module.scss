@@ -14,7 +14,7 @@
         z-index: 2;
     }
 
-    content {
+    .content {
         transition: all $transition-duration;
         overflow-x: auto;
         overflow-y: auto;

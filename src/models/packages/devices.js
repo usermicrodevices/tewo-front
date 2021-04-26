@@ -47,7 +47,6 @@ const COLUMNS = {
     title: 'Пакеты',
     sortDirections: 'both',
     grow: 3,
-    defaultSortOrder: 'ascend',
   },
 };
 

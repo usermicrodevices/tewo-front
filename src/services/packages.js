@@ -18,32 +18,34 @@ const RENAMER = {
   version: 'version',
 };
 
+const transformSession = (session, manager) => (v) => {
+  checkData(v, {
+    created_at: 'date',
+    description: 'string',
+    devices: 'array',
+    id: 'number',
+    name: 'string',
+    packet: 'number',
+  }, {
+    updated_at: 'date',
+  });
+  return new DeviceSession({
+    id: v.id,
+    name: v.name,
+    description: v.description,
+    devices: v.devices,
+    packetId: v.packet,
+    created: moment(v.created_at),
+    updated: v.updated_at ? moment(v.updated_at) : null,
+  }, session, manager);
+};
+
 const getSessions = (session, manager) => () => get('/local_api/sessions/').then((json) => {
   if (!Array.isArray(json)) {
     apiCheckConsole.warn('packets array expected');
     return [];
   }
-  const results = json.map((v) => {
-    checkData(v, {
-      created_at: 'date',
-      description: 'string',
-      devices: 'array',
-      id: 'number',
-      name: 'string',
-      packet: 'number',
-    }, {
-      updated_at: 'date',
-    });
-    return new DeviceSession({
-      id: v.id,
-      name: v.name,
-      description: v.description,
-      devices: v.devices,
-      packetId: v.packet,
-      created: moment(v.created_at),
-      updated: v.updated_at ? moment(v.updated_at) : null,
-    }, session, manager);
-  });
+  const results = json.map(transformSession(session, manager));
   return { results, count: results.length };
 });
 
@@ -83,30 +85,44 @@ const getPacketTypes = (acceptor) => get('/local_api/packet_types/').then((json)
   });
 });
 
-const getSessionTypes = (acceptor) => get('/local_api/packet_types/').then((json) => {
+const getDevices = (session, manager) => () => when(() => session.devices.isLoaded).then(() => ({
+  count: session.devices.rawData.length,
+  results: session.devices.rawData.map((device) => new Device(device, session, manager)),
+}));
+
+const postSession = (data, session, manager) => post('/local_api/sessions/', {
+  name: data.name,
+  description: data.description,
+  packet: data.packet,
+  devices: [...data.devices.values()].map((device) => ({ device })),
+}).then(transformSession(session, manager));
+
+const getSessionStatuses = (acceptor) => get('/local_api/session_statuses/').then((json) => {
   if (!Array.isArray(json)) {
-    apiCheckConsole.warn('packet types array expected');
+    apiCheckConsole.warn('/local_api/session_statuses array expected');
     return;
   }
-  for (const type of json) {
-    checkData(type, {
-      id: 'number',
-      name: 'string',
-      description: 'string',
-    });
-    acceptor.set(type.id, type);
-  }
+  transaction(() => {
+    for (const status of json) {
+      if (checkData(status, {
+        description: 'string',
+        id: 'number',
+        name: 'string',
+        can_errored: 'boolean',
+        can_finalized: 'boolean',
+      })) {
+        acceptor.set(status.id, {
+          description: status.description,
+          id: status.id,
+          name: status.name,
+          canErrored: status.can_errored,
+          canFinalized: status.can_finalized,
+        });
+      }
+    }
+  });
 });
-
-const getDevices = (session, manager) => () => when(() => session.devices.isLoaded).then(() => {
-  return {
-    count: session.devices.rawData.length,
-    results: session.devices.rawData.map((device) => new Device(device, session, manager)),
-  };
-});
-
-const postPackage = () => Promise.resolve();
 
 export {
-  postPackage, getSessions, getPackets, getPacketTypes, getSessionTypes, getDevices,
+  getSessions, getPackets, getPacketTypes, getDevices, getSessionStatuses, postSession,
 };
