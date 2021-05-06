@@ -314,6 +314,28 @@ const getLastCleanings = () => get('data/events/last_cleanings/').then((json) =>
   return result;
 });
 
+const getUncleaned = () => get('refs/devices/uncleaned/').then((json) => (
+  Array.isArray(json)
+    ? json.filter((note) => checkData(note, { id: 'number', beverages: 'number' }))
+    : []
+));
+
+const getDisabled = () => get('refs/devices/unused/').then((json) => (
+  Array.isArray(json)
+    ? json.filter((note) => checkData(note, { id: 'number', unused: 'number' }))
+      .map(({ id, unused }) => ({ id, unused: unused * 1000 }))
+    : []
+));
+
+const getCleaningsCount = (dateRange) => {
+  const dangeart = daterangeToArgs(dateRange, 'open_date');
+  const url = `/data/events/points_cleanings/?${dangeart}`;
+
+  return get(url).then((json) => json);
+};
+
 export {
-  getDevices, getDeviceModels, getStats, getSalesChart, applyDevice, getDeviceTypes, getVoltage, getWaterQuality, getQR, getLastCleanings,
+  getDevices, getDeviceModels, getStats, getSalesChart,
+  applyDevice, getDeviceTypes, getVoltage, getWaterQuality, getQR, getLastCleanings, getUncleaned, getDisabled,
+  getCleaningsCount,
 };

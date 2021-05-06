@@ -21,7 +21,7 @@ class DiagramIngredientsUsage {
         label: ingredient?.name,
         count,
         id: ingredientId,
-        measure: ingredient?.dimension,
+        measure: ingredient?.measureUnit,
       };
     });
     return result;

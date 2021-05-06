@@ -25,7 +25,7 @@ const unite = (a, b) => ({
   })(),
 });
 
-class DeviceListOff {
+class DeviceListDowntime {
   session;
 
   generic;
@@ -110,4 +110,4 @@ class DeviceListOff {
   };
 }
 
-export default DeviceListOff;
+export default DeviceListDowntime;

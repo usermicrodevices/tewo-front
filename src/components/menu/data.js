@@ -54,7 +54,7 @@ const items = [
         act: primecost,
       },
       {
-        text: 'Расходы ингредиентов',
+        text: 'Расход ингредиентов',
         act: ingredientsConsumption,
       },
       {
@@ -66,7 +66,7 @@ const items = [
         act: cancellations,
       },
       {
-        text: 'Расходы чистящих средств',
+        text: 'Расход чистящих средств',
         act: cleans,
       },
     ],

@@ -8,8 +8,9 @@ import OverviewWidget from 'components/dashboard/statistic';
 import OverviewModel from 'models/dashboard/widgets/statistic';
 import ChartBeveragesSalesWidget from 'components/dashboard/chartBeveragesSales';
 import ChartBeveragesSalesModel from 'models/dashboard/widgets/chartBeveragesSales';
-import HeatmapDeviceStatusesWidget from 'components/dashboard/heatmapDeviceStatuses';
+import HeatmapDevices from 'components/dashboard/heatmapDevices';
 import HeatmapDeviceStatusesModel from 'models/dashboard/widgets/heatmapDeviceStatuses';
+import HeatmapClearancesModel from 'models/dashboard/widgets/heatmapClearances';
 import DiagramTechStateWidget from 'components/dashboard/diagramTechState';
 import DiagramTechStateModel from 'models/dashboard/widgets/diagramTechState';
 import DiagramPopularityWidget from 'components/dashboard/diagramPopularity';
@@ -38,6 +39,10 @@ import ChartCostWidget from 'components/dashboard/chartCost';
 import ChartCostModel from 'models/dashboard/widgets/chartCost';
 import DiagramIngredientsUsageWidget from 'components/dashboard/diagramIngredientsUsage';
 import DiagramIngredientsUsageModel from 'models/dashboard/widgets/diagramIngredientsUsage';
+import DeviceListAwaitingCleaningWidget from 'components/dashboard/deviceListAwaitingCleaning';
+import DeviceListAwaitingCleaningModel from 'models/dashboard/widgets/deviceListAwaitingCleaning';
+import DeviceListDisabledWidget from 'components/dashboard/deviceListDisabled';
+import DeviceListDisabledModel from 'models/dashboard/widgets/deviceListDisabled';
 
 /**
  *
@@ -89,8 +94,19 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     isHaveDateFilter: false,
     isHavePointsFilter: true,
     tickDuration: 350,
-    widget: HeatmapDeviceStatusesWidget,
+    widget: HeatmapDevices,
     model: HeatmapDeviceStatusesModel,
+  },
+  heatmapClearances: {
+    rowSpan: 76,
+    colSpan: 2,
+    defaultDateRange: 'prw7Days',
+    excludedDateRandes: new Set([]),
+    isHaveDateFilter: true,
+    isHavePointsFilter: true,
+    tickDuration: 350,
+    widget: HeatmapDevices,
+    model: HeatmapClearancesModel,
   },
   diagramTechState: {
     rowSpan: 71,
@@ -132,7 +148,7 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     excludedDateRandes: new Set([]),
     isHaveDateFilter: true,
     isHavePointsFilter: true,
-    tickDuration: 350,
+    tickDuration: 60,
     widget: ChartSalesWidget,
     model: ChartSalesModel,
   },
@@ -143,7 +159,7 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     excludedDateRandes: new Set([]),
     isHaveDateFilter: true,
     isHavePointsFilter: true,
-    tickDuration: 350,
+    tickDuration: 60,
     widget: ChartBeveragesWidget,
     model: ChartBeveragesModel,
   },
@@ -232,13 +248,33 @@ const WIDGETS_ADDITIONAL_INFORMATION = {
     model: ChartCostModel,
   },
   diagramIngredientsUsage: {
-    rowSpan: 116,
-    colSpan: 1,
+    rowSpan: 76,
+    colSpan: 2,
     isHaveDateFilter: true,
     isHavePointsFilter: true,
     excludedDateRandes: new Set([]),
     widget: DiagramIngredientsUsageWidget,
     model: DiagramIngredientsUsageModel,
+  },
+  deviceListAwaitingCleaning: {
+    rowSpan: 93,
+    colSpan: 2,
+    excludedDateRandes: new Set([]),
+    isHaveDateFilter: false,
+    isHavePointsFilter: true,
+    tickDuration: 3600,
+    widget: DeviceListAwaitingCleaningWidget,
+    model: DeviceListAwaitingCleaningModel,
+  },
+  deviceListDisabled: {
+    rowSpan: 93,
+    colSpan: 2,
+    excludedDateRandes: new Set([]),
+    isHaveDateFilter: false,
+    isHavePointsFilter: true,
+    tickDuration: 3600,
+    widget: DeviceListDisabledWidget,
+    model: DeviceListDisabledModel,
   },
 };
 

@@ -62,6 +62,7 @@ const patchCompany = (id, data) => patch(`${LOCATION}${id}`, {
   name: data.name,
   phone: data.phone,
   emails: data.emails,
+  currency: data.currencyId,
 }).then((result) => transform(result, {}));
 
 export { getCompanies, patchCompany };

@@ -2,7 +2,7 @@ import {
   observable, reaction, action, computed,
 } from 'mobx';
 
-const AVERAGE_DEVICE_SPEED = 30;
+const AVERAGE_DEVICE_SPEED = 8;
 
 class Speedometr {
   generic;
@@ -33,6 +33,10 @@ class Speedometr {
 
     this.session.points.getBeveragesSpeed(this.generic.salePointsId || [])
       .then((value) => { this.value = value; });
+  }
+
+  update() {
+    this.updateValue();
   }
 }
 

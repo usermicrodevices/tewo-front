@@ -1,14 +1,15 @@
 /* eslint class-methods-use-this: off */
+import React from 'react';
 import moment from 'moment';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
 import Exporter from 'models/exporter';
-import { getBeverages, exportBeverages } from 'services/beverage';
-import { typeNameToIcon, canceledIcon } from 'elements/beverageIcons';
 import { beverage as beverageRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { daterangeToArgs } from 'utils/date';
 import plural from 'utils/plural';
+import { getBeverages, exportBeverages } from 'services/beverage';
+import { OperationIcon, canceledIcon } from 'elements/beverageIcons';
 import { tableItemLink } from 'elements/table/trickyCells';
 
 const declareColumns = (session) => ({
@@ -26,7 +27,7 @@ const declareColumns = (session) => ({
   },
   deviceDate: {
     isVisibleByDefault: true,
-    title: 'Момент налива',
+    title: 'Время налива',
     isDefaultSort: true,
     width: 189,
     sortDirections: 'both',
@@ -57,12 +58,12 @@ const declareColumns = (session) => ({
     grow: 1,
     sortDirections: 'both',
   },
-  operationName: {
+  operationId: {
     isVisibleByDefault: true,
-    title: 'Операция',
+    title: 'Тип оплаты',
     grow: 1,
     sortDirections: 'both',
-    transform: (name) => typeNameToIcon(name),
+    transform: (operationId, datum) => <OperationIcon id={operationId} description={datum.operationName} />,
   },
   saleSum: {
     isVisibleByDefault: true,
@@ -74,7 +75,7 @@ const declareColumns = (session) => ({
   },
   canceled: {
     isVisibleByDefault: true,
-    title: 'Отменена',
+    title: 'Отменен',
     width: 80,
     transform: (v) => (v ? canceledIcon : ''),
   },
@@ -83,7 +84,7 @@ const declareColumns = (session) => ({
 const declareFilters = (session) => ({
   device_date: {
     type: 'daterange',
-    title: 'Момент налива',
+    title: 'Время налива',
     apply: (general, data) => general(data.deviceDate),
   },
   device__sale_point__company__id: {
@@ -107,7 +108,7 @@ const declareFilters = (session) => ({
   drink__id: {
     type: 'selector',
     title: 'Напиток',
-    apply: (general, data) => general(data.drink),
+    apply: (general, data) => general(data.drinkId),
     selector: () => session.drinks.selector,
   },
   operation__id: {

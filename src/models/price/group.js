@@ -35,7 +35,7 @@ class PriceGroup extends Datum {
       id: this.id,
       name: this.name,
       companyId: this.companyId,
-      conceptionId: this.conception,
+      conceptionId: this.conceptionId,
       systemKey: this.systemKey,
       devicesIdSet: new Set([...this.devicesIdSet.values()]),
       pricesIdSet: new Set([...this.pricesIdSet.values()]),

@@ -1,6 +1,7 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { withSize } from 'react-sizeme';
+import moment from 'moment';
 
 import colors from 'themes/chart';
 import NoData from 'elements/noData';
@@ -48,27 +49,48 @@ const ScalebleChart = ({
   const series = y.map(({ name, data }) => ({ name, data, type: 'line' }));
   const isHaveOverviewChart = x.length > LENGTH_LIMIT;
   const axes = new Map();
-  y.forEach(({ axis }, id) => {
+  y.forEach(({ axis, name }, id) => {
     if (!axes.has(axis)) {
-      axes.set(axis, []);
+      axes.set(axis, { name, series: [] });
     }
-    axes.get(axis).push(id);
+    axes.get(axis).series.push(id);
   });
-  if (axes.size !== 1 && axes.size !== 2) {
+  if (!new Set([1, 2]).has(axes.size)) {
     console.error('wrong axes amount');
   }
   const yaxisSides = new Map([...axes.keys()].map((key, id) => [key, provideAxis(id === 0 ? y1 : y2, `y${id}`, id === 1)]));
   const yaxis = y.map(({ axis }) => axis);
-  for (const [side, itms] of axes.entries()) {
+  for (const [side, { name, series: itms }] of axes.entries()) {
     const richAxis = yaxisSides.get(side);
     yaxis[itms[0]] = richAxis;
     for (const idx of itms.slice(1)) {
       yaxis[idx] = {
         show: false,
         zoomEnabled: false,
-        seriesName: richAxis.seriesName,
+        seriesName: name,
       };
     }
+  }
+  let tooltip;
+  if (moment.isMoment(x[0])) {
+    tooltip = {
+      custom(args) {
+        const { dataPointIndex, series: reduced } = args;
+        return `
+          <div class="apexcharts-tooltip-title" style="font-family: Inter; font-size: 12px;">${x[dataPointIndex].format('D MMMM')}</div>
+          ${reduced.map((values, seriesIndex) => `
+            <div class="apexcharts-tooltip-series-group apexcharts-active" style="display: flex;">
+              <span class="apexcharts-tooltip-marker" style="background-color: ${colors[seriesIndex]};"></span>
+              <div class="apexcharts-tooltip-text" style="font-family: Inter; font-size: 12px;">
+                <div class="apexcharts-tooltip-y-group">
+                  <span class="apexcharts-tooltip-text-label">${(seriesIndex && x.prw ? x.prw : x)[dataPointIndex].format('D MMMM YYYY')}: </span>
+                  <span class="apexcharts-tooltip-text-value">${values[dataPointIndex]} ${y1.tooltipUnit || ''}</span>
+                </div>
+              </div>
+            </div>
+          `).join('')}`;
+      },
+    };
   }
   const data = {
     chart: {
@@ -107,6 +129,7 @@ const ScalebleChart = ({
       x: {
         show: true,
       },
+      ...tooltip,
     },
     legend: {
       horizontalAlign: 'left',

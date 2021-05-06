@@ -88,6 +88,10 @@ class Sales extends Table {
     if (!this.isLoaded) {
       return undefined;
     }
+    // В какой-то момент внутри графика понадобилось время предыдущего периода для построения тултипа но структура на столько не подходила,
+    // что такой хак создал меньше путаницы чем обычное аккуратное решеине - пришлось бы передавать prwXSeria которая не понятно зачем вообще...
+    // в общем тепло но стыдно...
+    this.chart.cur.xSeria.prw = this.chart.prw.xSeria;
     return this.chart.cur.xSeria;
   }
 
@@ -95,7 +99,7 @@ class Sales extends Table {
     const filters = new Filters({
       device_date: {
         type: 'daterange',
-        title: 'Момент налива',
+        title: 'Время налива',
         apply: (general, data) => general(data.deviceDate),
       },
       device__sale_point__company__id: {
