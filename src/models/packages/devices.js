@@ -54,7 +54,16 @@ class Devices extends Table {
   get isImpossibleToBeAsync() { return true; }
 
   constructor(session, manager) {
-    const filter = new Filter(DECLARE_DEVICE_FILTERS(session));
+    const filter = new Filter({
+      ...DECLARE_DEVICE_FILTERS(session),
+      isHaveDetails: {
+        type: 'checkbox',
+        title: 'Только устройства, на котрые загружались пакеты',
+        apply: (_, data) => data.isHaveDetails !== false,
+        passiveValue: false,
+        initialValue: true,
+      },
+    });
     super(COLUMNS, getDevices(session, manager), filter);
   }
 

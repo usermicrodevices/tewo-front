@@ -21,6 +21,10 @@ class Packet {
     return this.manager.packetTypes.get(this.typeId);
   }
 
+  @computed get typeName() {
+    return this.type?.name;
+  }
+
   webSession;
 
   manager;

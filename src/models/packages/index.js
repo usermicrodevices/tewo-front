@@ -31,7 +31,7 @@ class DeviceUpdate {
     this.session = session;
   }
 
-  chreatePackage() {
+  createPackage() {
     this.newSession = new CreateSessionState(this.session);
   }
 

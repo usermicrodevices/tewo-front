@@ -10,17 +10,18 @@ const SelectableTable = ({
   columns, onSelect, dataSource, className,
 }) => {
   const [selected, setSelected] = useState(new Set());
-  const onSelectRow = (id) => ({ target: { checked: value } }) => {
+  const onSelectRow = (id, disabled) => (disabled ? () => {} : ({ target: { checked: value } }) => {
     selected[value ? 'add' : 'delete'](id);
     setSelected(new Set([...selected.values()]));
     onSelect(selected);
-  };
+  });
   const ds = dataSource?.map((datum) => ({
     ...datum,
     className: classNames(datum.className, { [classes.selected]: selected.has(datum.key) }),
     checkbox: {
       isPicked: selected.has(datum.key),
-      setPicked: onSelectRow(datum.key),
+      setPicked: onSelectRow(datum.key, datum.disabled),
+      disabled: datum.disabled || false,
     },
   }));
 
@@ -32,7 +33,7 @@ const SelectableTable = ({
           title: '',
           width: 50,
           align: 'center',
-          transform: ({ isPicked, setPicked }) => <Checkbox defaultChecked={isPicked} onChange={setPicked} />,
+          transform: ({ isPicked, setPicked, disabled }) => <Checkbox disabled={disabled} defaultChecked={isPicked} onChange={setPicked} />,
         },
         ...columns,
       }}

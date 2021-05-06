@@ -24,8 +24,8 @@ const transformSession = (session, manager) => (v) => {
     description: 'string',
     devices: 'array',
     id: 'number',
-    name: 'string',
     packet: 'number',
+    status: 'number',
   }, {
     updated_at: 'date',
   });
@@ -37,6 +37,7 @@ const transformSession = (session, manager) => (v) => {
     packetId: v.packet,
     created: moment(v.created_at),
     updated: v.updated_at ? moment(v.updated_at) : null,
+    statusId: v.status,
   }, session, manager);
 };
 

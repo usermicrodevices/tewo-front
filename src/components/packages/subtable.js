@@ -6,16 +6,33 @@ import Loader from 'elements/loader';
 
 import classNames from './subtable.module.scss';
 
+const render = (value) => <Format>{value}</Format>;
+
 const columns = (width) => [
   {
     title: 'Пакет',
     dataIndex: 'name',
-    render: (name) => <Format>{name}</Format>,
+    render,
   },
   {
     title: 'Описание',
     dataIndex: 'description',
-    render: (name) => <Format>{name}</Format>,
+    render,
+  },
+  {
+    title: 'Тип',
+    dataIndex: 'typeName',
+    render,
+  },
+  {
+    title: 'Версия',
+    dataIndex: 'version',
+    render,
+  },
+  {
+    title: 'Статус на оборудовании',
+    dataIndex: 'deviceStatus',
+    render,
   },
 ];
 

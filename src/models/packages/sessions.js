@@ -15,13 +15,13 @@ const COLUMNS = {
     width: 70,
     sortDirections: 'both',
   },
-  name: {
+  packetName: {
     isDefaultSort: true,
     isVisibleByDefault: true,
     title: 'Название пакета',
     grow: 3,
     sortDirections: 'both',
-    transform: (_, datum, width) => tableItemLink(datum.name, `${deviceUpdateRout.path[1]}/${datum.id}`, width),
+    transform: (_, datum, width) => tableItemLink(datum.packetName, `${deviceUpdateRout.path[1]}/${datum.id}`, width),
   },
   version: {
     isVisibleByDefault: true,
@@ -34,7 +34,7 @@ const COLUMNS = {
     grow: 2,
     sortDirections: 'both',
   },
-  status: {
+  statusName: {
     isVisibleByDefault: true,
     title: 'Статус',
     grow: 3,

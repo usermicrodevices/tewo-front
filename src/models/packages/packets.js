@@ -1,6 +1,15 @@
 import { observable, transaction, computed } from 'mobx';
 import { getPackets } from 'services/packages';
+import Filter from 'models/filters';
 
+const declareFilters = (manager) => ({
+  typeId: {
+    type: 'selector',
+    title: 'Тип',
+    apply: (general, data) => general(data.typeId),
+    selector: () => [...manager.packetTypes.values()].map(({ id, name }) => [id, name]),
+  },
+});
 class Packets {
   session;
 
@@ -10,9 +19,12 @@ class Packets {
 
   data = observable.map();
 
+  filter;
+
   constructor(session, manager) {
     this.session = session;
     this.manager = manager;
+    this.filter = new Filter(declareFilters(manager));
     getPackets(session, manager).then((packets) => {
       transaction(() => {
         this.isLoaded = true;
@@ -21,6 +33,21 @@ class Packets {
         }
       });
     });
+  }
+
+  @computed get dataSource() {
+    return [...this.data.values()].filter(this.filter.predicate).map(({
+      id,
+      name,
+      version,
+      typeId,
+    }) => ({
+      key: id,
+      id,
+      name,
+      version,
+      typeName: this.manager.packetTypes.get(typeId)?.name,
+    }));
   }
 
   getType(packetId) {
