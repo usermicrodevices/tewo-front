@@ -1,8 +1,8 @@
 /* eslint class-methods-use-this: off */
 import Table from 'models/table';
 import Filter from 'models/filters';
-import { when } from 'mobx';
 
+import packetPopover from 'components/packages/packetPopover';
 import {
   devices as devicesRout,
   salePoints as salePointsRout,
@@ -12,7 +12,6 @@ import { tableItemLink } from 'elements/table/trickyCells';
 
 import { DECLARE_DEVICE_FILTERS } from 'models/devices';
 import { getDevices } from 'services/packages';
-import Packages from 'components/packages/subtable';
 
 const COLUMNS = {
   serial: {
@@ -43,10 +42,16 @@ const COLUMNS = {
     sortDirections: 'both',
   },
   packetsCount: {
-    isVisibleByDefault: true,
+    isVisibleByDefault: false,
     title: 'Пакеты',
     sortDirections: 'both',
     grow: 3,
+  },
+  lastPacket: {
+    isVisibleByDefault: true,
+    title: 'Последний пакет',
+    grow: 3,
+    transform: (packet) => packetPopover(packet),
   },
 };
 
@@ -56,10 +61,10 @@ class Devices extends Table {
   constructor(session, manager) {
     const filter = new Filter({
       ...DECLARE_DEVICE_FILTERS(session),
-      isHaveDetails: {
+      isHaveLoadedPackets: {
         type: 'checkbox',
         title: 'Только устройства, на котрые загружались пакеты',
-        apply: (_, data) => data.isHaveDetails !== false,
+        apply: (_, data) => Boolean(data.lastPacketId),
         passiveValue: false,
         initialValue: true,
       },
@@ -74,11 +79,6 @@ class Devices extends Table {
   get(deviceId) {
     return this.rawData.find(({ id }) => deviceId === id);
   }
-
-  actions = {
-    isVisible: true,
-    detailsWidget: Packages,
-  };
 }
 
 export default Devices;

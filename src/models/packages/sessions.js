@@ -82,15 +82,24 @@ class Sessions extends Table {
   }
 
   getByDeviceId(deviceId) {
-    return this.rawData.filter(({ devicesId }) => devicesId.has(deviceId));
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    return this.rawData.filter(({ devicesId }) => devicesId.has(deviceId)) || null;
   }
 
   getByPacketId(packetIdForSearch) {
-    return this.rawData.filter(({ packetId }) => packetId === packetIdForSearch);
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    return this.rawData.find(({ packetId }) => packetId === packetIdForSearch) || null;
   }
 
   get(sessionId) {
-    return this.rawData.find(({ id }) => sessionId === id);
+    if (!this.isLoaded) {
+      return undefined;
+    }
+    return this.rawData.find(({ id }) => sessionId === id) || null;
   }
 }
 

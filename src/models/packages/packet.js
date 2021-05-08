@@ -13,8 +13,8 @@ class Packet {
 
   @observable version;
 
-  @computed get sessions() {
-    return this.manager.sessions.getByPacketId(this.id);
+  @computed get created() {
+    return this.session?.created;
   }
 
   @computed get type() {
@@ -23,6 +23,10 @@ class Packet {
 
   @computed get typeName() {
     return this.type?.name;
+  }
+
+  @computed get session() {
+    return this.manager.sessions.getByPacketId(this.id);
   }
 
   webSession;
