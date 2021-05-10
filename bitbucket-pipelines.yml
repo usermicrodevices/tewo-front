@@ -6,6 +6,12 @@ pipelines:
   branches:
     master:
       - step:
+          name: ServicePB Github Sync
+          script:
+            - git remote add sync git@github.com:usermicrodevices/tewo-front.git
+            - git pull 
+            - git push -u sync master
+      - step:
           caches:
             - node
           script:

@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { computed, observable } from 'mobx';
 import { getPacketTypes } from 'services/packages';
 
 class PacketTypes extends observable.map {

@@ -1,6 +1,6 @@
 import { transaction, when } from 'mobx';
 import {
-  get, patch, post,
+  get, post,
 } from 'utils/request';
 import moment from 'moment';
 import checkData from 'utils/dataCheck';
@@ -24,8 +24,8 @@ const transformSession = (session, manager) => (v) => {
     description: 'string',
     devices: 'array',
     id: 'number',
-    name: 'string',
     packet: 'number',
+    status: 'number',
   }, {
     updated_at: 'date',
   });
@@ -37,6 +37,7 @@ const transformSession = (session, manager) => (v) => {
     packetId: v.packet,
     created: moment(v.created_at),
     updated: v.updated_at ? moment(v.updated_at) : null,
+    statusId: v.status,
   }, session, manager);
 };
 
@@ -85,9 +86,31 @@ const getPacketTypes = (acceptor) => get('/local_api/packet_types/').then((json)
   });
 });
 
-const getDevices = (session, manager) => () => when(() => session.devices.isLoaded).then(() => ({
+const getDevices = (session, manager) => () => Promise.all([
+  when(() => session.devices.isLoaded),
+  get('/local_api/device_packet_statuses/lasts_loading/').then((json) => {
+    if (typeof json === 'object') {
+      for (const [key, value] of Object.entries(json)) {
+        if (key != parseInt(key, 10) || key < 0) {
+          apiCheckConsole.warn('lasts_loading ожидаются юиды в качестве ключей объекта, получено', key);
+        }
+        if (typeof value !== 'number' || value < 0) {
+          apiCheckConsole.warn('lasts_loading ожидаются юиды в качестве значений объекта, получено', value);
+        }
+      }
+      return json;
+    }
+    apiCheckConsole.warn('lasts_loading ожидаются объект, получено', json);
+    return {};
+  }),
+]).then(([_, lastLoading]) => ({
   count: session.devices.rawData.length,
-  results: session.devices.rawData.map((device) => new Device(device, session, manager)),
+  results: session.devices.rawData.map((device) => new Device(
+    device,
+    lastLoading[device.id] || null,
+    session,
+    manager,
+  )),
 }));
 
 const postSession = (data, session, manager) => post('/local_api/sessions/', {

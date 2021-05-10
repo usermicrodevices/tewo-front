@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { observer, inject, Provider } from 'mobx-react';
 import {
   Modal, Button, Space, Input,
@@ -8,12 +8,14 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import Icon from 'elements/icon';
 import plural from 'utils/plural';
 import SelectableTable from 'elements/table/selectableTable';
-import Selector from 'elements/filters/select';
 import { FiltersButton } from 'elements/filters';
+
+import PacketSekector from './packetSelector';
 
 import classNames from './css.module.scss';
 
-const Wizard = inject('manager')(observer(({ manager }) => {
+const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
+  const [isPacketSelecting, setPacketSelecting] = useState(false);
   if (manager.newSession === null) {
     return null;
   }
@@ -40,6 +42,7 @@ const Wizard = inject('manager')(observer(({ manager }) => {
         </div>
       ),
       onOk: manager.submitNewSession,
+      className: classNames.popupconfirm,
       onCancel: () => {},
     });
   };
@@ -48,14 +51,24 @@ const Wizard = inject('manager')(observer(({ manager }) => {
     // eslint-disable-next-line no-param-reassign
     manager.newSession.devices = devices;
   };
-  const ds = manager.devices.isLoaded ? manager.devices.data
+  const { filter } = manager.devices;
+  const litePredicate = (data) => manager.newSession.devices.has(data.id) || filter.predicate(data);
+  let selectedCompany;
+  if (manager.newSession.devices.size) {
+    selectedCompany = session.devices.get(manager.newSession.devices.values().next().value)?.companyName;
+  }
+  const ds = manager.devices.isLoaded ? manager.devices.data.filter(litePredicate)
     .map(({
       id, name, salePointName, serial, companyName,
     }) => ({
-      key: id, name, salePointName, serial, companyName,
+      key: id,
+      name,
+      salePointName,
+      serial,
+      companyName,
+      disabled: selectedCompany !== undefined && selectedCompany !== companyName,
     })) : undefined;
 
-  const { filter } = manager.devices;
   const onSearchChange = (action) => {
     filter.searchText = action.target.value;
   };
@@ -70,7 +83,22 @@ const Wizard = inject('manager')(observer(({ manager }) => {
     </div>
   );
 
+  const cancelSelectPacket = () => setPacketSelecting(false);
+  const selectPacket = () => setPacketSelecting(true);
+  const acceptPacket = (packet) => {
+    // eslint-disable-next-line no-param-reassign
+    manager.newSession.packet = packet;
+    cancelSelectPacket();
+  };
+
   const selectedDevicesCount = manager.newSession.devices.size;
+  const packetDescription = (packetId) => {
+    const packet = manager.packets.get(packetId);
+    if (!packet) {
+      return null;
+    }
+    return `${packet.name} ${packet.version || ''} ${packet.typeName}`;
+  };
   const footer = (
     <div className={classNames.footer}>
       <Space>
@@ -79,20 +107,20 @@ const Wizard = inject('manager')(observer(({ manager }) => {
             `Выбрано ${
               selectedDevicesCount
             }/${
-              manager.devices.rawData.length
+              ds.length
             } ${
-              plural(manager.devices.rawData.length, ['устройство', 'устройств', 'устройства'])
+              plural(ds.length, ['устройство', 'устройств', 'устройства'])
             }`
           )
         }
-        <Selector
-          title="Пакет"
-          isSingle
-          value={manager.newSession.packet}
-          // eslint-disable-next-line no-param-reassign
-          onChange={(packet) => { manager.newSession.packet = packet || null; }}
-          selector={manager.packets.selector}
-        />
+        {
+          packetDescription(manager.newSession.packet)
+        }
+        <Button onClick={selectPacket}>
+          {
+            manager.newSession.packet ? 'Выбрать другой' : 'Выбрать пакет'
+          }
+        </Button>
       </Space>
       <div>
         <Button onClick={onCancel}>Отмена</Button>
@@ -148,6 +176,11 @@ const Wizard = inject('manager')(observer(({ manager }) => {
           dataSource={ds}
         />
       </Modal>
+      <PacketSekector
+        isVisible={isPacketSelecting}
+        onSubmit={acceptPacket}
+        onCancel={cancelSelectPacket}
+      />
     </Provider>
   );
 }));

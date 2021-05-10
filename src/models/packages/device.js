@@ -7,10 +7,20 @@ class Device {
 
   manager;
 
-  constructor(coreDevice, session, manager) {
+  lastPacketId;
+
+  constructor(coreDevice, lastPacketId, session, manager) {
+    this.lastPacketId = lastPacketId;
     this.device = coreDevice;
     this.session = session;
     this.manager = manager;
+  }
+
+  @computed get lastPacket() {
+    if (!this.manager.sessions.isLoaded) {
+      return undefined;
+    }
+    return this.manager.packets.get(this.lastPacketId) || null;
   }
 
   get id() { return this.device.id; }
@@ -37,25 +47,12 @@ class Device {
 
   @computed get companyId() { return this.device.companyId; }
 
-  @computed get isDetailsLoaded() {
-    return typeof this.detailsRows !== 'undefined';
-  }
-
   @computed get packetsCount() {
     const { detailsRows } = this;
     if (!Array.isArray(detailsRows)) {
       return undefined;
     }
     return detailsRows.length;
-  }
-
-  @computed get isHaveDetails() {
-    const { detailsRows } = this;
-    return Array.isArray(detailsRows) && detailsRows.length > 0;
-  }
-
-  @computed get detailsRows() {
-    return this.manager.packets.getByDeviceId(this.id);
   }
 }
 

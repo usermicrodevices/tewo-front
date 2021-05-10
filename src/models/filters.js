@@ -236,8 +236,15 @@ class Filters {
         return true;
       }
       if (typeof data.name === 'string') {
-        if (data.name.toLowerCase().indexOf(this.searchText.toLowerCase()) < 0) {
-          return false;
+        const searchText = this.searchText.toLowerCase();
+        if (data.name.toLowerCase().indexOf(searchText) < 0) {
+          if (typeof data.serial === 'string') {
+            if (data.serial.toLowerCase().indexOf(searchText) < 0) {
+              return false;
+            }
+          } else {
+            return false;
+          }
         }
       }
       for (const key of this.data.keys()) {

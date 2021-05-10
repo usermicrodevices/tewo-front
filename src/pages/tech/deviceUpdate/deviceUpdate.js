@@ -20,7 +20,7 @@ const DeviceUpdate = ({ manager: model, location }) => {
         <Typography.Title level={1}>
           Загрузки пакета обновления оборудования
         </Typography.Title>
-        <Button onClick={() => { model.chreatePackage(); }} icon={<Icon size={22} name="plus-circle-outline" />} type="text" />
+        <Button onClick={() => { model.createPackage(); }} icon={<Icon size={22} name="plus-circle-outline" />} type="text" />
       </Space>
       <Space>
         { !isSessions && <div key="devices"><Provider filter={model.devices.filter}><FiltersButton /></Provider></div> }
