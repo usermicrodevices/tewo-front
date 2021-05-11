@@ -1,6 +1,20 @@
+@import 'src/themes/constants';
+
 .loader {
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.actions {
+  display: flex;
+
+  >div {
+    margin-right: $generic-margin;
+
+    &:last-child {
+        margin-right: 0;
+    }
+  }
 }

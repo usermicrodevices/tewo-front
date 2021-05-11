@@ -43,6 +43,19 @@ class Session {
     return this.packetType?.name;
   }
 
+  @computed get devicesReadyCount() {
+    const DEVICE_LOADING_STATUS_ID = 5;
+    return this.devices.filter(({ status }) => status >= DEVICE_LOADING_STATUS_ID).length;
+  }
+
+  @computed get devicesCount() {
+    return this.devices.length;
+  }
+
+  @computed get progress() {
+    return this.isLoading ? this.devicesReadyCount / this.devicesCount : 100;
+  }
+
   @computed get status() {
     return this.manager.sessionStatuses.get(this.statusId);
   }
@@ -51,12 +64,21 @@ class Session {
     return this.status?.name;
   }
 
+  @computed get isLoading() {
+    const LOADING_STATUS_ID = 1;
+    return this.statusId === LOADING_STATUS_ID;
+  }
+
+  @computed get isLoadedWithEroors() {
+    const LOAD_ERROR_STATUS_ID = 1;
+    return this.statusId === LOAD_ERROR_STATUS_ID;
+  }
+
   constructor(data, session, manager) {
     this.session = session;
     this.manager = manager;
 
     this.id = data.id;
-    this.name = data.name;
     this.description = data.description;
     this.devices = data.devices;
     this.packetId = data.packetId;
