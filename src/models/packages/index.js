@@ -8,6 +8,7 @@ import PacketTypes from './packetTypes';
 import SessionStatuses from './sessionStatuses';
 import Sessions from './sessions';
 import CreateSessionState from './createSessionState';
+import DeviceStatuses from './deviceStatuses';
 
 class DeviceUpdate {
   devices;
@@ -21,6 +22,8 @@ class DeviceUpdate {
   sessionStatuses = new SessionStatuses();
 
   packetTypes = new PacketTypes();
+
+  deviceStatuses = new DeviceStatuses();
 
   @observable newSession = null;
 

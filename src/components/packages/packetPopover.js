@@ -12,7 +12,6 @@ export default (packet) => {
   const {
     name, description, typeName, created,
   } = packet;
-  console.log(created);
   return (
     <Popover
       content={(

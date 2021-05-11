@@ -21,19 +21,32 @@ const RENAMER = {
 const transformSession = (session, manager) => (v) => {
   checkData(v, {
     created_at: 'date',
-    description: 'string',
     devices: 'array',
     id: 'number',
     packet: 'number',
     status: 'number',
   }, {
+    description: 'string',
     updated_at: 'date',
   });
   return new DeviceSession({
     id: v.id,
     name: v.name,
     description: v.description,
-    devices: v.devices,
+    devices: v.devices.map((deviceJSON) => {
+      checkData(deviceJSON, {
+        created_at: 'date',
+        device: 'number',
+        id: 'number',
+        status: 'number',
+      });
+      return {
+        created: new Date(deviceJSON.created_at),
+        deviceId: deviceJSON.device,
+        statusId: deviceJSON.status,
+        packageUploadId: deviceJSON.id,
+      };
+    }),
     packetId: v.packet,
     created: moment(v.created_at),
     updated: v.updated_at ? moment(v.updated_at) : null,
@@ -146,6 +159,36 @@ const getSessionStatuses = (acceptor) => get('/local_api/session_statuses/').the
   });
 });
 
+const getDeviceStatuses = (acceptor) => get('/local_api/device_statuses/').then((json) => {
+  if (!Array.isArray(json)) {
+    apiCheckConsole.warn('device_statuses must be an array');
+    return;
+  }
+  for (const status of json) {
+    checkData(status, {
+      can_canceled: 'boolean',
+      can_errored: 'boolean',
+      can_finalized: 'boolean',
+      description: 'string',
+      id: 'number',
+      name: 'string',
+      weight: 'number',
+    }, {
+      icon: 'string',
+    });
+    acceptor.set(status.id, {
+      isCanCanceled: status.can_canceled,
+      isCanErrored: status.can_errored,
+      isCanFinalized: status.can_finalized,
+      description: status.description,
+      id: status.id,
+      name: status.name,
+      weight: status.weight,
+      icon: status.icon,
+    });
+  }
+});
+
 export {
-  getSessions, getPackets, getPacketTypes, getDevices, getSessionStatuses, postSession,
+  getSessions, getPackets, getPacketTypes, getDevices, getSessionStatuses, postSession, getDeviceStatuses,
 };
