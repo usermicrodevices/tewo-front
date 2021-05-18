@@ -1,6 +1,6 @@
 import { observable } from 'mobx';
 
-import { postSession } from 'services/packages';
+import { postSession, cancelSession, getSession } from 'services/packages';
 
 import Packets from './packets';
 import Devices from './devices';
@@ -48,6 +48,10 @@ class DeviceUpdate {
   clearNewSession() {
     this.newSession = null;
   }
+
+  cancelSession = cancelSession;
+
+  getSession = getSession;
 }
 
 export default DeviceUpdate;

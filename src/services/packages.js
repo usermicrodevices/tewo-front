@@ -18,7 +18,7 @@ const RENAMER = {
   version: 'version',
 };
 
-const transformSession = (session, manager) => (v) => {
+const transformSessionData = (v) => {
   checkData(v, {
     created_at: 'date',
     devices: 'array',
@@ -28,8 +28,9 @@ const transformSession = (session, manager) => (v) => {
   }, {
     description: 'string',
     updated_at: 'date',
+    is_cancelable: 'boolean',
   });
-  return new DeviceSession({
+  return {
     id: v.id,
     name: v.name,
     description: v.description,
@@ -51,8 +52,15 @@ const transformSession = (session, manager) => (v) => {
     created: moment(v.created_at),
     updated: v.updated_at ? moment(v.updated_at) : null,
     statusId: v.status,
-  }, session, manager);
+    isCancelableType: v.is_cancelable,
+  };
 };
+
+const transformSession = (session, manager) => (v) => (
+  new DeviceSession(transformSessionData(v), session, manager)
+);
+
+const getSession = (id) => get(`/local_api/sessions/${id}`).then(transformSessionData);
 
 const getSessions = (session, manager) => () => get('/local_api/sessions/').then((json) => {
   if (!Array.isArray(json)) {
@@ -62,6 +70,8 @@ const getSessions = (session, manager) => () => get('/local_api/sessions/').then
   const results = json.map(transformSession(session, manager));
   return { results, count: results.length };
 });
+
+const cancelSession = (id) => post(`local_api/device_packet_statuses/${id}/cancel_loading/`);
 
 const getPackets = (session, manager) => get('/local_api/packets/').then((json) => {
   if (!Array.isArray(json)) {
@@ -190,5 +200,5 @@ const getDeviceStatuses = (acceptor) => get('/local_api/device_statuses/').then(
 });
 
 export {
-  getSessions, getPackets, getPacketTypes, getDevices, getSessionStatuses, postSession, getDeviceStatuses,
+  getSessions, getPackets, getPacketTypes, getDevices, getSessionStatuses, postSession, getDeviceStatuses, getSession, cancelSession,
 };
