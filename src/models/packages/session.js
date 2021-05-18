@@ -1,4 +1,4 @@
-import { computed, observable } from 'mobx';
+import { computed, observable, transaction } from 'mobx';
 
 class Session {
   session;
@@ -19,6 +19,8 @@ class Session {
 
   @observable statusId;
 
+  @observable isCanceling = false;
+
   @computed get devicesId() {
     return new Set(this.devices.map(({ id }) => id));
   }
@@ -33,6 +35,10 @@ class Session {
 
   @computed get packetName() {
     return this.packet?.name;
+  }
+
+  @computed get isСancelable() {
+    return this.isCancelableType && this.isLoading;
   }
 
   @computed get version() {
@@ -74,17 +80,31 @@ class Session {
     return this.statusId === LOAD_ERROR_STATUS_ID;
   }
 
+  async cancel() {
+    this.isCanceling = true;
+    await this.manager.cancelSession(this.id);
+    await this.applyData(this.manager.getSession(this.id));
+    this.isCanceling = false;
+  }
+
+  applyData(data) {
+    transaction(() => {
+      this.id = data.id;
+      this.description = data.description;
+      this.devices = data.devices;
+      this.packetId = data.packetId;
+      this.created = data.created;
+      this.updated = data.updated;
+      this.statusId = data.statusId;
+      this.isCancelableType = data.isCancelableType;
+    });
+  }
+
   constructor(data, session, manager) {
     this.session = session;
     this.manager = manager;
 
-    this.id = data.id;
-    this.description = data.description;
-    this.devices = data.devices;
-    this.packetId = data.packetId;
-    this.created = data.created;
-    this.updated = data.updated;
-    this.statusId = data.statusId;
+    this.applyData(data);
   }
 }
 
