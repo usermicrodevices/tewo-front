@@ -1,4 +1,5 @@
 import moment from 'moment';
+import 'frozen-moment';
 import plural from 'utils/plural';
 
 const momentToArg = (m) => m.format().replace('+', '%2B');
