@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { inject, Provider, observer } from 'mobx-react';
 import { Space, Button } from 'antd';
 import { withRouter } from 'react-router-dom';
@@ -29,6 +29,10 @@ const DeviceUpdate = ({ manager: model, location }) => {
       <CreatePackageWizard />
     </>
   );
+  useEffect(() => {
+    const sessionsUpdate = setInterval(() => model.sessions.reload(), 30000);
+    return () => clearInterval(sessionsUpdate);
+  }, []);
   return (
     <SubPage
       menu={[

@@ -43,7 +43,9 @@ const Actions = inject('uploadSession')(observer(withRouter(({
       <Space>
         <Button onClick={history.goBack}>Назад</Button>
         { session.isLoadedWithEroors && <Button onClick={() => { message.error('Функциональность не реализована'); }}>Перезапустить неудавшиеся</Button> }
-        { session.isСancelable && <Button loading={session.isCanceling} disabled={session.isCanceling} onClick={() => { session.cancel().then(history.goBack); }}>Отменить загрузку</Button> }
+        { session.isAccureCancelable && (
+          <Button loading={session.isCanceling} disabled={session.isCanceling} onClick={() => { session.cancel().then(history.goBack); }}>Отменить сессию</Button>
+        )}
       </Space>
     </Card>
   </div>
