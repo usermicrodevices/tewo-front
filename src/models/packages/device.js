@@ -17,10 +17,14 @@ class Device {
   }
 
   @computed get lastPacket() {
-    if (!this.manager.sessions.isLoaded) {
+    if (!this.manager.packets.isLoaded) {
       return undefined;
     }
     return this.manager.packets.get(this.lastPacketId) || null;
+  }
+
+  @computed get sessionId() {
+    return this.manager.sessions.getByPacketId(this.lastPacketId)?.id;
   }
 
   get id() { return this.device.id; }
@@ -36,6 +40,8 @@ class Device {
   get companyName() { return this.device.companyName; }
 
   get deviceModelType() { return this.device.deviceModelType; }
+
+  get deviceModelId() { return this.device.deviceModelId; }
 
   get deviceModelName() { return this.device.deviceModelName; }
 

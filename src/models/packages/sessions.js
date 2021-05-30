@@ -5,7 +5,7 @@ import Filter from 'models/filters';
 import {
   deviceUpdate as deviceUpdateRout,
 } from 'routes';
-import { tableItemLink } from 'elements/table/trickyCells';
+import { tableItemLink, popoverCell } from 'elements/table/trickyCells';
 import { getSessions } from 'services/packages';
 
 const COLUMNS = {
@@ -33,6 +33,7 @@ const COLUMNS = {
     title: 'Тип пакета',
     grow: 2,
     sortDirections: 'both',
+    transform: (_, datum, width) => popoverCell(datum.packetTypeName, datum.packetDescription, width),
   },
   statusName: {
     isVisibleByDefault: true,
@@ -48,7 +49,7 @@ const COLUMNS = {
   },
 };
 
-const declareFilters = (session) => ({
+const declareFilters = (session, manager) => ({
   companyId: {
     type: 'selector',
     title: 'Оборудование',
@@ -67,13 +68,20 @@ const declareFilters = (session) => ({
     apply: (general, data) => general(data.deviceModelId),
     selector: () => session.deviceModels.selector,
   },
+  packet: {
+    type: 'selector',
+    title: 'Пакет',
+    apply: (general, data) => general(data.packetId),
+    selector: () => manager.packets.selector,
+  },
 });
 
 class Sessions extends Table {
   get isImpossibleToBeAsync() { return true; }
 
   constructor(session, manager) {
-    const filter = new Filter(declareFilters(session));
+    const filter = new Filter(declareFilters(session, manager));
+    filter.isShowSearch = false;
     super(COLUMNS, getSessions(session, manager), filter);
   }
 

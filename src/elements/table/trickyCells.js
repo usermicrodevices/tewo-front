@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Typography, Button, Dropdown, Menu,
+  Typography, Button, Dropdown, Menu, Popover,
 } from 'antd';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -15,6 +15,8 @@ const { Text } = Typography;
 const linkedCell = (onClick) => (name, datum, width) => (
   <Button className="cell-link" style={{ height: 20 }} onClick={onClick(datum)} type="link"><Format width={width}>{ name }</Format></Button>
 );
+
+const popoverCell = (content, popover, width) => <Popover content={popover}><Format width={width}>{ content }</Format></Popover>;
 
 const tableItemLink = (text, to, width) => <Link to={to}><Format width={width}>{text}</Format></Link>;
 
@@ -114,5 +116,5 @@ const explainedTitleCell = (title, explains) => (
 );
 
 export {
-  tableItemLink, linkedCell, devicesCell, durationCell, rangeMetricCompareCell, explainedTitleCell,
+  tableItemLink, linkedCell, devicesCell, durationCell, rangeMetricCompareCell, explainedTitleCell, popoverCell,
 };

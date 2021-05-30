@@ -58,6 +58,10 @@ class Keeper {
     });
   }
 
+  reload() {
+    this.manager.reload();
+  }
+
   @computed get data() {
     if (this.isAsync) {
       return this.manager.data;

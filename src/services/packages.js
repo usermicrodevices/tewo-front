@@ -18,6 +18,21 @@ const RENAMER = {
   version: 'version',
 };
 
+const transformSessionDeviceStatus = (deviceJSON) => {
+  checkData(deviceJSON, {
+    created_at: 'date',
+    device: 'number',
+    id: 'number',
+    status: 'number',
+  });
+  return {
+    created: new Date(deviceJSON.created_at),
+    deviceId: deviceJSON.device,
+    statusId: deviceJSON.status,
+    packageUploadId: deviceJSON.id,
+  };
+};
+
 const transformSessionData = (v) => {
   checkData(v, {
     created_at: 'date',
@@ -34,25 +49,12 @@ const transformSessionData = (v) => {
     id: v.id,
     name: v.name,
     description: v.description,
-    devices: v.devices.map((deviceJSON) => {
-      checkData(deviceJSON, {
-        created_at: 'date',
-        device: 'number',
-        id: 'number',
-        status: 'number',
-      });
-      return {
-        created: new Date(deviceJSON.created_at),
-        deviceId: deviceJSON.device,
-        statusId: deviceJSON.status,
-        packageUploadId: deviceJSON.id,
-      };
-    }),
+    devices: v.devices.map(transformSessionDeviceStatus),
     packetId: v.packet,
     created: moment(v.created_at),
     updated: v.updated_at ? moment(v.updated_at) : null,
     statusId: v.status,
-    isCancelableType: v.is_cancelable,
+    isCancelable: Boolean(v.is_cancelable),
   };
 };
 
@@ -71,7 +73,16 @@ const getSessions = (session, manager) => () => get('/local_api/sessions/').then
   return { results, count: results.length };
 });
 
-const cancelSession = (id) => post(`local_api/device_packet_statuses/${id}/cancel_loading/`);
+const cancelSession = async (session) => {
+  await Promise.all(
+    session.devices
+      .filter(({ statusId }) => session.manager.deviceStatuses.get(statusId).isCancelable)
+      .map(({ packageUploadId: id }) => post(`local_api/device_packet_statuses/${id}/cancel_loading/`)),
+  );
+  await session.applyData(getSession(session.id));
+};
+
+const restartSession = (id) => post(`local_api/sessions/${id}/restart/`);
 
 const getPackets = (session, manager) => get('/local_api/packets/').then((json) => {
   if (!Array.isArray(json)) {
@@ -86,7 +97,7 @@ const getPackets = (session, manager) => get('/local_api/packets/').then((json) 
       file: 'string',
       packet_type: 'number',
     }, {
-      version: 'object',
+      version: 'string',
     });
     return new Packet(Object.fromEntries(Object.entries(v).map(([key, val]) => [RENAMER[key], val])), session, manager);
   });
@@ -176,29 +187,35 @@ const getDeviceStatuses = (acceptor) => get('/local_api/device_statuses/').then(
   }
   for (const status of json) {
     checkData(status, {
-      can_canceled: 'boolean',
-      can_errored: 'boolean',
-      can_finalized: 'boolean',
       description: 'string',
       id: 'number',
       name: 'string',
       weight: 'number',
+      status: 'string',
+      is_cancelable: 'boolean',
     }, {
       icon: 'string',
     });
     acceptor.set(status.id, {
-      isCanCanceled: status.can_canceled,
-      isCanErrored: status.can_errored,
-      isCanFinalized: status.can_finalized,
+      isCancelable: status.is_cancelable,
       description: status.description,
       id: status.id,
       name: status.name,
       weight: status.weight,
       icon: status.icon,
+      statusText: status.status,
     });
+  }
+
+  const lastStatus = [...acceptor.values()].filter(({ weight, statusText }) => weight === 5 && statusText !== 'failed');
+  if (lastStatus.length === 0) {
+    console.error('не смог найти статус, соответствующий финальному успешному состоянию');
+  }
+  if (lastStatus.length !== 1) {
+    console.error('Найдено более одного статуса, соответстующего финальному успешному состоянию');
   }
 });
 
 export {
-  getSessions, getPackets, getPacketTypes, getDevices, getSessionStatuses, postSession, getDeviceStatuses, getSession, cancelSession,
+  getSessions, getPackets, getPacketTypes, getDevices, getSessionStatuses, postSession, getDeviceStatuses, getSession, cancelSession, restartSession,
 };

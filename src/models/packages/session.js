@@ -37,8 +37,18 @@ class Session {
     return this.packet?.name;
   }
 
-  @computed get isСancelable() {
-    return this.isCancelableType && this.isLoading;
+  @computed get packetDescription() {
+    return this.packet?.description;
+  }
+
+  @computed get isAccureCancelable() {
+    if (!this.isCancelable) {
+      return false;
+    }
+    return this.devices.find(({ statusId }) => {
+      const deviceStatus = this.manager.deviceStatuses.get(statusId);
+      return deviceStatus?.isCancelable;
+    }) !== undefined;
   }
 
   @computed get version() {
@@ -76,13 +86,13 @@ class Session {
   }
 
   @computed get isLoadedWithEroors() {
-    const LOAD_ERROR_STATUS_ID = 1;
+    const LOAD_ERROR_STATUS_ID = 2;
     return this.statusId === LOAD_ERROR_STATUS_ID;
   }
 
   async cancel() {
     this.isCanceling = true;
-    await this.manager.cancelSession(this.id);
+    await this.manager.cancelSession(this);
     await this.applyData(this.manager.getSession(this.id));
     this.isCanceling = false;
   }
@@ -96,7 +106,7 @@ class Session {
       this.created = data.created;
       this.updated = data.updated;
       this.statusId = data.statusId;
-      this.isCancelableType = data.isCancelableType;
+      this.isCancelable = data.isCancelable;
     });
   }
 

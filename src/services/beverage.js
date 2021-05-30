@@ -15,14 +15,12 @@ const getBeverages = (session) => (limit, offset = 0, filter = '') => new Promis
   get(`/data/beverages/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
     const beverageMustBe = {
       id: 'number',
-      cid: 'string',
       created_date: 'date',
       device_date: 'date',
       device: 'number',
       sale_sum: 'number',
       canceled: 'boolean',
       cost: 'number',
-      sale_sum_hidden: 'number',
     };
     const mayBe = {
       drink: 'number',
@@ -64,7 +62,6 @@ const getBeverages = (session) => (limit, offset = 0, filter = '') => new Promis
       results: response.results.map((datum) => {
         const beverage = new Beverage(session);
         beverage.id = datum.id;
-        beverage.cid = datum.cid;
         beverage.createdDate = moment(datum.created_date);
         beverage.deviceDate = moment(datum.device_date);
         beverage.deviceId = datum.device;

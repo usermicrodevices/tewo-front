@@ -12,11 +12,12 @@ const Row = (width, itemsCount) => {
         {
           new Array(elementsInRow).fill(null).map((_, id) => {
             if (itemsCount <= index * elementsInRow + id) {
-              return <div style={{ minWidth: ELEMNT_MINIMUM_WIDTH }} />;
+              // eslint-disable-next-line
+              return <div style={{ minWidth: ELEMNT_MINIMUM_WIDTH }} key={id} />;
             }
             return (
               // eslint-disable-next-line
-              <Item width={width / elementsInRow} id={id + index * elementsInRow} key={id} />
+              <Item width={width / elementsInRow - 24} id={id + index * elementsInRow} key={id} />
             );
           })
         }

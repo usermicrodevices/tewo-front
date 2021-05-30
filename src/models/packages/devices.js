@@ -19,7 +19,11 @@ const COLUMNS = {
     title: 'Серийный номер',
     grow: 3,
     sortDirections: 'both',
-    transform: (_, datum, width) => tableItemLink(datum.serial, `${deviceUpdateRout.path}/${datum.id}`, width),
+    transform: (_, datum, width) => (
+      typeof datum.sessionId === 'number'
+        ? tableItemLink(datum.serial, `${deviceUpdateRout.path}/${datum.sessionId}`, width)
+        : datum.serial
+    ),
   },
   name: {
     isDefaultSort: true,
