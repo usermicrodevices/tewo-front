@@ -139,7 +139,14 @@ class Beverages extends Table {
 
     this.exporter = new Exporter(exportBeverages, this.filter, {
       checkDisable: () => !this.filter.data.has('device_date') || this.data.length === 0,
-      generateFilename: () => `Экспорт_Наливов_${decodeURIComponent(this.filter.search)}__${moment().format('DD-MM-YYYYTHH:mm:ss')}`,
+      generateFilename: () => {
+        const dateFormat = 'DD.MM-YYYY';
+        const dateRange = this.filter.data.get('device_date');
+        const dateStart = dateRange[0].format(dateFormat);
+        const dateEnd = dateRange[1].format(dateFormat);
+
+        return `Наливы_${dateStart}-${dateEnd}`;
+      },
       generateConfirmMessage: () => {
         const dateFormat = 'DD.MM.YYYY HH:mm';
         const count = this.data.length;
