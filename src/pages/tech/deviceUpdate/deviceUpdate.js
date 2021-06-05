@@ -9,7 +9,7 @@ import Typography from 'elements/typography';
 import { FiltersButton } from 'elements/filters';
 import Table from 'elements/table';
 import Card from 'elements/card';
-import CreatePackageWizard from 'components/сreatePackageWizard';
+import CreatePackageWizard from 'components/createPackageWizard';
 
 const DeviceUpdate = ({ manager: model, location }) => {
   const isSessions = location.pathname.indexOf('sessions') >= 0;

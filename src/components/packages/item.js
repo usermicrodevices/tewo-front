@@ -1,10 +1,11 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Steps, Card, Popover } from 'antd';
+import {
+  Steps, Card, Popover, Button,
+} from 'antd';
 import { Link } from 'react-router-dom';
 import Icon from 'elements/icon';
 
-import Loader from 'elements/loader';
 import Format from 'elements/format';
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
 
@@ -19,9 +20,10 @@ const Item = inject('uploadSession', 'manager')(observer(({
 }) => {
   const deviceSessionStatus = session.devices[id];
   const device = manager.devices.get(deviceSessionStatus.deviceId);
+  const status = manager.deviceStatuses.get(deviceSessionStatus.statusId);
   const CardWrap = ({ children, ...props }) => (
     <Card
-      style={{ width }}
+      style={{ width, maxWidth: width }}
       type="inner"
       // eslint-disable-next-line
       {...props}
@@ -32,7 +34,6 @@ const Item = inject('uploadSession', 'manager')(observer(({
   if (!device) {
     return <CardWrap><Format>{device}</Format></CardWrap>;
   }
-  const status = manager.deviceStatuses.get(deviceSessionStatus.statusId);
   const deviceStatuses = [...manager.deviceStatuses.values()];
   const genericStatuses = deviceStatuses
     .filter(({ weight }) => weight < 5)
@@ -44,16 +45,15 @@ const Item = inject('uploadSession', 'manager')(observer(({
   return (
     <CardWrap
       cover={(
-        <div>
+        <div className={classNames.content}>
+          <div>
+            {`Обновление ${session.packetName} для `}
+            <Link to={`${devicesRout.path}/${device.id}`}><Format>{device.name}</Format></Link>
+            {' расположенном в '}
+            <Link to={`${salePointsRout.path}/${device.salePointId}`}><Format width={width}>{device.salePointName}</Format></Link>
+          </div>
           {
-            device ? (
-              <>
-                {`Обновление ${session.packetName} для `}
-                <Link to={`${devicesRout.path}/${device.id}`}><Format width={width}>{device.name}</Format></Link>
-                {' расположенном в '}
-                <Link to={`${salePointsRout.path}/${device.salePointId}`}><Format width={width}>{device.salePointName}</Format></Link>
-              </>
-            ) : <Loader />
+            status.isCancelable && <Button onClick={() => session.cancelDevice(id)}>Отмена</Button>
           }
         </div>
       )}
@@ -70,19 +70,16 @@ const Item = inject('uploadSession', 'manager')(observer(({
             } = allSteps[index];
             const isComplete = weight > status.weight;
             const iconName = isComplete ? icon : icon.replace('-outline', '');
-            const statuses = deviceStatuses.filter((s) => s.weight === weight);
+            const statuses = deviceStatuses.filter((s) => (s.weight === weight && status.weight !== weight) || status === s)
+              .sort(({ name: a }, { name: b }) => a.localeCompare(b));
             const content = statuses.length === 1 ? name : (
-              <>
-                {
-                  statuses.map(({ name: statusName, icon: statusIconName }) => (
-                    <>
-                      <Icon size={20} className={classNames[isComplete ? 'basic' : 'active']} name={statusIconName} />
-                      {` ${statusName}`}
-                      <br />
-                    </>
-                  ))
-                }
-              </>
+              statuses.map(({ name: statusName, icon: statusIconName }) => (
+                <React.Fragment key={statusName}>
+                  <Icon size={20} className={classNames[isComplete ? 'basic' : 'active']} name={statusIconName} />
+                  {` ${statusName}`}
+                  <br />
+                </React.Fragment>
+              ))
             );
             return (
               <Popover

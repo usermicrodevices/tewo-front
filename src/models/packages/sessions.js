@@ -5,7 +5,7 @@ import Filter from 'models/filters';
 import {
   deviceUpdate as deviceUpdateRout,
 } from 'routes';
-import { tableItemLink, popoverCell } from 'elements/table/trickyCells';
+import { devicesCell, tableItemLink, popoverCell } from 'elements/table/trickyCells';
 import { getSessions } from 'services/packages';
 
 const COLUMNS = {
@@ -40,6 +40,14 @@ const COLUMNS = {
     title: 'Статус',
     grow: 3,
     sortDirections: 'both',
+  },
+  devicesList: {
+    isDefaultSort: true,
+    isVisibleByDefault: true,
+    title: 'Кофемашины',
+    grow: 3,
+    sortDirections: 'both',
+    transform: devicesCell,
   },
   created: {
     isVisibleByDefault: true,

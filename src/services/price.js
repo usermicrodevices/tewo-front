@@ -21,6 +21,9 @@ const priceObjectFromJSON = (json, acceptor) => {
       value: 'number',
       id: 'number',
     },
+    {
+      nds: 'any',
+    },
   )) {
     apiCheckConsole.error(`Неожиданный ответ по адресу ${PRICES_LOCATION}`, json);
   }
