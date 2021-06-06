@@ -139,7 +139,14 @@ class Events extends Table {
 
     this.exporter = new Exporter(exportEvents, this.filter, {
       checkDisable: () => !this.filter.data.has('open_date') || this.data.length === 0,
-      generateFilename: () => `Экспорт_Событий_${decodeURIComponent(this.filter.search)}__${moment().format('DD-MM-YYYYTHH:mm:ss')}`,
+      generateFilename: () => {
+        const dateFormat = 'DD.MM-YYYY';
+        const dateRange = this.filter.data.get('open_date');
+        const dateStart = dateRange[0].format(dateFormat);
+        const dateEnd = dateRange[1].format(dateFormat);
+
+        return `События_${dateStart}-${dateEnd}`;
+      },
       generateConfirmMessage: () => {
         const dateFormat = 'DD.MM.YYYY HH:mm';
         const count = this.data.length;
