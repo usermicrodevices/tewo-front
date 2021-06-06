@@ -43,7 +43,6 @@ const transformSessionData = (v) => {
   }, {
     description: 'string',
     updated_at: 'date',
-    is_cancelable: 'boolean',
   });
   return {
     id: v.id,
@@ -54,7 +53,6 @@ const transformSessionData = (v) => {
     created: moment(v.created_at),
     updated: v.updated_at ? moment(v.updated_at) : null,
     statusId: v.status,
-    isCancelable: Boolean(v.is_cancelable),
   };
 };
 
@@ -77,9 +75,12 @@ const cancelSession = async (session) => {
   await Promise.all(
     session.devices
       .filter(({ statusId }) => session.manager.deviceStatuses.get(statusId).isCancelable)
-      .map(({ packageUploadId: id }) => post(`local_api/device_packet_statuses/${id}/cancel_loading/`)),
+      .map(({ packageUploadId: id }) => cancelDevice(id)),
   );
-  await session.applyData(getSession(session.id));
+};
+
+const cancelDevice = async (deviceId) => {
+  await post(`local_api/device_packet_statuses/${deviceId}/cancel_loading/`);
 };
 
 const restartSession = (id) => post(`local_api/sessions/${id}/restart/`);
@@ -217,5 +218,5 @@ const getDeviceStatuses = (acceptor) => get('/local_api/device_statuses/').then(
 });
 
 export {
-  getSessions, getPackets, getPacketTypes, getDevices, getSessionStatuses, postSession, getDeviceStatuses, getSession, cancelSession, restartSession,
+  getSessions, getPackets, getPacketTypes, getDevices, getSessionStatuses, postSession, getDeviceStatuses, getSession, cancelSession, restartSession, cancelDevice,
 };

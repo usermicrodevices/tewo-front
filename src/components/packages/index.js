@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { inject, observer, Provider } from 'mobx-react';
 import {
   Space, Button, Progress, message,
- } from 'antd';
+} from 'antd';
 import { Redirect, withRouter } from 'react-router-dom';
 import { withSize } from 'react-sizeme';
 import { FixedSizeList } from 'react-window';
@@ -24,6 +24,7 @@ const List = inject('uploadSession')(observer(withSize({ monitorHeight: true })(
       itemSize={170}
       width={width}
       height={height}
+      style={{ width: '100%' }}
     >
       {renderer}
     </FixedSizeList>
@@ -42,8 +43,10 @@ const Actions = inject('uploadSession')(observer(withRouter(({
     <Card>
       <Space>
         <Button onClick={history.goBack}>Назад</Button>
-        { session.isLoadedWithEroors && <Button onClick={() => { message.error('Функциональность не реализована'); }}>Перезапустить неудавшиеся</Button> }
-        { session.isAccureCancelable && (
+        { session.isLoadedWithEroors && (
+          <Button loading={session.isRestarting} disabled={session.isRestarting} onClick={() => { session.restart(); }}>Перезапустить неудавшиеся</Button>
+        )}
+        { session.isCancelable && (
           <Button loading={session.isCanceling} disabled={session.isCanceling} onClick={() => { session.cancel().then(history.goBack); }}>Отменить сессию</Button>
         )}
       </Space>
@@ -51,10 +54,18 @@ const Actions = inject('uploadSession')(observer(withRouter(({
   </div>
 ))));
 
-const packeges = ({
+const Packeges = ({
   match: { params: { id }, url },
   manager,
 }) => {
+  const session = manager.sessions.get(parseInt(id, 10));
+  useEffect(() => {
+    if (!session) {
+      return () => {};
+    }
+    const sessionsUpdate = setInterval(() => session.reload(), 30000);
+    return () => { clearInterval(sessionsUpdate); };
+  }, [session]);
   if (!manager.sessions.isLoaded) {
     return (
       <div className={classes.loader}>
@@ -62,13 +73,12 @@ const packeges = ({
       </div>
     );
   }
-  const session = manager.sessions.get(parseInt(id, 10));
-  if (typeof session === 'undefined') {
+  if (session === undefined) {
     return <Redirect to={url.split('/').slice(0, -1).join('/')} />;
   }
   return (
     <Provider uploadSession={session}>
-      <Card>
+      <Card className={classes.virt}>
         <List />
       </Card>
       <Actions />
@@ -76,4 +86,4 @@ const packeges = ({
   );
 };
 
-export default withRouter(inject('manager')(observer(packeges)));
+export default withRouter(inject('manager')(observer(Packeges)));

@@ -9,7 +9,7 @@ class Session {
 
   @observable description;
 
-  @observable devices;
+  devices = observable.array();
 
   @observable packetId;
 
@@ -23,6 +23,13 @@ class Session {
 
   @computed get devicesId() {
     return new Set(this.devices.map(({ id }) => id));
+  }
+
+  @computed get devicesList() {
+    if (!this.session.devices.isLoaded) {
+      return undefined;
+    }
+    return this.devices.map(({ deviceId }) => this.session.devices.get(deviceId)).filter(Boolean);
   }
 
   @computed get packet() {
@@ -41,10 +48,7 @@ class Session {
     return this.packet?.description;
   }
 
-  @computed get isAccureCancelable() {
-    if (!this.isCancelable) {
-      return false;
-    }
+  @computed get isCancelable() {
     return this.devices.find(({ statusId }) => {
       const deviceStatus = this.manager.deviceStatuses.get(statusId);
       return deviceStatus?.isCancelable;
@@ -61,7 +65,10 @@ class Session {
 
   @computed get devicesReadyCount() {
     const DEVICE_LOADING_STATUS_ID = 5;
-    return this.devices.filter(({ status }) => status >= DEVICE_LOADING_STATUS_ID).length;
+    return this.devices.filter(({ statusId }) => {
+      const status = this.manager.deviceStatuses.get(statusId);
+      return status.weight >= DEVICE_LOADING_STATUS_ID;
+    }).length;
   }
 
   @computed get devicesCount() {
@@ -69,7 +76,7 @@ class Session {
   }
 
   @computed get progress() {
-    return this.isLoading ? this.devicesReadyCount / this.devicesCount : 100;
+    return this.isLoading ? this.devicesReadyCount / this.devicesCount * 100 : 100;
   }
 
   @computed get status() {
@@ -93,20 +100,34 @@ class Session {
   async cancel() {
     this.isCanceling = true;
     await this.manager.cancelSession(this);
-    await this.applyData(this.manager.getSession(this.id));
+    await this.reload();
     this.isCanceling = false;
+  }
+
+  async cancelDevice(id) {
+    await this.manager.cancelDevice(id);
+    this.applyData(await this.manager.getSession(this.id));
+    await this.reload();
+  }
+
+  async restart() {
+    await this.manager.restartSession(this.id);
+    await this.reload();
+  }
+
+  async reload() {
+    this.applyData(await this.manager.getSession(this.id));
   }
 
   applyData(data) {
     transaction(() => {
       this.id = data.id;
       this.description = data.description;
-      this.devices = data.devices;
+      this.devices.replace(data.devices);
       this.packetId = data.packetId;
       this.created = data.created;
       this.updated = data.updated;
       this.statusId = data.statusId;
-      this.isCancelable = data.isCancelable;
     });
   }
 

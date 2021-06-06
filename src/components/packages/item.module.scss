@@ -12,3 +12,12 @@
 .progress {
   margin-left: -70px;
 }
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &>:first-child {
+    flex: 1;
+  }
+}

@@ -53,20 +53,20 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
   };
   const { filter } = manager.devices;
   const litePredicate = (data) => manager.newSession.devices.has(data.id) || filter.predicate(data);
-  let selectedCompany;
+  let selectedModel;
   if (manager.newSession.devices.size) {
-    selectedCompany = session.devices.get(manager.newSession.devices.values().next().value)?.companyName;
+    selectedModel = session.devices.get(manager.newSession.devices.values().next().value)?.deviceModelId;
   }
   const ds = manager.devices.isLoaded ? manager.devices.data.filter(litePredicate)
     .map(({
-      id, name, salePointName, serial, companyName,
+      id, name, salePointName, serial, companyName, deviceModelId,
     }) => ({
       key: id,
       name,
       salePointName,
       serial,
       companyName,
-      disabled: selectedCompany !== undefined && selectedCompany !== companyName,
+      disabled: selectedModel !== undefined && selectedModel !== deviceModelId,
     })) : undefined;
 
   const onSearchChange = (action) => {
@@ -155,6 +155,7 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
         <SelectableTable
           className={classNames.table}
           onSelect={onSelectDevice}
+          disabledText="Загрузка пакета возможна только на оборудование одной модели"
           columns={{
             serial: {
               title: 'Серийный номер',

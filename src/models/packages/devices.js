@@ -21,7 +21,7 @@ const COLUMNS = {
     sortDirections: 'both',
     transform: (_, datum, width) => (
       typeof datum.sessionId === 'number'
-        ? tableItemLink(datum.serial, `${deviceUpdateRout.path}/${datum.sessionId}`, width)
+        ? tableItemLink(datum.serial, `${deviceUpdateRout.path[1]}/${datum.sessionId}`, width)
         : datum.serial
     ),
   },
