@@ -14,7 +14,7 @@ import Summary from './summary';
 
 import classes from './index.module.scss';
 
-const Cleans = ({ table: { chart, filter } }) => (
+const Primecost = ({ table: { chart, filter } }) => (
   <>
     <TableHeader
       title="Себестоимость"
@@ -25,7 +25,7 @@ const Cleans = ({ table: { chart, filter } }) => (
         )}
     />
     <div className={classes.root}>
-      <Card>
+      <Card noMargin>
         <Space size={32}>
           <Typography.Title level={3}>Топ 6 напитков по прибыли</Typography.Title>
           <DaterangeTitle announce="Период" range={filter.get('device_date')} />
@@ -40,4 +40,4 @@ const Cleans = ({ table: { chart, filter } }) => (
   </>
 );
 
-export default inject('table')(observer(Cleans));
+export default inject('table')(observer(Primecost));
