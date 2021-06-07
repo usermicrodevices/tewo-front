@@ -28,27 +28,27 @@ const declareColumns = () => ({
   salePointName: {
     isVisibleByDefault: true,
     title: 'Объект',
-    grow: 1,
+    grow: 1.5,
     sortDirections: 'both',
     transform: (v, datum, width) => tableItemLink(v, `${salePointsRout.path}/${datum.salePointId}`, width),
   },
   deviceName: {
     isVisibleByDefault: true,
     title: 'Оборудование',
-    grow: 1,
+    grow: 1.5,
     transform: (v, datum, width) => tableItemLink(v, `${devicesRout.path}/${datum.deviceId}`, width),
   },
   eventName: {
     isVisibleByDefault: true,
     title: 'Тип события',
-    grow: 2,
+    grow: 1,
     sortDirections: 'both',
     transform: (_, data, width) => colorizedCell({ children: data.eventName, color: data.eventColor, width }),
   },
   eventDescription: {
     isVisibleByDefault: true,
     title: 'Описание',
-    grow: 2,
+    grow: 1,
   },
   duration: {
     isVisibleByDefault: true,
