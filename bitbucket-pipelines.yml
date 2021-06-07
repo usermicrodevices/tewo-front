@@ -13,6 +13,7 @@ pipelines:
               variables:
                 USER: $SFTP_DEVELOPMENT_USER
                 SERVER: $SFTP_DEVELOPMENT_SERVER
+                PASSWORD: $SFTP_DEVELOPMENT_PASSWORD
                 SFTP_PASSWORD: $SFTP_DEVELOPMENT_PASSWORD
                 EXTRA_ARGS: '-P 23'
                 REMOTE_PATH: '/public'
