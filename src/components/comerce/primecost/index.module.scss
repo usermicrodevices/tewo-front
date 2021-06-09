@@ -10,6 +10,11 @@
   min-height: 135vh;
   overflow: hidden;
 
+  .top {
+    display: flex;
+    flex-direction: column;
+  }
+
   .table {
     grid-column-end: span 2;
     overflow-x: hidden;
