@@ -102,6 +102,8 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
     }
     return `${packet.name} ${packet.version || ''} ${packet.typeName}`;
   };
+  // eslint-disable-next-line no-param-reassign
+  const cancelSelection = () => { manager.newSession.devices = new Set(); };
   const footer = (
     <div className={classNames.footer}>
       <Space>
@@ -116,6 +118,7 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
             }`
           )
         }
+        { Boolean(selectedDevicesCount) && <Button onClick={cancelSelection}>Снять выбор</Button>}
         {
           packetDescription(manager.newSession.packet)
         }
@@ -158,6 +161,7 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
         <SelectableTable
           className={classNames.table}
           onSelect={onSelectDevice}
+          value={manager.newSession.devices}
           disabledText="Загрузка пакета возможна только на оборудование одной модели"
           columns={{
             serial: {
