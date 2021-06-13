@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { observer, inject, Provider } from 'mobx-react';
 import {
   Modal, Button, Space, Input,
@@ -9,6 +10,7 @@ import Icon from 'elements/icon';
 import plural from 'utils/plural';
 import SelectableTable from 'elements/table/selectableTable';
 import { FiltersButton } from 'elements/filters';
+import { deviceUpdate as deviceUpdateRout } from 'routes';
 
 import PacketSekector from './packetSelector';
 
@@ -16,6 +18,7 @@ import classNames from './css.module.scss';
 
 const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
   const [isPacketSelecting, setPacketSelecting] = useState(false);
+  const history = useHistory();
   if (manager.newSession === null) {
     return null;
   }
@@ -41,7 +44,7 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
           </ul>
         </div>
       ),
-      onOk: manager.submitNewSession,
+      onOk: () => manager.submitNewSession.then(({ id }) => history.push(`${deviceUpdateRout.path[1]}/${id}`)),
       className: classNames.popupconfirm,
       onCancel: () => {},
     });

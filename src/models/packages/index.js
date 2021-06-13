@@ -40,12 +40,11 @@ class DeviceUpdate {
     this.newSession = new CreateSessionState(this.session);
   }
 
-  submitNewSession = () => {
-    postSession(this.newSession, this.session, this).then((createdSession) => {
-      this.sessions.rawData.push(createdSession);
-      this.clearNewSession();
-    });
-  }
+  submitNewSession = () => postSession(this.newSession, this.session, this).then((createdSession) => {
+    this.sessions.rawData.push(createdSession);
+    this.clearNewSession();
+    return createdSession;
+  });
 
   clearNewSession() {
     this.newSession = null;
