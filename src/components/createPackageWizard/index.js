@@ -44,7 +44,7 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
           </ul>
         </div>
       ),
-      onOk: () => manager.submitNewSession.then(({ id }) => history.push(`${deviceUpdateRout.path[1]}/${id}`)),
+      onOk: () => manager.submitNewSession().then(({ id }) => history.push(`${deviceUpdateRout.path[1]}/${id}`)),
       className: classNames.popupconfirm,
       onCancel: () => {},
     });
