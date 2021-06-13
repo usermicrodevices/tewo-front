@@ -27,6 +27,8 @@ class SalePoint extends Datum {
 
   @observable cityId = null;
 
+  @observable statusId = null;
+
   @observable isClosed = false;
 
   isHaveOpenedTasks = false;
@@ -67,9 +69,9 @@ class SalePoint extends Datum {
         value: this.name,
       },
       {
-        dataIndex: 'isClosed',
-        title: 'Объект закрыт',
-        value: this.isClosed,
+        dataIndex: 'statusId',
+        title: 'Статус',
+        value: this.statusName,
       },
       {
         dataIndex: 'companyId',
@@ -148,9 +150,6 @@ class SalePoint extends Datum {
         type: 'text',
         isRequired: true,
       },
-      isClosed: {
-        type: 'checkbox',
-      },
       address: {
         type: 'text',
       },
@@ -174,6 +173,10 @@ class SalePoint extends Datum {
       cityId: {
         type: 'selector',
         selector: this.session.locations.citiesSelector,
+      },
+      statusId: {
+        type: 'selector',
+        selector: this.session.pointsStatuses.selector,
       },
       tags: {
         type: 'selector',
@@ -228,6 +231,19 @@ class SalePoint extends Datum {
   @computed get cityName() {
     const { city } = this;
     return city && city.name;
+  }
+
+  @computed get status() {
+    if (this.statusId === null) {
+      return null;
+    }
+    const { pointsStatuses } = this.session;
+    return pointsStatuses.get(this.statusId);
+  }
+
+  @computed get statusName() {
+    const { status } = this;
+    return status && status.name;
   }
 
   @computed get region() {

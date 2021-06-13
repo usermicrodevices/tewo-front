@@ -18,7 +18,7 @@ const DatergangePicker = ({
 }) => {
   const quartalStart = moment().startOf('year').add(Math.floor(moment().month() / 3) * 3, 'month');
   const halfAYearStart = moment().startOf('year').add(Math.floor(moment().month() / 6) * 6, 'month');
-  const realOnChange = (v) => onChange(Array.isArray(v) ? [v[0].startOf('day'), v[1].endOf('day')] : [null, null]);
+  const realOnChange = (v) => onChange(Array.isArray(v) ? [v[0].freeze().startOf('day'), v[1].freeze().endOf('day')] : [null, null]);
   return (
     <div className={style.space}>
       <Typography.Text>{ `${title}:` }</Typography.Text>

@@ -26,6 +26,7 @@ const RENAMER = {
   phone: 'phone',
   emails: 'email',
   opened_tasks: 'isHaveOpenedTasks',
+  status_reference: 'statusId',
 };
 
 const LOCATION = '/refs/sale_points/';
@@ -222,6 +223,12 @@ const addFavorite = (id) => post(`${LOCATION}${id}/favorite/`);
 
 const deleteFavorite = (id) => del(`${LOCATION}${id}/favorite/`);
 
+const getSalePointsStatuses = (model) => get('/refs/statuses/').then((statuses) => {
+  for (const status of statuses) {
+    model.set(status.id, status);
+  }
+});
+
 export {
   applySalePoint,
   getSalePoints,
@@ -233,4 +240,5 @@ export {
   deleteSalePoint,
   addFavorite,
   deleteFavorite,
+  getSalePointsStatuses,
 };

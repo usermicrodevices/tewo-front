@@ -1,6 +1,7 @@
 import Beverages from './beverages';
 import Companies from './companies';
 import Points from './salePoints';
+import SalePointsStatuses from './salePoints/statuses';
 import Locations from './locations';
 import Events from './events';
 import EventTypes from './events/types';
@@ -62,6 +63,8 @@ class Session {
   companies = new Companies(this);
 
   points = new Points(this);
+
+  pointsStatuses = new SalePointsStatuses(this);
 
   devices = new Devices(this);
 

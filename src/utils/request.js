@@ -13,6 +13,7 @@ request.interceptors.request.use((config) => {
   const bearer = localStorage.getItem(BEARER_KEY);
 
   if (typeof bearer === 'string') {
+    // eslint-disable-next-line no-param-reassign
     config.headers.Authorization = `bearer ${bearer}`;
   }
 

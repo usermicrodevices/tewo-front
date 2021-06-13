@@ -40,7 +40,7 @@ $icon-size: 34px;
     margin: 0;
   }
 
-  &:global(.ant-menu-inline-collapsed) {
+  &:global(.ant-menu.ant-menu-inline-collapsed) {
     width: $small-menu-width;
     padding-top: 0;
 
@@ -54,6 +54,7 @@ $icon-size: 34px;
 
     :global(.anticon),
     :global(.ant-menu-submenu > .ant-menu-submenu-title .anticon),
+    :global(.ant-menu-item .anticon),
     :global(.anticon > svg)  {
       font-size: $icon-size;
     }
