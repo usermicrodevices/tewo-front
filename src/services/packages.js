@@ -74,12 +74,12 @@ const getSessions = (session, manager) => () => get('/local_api/sessions/').then
 
 const cancelSession = async (session) => {
   await post(`/local_api/sessions/${session.id}/cancel_loading/`)
-    .catch((r) => message.error(`Произошла ошибка при выполнении операции\n${JSON.stringify(r, null, 2)}`));
+    .catch(({ response }) => message.error(response.data.detail));
 };
 
 const cancelDevice = async (deviceId) => {
   await post(`local_api/device_packet_statuses/${deviceId}/cancel_loading/`)
-    .catch((r) => message.error(`Произошла ошибка при выполнении операции\n${JSON.stringify(r, null, 2)}`));
+    .catch(({ response }) => message.error(response.data.detail));
 };
 
 const restartSession = (id) => post(`local_api/sessions/${id}/restart/`);
