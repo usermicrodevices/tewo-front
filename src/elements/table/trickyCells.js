@@ -9,6 +9,7 @@ import { devices as devicesRout } from 'routes';
 import Format from 'elements/format';
 import plural from 'utils/plural';
 import ChangesLabel from 'elements/changesLabel';
+import classNames from './trickyCells.module.scss';
 
 const { Text } = Typography;
 
@@ -35,7 +36,7 @@ const devicesCell = (devices, _, width) => {
   }
   const isNeedDropdown = forShow < devices.length;
   return (
-    <span>
+    <div className={classNames.devices}>
       {devices.slice(0, forShow).map((device, id) => (
         <React.Fragment key={device.id}>
           {
@@ -64,7 +65,7 @@ const devicesCell = (devices, _, width) => {
           </span>
         </Dropdown>
       )}
-    </span>
+    </div>
   );
 };
 

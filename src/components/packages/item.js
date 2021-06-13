@@ -13,7 +13,7 @@ import classNames from './item.module.scss';
 
 const { Step } = Steps;
 
-const ELEMNT_MINIMUM_WIDTH = 550 - 24;
+const ELEMNT_MINIMUM_WIDTH = 650 - 24;
 
 const Item = inject('uploadSession', 'manager')(observer(({
   id, width, uploadSession: session, manager,
@@ -70,7 +70,7 @@ const Item = inject('uploadSession', 'manager')(observer(({
             } = allSteps[index];
             const isComplete = weight > status.weight;
             const iconName = isComplete ? icon : icon.replace('-outline', '');
-            const statuses = deviceStatuses.filter((s) => (s.weight === weight && status.weight !== weight) || status === s)
+            const statuses = deviceStatuses.filter((s) => s.weight === weight && (status.weight !== weight || status === s))
               .sort(({ name: a }, { name: b }) => a.localeCompare(b));
             const content = statuses.length === 1 ? name : (
               statuses.map(({ name: statusName, icon: statusIconName }) => (
