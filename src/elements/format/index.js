@@ -51,8 +51,10 @@ const Format = ({
   } else if (moment.isMoment(children)) {
     return (
       <div className={style.clock}>
-        <Icon size={16} name="clock-outline" className={style.clockicon} />
-        <Format>{ children.isValid() ? children.format('DD.MM.YY HH:mm') : null }</Format>
+        <div>
+          <Icon size={16} name="clock-outline" className={style.clockicon} />
+          <Format>{ children.isValid() ? children.format('DD.MM.YY HH:mm') : null }</Format>
+        </div>
       </div>
     );
   } else if (Array.isArray(children) && children.length === 2 && typeof children.find((v) => typeof v !== 'number') === 'undefined') {

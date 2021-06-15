@@ -7,9 +7,10 @@ import SimpleTable from 'elements/table/simpleTable';
 import classes from './style.module.scss';
 
 const SelectableTable = ({
-  columns, onSelect, dataSource, className, disabledText,
+  columns, onSelect, dataSource, className, disabledText, value: externalValue,
 }) => {
-  const [selected, setSelected] = useState(new Set());
+  const internalValue = useState(new Set());
+  const [selected, setSelected] = externalValue ? [externalValue, () => {}] : internalValue;
   const onSelectRow = (id, disabled) => (disabled ? () => {} : ({ target: { checked: value } }) => {
     selected[value ? 'add' : 'delete'](id);
     setSelected(new Set([...selected.values()]));
@@ -38,18 +39,7 @@ const SelectableTable = ({
       className={className}
       columns={{
         checkbox: {
-          title: (
-            <Tooltip title="Снять выбор">
-              <Checkbox
-                indeterminate={selected.size > 0}
-                checked={selected.size === dataSource?.filter(({ disabled }) => !disabled).length}
-                onChange={() => {
-                  setSelected(new Set([]));
-                  onSelect(selected);
-                }}
-              />
-            </Tooltip>
-          ),
+          title: null,
           width: 50,
           align: 'center',
           transform: ({ isPicked, setPicked, disabled }) => (

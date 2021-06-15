@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { observer, inject, Provider } from 'mobx-react';
 import {
   Modal, Button, Space, Input,
@@ -9,6 +10,7 @@ import Icon from 'elements/icon';
 import plural from 'utils/plural';
 import SelectableTable from 'elements/table/selectableTable';
 import { FiltersButton } from 'elements/filters';
+import { deviceUpdate as deviceUpdateRout } from 'routes';
 
 import PacketSekector from './packetSelector';
 
@@ -16,6 +18,7 @@ import classNames from './css.module.scss';
 
 const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
   const [isPacketSelecting, setPacketSelecting] = useState(false);
+  const history = useHistory();
   if (manager.newSession === null) {
     return null;
   }
@@ -41,7 +44,7 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
           </ul>
         </div>
       ),
-      onOk: manager.submitNewSession,
+      onOk: () => manager.submitNewSession().then(({ id }) => history.push(`${deviceUpdateRout.path[1]}/${id}`)),
       className: classNames.popupconfirm,
       onCancel: () => {},
     });
@@ -99,6 +102,8 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
     }
     return `${packet.name} ${packet.version || ''} ${packet.typeName}`;
   };
+  // eslint-disable-next-line no-param-reassign
+  const cancelSelection = () => { manager.newSession.devices = new Set(); };
   const footer = (
     <div className={classNames.footer}>
       <Space>
@@ -113,6 +118,7 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
             }`
           )
         }
+        { Boolean(selectedDevicesCount) && <Button onClick={cancelSelection}>Снять выбор</Button>}
         {
           packetDescription(manager.newSession.packet)
         }
@@ -155,6 +161,7 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
         <SelectableTable
           className={classNames.table}
           onSelect={onSelectDevice}
+          value={manager.newSession.devices}
           disabledText="Загрузка пакета возможна только на оборудование одной модели"
           columns={{
             serial: {
