@@ -4,7 +4,16 @@ options:
   max-time: 5
 pipelines:
   branches:
-    development:
+    development:      
+      - step:
+          caches:
+            - node
+          script:
+            - npm ci
+            - npm run build
+          artifacts:
+            - build/**
+ 
       - step:
           name: SFTP Deploy
           deployment: production
