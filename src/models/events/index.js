@@ -87,7 +87,7 @@ const declareColumns = () => ({
     isVisibleByDefault: true,
     title: 'Описание',
     width: 84,
-    transform: (_, data) => <Tooltip placement="topRight" width={250} title={data.eventDescription}>{infoIcon}</Tooltip>,
+    transform: (_, data) => (data.eventDescription ? <Tooltip placement="topRight" width={250} title={data.eventDescription}>{infoIcon}</Tooltip> : ' '),
   },
 });
 
