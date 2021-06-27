@@ -5,10 +5,15 @@
   column-gap: $generic-margin;
   row-gap: $generic-margin;
   grid-template-columns: 676fr 440fr;
-  height: 100%;
+  grid-template-rows: 600px auto;
 
-  min-height: 1000px;
+  min-height: 135vh;
   overflow: hidden;
+
+  .top {
+    display: flex;
+    flex-direction: column;
+  }
 
   .table {
     grid-column-end: span 2;

@@ -126,6 +126,9 @@ $sticky-row-height: 45px;
 
   &.sticky-row.sticky-thead {
     :global {
+      .ant-table-thead > tr > th:hover {
+        background: #eee;
+      }
       .ant-table-thead > tr > th {
         top: $initial-sticky-offset + $sticky-row-height;
       }

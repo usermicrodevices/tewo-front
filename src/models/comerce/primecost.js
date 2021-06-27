@@ -70,6 +70,7 @@ class PrimeCost extends Table {
         }
       }
     }
+
     return Object.values(result).map(({
       earn,
       cost,

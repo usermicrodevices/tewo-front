@@ -26,7 +26,7 @@ const Row = ({ earn, cost, margin }) => (
 );
 
 const Summary = ({ table }) => {
-  const { summary, top } = table;
+  const { summary, top, isLoaded } = table;
   return (
     <SummaryCard className={classes.whole}>
       <div>
@@ -46,7 +46,7 @@ const Summary = ({ table }) => {
               </div>
             ))
           }
-          { top.length === 0 && <Loader /> }
+          { !isLoaded && <Loader /> }
         </div>
       </div>
     </SummaryCard>

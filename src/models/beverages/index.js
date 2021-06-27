@@ -41,14 +41,14 @@ const declareColumns = (session) => ({
   deviceName: {
     isVisibleByDefault: true,
     title: 'Оборудование',
-    grow: 1,
+    grow: 1.5,
     sortDirections: 'both',
     transform: (v, datum, width) => tableItemLink(v, `${devicesRout.path}/${datum.deviceId}`, width),
   },
   salePointName: {
     isVisibleByDefault: true,
     title: 'Объект',
-    grow: 1,
+    grow: 1.5,
     sortDirections: 'both',
     transform: (v, datum, width) => tableItemLink(v, `${salePointsRout.path}/${datum.salePointId}`, width),
   },
@@ -61,7 +61,7 @@ const declareColumns = (session) => ({
   operationId: {
     isVisibleByDefault: true,
     title: 'Тип оплаты',
-    grow: 1,
+    width: 98,
     sortDirections: 'both',
     transform: (operationId, datum) => <OperationIcon id={operationId} description={datum.operationName} />,
   },
@@ -119,7 +119,7 @@ const declareFilters = (session) => ({
   },
   canceled: {
     type: 'checkbox',
-    title: 'Отмемённые',
+    title: 'Отмененные напитки',
     apply: (_, data) => data.canceled,
     passiveValue: false,
   },
