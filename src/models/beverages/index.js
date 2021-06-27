@@ -1,6 +1,5 @@
 /* eslint class-methods-use-this: off */
 import React from 'react';
-import moment from 'moment';
 
 import Table from 'models/table';
 import Filters from 'models/filters';

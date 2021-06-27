@@ -41,6 +41,6 @@ const OperationIcon = ({ id, description = '' }) => {
   return <Tooltip placement="topLeft" title={description}><div><Icon size="large" name={iconName} /></div></Tooltip>;
 };
 
-const canceledIcon = <Icon name="minus-circle-outline" />;
+const canceledIcon = <Icon name="minus-circle-outline" size="large" />;
 
 export { typeNameToIcon, OperationIcon, canceledIcon };
