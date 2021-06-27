@@ -43,6 +43,10 @@ class Device extends Datum {
 
   @observable description;
 
+  @observable softwareVersion;
+
+  @observable authKey;
+
   status;
 
   detailsData = null;

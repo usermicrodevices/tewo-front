@@ -11,6 +11,8 @@ import plural from 'utils/plural';
 import SelectableTable from 'elements/table/selectableTable';
 import { FiltersButton } from 'elements/filters';
 import { deviceUpdate as deviceUpdateRout } from 'routes';
+import Badge from 'elements/badged';
+import Format from 'elements/format';
 
 import PacketSekector from './packetSelector';
 
@@ -62,14 +64,15 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
   }
   const ds = manager.devices.isLoaded ? manager.devices.data.filter(litePredicate)
     .map(({
-      id, name, salePointName, serial, companyName, deviceModelId,
+      id, badgedName, salePointName, serial, companyName, deviceModelId, softwareVersion,
     }) => ({
       key: id,
-      name,
+      badgedName,
       salePointName,
       serial,
       companyName,
       disabled: selectedModel !== undefined && selectedModel !== deviceModelId,
+      softwareVersion,
     })) : undefined;
 
   const onSearchChange = (action) => {
@@ -168,9 +171,16 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
               title: 'Серийный номер',
               grow: 2,
             },
-            name: {
+            badgedName: {
               title: 'Название',
               grow: 2,
+              transform: ({ stateColor, name }) => (
+                <div style={{ position: 'relative' }}>
+                  <Badge size={8} stateColor={stateColor}>
+                    <div style={{ marginLeft: 10 }}><Format>{name}</Format></div>
+                  </Badge>
+                </div>
+              ),
             },
             salePointName: {
               title: 'Объект',
@@ -178,6 +188,10 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
             },
             companyName: {
               title: 'Компания',
+              grow: 2,
+            },
+            softwareVersion: {
+              title: 'Версия ПО',
               grow: 2,
             },
           }}

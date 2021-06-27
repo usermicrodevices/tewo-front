@@ -32,14 +32,13 @@ const SelectableTable = ({
       setSelected(filtered);
       onSelect(filtered);
     }
-  }, [dataSource]);
-
+  }, [dataSource, onSelect, selected, setSelected]);
   return (
     <SimpleTable
       className={className}
       columns={{
         checkbox: {
-          title: null,
+          title: '',
           width: 50,
           align: 'center',
           transform: ({ isPicked, setPicked, disabled }) => (
