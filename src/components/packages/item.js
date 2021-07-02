@@ -21,6 +21,8 @@ const Item = inject('uploadSession', 'manager')(observer(({
   const deviceSessionStatus = session.devices[id];
   const device = manager.devices.get(deviceSessionStatus.deviceId);
   const status = manager.deviceStatuses.get(deviceSessionStatus.statusId);
+  const { packageUploadId } = deviceSessionStatus;
+
   const CardWrap = ({ children, ...props }) => (
     <Card
       style={{ width, maxWidth: width }}
@@ -53,7 +55,7 @@ const Item = inject('uploadSession', 'manager')(observer(({
             <Link to={`${salePointsRout.path}/${device.salePointId}`}><Format width={width}>{device.salePointName}</Format></Link>
           </div>
           {
-            status.isCancelable && <Button onClick={() => session.cancelDevice(id)}>Отмена</Button>
+            status.isCancelable && <Button onClick={() => session.cancelDevice(packageUploadId)}>Отмена</Button>
           }
         </div>
       )}
