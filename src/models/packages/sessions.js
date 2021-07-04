@@ -57,23 +57,31 @@ const COLUMNS = {
   },
 };
 
+const anyOfArray = (elements, filter) => {
+  for (const e of elements) {
+    if (filter(e)) {
+      return true;
+    }
+  }
+  return false;
+};
+
 const declareFilters = (session, manager) => ({
-  companyId: {
+  devices: {
     type: 'selector',
     title: 'Оборудование',
-    apply: (general, data) => general(data.deviceId),
+    apply: (general, data) => anyOfArray(data.devices.map(({ deviceId }) => deviceId), general),
     selector: () => session.devices.selector,
   },
-  salePointId: {
-    type: 'selector',
+  created: {
+    type: 'daterange',
     title: 'Дата создания',
-    apply: (general, data) => general(data.salePointId),
-    selector: () => session.points.selector,
+    apply: (general, data) => general(data.created),
   },
-  deviceModelName: {
+  devicesModel: {
     type: 'selector',
     title: 'Модель оборудования',
-    apply: (general, data) => general(data.deviceModelId),
+    apply: (general, data) => anyOfArray(data.devicesList.map(({ deviceModelId }) => deviceModelId).filter(Boolean), general),
     selector: () => session.deviceModels.selector,
   },
   packet: {

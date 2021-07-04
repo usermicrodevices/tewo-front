@@ -13,7 +13,7 @@ const DevicePicker = ({ element, session, onSelect }) => {
   const search = searchText.toLowerCase();
   const [points, setSalePoint] = useState([]);
   const pointsSet = points.length === 0 ? { has: () => true } : new Set(points);
-  const skipSet = new Set(element.devices.map(({ id }) => id));
+  const skipSet = new Set(Array.isArray(element?.devices) ? element.devices.map(({ id }) => id) : []);
   const ds = session.devices.isLoaded ? session.devices.rawData
     .filter(({
       id, salePointId, salePoint, name, companyId,

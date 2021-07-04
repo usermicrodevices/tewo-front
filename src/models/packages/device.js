@@ -27,6 +27,33 @@ class Device {
     return this.manager.sessions.getByPacketId(this.lastPacketId)?.id;
   }
 
+  get softwareVersion() { return this.device.softwareVersion; }
+
+  get statusId() {
+    if (this.device.status === -1) {
+      return 3;
+    }
+    if (this.device.status === 0) {
+      return 2;
+    }
+    if (this.device.isNeedTechService) {
+      return 1;
+    }
+    return 0;
+  }
+
+  get badgedName() {
+    return {
+      stateColor: [
+        '#4CD964',
+        '#FABC5F',
+        '#FF3B30',
+        '#9A9A9A',
+      ][this.statusId],
+      name: this.name,
+    };
+  }
+
   get id() { return this.device.id; }
 
   get serial() { return this.device.serial; }

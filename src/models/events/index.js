@@ -35,13 +35,13 @@ const declareColumns = () => ({
   deviceName: {
     isVisibleByDefault: true,
     title: 'Оборудование',
-    grow: 1,
+    grow: 2,
     transform: (v, datum, width) => tableItemLink(v, `${devicesRout.path}/${datum.deviceId}`, width),
   },
   salePointName: {
     isVisibleByDefault: true,
     title: 'Объект',
-    grow: 1,
+    grow: 2,
     sortDirections: 'both',
     transform: (v, datum, width) => tableItemLink(v, `${salePointsRout.path}/${datum.salePointId}`, width),
   },
@@ -66,7 +66,7 @@ const declareColumns = () => ({
   },
   duration: {
     isVisibleByDefault: true,
-    title: 'Длительность',
+    title: 'Время отклика',
     grow: 2,
     transform: (_, data) => durationCell(data),
     sortDirections: 'both',

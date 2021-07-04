@@ -61,7 +61,7 @@ const declareFilters = (session) => ({
   },
   isHaveRecipe: {
     type: 'checkbox',
-    title: 'Заполнена ли рецептура',
+    title: 'Рецептура заполнена',
     apply: (_, data) => data.isHaveRecipe,
     passiveValue: false,
   },

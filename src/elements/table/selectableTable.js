@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Checkbox, Tooltip } from 'antd';
 import classNames from 'classnames';
+import { withSize } from 'react-sizeme';
 
 import SimpleTable from 'elements/table/simpleTable';
 
 import classes from './style.module.scss';
 
 const SelectableTable = ({
-  columns, onSelect, dataSource, className, disabledText, value: externalValue,
+  columns, onSelect, dataSource, className, disabledText, value: externalValue, size: { width },
 }) => {
   const internalValue = useState(new Set());
   const [selected, setSelected] = externalValue ? [externalValue, () => {}] : internalValue;
@@ -32,14 +33,14 @@ const SelectableTable = ({
       setSelected(filtered);
       onSelect(filtered);
     }
-  }, [dataSource]);
-
+  }, [dataSource, onSelect, selected, setSelected]);
   return (
     <SimpleTable
       className={className}
+      minWidth={width || '40vw'}
       columns={{
         checkbox: {
-          title: null,
+          title: '',
           width: 50,
           align: 'center',
           transform: ({ isPicked, setPicked, disabled }) => (
@@ -59,4 +60,4 @@ const SelectableTable = ({
   );
 };
 
-export default SelectableTable;
+export default withSize()(SelectableTable);
