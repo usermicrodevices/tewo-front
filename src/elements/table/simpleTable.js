@@ -15,12 +15,14 @@ class SimpleTable extends React.Component {
   }
 
   render() {
-    const { columns, dataSource, className } = this.props;
+    const {
+      columns, dataSource, className, minWidth,
+    } = this.props;
     this.model.rows = dataSource;
     this.model.columns = columns;
     return (
       <Provider table={this.model}>
-        <Table className={className} />
+        <Table minWidth={minWidth} className={className} />
       </Provider>
     );
   }

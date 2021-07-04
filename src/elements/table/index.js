@@ -44,10 +44,12 @@ class TableComponent extends React.Component {
       filter: { searchText, isShowSearch },
       size,
       className,
+      minWidth,
     } = this.props;
     const columnWidth = calculateColumnWidth(size.width, columns.map(({ width }) => width), actions);
+    const minWidthHardcode = minWidth ? { minWidth } : undefined;
     return (
-      <div className={classnames(className, style.whole, isStickyTHead && style['sticky-thead'], isStickyRow && style['sticky-row'])}>
+      <div style={minWidthHardcode} className={classnames(className, style.whole, isStickyTHead && style['sticky-thead'], isStickyRow && style['sticky-row'])}>
         { !isHideTitleRow && (
           <div className={style.buttons}>
             { isShowSearch && <Input placeholder="Поиск" allowClear prefix={<Icon name="search-outline" />} value={searchText} onChange={this.onSearchChange} /> }
