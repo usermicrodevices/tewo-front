@@ -167,7 +167,7 @@ const getSessionStatuses = (acceptor) => get('/local_api/session_statuses/').the
         name: 'string',
         can_errored: 'boolean',
         can_finalized: 'boolean',
-      })) {
+      }, { value: 'string' })) {
         acceptor.set(status.id, {
           description: status.description,
           id: status.id,
