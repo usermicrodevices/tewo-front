@@ -87,6 +87,33 @@ const getBeverageOperations = (map) => get('refs/operations/').then((data) => {
   return map;
 });
 
+const getBeverageIndicators = (map) => get('/local_api/indicator_references/').then((data) => {
+  if (Array.isArray(data)) {
+    for (const datum of data) {
+      if (!checkData(datum, {
+        id: 'number', name: 'string', description: 'string', unit: 'number',
+      })) {
+        apiCheckConsole.error('Неожиданные данные для операций /local_api/indicator_references/', datum);
+      }
+      map.set(datum.id, datum);
+    }
+  }
+  return map;
+});
+
+const getBeverageIndicatorsValues = (beverageId) => get(`/local_api/indicator_beverages/?beverage=${beverageId}`).then((data) => {
+  if (Array.isArray(data)) {
+    for (const datum of data) {
+      if (!checkData(datum, {
+        id: 'number', value: 'string', beverage: 'string', indicator: 'number',
+      })) {
+        apiCheckConsole.error(`Неожиданные данные для операций /local_api/indicator_beverages/?beverage=${beverageId}`, datum);
+      }
+    }
+  }
+  return data;
+});
+
 const exportBeverages = (filter = '') => blob(`/data/beverages/xlsx/${filter !== '' ? `?${filter}` : filter}`);
 
 const getBeveragesStats = (daterange, filters, step) => {
@@ -288,6 +315,8 @@ export {
   getBeverages,
   exportBeverages,
   getBeverageOperations,
+  getBeverageIndicators,
+  getBeverageIndicatorsValues,
   getBeveragesStats,
   getBeveragesSalePointsStats,
   getBeveragesDense,

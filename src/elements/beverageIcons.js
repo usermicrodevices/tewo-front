@@ -42,5 +42,8 @@ const OperationIcon = ({ id, description = '' }) => {
 };
 
 const canceledIcon = <Icon name="minus-circle-outline" size="large" />;
+const indicatorsIcon = <Icon name="file-text-outline" size="large" />;
 
-export { typeNameToIcon, OperationIcon, canceledIcon };
+export {
+  typeNameToIcon, OperationIcon, canceledIcon, indicatorsIcon,
+};

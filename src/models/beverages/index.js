@@ -1,5 +1,7 @@
 /* eslint class-methods-use-this: off */
 import React from 'react';
+import { observable, action } from 'mobx';
+import { Button } from 'antd';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
@@ -8,7 +10,7 @@ import { beverage as beverageRout, devices as devicesRout, salePoints as salePoi
 import { daterangeToArgs } from 'utils/date';
 import plural from 'utils/plural';
 import { getBeverages, exportBeverages } from 'services/beverage';
-import { OperationIcon, canceledIcon } from 'elements/beverageIcons';
+import { OperationIcon, canceledIcon, indicatorsIcon } from 'elements/beverageIcons';
 import { tableItemLink } from 'elements/table/trickyCells';
 
 const declareColumns = (session) => ({
@@ -75,8 +77,18 @@ const declareColumns = (session) => ({
   canceled: {
     isVisibleByDefault: true,
     title: 'Отменен',
-    width: 80,
+    width: 94,
     transform: (v) => (v ? canceledIcon : ''),
+  },
+  indicators: {
+    isVisibleByDefault: true,
+    title: 'Показатели',
+    width: 100,
+    transform: (indicators, datum) => (
+      <Button type="link" style={{ padding: 0, height: 'auto' }} onClick={() => { session.beverages.setIndicatorBeverage(datum); }}>
+        {indicatorsIcon}
+      </Button>
+    ),
   },
 });
 
@@ -129,6 +141,9 @@ class Beverages extends Table {
 
   exporter = null;
 
+  @observable
+  beverageIndicators = null
+
   session;
 
   constructor(session) {
@@ -156,6 +171,16 @@ class Beverages extends Table {
         return `Выгрузить ${count} ${plural(count, ['запись', 'записи', 'записей'])} по наливам с ${dateStart} по ${dateEnd}?`;
       },
     });
+  }
+
+  setIndicatorBeverage(beverage) {
+    this.beverageIndicators = beverage;
+    this.beverageIndicators.fetchIndicators();
+  }
+
+  @action.bound
+  unsetIndicatorBeverage() {
+    this.beverageIndicators = null;
   }
 
   toString() {
