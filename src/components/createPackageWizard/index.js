@@ -150,6 +150,8 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
   return (
     <Provider filter={manager.devices.filter}>
       <Modal
+        transitionName=""
+        maskTransitionName=""
         title={title}
         visible
         width="80vw"
@@ -181,7 +183,17 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
                     transform: ({ stateColor, name }) => (
                       <div style={{ position: 'relative' }}>
                         <Badge size={8} stateColor={stateColor}>
-                          <div style={{ marginLeft: 10 }}><Format>{name}</Format></div>
+                          <div
+                            style={{
+                              marginLeft: '15px',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                            title={name}
+                          >
+                            <Format>{name}</Format>
+                          </div>
                         </Badge>
                       </div>
                     ),
@@ -196,7 +208,7 @@ const Wizard = inject('manager', 'session')(observer(({ manager, session }) => {
                   },
                   softwareVersion: {
                     title: 'Версия ПО',
-                    grow: 2,
+                    grow: 1,
                   },
                 }}
                 dataSource={ds}
