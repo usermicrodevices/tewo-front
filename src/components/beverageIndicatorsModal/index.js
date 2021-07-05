@@ -23,7 +23,7 @@ const columns = [
 ];
 
 const LoadingIndicator = () => (
-  <div style={{ display: 'flex', alignItems: 'center' }}><Loader size="large" /></div>
+  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Loader size="large" /></div>
 );
 
 const BeverageIndicatorsModal = ({ session }) => {
