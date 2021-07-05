@@ -71,7 +71,15 @@ const declareFilters = (session, manager) => ({
     type: 'selector',
     title: 'Оборудование',
     apply: (general, data) => anyOfArray(data.devices.map(({ deviceId }) => deviceId), general),
-    selector: () => session.devices.selector,
+    selector: ({ data }) => {
+      const models = new Set(data.get('devicesModel'));
+      if (models.size) {
+        return session.devices.rawData
+          .filter(({ deviceModelId }) => models.has(deviceModelId))
+          .map(({ id, name }) => [id, name]);
+      }
+      return session.devices.selector;
+    },
   },
   created: {
     type: 'daterange',
@@ -82,7 +90,7 @@ const declareFilters = (session, manager) => ({
     type: 'selector',
     title: 'Модель оборудования',
     apply: (general, data) => anyOfArray(data.devicesList.map(({ deviceModelId }) => deviceModelId).filter(Boolean), general),
-    selector: () => session.deviceModels.selector,
+    selector: (filter) => session.deviceModels.selector,
   },
   packet: {
     type: 'selector',
