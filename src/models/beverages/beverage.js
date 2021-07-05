@@ -107,7 +107,7 @@ class Beverage {
   @action fetchIndicators() {
     this.indicators = undefined;
 
-    getBeverageIndicatorsValues(/* TODO set `this.id` when api will ready */8000000).then((indicators) => {
+    getBeverageIndicatorsValues(this.id).then((indicators) => {
       this.indicators = indicators;
     });
   }

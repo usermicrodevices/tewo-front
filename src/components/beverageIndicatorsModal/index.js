@@ -1,6 +1,8 @@
 import React from 'react';
 import { Modal, Table } from 'antd';
 import { inject, observer } from 'mobx-react';
+import Loader from 'elements/loader';
+import NoData from 'elements/noData';
 
 const columns = [
   {
@@ -20,9 +22,23 @@ const columns = [
   },
 ];
 
+const LoadingIndicator = () => (
+  <div style={{ display: 'flex', alignItems: 'center' }}><Loader size="large" /></div>
+);
+
 const BeverageIndicatorsModal = ({ session }) => {
   if (!session.beverages.beverageIndicators) {
     return null;
+  }
+
+  let content = <LoadingIndicator />;
+
+  if (session.beverages.beverageIndicators.indicatorsList) {
+    content = session.beverages.beverageIndicators.indicatorsList.length === 0 ? (
+      <NoData noMargin title="Показателей по наливу не найдено!" text="попробуйтей выбрать другой налив" />
+    ) : (
+      <Table dataSource={session.beverages.beverageIndicators.indicatorsList} columns={columns} pagination={false} />
+    );
   }
 
   return (
@@ -39,9 +55,7 @@ const BeverageIndicatorsModal = ({ session }) => {
       footer={null}
       destroyOnClose
     >
-      {session.beverages.beverageIndicators.indicatorsList === undefined ? 'Loading...' : (
-        <Table dataSource={session.beverages.beverageIndicators.indicatorsList} columns={columns} pagination={false} />
-      )}
+      {content}
     </Modal>
   );
 };
