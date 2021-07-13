@@ -28,7 +28,7 @@ class Login extends React.Component {
       if (JSON.stringify(reason) === JSON.stringify({ non_field_errors: ['Unable to log in with provided credentials.'] })) {
         message.error('Неизвестное сочетание логина и пароля');
       } else {
-        message.error('Произошла ошибка при обработке авторизационных данны');
+        message.error('Произошла ошибка при обработке авторизационных данных');
       }
     });
   };
