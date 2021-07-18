@@ -1,3 +1,8 @@
 {
-    "cSpell.language": "ru"
+    "cSpell.language": "ru",
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#192B5D",
+        "titleBar.activeBackground": "#233C82",
+        "titleBar.activeForeground": "#FBFBFE"
+    }
 }
