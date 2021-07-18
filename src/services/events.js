@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 import {
-  get, patch, post, blob,
+  sequentialGet, get, patch, post, blob,
 } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import apiCheckConsole from 'utils/console';
@@ -10,11 +10,13 @@ import EventType from 'models/events/eventType';
 import Event from 'models/events/event';
 import { daterangeToArgs, alineDates, isDateRange } from 'utils/date';
 
+const sequentialGetEvents = sequentialGet();
+
 const TECH_CLEARANCE_EVENT_ID = 8;
 
 const getEvents = (session) => (limit, offset = 0, filter = '') => {
   apiCheckConsole.assert(limit > 0 && offset >= 0, `Неверные параметры запроса событий "${limit}" "${offset}"`);
-  return get(`/data/events/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
+  return sequentialGetEvents(`/data/events/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
     const mustBe = {
       id: 'number',
       cid: 'string',
@@ -153,6 +155,8 @@ const patchEventType = (id, data) => patch(`${TYPES_LOCATION}${id}`, form(data))
 
 const patchCustomEventType = (id, data) => post(`${TYPES_LOCATION}${id}/custom/`, form(data)).then((josn) => transform(josn, {}));
 
+const sequentialGetEventsClearancesChart = sequentialGet();
+
 const getEventsClearancesChart = (deviceId, daterange) => {
   const args = (() => {
     if (!Array.isArray(deviceId)) {
@@ -170,7 +174,7 @@ const getEventsClearancesChart = (deviceId, daterange) => {
     }
     return '';
   })();
-  return get(
+  return sequentialGetEventsClearancesChart(
     `/data/events/cleanings/${args}`,
   ).then((result) => {
     if (!Array.isArray(result)) {
@@ -218,9 +222,11 @@ const getEventsClearancesChart = (deviceId, daterange) => {
   });
 };
 
+const sequentialGetDetergents = sequentialGet();
+
 const getDetergents = (filter) => {
   const location = `/data/events/detergent/${filter ? `?${filter}` : ''}`;
-  return get(location).then((json) => {
+  return sequentialGetDetergents(location).then((json) => {
     const errorResponse = {
       decalcents: 0,
       detergent: 0,
