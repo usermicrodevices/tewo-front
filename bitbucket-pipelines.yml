@@ -9,7 +9,7 @@ pipelines:
           name: ServicePB Github Sync
           script:
             - git remote add sync git@github.com:usermicrodevices/tewo-front.git
-            - git pull 
+            - git pull
             - git push -u sync master
       - step:
           caches:
@@ -28,6 +28,7 @@ pipelines:
                 USER: $SFTP_USER
                 SERVER: $SFTP_SERVER
                 PASSWORD: $SFTP_PASSWORD
+                EXTRA_ARGS: $SFTP_EXTRA
                 REMOTE_PATH: '/public'
                 LOCAL_PATH: 'build/*'
                 DEBUG: 'true'
