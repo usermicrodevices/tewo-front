@@ -74,7 +74,20 @@ const getEvents = (session) => (limit, offset = 0, filter = '') => {
   });
 };
 
+/**
+ * @deprecated use sendEventsReport instead
+ * @param {*} filter ;
+ */
 const exportEvents = (filter = '') => blob(`/data/events/xlsx/${filter !== '' ? `?${filter}` : filter}`);
+
+const sendEventsReport = (filter = '', email = '') => {
+  const url = `/data/events/link_to_email/${filter !== '' ? `?${filter}` : filter}`;
+  const data = {
+    email,
+  };
+
+  return post(url, data);
+};
 
 const getClearances = (session) => (limit, offset = 0, filter = '') => (
   getEvents(session)(limit, offset, `event_reference__id=${TECH_CLEARANCE_EVENT_ID}${filter !== '' ? `&${filter}` : filter}`)
@@ -277,5 +290,5 @@ const getEventPriorities = (acceptor) => get('refs/event_priorities/').then(((da
 
 export {
   getEvents, getEventTypes, getEventsClearancesChart, getClearances, getDetergents, getOverdued, getDowntimes, getEventPriorities, patchEventType,
-  exportEvents, patchCustomEventType,
+  exportEvents, patchCustomEventType, sendEventsReport,
 };

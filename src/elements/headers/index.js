@@ -134,7 +134,7 @@ const TableHeader = inject('table')(observer(({ title, table, customButtons }) =
         <Space>
           { customButtons || (
             <>
-              { isHaveExport && <ExportButton text="Экспорт Excel" exporter={table.exporter} />}
+              { isHaveExport && <ExportButton text="Экспорт на email" exporter={table.exporter} />}
               <Dropdown
                 trigger={['click']}
                 overlay={<ColumnsPicker onReorder={onReorder} onChange={onColumnsPicked} visibleColumns={table.visibleColumns} />}
