@@ -52,6 +52,7 @@ pipelines:
                 USER: $SFTP_USER
                 SERVER: $SFTP_SERVER
                 PASSWORD: $SFTP_PASSWORD
+                EXTRA_ARGS: $SFTP_EXTRA
                 REMOTE_PATH: '/public'
                 LOCAL_PATH: 'build/*'
                 DEBUG: 'true'

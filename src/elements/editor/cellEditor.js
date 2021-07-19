@@ -108,7 +108,7 @@ const CellEditor = ({
             showSearch
             filterOption={filterComparator}
             placeholder="Значение не задано"
-            style={{ width: '100%' }}
+            style={{ maxWidth: '400px' }}
             allowClear={isMultiple}
             mode={isMultiple ? 'multiple' : undefined}
             disabled={!Array.isArray(selector)}

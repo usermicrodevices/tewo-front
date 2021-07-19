@@ -5,12 +5,11 @@ import { Button } from 'antd';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
-import Exporter from 'models/exporter';
+import ExporterToEmail from 'models/exporterToEmail';
 import { beverage as beverageRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { daterangeToArgs } from 'utils/date';
-import plural from 'utils/plural';
-import { getBeverages, exportBeverages } from 'services/beverage';
 import { OperationIcon, canceledIcon, indicatorsIcon } from 'elements/beverageIcons';
+import { getBeverages, sendBeveragesReport } from 'services/beverage';
 import { tableItemLink } from 'elements/table/trickyCells';
 
 const declareColumns = (session) => ({
@@ -151,25 +150,9 @@ class Beverages extends Table {
     this.session = session;
     this.filter.isShowSearch = false;
 
-    this.exporter = new Exporter(exportBeverages, this.filter, {
-      checkDisable: () => !this.filter.data.has('device_date') || this.data.length === 0,
-      generateFilename: () => {
-        const dateFormat = 'DD.MM-YYYY';
-        const dateRange = this.filter.data.get('device_date');
-        const dateStart = dateRange[0].format(dateFormat);
-        const dateEnd = dateRange[1].format(dateFormat);
-
-        return `Наливы_${dateStart}-${dateEnd}`;
-      },
-      generateConfirmMessage: () => {
-        const dateFormat = 'DD.MM.YYYY HH:mm';
-        const count = this.data.length;
-        const dateRange = this.filter.data.get('device_date');
-        const dateStart = dateRange[0].format(dateFormat);
-        const dateEnd = dateRange[1].format(dateFormat);
-
-        return `Выгрузить ${count} ${plural(count, ['запись', 'записи', 'записей'])} по наливам с ${dateStart} по ${dateEnd}?`;
-      },
+    this.exporter = new ExporterToEmail(sendBeveragesReport, this.filter, {
+      checkDisable: () => !this.filter.data.has('device_date'),
+      generateConfirmMessage: () => 'Ссылка будет отправлена на указанную почту, файл храниться 30 дней.',
     });
   }
 

@@ -22,7 +22,8 @@
       "ForInStatement",
       "LabeledStatement",
       "WithStatement"
-    ]
+    ],
+    "class-methods-use-this": "off"
   },
   "parserOptions": {
     "parser": "babel-eslint",

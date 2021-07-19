@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { when } from 'mobx';
 
-import { get, blob } from 'utils/request';
+import { get, blob, post } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import {
   daterangeToArgs, isDateRange, alineDates, momentToArg,
@@ -114,7 +114,17 @@ const getBeverageIndicatorsValues = (beverageId) => get(`/local_api/indicator_be
   return data;
 });
 
+/** @deprecated */
 const exportBeverages = (filter = '') => blob(`/data/beverages/xlsx/${filter !== '' ? `?${filter}` : filter}`);
+
+const sendBeveragesReport = (filter = '', email = '') => {
+  const url = `/data/beverages/link_to_email/${filter !== '' ? `?${filter}` : filter}`;
+  const data = {
+    email,
+  };
+
+  return post(url, data);
+};
 
 const getBeveragesStats = (daterange, filters, step) => {
   const rangeArg = daterangeToArgs(daterange, 'device_date') || `&device_date__gt=${momentToArg(moment(1))}`;
@@ -314,6 +324,7 @@ const getBeveragesDenseChart = (search, session) => Promise.all([
 export {
   getBeverages,
   exportBeverages,
+  sendBeveragesReport,
   getBeverageOperations,
   getBeverageIndicators,
   getBeverageIndicatorsValues,
