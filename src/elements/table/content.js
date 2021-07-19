@@ -5,10 +5,9 @@ import { VariableSizeList as List } from 'react-window';
 import Loader from 'elements/loader';
 import NoData from 'elements/noData';
 
-import Row, { MAX_ROWS_AMOUNT } from './row';
+import Row, { MAX_ROWS_AMOUNT, ROW_HEIGHT } from './row';
 import style from './style.module.scss';
 
-const ROW_HEIGHT = 54;
 const DEFAULT_PRESCROLL_HEIGHT = 2150;
 
 @inject('table')

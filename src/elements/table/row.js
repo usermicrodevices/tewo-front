@@ -15,10 +15,12 @@ import styles from './style.module.scss';
 const ACTIONS_COLUMN_WIDT = 100;
 const SCROLL_PANE_WIDTH = 25;
 const MAX_ROWS_AMOUNT = 620000;
+const ROW_HEIGHT = 54;
 
 const Row = (
   data, columns, freshItems, rowFunc, columnWidth, actions, onRowClick, openedRows, setHeightOfExpanded,
-) => withRouter(observer(({ index: rowIndex, style, history: { push } }) => {
+) => withRouter(observer(({ index: rowIndex, style: extStyle, history: { push } }) => {
+  const style = { minHeight: ROW_HEIGHT, ...extStyle };
   const index = rowFunc(rowIndex);
   const rowData = data[index];
   if (rowIndex === MAX_ROWS_AMOUNT - 1) {
@@ -108,5 +110,5 @@ const Row = (
 }));
 
 export {
-  Row as default, ACTIONS_COLUMN_WIDT, SCROLL_PANE_WIDTH, MAX_ROWS_AMOUNT,
+  Row as default, ACTIONS_COLUMN_WIDT, SCROLL_PANE_WIDTH, MAX_ROWS_AMOUNT, ROW_HEIGHT,
 };
