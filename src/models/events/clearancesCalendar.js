@@ -6,6 +6,7 @@ import moment from 'moment';
 import { getBeveragesStats } from 'services/beverage';
 import { getClearances } from 'services/events';
 import { daterangeToArgs } from 'utils/date';
+import { sequentialGet } from 'utils/request';
 
 class ClearancesCalendar {
   @observable beverages = {};
@@ -47,6 +48,10 @@ class ClearancesCalendar {
     this.table.filter.data.set('open_date', range);
   }
 
+  bevergagesGet = sequentialGet('beverages stats');
+
+  clearancesGet = sequentialGet('clearances');
+
   @action setMonth(date, passive) {
     const month = date.month() + date.year() * 12;
     this.month = month;
@@ -69,11 +74,15 @@ class ClearancesCalendar {
       dateRange,
       externalFilters,
       86400,
+      this.bevergagesGet,
     ).then(({ beveragesSeria }) => {
       this.beverages = { ...this.beverages, ...ClearancesCalendar.arrayToMap(beveragesSeria, dateRange) };
     });
     const rangeArg = daterangeToArgs(dateRange, 'open_date');
-    getClearances(this.session)(1e4, 0, `${rangeArg}${externalFilters && dateRange ? `&${externalFilters}` : externalFilters}`).then(({ results }) => {
+    getClearances(this.session, this.clearancesGet)(
+      1e4, 0,
+      `${rangeArg}${externalFilters && dateRange ? `&${externalFilters}` : externalFilters}`,
+    ).then(({ results }) => {
       const destrib = new Array(ClearancesCalendar.rangeLenght(dateRange)).fill(0);
       const begin = dateRange[0].dayOfYear();
       for (const { openDate } of results) {

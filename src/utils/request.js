@@ -45,17 +45,18 @@ const get = (endpoint, config) => {
  * проверяет, был-ли делались-ли запросы после через неё же. Если делались,
  * то подменяет ответ на тот, что пришел из следующего запроса.
  */
-const sequentialGet = () => {
+const sequentialGet = (space) => {
   const lastRequest = {};
   return (endpoint, config) => new Promise((resolve, reject) => {
     const req = get(endpoint, config).then((result) => {
-      if (req === lastRequest.v) {
+      if (req === lastRequest.id) {
         resolve(result);
       } else {
-        lastRequest.v.then(resolve).catch(reject);
+        lastRequest.req.then(resolve, reject);
       }
+      return result;
     });
-    lastRequest.v = req;
+    lastRequest.req = req;
   });
 };
 

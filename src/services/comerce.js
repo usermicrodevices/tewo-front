@@ -55,7 +55,7 @@ const joinToChart = (data) => {
   );
 };
 
-const salesLoader = (session, filter, commitChartData) => () => {
+const salesLoader = (session, filter, commitChartData, getter = get) => () => {
   const curRange = filter.data.get('device_date');
   const prwRange = isDateRange(curRange) ? stepToPast(curRange) : [];
   const search = filter.searchSkip(new Set(['device_date']));
@@ -78,7 +78,7 @@ const salesLoader = (session, filter, commitChartData) => () => {
     [curRange, prwRange].map((dateRange) => {
       const rangeArg = daterangeToArgs(dateRange, 'device_date');
       const lnk = `${BEVERAGES_SALE_POINTS_STATS.link}?step=86400${search ? `&${search}` : ''}${rangeArg}`;
-      return get(lnk);
+      return getter(lnk);
     }),
   ).then(([cur, prw]) => {
     const elements = Object.entries(cur);
@@ -95,20 +95,20 @@ const salesLoader = (session, filter, commitChartData) => () => {
   });
 };
 
-const salesDetails = (salePointId, filter) => {
+const salesDetails = (salePointId, filter, getter = get) => {
   const curRange = filter.data.get('device_date');
   const prwRange = isDateRange(curRange) ? stepToPast(curRange) : [];
   const search = filter.searchSkip(new Set(['device_date']));
   return Promise.all(
     [curRange, prwRange].map((dateRange) => {
       const rangeArg = daterangeToArgs(dateRange, 'device_date');
-      return getSalesTop(`device__sale_point__id=${salePointId}${search ? `&${search}` : ''}${rangeArg}`);
+      return getSalesTop(`device__sale_point__id=${salePointId}${search ? `&${search}` : ''}${rangeArg}`, getter);
     }),
   );
 };
 
-const getPrimecost = (session, chartDataAcceptor) => (_, __, search) => {
-  const dense = getBeveragesDense(search);
+const getPrimecost = (session, chartDataAcceptor, getter = get) => (_, __, search) => {
+  const dense = getBeveragesDense(search, getter);
   Promise.all([
     dense,
     when(() => session.drinks.isLoaded),

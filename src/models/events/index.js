@@ -3,6 +3,7 @@ import moment from 'moment';
 
 import { daterangeToArgs, SemanticRanges } from 'utils/date';
 import plural from 'utils/plural';
+import { sequentialGet } from 'utils/request';
 import Table from 'models/table';
 import Filters from 'models/filters';
 import Exporter from 'models/exporter';
@@ -133,7 +134,7 @@ class Events extends Table {
 
   constructor(session) {
     const filters = new Filters(declareFilters(session));
-    super(declareColumns(), getEvents(session), filters);
+    super(declareColumns(), getEvents(session, sequentialGet()), filters);
     this.filter.isShowSearch = false;
     this.session = session;
 

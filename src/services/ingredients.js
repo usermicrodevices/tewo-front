@@ -72,7 +72,7 @@ const applyIngredient = (id, changes, session) => {
 
 const deleteIngredient = (id) => del(`${LOCATION}${id}`);
 
-const getIngredientsConsumption = (session) => (_, __, search) => getBeveragesDense(search).then((response) => {
+const getIngredientsConsumption = (session, getter = get) => (_, __, search) => getBeveragesDense(search, getter).then((response) => {
   const ingredients = {};
   for (const point of response.values()) {
     for (const [drinkId, drinkData] of point.entries()) {

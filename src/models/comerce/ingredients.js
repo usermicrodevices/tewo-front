@@ -7,6 +7,7 @@ import { getIngredientsConsumption } from 'services/ingredients';
 import { DECLARE_BEVERAGES_FILTERS } from 'models/beverages';
 import Details from 'components/comerce/consumptionDetails';
 import { SemanticRanges } from 'utils/date';
+import { sequentialGet } from 'utils/request';
 
 const declareColumns = () => ({
   ingredientName: {
@@ -54,7 +55,7 @@ class Ingredients extends Table {
     filters.isShowSearch = false;
     filters.set('device_date', SemanticRanges.prw30Days.resolver());
 
-    super(declareColumns(session), getIngredientsConsumption(session), filters);
+    super(declareColumns(session), getIngredientsConsumption(session, sequentialGet()), filters);
   }
 
   toString() {

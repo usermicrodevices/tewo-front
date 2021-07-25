@@ -6,7 +6,7 @@ import SalePoint from 'models/salePoints/salePoint';
 
 import apiCheckConsole from 'utils/console';
 import {
-  get, post, patch, del,
+  get, post, patch, del, sequentialGet
 } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import { daterangeToArgs, SemanticRanges, SmallSemanticRanges } from 'utils/date';
@@ -159,14 +159,14 @@ const applySalePoint = (item, changes, session) => {
   return request.then((response) => converter(response, item === null ? new SalePoint(session) : {}));
 };
 
-const getSalesTop = (filter) => {
+const getSalesTop = (filter, getter = get) => {
   const location = `/data/beverages/stats_drinks/?${filter}`;
   const mustBe = {
     drink_id: 'number',
     total: 'number',
     sum: 'number',
   };
-  return get(location)
+  return getter(location)
     .then((result) => {
       if (!Array.isArray(result)) {
         apiCheckConsole.error(`can not ger data from ${location}`, result);
@@ -199,9 +199,13 @@ const getSalesChart = (pointId, daterange) => {
   return getBeveragesStats(daterange, filter, 86400);
 };
 
+const sequentialOutdatedTasks = sequentialGet();
 const getOutdatedTasks = (pointId) => {
   const lastDay = [moment().subtract(1, 'day'), moment()];
-  return getEvents(null)(1, 0, `device__sale_point__id__exact=${pointId}&overdued=1${daterangeToArgs(lastDay, 'open_date')}`).then(({ count }) => count);
+  return getEvents(null, sequentialOutdatedTasks)(
+    1, 0,
+    `device__sale_point__id__exact=${pointId}&overdued=1${daterangeToArgs(lastDay, 'open_date')}`,
+  ).then(({ count }) => count);
 };
 
 const getSalePointLastDaysBeverages = (pointId) => (
