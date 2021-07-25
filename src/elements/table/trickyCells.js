@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Typography, Button, Dropdown, Menu, Popover,
+  Popconfirm,
+  Input,
 } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -116,6 +119,43 @@ const explainedTitleCell = (title, explains) => (
   </>
 );
 
+const sophisticatedPopconfirm = (rowData, actions) => () => {
+  const { drinksAmount, name } = rowData;
+  const requiredRow = 'Удалить';
+  const [inputRow, setInputRow] = useState('');
+  const onConfirm = () => { actions.onDelete(rowData); };
+  const inputRef = useRef(null);
+  const form = () => (
+    <div style={{ maxWidth: 380 }}>
+      {`Вы собираетесь удалить ингредиент ${name}${drinksAmount ? `, который используется в ${drinksAmount} \
+      ${plural(drinksAmount, ['напитке', 'напитках', 'напитке'])}? ` : '? '}`}
+      <span style={{ color: 'rgb(245, 110, 100)' }}>После удаления восстановление невозможно</span>
+      <div style={{ paddingTop: 8, color: '#9a9a9a' }}>
+        { `Для продолжения введите "${requiredRow}" в поле ввода и нажмите “Да” для удаления ингредиента`}
+      </div>
+      <div style={{ paddingTop: 8 }}>
+        <Input onPressEnter={onConfirm} ref={inputRef} value={inputRow} onChange={({ target }) => setInputRow(target.value)} />
+      </div>
+    </div>
+  );
+  return (
+    <Popconfirm
+      placement="left"
+      title={form}
+      onConfirm={onConfirm}
+      okText="Да"
+      cancelText="Нет"
+      okButtonProps={{ disabled: requiredRow.toLowerCase() !== inputRow.toLowerCase() }}
+    >
+      <Button
+        onClick={() => setTimeout(() => { if (inputRef.current) { inputRef.current.focus(); } }, 10)}
+        type="link"
+        icon={<DeleteOutlined style={{ transform: 'scale(1.37)' }} />}
+      />
+    </Popconfirm>
+  );
+};
+
 export {
-  tableItemLink, linkedCell, devicesCell, durationCell, rangeMetricCompareCell, explainedTitleCell, popoverCell,
+  tableItemLink, linkedCell, devicesCell, durationCell, rangeMetricCompareCell, explainedTitleCell, sophisticatedPopconfirm, popoverCell,
 };

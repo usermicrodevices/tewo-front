@@ -5,6 +5,7 @@ import Table from 'models/table';
 import Filters from 'models/filters';
 import { getIngredients, applyIngredient, deleteIngredient } from 'services/ingredients';
 import { FORMAT } from 'elements/format';
+import { sophisticatedPopconfirm } from 'elements/table/trickyCells';
 
 import Ingredient from './ingredient';
 
@@ -65,6 +66,7 @@ class Ingridients extends Table {
     onDelete: (datum) => {
       deleteIngredient(datum.id).then(this.rawData.splice(this.rawData.findIndex((d) => d === datum), 1));
     },
+    deleteConfirm: sophisticatedPopconfirm,
   };
 
   constructor(session) {

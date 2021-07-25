@@ -26,6 +26,13 @@ class Ingridient extends Datum {
     return this.session.units.get(this.unitId)?.label || null;
   }
 
+  @computed get drinksAmount() {
+    if (this.session.drinks.isLoaded) {
+      return this.session.drinks.rawData.filter(({ recipe }) => recipe.findIndex(({ id }) => id === this.id)).length;
+    }
+    return 0;
+  }
+
   @computed get company() {
     return this.session.companies.get(this.companyId);
   }
