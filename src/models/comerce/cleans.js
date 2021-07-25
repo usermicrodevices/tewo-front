@@ -6,6 +6,7 @@ import Table from 'models/table';
 import { getEventsClearancesChart, getDetergents } from 'services/events';
 import { daterangeToArgs, SemanticRanges } from 'utils/date';
 import { getLastCleanings } from 'services/device';
+import { sequentialGet } from 'utils/request';
 
 const declareFilters = (session) => ({
   companyId: {
@@ -45,6 +46,10 @@ class Cleans extends Table {
   @observable stats = {};
 
   @observable lastCleans = new Map();
+
+  sequentialDetergentsGetter = sequentialGet();
+
+  sequentialChartGetter = sequentialGet();
 
   constructor(session) {
     const filters = new Filters(declareFilters(session));
@@ -99,7 +104,7 @@ class Cleans extends Table {
         const results = devices.filter(filters.predicate);
         const devicesFilter = results.length === devices.length ? [] : results.map(({ id }) => id);
         const daterange = filters.get('clearanceDate');
-        getEventsClearancesChart(devicesFilter, daterange)
+        getEventsClearancesChart(devicesFilter, daterange, this.sequentialChartGetter)
           .then((result) => {
             const series = {
               x: [],
@@ -124,7 +129,7 @@ class Cleans extends Table {
 
         const deviceFilter = devicesFilter.length > 0 ? `device__id${devicesFilter.length > 1 ? '__in' : ''}=${devicesFilter}` : '';
         const dateFilter = daterangeToArgs(daterange, 'open_date');
-        getDetergents(deviceFilter ? `${deviceFilter}${dateFilter}` : dateFilter.slice(1))
+        getDetergents(deviceFilter ? `${deviceFilter}${dateFilter}` : dateFilter.slice(1), this.sequentialDetergentsGetter)
           .then((stats) => { this.stats = stats; });
         return {
           count: results.length,

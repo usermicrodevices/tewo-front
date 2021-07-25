@@ -2,6 +2,8 @@
 import React from 'react';
 import { Tooltip } from 'antd';
 import { daterangeToArgs, SemanticRanges } from 'utils/date';
+
+import { sequentialGet } from 'utils/request';
 import Table from 'models/table';
 import Filters from 'models/filters';
 import {
@@ -135,7 +137,7 @@ class Events extends Table {
 
   constructor(session) {
     const filters = new Filters(declareFilters(session));
-    super(declareColumns(), getEvents(session), filters);
+    super(declareColumns(), getEvents(session, sequentialGet()), filters);
     this.filter.isShowSearch = false;
     this.session = session;
 

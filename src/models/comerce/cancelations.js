@@ -9,6 +9,7 @@ import { getSalesTop } from 'services/salePoints';
 import { SemanticRanges } from 'utils/date';
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { tableItemLink } from 'elements/table/trickyCells';
+import { sequentialGet } from 'utils/request';
 
 const declareColumns = () => ({
   deviceDate: {
@@ -43,6 +44,22 @@ const declareColumns = () => ({
   },
 });
 
+const sequentialGetter = (session, allAcceptor, cancelAcceptor, salesAcceptor) => {
+  const sequentialStatsAll = sequentialGet();
+  const sequentialStatsCancel = sequentialGet();
+  const sequentialTop = sequentialGet();
+
+  return (limit, offset, search) => {
+    const cnceledFilters = `canceled=1${search ? `&${search}` : ''}`;
+    getBeveragesStats(null, search, 86400, sequentialStatsAll)
+      .then(allAcceptor);
+    getBeveragesStats(null, cnceledFilters, 86400, sequentialStatsCancel)
+      .then(cancelAcceptor);
+    getSalesTop(cnceledFilters, sequentialTop).then(salesAcceptor);
+    return getBeverages(session)(limit, offset, cnceledFilters);
+  };
+};
+
 class Sales extends Table {
   @observable whole;
 
@@ -59,15 +76,12 @@ class Sales extends Table {
     filters.isShowSearch = false;
     filters.set('device_date', SemanticRanges.prw30Days.resolver());
 
-    super(declareColumns(session), (limit, offset, search) => {
-      const cnceledFilters = `canceled=1${search ? `&${search}` : ''}`;
-      getBeveragesStats(null, search, 86400)
-        .then((data) => { this.whole = data; });
-      getBeveragesStats(null, cnceledFilters, 86400)
-        .then((data) => { this.canceled = data; });
-      getSalesTop(cnceledFilters).then((result) => { this.top = result.sort(({ beverages: a }, { beverages: b }) => b - a); });
-      return getBeverages(session)(limit, offset, cnceledFilters);
-    }, filters);
+    super(declareColumns(session), sequentialGetter(
+      session,
+      (data) => { this.whole = data; },
+      (data) => { this.canceled = data; },
+      (result) => { this.top = result.sort(({ beverages: a }, { beverages: b }) => b - a); },
+    ), filters);
   }
 
   toString() {

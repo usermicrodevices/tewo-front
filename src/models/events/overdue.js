@@ -9,6 +9,7 @@ import colorizedCell from 'elements/table/colorizedCell';
 import { tableItemLink } from 'elements/table/trickyCells';
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { SemanticRanges } from 'utils/date';
+import { sequentialGet } from 'utils/request';
 
 const declareColumns = () => ({
   id: {
@@ -110,14 +111,14 @@ class Overdue extends Table {
 
   constructor(session) {
     const filters = new Filters(declareFilters(session));
-    super(declareColumns(), getOverdued(session), filters);
+    super(declareColumns(), getOverdued(session, sequentialGet()), filters);
     this.filter.isShowSearch = false;
     this.filter.set('open_date', SemanticRanges.prw30Days.resolver());
     this.session = session;
 
     const update = () => {
       this.downtimes = undefined;
-      getDowntimes(this.filter.search).then((downtimes) => {
+      getDowntimes(this.filter.search, sequentialGet()).then((downtimes) => {
         this.downtimes = downtimes.sort((a, b) => Math.sign(b.downtime - a.downtime));
       });
     };

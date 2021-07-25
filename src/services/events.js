@@ -10,13 +10,11 @@ import EventType from 'models/events/eventType';
 import Event from 'models/events/event';
 import { daterangeToArgs, alineDates, isDateRange } from 'utils/date';
 
-const sequentialGetEvents = sequentialGet();
-
 const TECH_CLEARANCE_EVENT_ID = 8;
 
-const getEvents = (session) => (limit, offset = 0, filter = '') => {
+const getEvents = (session, getter = get) => (limit, offset = 0, filter = '') => {
   apiCheckConsole.assert(limit > 0 && offset >= 0, `Неверные параметры запроса событий "${limit}" "${offset}"`);
-  return sequentialGetEvents(`/data/events/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
+  return getter(`/data/events/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
     const mustBe = {
       id: 'number',
       cid: 'string',
@@ -91,12 +89,16 @@ const sendEventsReport = (filter = '', email = '') => {
   return post(url, data);
 };
 
-const getClearances = (session) => (limit, offset = 0, filter = '') => (
-  getEvents(session)(limit, offset, `event_reference__id=${TECH_CLEARANCE_EVENT_ID}${filter !== '' ? `&${filter}` : filter}`)
+const getClearances = (session, getter = get) => (limit, offset = 0, filter = '') => (
+  getEvents(session, getter)(
+    limit,
+    offset,
+    `event_reference__id=${TECH_CLEARANCE_EVENT_ID}${filter !== '' ? `&${filter}` : filter}`,
+  )
 );
 
-const getOverdued = (session) => (limit, offset = 0, filter = '') => (
-  getEvents(session)(limit, offset, `overdued=1${filter !== '' ? `&${filter}` : filter}`)
+const getOverdued = (session, getter = get) => (limit, offset = 0, filter = '') => (
+  getEvents(session, get)(limit, offset, `overdued=1${filter !== '' ? `&${filter}` : filter}`)
 );
 
 const TYPES_RENAMER = {
@@ -168,9 +170,7 @@ const patchEventType = (id, data) => patch(`${TYPES_LOCATION}${id}`, form(data))
 
 const patchCustomEventType = (id, data) => post(`${TYPES_LOCATION}${id}/custom/`, form(data)).then((josn) => transform(josn, {}));
 
-const sequentialGetEventsClearancesChart = sequentialGet();
-
-const getEventsClearancesChart = (deviceId, daterange) => {
+const getEventsClearancesChart = (deviceId, daterange, getter = get) => {
   const args = (() => {
     if (!Array.isArray(deviceId)) {
       return `?device__id=${deviceId}${daterangeToArgs(daterange, 'open_date')}`;
@@ -187,8 +187,8 @@ const getEventsClearancesChart = (deviceId, daterange) => {
     }
     return '';
   })();
-  return sequentialGetEventsClearancesChart(
-    `/data/events/cleanings/${args}`,
+  return getter(
+    `/data/events/cleanings/${args}`, getter,
   ).then((result) => {
     if (!Array.isArray(result)) {
       apiCheckConsole.error('can not ger data from /data/events/cleanings/', result);
@@ -235,11 +235,9 @@ const getEventsClearancesChart = (deviceId, daterange) => {
   });
 };
 
-const sequentialGetDetergents = sequentialGet();
-
-const getDetergents = (filter) => {
+const getDetergents = (filter, getter = get) => {
   const location = `/data/events/detergent/${filter ? `?${filter}` : ''}`;
-  return sequentialGetDetergents(location).then((json) => {
+  return getter(location).then((json) => {
     const errorResponse = {
       decalcents: 0,
       detergent: 0,
@@ -260,7 +258,7 @@ const getDetergents = (filter) => {
   });
 };
 
-const getDowntimes = (filter) => get(`/data/events/downtime-salepoints/?${filter}`).then((json) => {
+const getDowntimes = (filter, getter = get) => getter(`/data/events/downtime-salepoints/?${filter}`).then((json) => {
   if (!Array.isArray(json)) {
     apiCheckConsole.error(`/data/events/downtime-salepoints/?${filter} isn't array`);
   }

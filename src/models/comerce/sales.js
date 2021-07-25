@@ -8,6 +8,7 @@ import { SemanticRanges } from 'utils/date';
 import { rangeMetricCompareCell, explainedTitleCell } from 'elements/table/trickyCells';
 import Details from 'components/comerce/salesDynamic/details';
 import { SALES_DATA_TYPES } from 'models/detailsProps';
+import { sequentialGet } from 'utils/request';
 
 const declareColumns = () => ({
   salePointCityName: {
@@ -136,7 +137,7 @@ class Sales extends Table {
 
     super(declareColumns(session), salesLoader(session, filters, (cur, prw) => {
       this.chart = { prw, cur };
-    }), filters);
+    }, sequentialGet()), filters);
   }
 
   get isImpossibleToBeSync() { return true; }

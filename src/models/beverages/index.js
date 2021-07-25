@@ -11,6 +11,7 @@ import { daterangeToArgs } from 'utils/date';
 import { OperationIcon, canceledIcon, indicatorsIcon } from 'elements/beverageIcons';
 import { getBeverages, sendBeveragesReport } from 'services/beverage';
 import { tableItemLink } from 'elements/table/trickyCells';
+import { sequentialGet } from 'utils/request';
 
 const declareColumns = (session) => ({
   id: {
@@ -146,7 +147,7 @@ class Beverages extends Table {
   session;
 
   constructor(session) {
-    super(declareColumns(session), getBeverages(session), new Filters(declareFilters(session)));
+    super(declareColumns(session), getBeverages(session, sequentialGet()), new Filters(declareFilters(session)));
     this.session = session;
     this.filter.isShowSearch = false;
 

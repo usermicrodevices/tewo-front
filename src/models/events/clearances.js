@@ -5,6 +5,7 @@ import Table from 'models/table';
 import Filters from 'models/filters';
 import { getClearances, getDetergents } from 'services/events';
 import { tableItemLink, durationCell } from 'elements/table/trickyCells';
+import { sequentialGet } from 'utils/request';
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
 
 import ClearancesCalendar from './clearancesCalendar';
@@ -90,16 +91,18 @@ class Clearances extends Table {
 
   @observable stats;
 
+  sequentialDetergetnsGetter = sequentialGet();
+
   constructor(session) {
     const filters = new Filters(declareFilters(session));
-    super(declareColumns(), getClearances(session), filters);
+    super(declareColumns(), getClearances(session, sequentialGet()), filters);
     this.filter.isShowSearch = false;
     this.session = session;
     this.calendar = new ClearancesCalendar(this, session);
 
     const update = () => {
       this.stats = {};
-      getDetergents(filters.search).then((stats) => { this.stats = stats; });
+      getDetergents(filters.search, this.sequentialDetergetnsGetter).then((stats) => { this.stats = stats; });
     };
 
     reaction(() => filters.search, update);
