@@ -34,6 +34,19 @@ const Row = (
   if (typeof rowData === 'undefined') {
     return <div style={style}><Loader /></div>;
   }
+
+  const OnDeleteConfirm = actions.deleteConfirm?.(rowData, actions) || (() => (
+    <Popconfirm
+      placement="left"
+      title="Отмена операции невозможна. Продолжить удаление?"
+      onConfirm={() => { actions.onDelete(rowData); }}
+      okText="Да"
+      cancelText="Нет"
+    >
+      <Button type="link" icon={<DeleteOutlined style={{ transform: 'scale(1.37)' }} />} />
+    </Popconfirm>
+  ));
+
   return (
     <div
       style={style}
@@ -80,17 +93,7 @@ const Row = (
             { typeof actions.onEdit === 'function' && (
               <Button type="link" onClick={() => { actions.onEdit(rowData, push); }} icon={<EditOutlined style={{ transform: 'scale(1.37)' }} />} />
             )}
-            { typeof actions.onDelete === 'function' && (
-              <Popconfirm
-                placement="left"
-                title="Отмена операции невозможна. Продолжить удаление?"
-                onConfirm={() => { actions.onDelete(rowData); }}
-                okText="Да"
-                cancelText="Нет"
-              >
-                <Button type="link" icon={<DeleteOutlined style={{ transform: 'scale(1.37)' }} />} />
-              </Popconfirm>
-            )}
+            { typeof actions.onDelete === 'function' && <OnDeleteConfirm />}
           </div>
         )}
       </div>
