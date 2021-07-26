@@ -19,7 +19,7 @@ const longCrop = (str) => {
 };
 
 const Barchart = ({
-  size, x, y, yAxis,
+  size, x, y, yAxis, onSelect, selected,
 }) => {
   if (!Array.isArray(x) || !Array.isArray(y) || x.length <= 1) {
     return <NoData noMargin title="Недостаточно данных для построения графика" />;
@@ -29,6 +29,13 @@ const Barchart = ({
     name: yAxis,
     data: y,
   }];
+  const selectConstoller = ({ el }) => {
+    if (typeof selected === 'number' && selected >= 0 && selected < x.length) {
+      const selectedPath = el.querySelector(`path[j="${selected}"]`);
+      selectedPath.setAttribute('fill', colors[1]);
+      selectedPath.setAttribute('stroke', colors[1]);
+    }
+  };
   const data = {
     colors,
     chart: {
@@ -41,6 +48,22 @@ const Barchart = ({
         enabled: false,
       },
       ...locale,
+
+      events: {
+        click: onSelect ? ({ target }) => {
+          const id = parseInt(target.getAttribute('j'), 10);
+          if (isNaN(id)) {
+            return;
+          }
+          if (selected === id) {
+            onSelect(null);
+          } else {
+            onSelect(id, x[id], y[id]);
+          }
+        } : undefined,
+        mounted: selectConstoller,
+        updated: selectConstoller,
+      },
     },
 
     tooltip: {
@@ -93,7 +116,7 @@ const Barchart = ({
 };
 
 const Wrap = withSize()(({
-  size: { width }, height, x, y, yAxis,
-}) => (<div className={style.chartwrap}><Barchart x={x} y={y} size={{ width, height }} yAxis={yAxis} /></div>));
+  size: { width }, height, x, y, yAxis, onSelect, selected,
+}) => (<div className={style.chartwrap}><Barchart onSelect={onSelect} selected={selected} x={x} y={y} size={{ width, height }} yAxis={yAxis} /></div>));
 
 export default Wrap;
