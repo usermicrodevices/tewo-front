@@ -128,7 +128,7 @@ const sophisticatedPopconfirm = (rowData, actions) => () => {
   const form = () => (
     <div style={{ maxWidth: 380 }}>
       {`Вы собираетесь удалить ингредиент ${name}${drinksAmount ? `, который используется в ${drinksAmount} \
-      ${plural(drinksAmount, ['напитке', 'напитках', 'напитках'])}? ` : '? '}`}
+      ${plural(drinksAmount, ['напитке', 'напитках', 'напитках'])}? ` : ', который не используется в напитках? '}`}
       <span style={{ color: 'rgb(245, 110, 100)' }}>После удаления восстановление невозможно</span>
       <div style={{ paddingTop: 8, color: '#9a9a9a' }}>
         { `Для продолжения введите "${requiredRow}" в поле ввода и нажмите “Да” для удаления ингредиента`}

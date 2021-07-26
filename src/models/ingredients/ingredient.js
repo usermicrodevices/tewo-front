@@ -28,7 +28,7 @@ class Ingridient extends Datum {
 
   @computed get drinksAmount() {
     if (this.session.drinks.isLoaded) {
-      return this.session.drinks.rawData.filter(({ recipe }) => recipe.findIndex(({ id }) => id === this.id)).length;
+      return this.session.drinks.rawData.filter(({ recipe }) => recipe.findIndex(({ id }) => id === this.id) >= 0).length;
     }
     return 0;
   }

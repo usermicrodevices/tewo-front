@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { inject, Provider, observer } from 'mobx-react';
 import { Card } from 'antd';
 import moment from 'moment';
@@ -33,14 +33,18 @@ const Values = inject('table')(observer(({ table }) => (
 )));
 
 const Chart = inject('table')(observer(({ table }) => {
+  const [selected, onSelect] = useState();
   if (typeof table.pointsDowntimes === 'undefined') {
     return <Loader />;
   }
+  const MAX_POINTS = 60;
   return (
     <Barchart
       height={345}
-      x={table.pointsDowntimes.map(({ name }) => name).slice(0, 60)}
-      y={table.pointsDowntimes.map(({ downtime }) => Math.round(downtime / 60)).slice(0, 60)}
+      onSelect={onSelect}
+      selected={selected}
+      x={table.pointsDowntimes.map(({ name }) => name).slice(0, MAX_POINTS)}
+      y={table.pointsDowntimes.map(({ downtime }) => Math.round(downtime / 60)).slice(0, MAX_POINTS)}
       yAxis="Время простоя (минут)"
     />
   );
