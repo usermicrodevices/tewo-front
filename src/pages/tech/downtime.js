@@ -33,7 +33,6 @@ const Values = inject('table')(observer(({ table }) => (
 )));
 
 const Chart = inject('table')(observer(({ table }) => {
-  const [selected, onSelect] = useState();
   if (typeof table.pointsDowntimes === 'undefined') {
     return <Loader />;
   }
@@ -41,8 +40,8 @@ const Chart = inject('table')(observer(({ table }) => {
   return (
     <Barchart
       height={345}
-      onSelect={onSelect}
-      selected={selected}
+      onSelect={table.setAdditionalFilterPoint}
+      selected={table.additionalFilterPoint}
       x={table.pointsDowntimes.map(({ name }) => name).slice(0, MAX_POINTS)}
       y={table.pointsDowntimes.map(({ downtime }) => Math.round(downtime / 60)).slice(0, MAX_POINTS)}
       yAxis="Время простоя (минут)"
