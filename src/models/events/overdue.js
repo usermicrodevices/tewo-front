@@ -1,5 +1,7 @@
 /* eslint class-methods-use-this: off */
-import { computed, observable, reaction } from 'mobx';
+import {
+  computed, observable, reaction, action,
+} from 'mobx';
 import moment from 'moment';
 
 import Table from 'models/table';
@@ -109,6 +111,20 @@ class Overdue extends Table {
 
   @observable downtimes;
 
+  @observable additionalFilterPoint = null;
+
+  setAdditionalFilterPoint = (id) => {
+    this.additionalFilterPoint = id;
+    if (typeof id === 'number') {
+      const { salePointId } = this.downtimes[id];
+      this.additionalFilter = (event) => event.salePointId === salePointId;
+    } else {
+      this.additionalFilter = undefined;
+    }
+  }
+
+  @observable additionalFilter;
+
   constructor(session) {
     const filters = new Filters(declareFilters(session));
     super(declareColumns(), getOverdued(session, sequentialGet()), filters);
@@ -123,6 +139,7 @@ class Overdue extends Table {
       });
     };
     reaction(() => this.filter.search, update);
+    reaction(() => this.filter.search, () => this.setAdditionalFilterPoint(null));
     update();
   }
 

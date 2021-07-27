@@ -242,7 +242,10 @@ class Table {
   }
 
   @computed get rawData() {
-    return this.dataModel.manager.data;
+    if (this.additionalFilter === undefined) {
+      return this.dataModel.manager.data;
+    }
+    return this.dataModel.manager.data.filter(this.additionalFilter);
   }
 
   @computed get isLoaded() {
