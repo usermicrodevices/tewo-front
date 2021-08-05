@@ -12,6 +12,31 @@ import PriceGroup from 'models/price/group';
 
 const PRICES_LOCATION = '/refs/prices/';
 
+const RENAMER = {
+  drink: 'drinkId',
+  price_group: 'groupId',
+  code_ext: 'codeExt',
+  value: 'value',
+  id: 'id',
+};
+
+function rename(data, keys, reverse = false) {
+  const result = {};
+
+  if (reverse) {
+    keys = Object.keys(keys).reduce((acc, key) => {
+      acc[keys[key]] = key;
+      return acc;
+    }, {});
+  }
+
+  for (const [jsonName, modelName] of Object.entries(keys)) {
+    result[modelName] = data[jsonName];
+  }
+
+  return result;
+}
+
 const priceObjectFromJSON = (json, acceptor) => {
   if (!checkData(
     json,
@@ -23,19 +48,16 @@ const priceObjectFromJSON = (json, acceptor) => {
     },
     {
       nds: 'any',
+      code_ext: 'any',
     },
   )) {
     apiCheckConsole.error(`Неожиданный ответ по адресу ${PRICES_LOCATION}`, json);
   }
-  const renamer = {
-    drink: 'drinkId',
-    price_group: 'groupId',
-    value: 'value',
-    id: 'id',
-  };
 
-  for (const [jsonName, modelName] of Object.entries(renamer)) {
-    acceptor[modelName] = json[jsonName];
+  const renamedJson = rename(json, RENAMER);
+
+  for (const [key, value] of Object.entries(renamedJson)) {
+    acceptor[key] = value;
   }
   return acceptor;
 };
@@ -63,7 +85,7 @@ const postPrices = (drinks, priceGroupId, session) => Promise.all(drinks.map((dr
   return newPrices;
 });
 
-const patchPrice = (id, data) => patch(`${PRICES_LOCATION}${id}`, data).then((result) => priceObjectFromJSON(result, {}));
+const patchPrice = (id, data) => patch(`${PRICES_LOCATION}${id}`, rename(data, RENAMER, true)).then((result) => priceObjectFromJSON(result, {}));
 
 const deletePrice = (id) => del(`${PRICES_LOCATION}${id}`);
 

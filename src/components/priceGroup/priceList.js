@@ -31,7 +31,7 @@ const COLUMNS = [
     render: (v) => <Format>{v}</Format>,
   },
   {
-    title: 'Цена',
+    title: 'Цена (позиция)',
     dataIndex: 'value',
     render: priceCell,
     sorter: (a, b) => b.value - a.value || a.key - b.key,
@@ -61,9 +61,10 @@ const PriceList = ({ element, onAdd, isLoading }) => {
     name: price.name,
     value: price.value,
     nds: price.nds,
+    codeExt: price.codeExt,
     currency: price.currency,
     rm: () => element.removePrice(price.id),
-    sendValue: (value) => price.setValue(value),
+    sendValue: (value, codeExt) => price.setValue(value, codeExt),
   });
 
   return (
