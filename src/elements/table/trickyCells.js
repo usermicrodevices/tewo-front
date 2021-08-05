@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Typography, Button, Dropdown, Menu,
   Popconfirm,
-  Input,
+  Input, Popover,
 } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
@@ -12,13 +12,15 @@ import { devices as devicesRout } from 'routes';
 import Format from 'elements/format';
 import plural from 'utils/plural';
 import ChangesLabel from 'elements/changesLabel';
-import Form from 'antd/lib/form/Form';
+import classNames from './trickyCells.module.scss';
 
 const { Text } = Typography;
 
 const linkedCell = (onClick) => (name, datum, width) => (
   <Button className="cell-link" style={{ height: 20 }} onClick={onClick(datum)} type="link"><Format width={width}>{ name }</Format></Button>
 );
+
+const popoverCell = (content, popover, width) => <Popover content={popover}><Format width={width}>{ content }</Format></Popover>;
 
 const tableItemLink = (text, to, width) => <Link to={to}><Format width={width}>{text}</Format></Link>;
 
@@ -37,7 +39,7 @@ const devicesCell = (devices, _, width) => {
   }
   const isNeedDropdown = forShow < devices.length;
   return (
-    <span>
+    <div className={classNames.devices}>
       {devices.slice(0, forShow).map((device, id) => (
         <React.Fragment key={device.id}>
           {
@@ -66,7 +68,7 @@ const devicesCell = (devices, _, width) => {
           </span>
         </Dropdown>
       )}
-    </span>
+    </div>
   );
 };
 
@@ -155,5 +157,5 @@ const sophisticatedPopconfirm = (rowData, actions) => () => {
 };
 
 export {
-  tableItemLink, linkedCell, devicesCell, durationCell, rangeMetricCompareCell, explainedTitleCell, sophisticatedPopconfirm,
+  tableItemLink, linkedCell, devicesCell, durationCell, rangeMetricCompareCell, explainedTitleCell, popoverCell, sophisticatedPopconfirm,
 };

@@ -267,6 +267,15 @@ class Table {
   @computed get newElements() {
     return this.dataModel.newElements;
   }
+
+  /**
+   * Механизм рефреша рассчитан на то, что появляются новые данные а
+   * старые не обновляются. Релоад позволяет грубой силой обновить
+   * данные не зависимо от того, загружались-ли они или нет
+   */
+  reload() {
+    this.dataModel.reload();
+  }
 }
 
 export default Table;

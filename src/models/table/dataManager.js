@@ -29,6 +29,14 @@ class DataManager {
   constructor(partialLoader) {
     this.partialLoader = partialLoader;
 
+    this.reload();
+  }
+
+  @computed get isLoaded() {
+    return this.isAsync !== null;
+  }
+
+  @action reload() {
     this.partialLoader(constants.preloadLimit).then(({ count: amount, results }) => {
       transaction(() => {
         this.data.replace(results.concat(new Array(amount - results.length)));
@@ -40,10 +48,6 @@ class DataManager {
         }
       });
     });
-  }
-
-  @computed get isLoaded() {
-    return this.isAsync !== null;
   }
 
   @action takeData = (data) => {

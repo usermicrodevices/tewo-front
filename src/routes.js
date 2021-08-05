@@ -22,6 +22,7 @@ import Cleans from 'pages/comerce/cleans';
 import Cancellations from 'pages/comerce/cancelations';
 import IngredientsConsumption from 'pages/comerce/ingredients';
 import Primecost from 'pages/comerce/primecost';
+import DeviceUpdate from 'pages/tech/deviceUpdate';
 
 class Rout {
   path;
@@ -64,8 +65,10 @@ const cleans = new Rout('/cleans', Cleans);
 const cancellations = new Rout('/cancellations', Cancellations);
 const ingredientsConsumption = new Rout('/consumption', IngredientsConsumption);
 const primecost = new Rout('/primecost', Primecost);
+const deviceUpdate = new Rout(['/device_update', '/session'], DeviceUpdate);
 
 const authorizedRoutes = [
+  deviceUpdate,
   primecost,
   ingredientsConsumption,
   cancellations,
@@ -96,6 +99,7 @@ const defaultAuthorizedRout = dashboard;
 const defaultUnauthorizedRout = signin;
 
 export {
+  deviceUpdate,
   primecost,
   ingredientsConsumption,
   cancellations,

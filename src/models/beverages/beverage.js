@@ -1,4 +1,11 @@
-import { computed } from 'mobx';
+import { action, computed, observable } from 'mobx';
+import { getBeverageIndicatorsValues } from 'services/beverage';
+
+function getUnitFromIndicator(session, indicatorInfo) {
+  const unitId = session.beverageIndicators.get(indicatorInfo.indicator)?.unit;
+
+  return session.units.get(unitId)?.name;
+}
 
 class Beverage {
   id;
@@ -21,10 +28,25 @@ class Beverage {
 
   session;
 
+  @observable
+  indicators;
+
   get key() { return this.id; }
 
   constructor(session) {
     this.session = session;
+  }
+
+  @computed get indicatorsList() {
+    if (!this.indicators) {
+      return undefined;
+    }
+
+    return this.indicators.map((indicatorInfo) => ({
+      name: this.session.beverageIndicators.get(indicatorInfo.indicator)?.name,
+      value: indicatorInfo.value,
+      unit: getUnitFromIndicator(this.session, indicatorInfo),
+    }));
   }
 
   @computed get operationName() {
@@ -80,6 +102,14 @@ class Beverage {
   @computed get deviceName() {
     const { device } = this;
     return device && device.name;
+  }
+
+  @action fetchIndicators() {
+    this.indicators = undefined;
+
+    getBeverageIndicatorsValues(this.id).then((indicators) => {
+      this.indicators = indicators;
+    });
   }
 }
 

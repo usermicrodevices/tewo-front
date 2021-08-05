@@ -12,7 +12,7 @@ const Chart = ({ element: { details: { beveragesStats: { series, xSeria, isSerie
       (() => {
         const y1 = [
           { text: 'Наливов в день, шт.', decimalsInFloat: 0, tooltipUnit: 'шт.' },
-          { text: 'Динамика продаж, ₽', decimalsInFloat: 2, tooltipUnit: '₽' },
+          { text: 'Динамика продаж, ₽', decimalsInFloat: 0, tooltipUnit: '₽' },
         ][series[0].axis];
         return (
           <ScalebleChart

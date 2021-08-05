@@ -1,20 +1,21 @@
 /* eslint class-methods-use-this: off */
-import moment from 'moment';
-
+import React from 'react';
+import { Tooltip } from 'antd';
 import { daterangeToArgs, SemanticRanges } from 'utils/date';
-import plural from 'utils/plural';
 import { sequentialGet } from 'utils/request';
 import Table from 'models/table';
 import Filters from 'models/filters';
-import Exporter from 'models/exporter';
 import {
-  getEvents, getEventsClearancesChart, getClearances, exportEvents,
+  getEvents, getEventsClearancesChart, getClearances, sendEventsReport,
 } from 'services/events';
 import colorizedCell from 'elements/table/colorizedCell';
 import { eventsLog as eventsLogRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { tableItemLink, durationCell } from 'elements/table/trickyCells';
+import Icon from 'elements/icon';
+import ExporterToEmail from 'models/exporterToEmail';
 
 const TECH_SERVICE_EVENT_ID = 20;
+const infoIcon = <div style={{ textAlign: 'center', width: 38, margin: '0 auto' }}><Icon size="large" name="info-outline" /></div>;
 
 const declareColumns = () => ({
   id: {
@@ -51,14 +52,9 @@ const declareColumns = () => ({
     sortDirections: 'both',
     transform: (_, data, width) => colorizedCell({ children: data.eventName, color: data.eventColor, width }),
   },
-  eventDescription: {
-    isVisibleByDefault: true,
-    title: 'Описание',
-    grow: 2,
-  },
   eventPriorityDescription: {
     isVisibleByDefault: true,
-    title: 'Приоритет события',
+    title: 'Категория',
     grow: 1,
     sortDirections: 'both',
   },
@@ -87,6 +83,12 @@ const declareColumns = () => ({
     width: 189,
     sortDirections: 'both',
   },
+  eventDescription: {
+    isVisibleByDefault: true,
+    title: 'Описание',
+    width: 84,
+    transform: (_, data) => (data.eventDescription ? <Tooltip placement="topRight" width={250} title={data.eventDescription}>{infoIcon}</Tooltip> : ' '),
+  },
 });
 
 const declareFilters = (session) => ({
@@ -109,7 +111,7 @@ const declareFilters = (session) => ({
   },
   event_reference__priority__id: {
     type: 'selector',
-    title: 'Приоритет',
+    title: 'Категория',
     apply: (general, data) => general(data.priority),
     selector: () => session.eventPriorities.selector,
   },
@@ -138,25 +140,9 @@ class Events extends Table {
     this.filter.isShowSearch = false;
     this.session = session;
 
-    this.exporter = new Exporter(exportEvents, this.filter, {
-      checkDisable: () => !this.filter.data.has('open_date') || this.data.length === 0,
-      generateFilename: () => {
-        const dateFormat = 'DD.MM-YYYY';
-        const dateRange = this.filter.data.get('open_date');
-        const dateStart = dateRange[0].format(dateFormat);
-        const dateEnd = dateRange[1].format(dateFormat);
-
-        return `События_${dateStart}-${dateEnd}`;
-      },
-      generateConfirmMessage: () => {
-        const dateFormat = 'DD.MM.YYYY HH:mm';
-        const count = this.data.length;
-        const dateRange = this.filter.data.get('open_date');
-        const dateStart = dateRange[0].format(dateFormat);
-        const dateEnd = dateRange[1].format(dateFormat);
-
-        return `Выгрузить ${count} ${plural(count, ['запись', 'записи', 'записей'])} по событиям с ${dateStart} по ${dateEnd}?`;
-      },
+    this.exporter = new ExporterToEmail(sendEventsReport, this.filter, {
+      checkDisable: () => !this.filter.data.has('open_date'),
+      generateConfirmMessage: () => 'Ссылка будет отправлена на указанную почту, файл храниться 30 дней.',
     });
   }
 

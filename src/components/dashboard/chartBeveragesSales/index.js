@@ -33,7 +33,7 @@ const Chart = inject('storage')(observer(({
         height={290}
         y1={[
           { text: 'Наливов в день, шт.', decimalsInFloat: 0, tooltipUnit: 'шт.' },
-          { text: 'Динамика продаж, ₽', decimalsInFloat: 2, tooltipUnit: '₽' },
+          { text: 'Динамика продаж, ₽', decimalsInFloat: 0, tooltipUnit: '₽' },
         ][series[0].axis]}
       />
     </div>

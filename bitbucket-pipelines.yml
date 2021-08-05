@@ -4,18 +4,42 @@ options:
   max-time: 5
 pipelines:
   branches:
+    development:
+      - step:
+          caches:
+            - node
+          script:
+            - npm ci
+            - npm run build
+          artifacts:
+            - build/**
+
+      - step:
+          name: SFTP Deploy
+          deployment: production
+          script:
+            - pipe: atlassian/sftp-deploy:0.5.7
+              variables:
+                USER: $SFTP_DEVELOPMENT_USER
+                SERVER: $SFTP_DEVELOPMENT_SERVER
+                PASSWORD: $SFTP_DEVELOPMENT_PASSWORD
+                SFTP_PASSWORD: $SFTP_DEVELOPMENT_PASSWORD
+                EXTRA_ARGS: '-P 23'
+                REMOTE_PATH: '/public'
+                LOCAL_PATH: 'build/*'
+                DEBUG: 'true'
     master:
       - step:
           name: ServicePB Github Sync
           script:
             - git remote add sync git@github.com:usermicrodevices/tewo-front.git
-            - git pull 
+            - git pull
             - git push -u sync master
       - step:
           caches:
             - node
           script:
-            - npm install
+            - npm ci
             - npm run build
           artifacts:
             - build/**
@@ -28,6 +52,7 @@ pipelines:
                 USER: $SFTP_USER
                 SERVER: $SFTP_SERVER
                 PASSWORD: $SFTP_PASSWORD
+                EXTRA_ARGS: $SFTP_EXTRA
                 REMOTE_PATH: '/public'
                 LOCAL_PATH: 'build/*'
                 DEBUG: 'true'
