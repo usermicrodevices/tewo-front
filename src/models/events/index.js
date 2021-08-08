@@ -2,7 +2,8 @@
 import React from 'react';
 import { Tooltip } from 'antd';
 import { daterangeToArgs, SemanticRanges } from 'utils/date';
-import { sequentialGet } from 'utils/request';
+
+import { sequentialGet, get } from 'utils/request';
 import Table from 'models/table';
 import Filters from 'models/filters';
 import {
@@ -154,8 +155,8 @@ class Events extends Table {
     return `${eventsLogRout.path}/?device__id__in=${deviceId}`;
   }
 
-  getDeviceServiceEvents(deviceId) {
-    return getEvents(this.session)(1e3, 0, `event_reference__id=${TECH_SERVICE_EVENT_ID}&close_date__isnull=1&device__id__in=${deviceId}`);
+  getDeviceServiceEvents(deviceId, getter = get) {
+    return getEvents(this.session, getter)(1e3, 0, `event_reference__id=${TECH_SERVICE_EVENT_ID}&close_date__isnull=1&device__id__in=${deviceId}`);
   }
 
   getDeviceClearancesEventsLastWeekCount(deviceId) {
@@ -170,9 +171,9 @@ class Events extends Table {
 
   getClearances = getClearances;
 
-  getOverdueTasks(dateRange, salePointsFilter) {
+  getOverdueTasks(dateRange, salePointsFilter, getter) {
     const datefilter = daterangeToArgs(dateRange, 'open_date');
-    return getEvents(this.session)(3e4, 0, `overdued=1${datefilter}&${salePointsFilter}`);
+    return getEvents(this.session, getter)(3e4, 0, `overdued=1${datefilter}&${salePointsFilter}`);
   }
 
   getDeviceClearancesChart = getEventsClearancesChart;

@@ -12,6 +12,7 @@ const COLUMNS = [
   {
     title: 'PLU (доп PLU)',
     dataIndex: 'plu',
+    width: 160,
   },
   {
     title: 'Название',
@@ -33,6 +34,7 @@ const COLUMNS = [
   {
     title: 'Цена (позиция)',
     dataIndex: 'value',
+    width: 260,
     render: priceCell,
     sorter: (a, b) => b.value - a.value || a.key - b.key,
   },

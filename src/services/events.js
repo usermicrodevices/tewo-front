@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 import {
-  sequentialGet, get, patch, post, blob,
+  get, patch, post, blob,
 } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import apiCheckConsole from 'utils/console';
@@ -98,7 +98,7 @@ const getClearances = (session, getter = get) => (limit, offset = 0, filter = ''
 );
 
 const getOverdued = (session, getter = get) => (limit, offset = 0, filter = '') => (
-  getEvents(session, get)(limit, offset, `overdued=1${filter !== '' ? `&${filter}` : filter}`)
+  getEvents(session, getter)(limit, offset, `overdued=1${filter !== '' ? `&${filter}` : filter}`)
 );
 
 const TYPES_RENAMER = {

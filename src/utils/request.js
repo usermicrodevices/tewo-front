@@ -47,7 +47,7 @@ const get = (endpoint, config) => {
  */
 const sequentialGet = (space) => {
   const lastRequest = {};
-  return (endpoint, config) => new Promise((resolve, reject) => {
+  const result = (endpoint, config) => new Promise((resolve, reject) => {
     const req = get(endpoint, config).then((result) => {
       if (req === lastRequest.id) {
         resolve(result);
@@ -58,6 +58,7 @@ const sequentialGet = (space) => {
     });
     lastRequest.req = req;
   });
+  return result;
 };
 
 const post = (endpoint, data) => request.post(endpoint, data).then(({ data: result }) => result);

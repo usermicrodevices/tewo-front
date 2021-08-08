@@ -157,5 +157,5 @@ const sophisticatedPopconfirm = (rowData, actions) => () => {
 };
 
 export {
-  tableItemLink, linkedCell, devicesCell, durationCell, rangeMetricCompareCell, explainedTitleCell, popoverCell, sophisticatedPopconfirm,
+  tableItemLink, linkedCell, devicesCell, durationCell, rangeMetricCompareCell, explainedTitleCell, sophisticatedPopconfirm, popoverCell,
 };

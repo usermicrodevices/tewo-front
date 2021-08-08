@@ -80,6 +80,7 @@ class Content extends React.Component {
         this.forceUpdate();
       }
     } : () => {};
+
     return (
       <List
         onScroll={this.onScroll}

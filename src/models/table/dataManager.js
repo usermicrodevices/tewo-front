@@ -103,6 +103,9 @@ class DataManager {
           this.amount + results.length < count,
           `Противоречивое состояние данных: firstOld === 0 && ${this.amount} + ${results.length} < ${count}`,
         );
+        if (this.amount + results.length > count) {
+          return;
+        }
         this.data.replace(results.concat(new Array(count - this.data.length - results.length).concat(this.data.slice())));
         return;
       }
@@ -159,36 +162,21 @@ class DataManager {
   };
 
   @action validate() {
-    const headCheck = this.partialLoader(constants.preloadLimit).then(this.takeData);
-    if (!this.validateAddition) {
-      return headCheck;
-    }
-    const { addition: additionRequest, offset } = this.validateAddition();
-    this.validateAddition = null;
-    headCheck.then(() => {
-      additionRequest.then((addition) => {
-        this.resolveDataRange(addition, offset);
-      });
-    });
-    return Promise.all([headCheck, additionRequest]).then(([{ count: headAmount }, { count: additionAmount }]) => {
-      console.assert(headAmount === additionAmount, `Добавление элемента во время запроса данных ${headAmount} ${additionAmount}`);
-    });
+    return this.partialLoader(constants.preloadLimit).then(this.takeData);
   }
 
   isEverythingLoadedFromRange(begin, end) {
     const suggestedRows = this.data.slice(begin, end);
-    return suggestedRows.findIndex((itm) => typeof itm === 'undefined') < 0;
+    return suggestedRows.findIndex((itm) => itm === undefined) < 0;
   }
 
   @action validateWithAddition(offset) {
     if (!this.isAsync) {
       return;
     }
-    this.validateAddition = () => {
-      const addition = this.partialLoader(constants.preloadLimit, offset);
-      return { addition, offset };
-    };
-    this.validate();
+    this.partialLoader(constants.preloadLimit, offset).then((addition) => {
+      this.resolveDataRange(addition, offset);
+    });
   }
 
   @action resolveDataRange({ results }, offset) {

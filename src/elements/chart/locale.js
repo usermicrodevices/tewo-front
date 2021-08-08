@@ -23,7 +23,7 @@ function relativeTimeWithPlural(number, withoutSuffix, key) {
     dd: ['день', 'дня', 'дней'],
     ww: ['неделя', 'недели', 'недель'],
     MM: ['месяц', 'месяца', 'месяцев'],
-    yy: ['год', 'года', 'лет'],
+    yy: ['год', number % 10 >= 5 ? 'лет' : 'года', 'лет'],
   };
 
   const localKey = key.length === 1 ? `${key}${key}` : key;

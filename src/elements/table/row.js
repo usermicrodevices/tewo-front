@@ -33,7 +33,7 @@ const Row = (
       </div>
     );
   }
-  if (typeof rowData === 'undefined') {
+  if (rowData === undefined) {
     return <div style={style}><Loader /></div>;
   }
 
