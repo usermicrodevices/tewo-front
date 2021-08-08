@@ -111,19 +111,22 @@ class Overdue extends Table {
 
   @observable downtimes;
 
-  @observable additionalFilterPoint = null;
+  @observable selectedPointId = null;
+
+  lastChartSearch = null;
+
+  internalPrevent = false;
 
   setAdditionalFilterPoint = (id) => {
-    this.additionalFilterPoint = id;
-    if (typeof id === 'number') {
-      const { salePointId } = this.downtimes[id];
-      this.additionalFilter = (event) => event.salePointId === salePointId;
-    } else {
-      this.additionalFilter = undefined;
+    if (this.internalPrevent) {
+      this.internalPrevent = false;
+      return;
     }
+    this.selectedPointId = id;
+    this.filter.data[typeof id === 'number' ? 'set' : 'delete'](
+      'device__sale_point__id', id ? [this.downtimes[id].salePointId] : undefined,
+    );
   }
-
-  @observable additionalFilter;
 
   constructor(session) {
     const filters = new Filters(declareFilters(session));
@@ -133,13 +136,31 @@ class Overdue extends Table {
     this.session = session;
 
     const update = () => {
-      this.downtimes = undefined;
-      getDowntimes(this.filter.search, sequentialGet()).then((downtimes) => {
-        this.downtimes = downtimes.sort((a, b) => Math.sign(b.downtime - a.downtime));
-      });
+      const newFilter = this.filter.search.replace(/[&]?device__sale_point__id__in=[\d,]+/, '');
+      console.log(this.lastChartSearch, newFilter);
+      if (this.lastChartSearch !== newFilter) {
+        this.downtimes = undefined;
+        this.lastChartSearch = newFilter;
+        getDowntimes(newFilter, sequentialGet()).then((downtimes) => {
+          this.downtimes = downtimes.sort((a, b) => Math.sign(b.downtime - a.downtime));
+        });
+      }
     };
     reaction(() => this.filter.search, update);
-    reaction(() => this.filter.search, () => this.setAdditionalFilterPoint(null));
+    reaction(() => this.filter.search, () => {
+      const cur = this.filter.data.get('device__sale_point__id');
+      if (cur?.length !== 1) {
+        this.internalPrevent = true;
+        this.selectedPointId = null;
+        return;
+      }
+      if (this.downtimes && this.downtimes[this.selectedPointId].salePointId !== cur[0]) {
+        const id = this.downtimes.findIndex(({ salePointId }) => salePointId === cur[0]);
+        if (id > 0) {
+          this.setAdditionalFilterPoint(id);
+        }
+      }
+    });
     update();
   }
 

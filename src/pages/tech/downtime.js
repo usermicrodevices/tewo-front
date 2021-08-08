@@ -41,7 +41,7 @@ const Chart = inject('table')(observer(({ table }) => {
     <Barchart
       height={345}
       onSelect={table.setAdditionalFilterPoint}
-      selected={table.additionalFilterPoint}
+      selected={table.selectedPointId}
       x={table.pointsDowntimes.map(({ name }) => name).slice(0, MAX_POINTS)}
       y={table.pointsDowntimes.map(({ downtime }) => Math.round(downtime / 60)).slice(0, MAX_POINTS)}
       yAxis="Время простоя (минут)"
