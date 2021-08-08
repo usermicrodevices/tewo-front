@@ -229,7 +229,7 @@ class Table {
   @computed get data() {
     if (this.isImpossibleToBeSync) {
       const isReverse = this.sort.direction === 'ascend' && false;
-      const result = this.rawData.slice().sort(this.sortPredicate);
+      const result = this.rawData.slice();
       if (isReverse) {
         return result.reverse();
       }
