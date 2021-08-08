@@ -18,7 +18,7 @@ const declareColumns = () => ({
     isDefaultSort: true,
     sortDirections: 'both',
   },
-  createdDate: {
+  openDate: {
     isVisibleByDefault: false,
     title: 'Время начала',
     width: 189,

@@ -8,17 +8,22 @@
 }
 
 .clock {
-  border-radius: 14px;
-  width: 167px;
-  display: inline-block;
-  height: 28px;
-  line-height: 28px;
-  background: #F3F5F7;
-  justify-content: center;
-  white-space: nowrap;
 
-  .clockicon {
-    margin: 1px 6px -1px 6px;
-    fill: $link-color
+  margin-top: -20px;
+  padding-top: 15px;
+  margin-bottom: -20px;
+  >div {
+    border-radius: 14px;
+    width: 167px;
+    display: inline-block;
+    height: 28px;
+    line-height: 28px;
+    background: #F3F5F7;
+    white-space: nowrap;
+
+    .clockicon {
+      margin: 1px 6px -1px 6px;
+      fill: $link-color
+    }
   }
 }

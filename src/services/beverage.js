@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { when } from 'mobx';
 
-import { get, blob } from 'utils/request';
+import { get, blob, post } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import {
   daterangeToArgs, isDateRange, alineDates, momentToArg,
@@ -15,14 +15,12 @@ const getBeverages = (session) => (limit, offset = 0, filter = '') => new Promis
   get(`/data/beverages/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
     const beverageMustBe = {
       id: 'number',
-      cid: 'string',
       created_date: 'date',
       device_date: 'date',
       device: 'number',
       sale_sum: 'number',
       canceled: 'boolean',
       cost: 'number',
-      sale_sum_hidden: 'number',
     };
     const mayBe = {
       drink: 'number',
@@ -64,7 +62,6 @@ const getBeverages = (session) => (limit, offset = 0, filter = '') => new Promis
       results: response.results.map((datum) => {
         const beverage = new Beverage(session);
         beverage.id = datum.id;
-        beverage.cid = datum.cid;
         beverage.createdDate = moment(datum.created_date);
         beverage.deviceDate = moment(datum.device_date);
         beverage.deviceId = datum.device;
@@ -90,7 +87,44 @@ const getBeverageOperations = (map) => get('refs/operations/').then((data) => {
   return map;
 });
 
+const getBeverageIndicators = (map) => get('/local_api/indicator_references/').then((data) => {
+  if (Array.isArray(data)) {
+    for (const datum of data) {
+      if (!checkData(datum, {
+        id: 'number', name: 'string', description: 'string', unit: 'number',
+      })) {
+        apiCheckConsole.error('Неожиданные данные для операций /local_api/indicator_references/', datum);
+      }
+      map.set(datum.id, datum);
+    }
+  }
+  return map;
+});
+
+const getBeverageIndicatorsValues = (beverageId) => get(`/local_api/indicator_beverages/?beverage=${beverageId}`).then((data) => {
+  if (Array.isArray(data)) {
+    for (const datum of data) {
+      if (!checkData(datum, {
+        id: 'number', value: 'string', beverage: 'string', indicator: 'number',
+      })) {
+        apiCheckConsole.error(`Неожиданные данные для операций /local_api/indicator_beverages/?beverage=${beverageId}`, datum);
+      }
+    }
+  }
+  return data;
+});
+
+/** @deprecated */
 const exportBeverages = (filter = '') => blob(`/data/beverages/xlsx/${filter !== '' ? `?${filter}` : filter}`);
+
+const sendBeveragesReport = (filter = '', email = '') => {
+  const url = `/data/beverages/link_to_email/${filter !== '' ? `?${filter}` : filter}`;
+  const data = {
+    email,
+  };
+
+  return post(url, data);
+};
 
 const getBeveragesStats = (daterange, filters, step) => {
   const rangeArg = daterangeToArgs(daterange, 'device_date') || `&device_date__gt=${momentToArg(moment(1))}`;
@@ -290,7 +324,10 @@ const getBeveragesDenseChart = (search, session) => Promise.all([
 export {
   getBeverages,
   exportBeverages,
+  sendBeveragesReport,
   getBeverageOperations,
+  getBeverageIndicators,
+  getBeverageIndicatorsValues,
   getBeveragesStats,
   getBeveragesSalePointsStats,
   getBeveragesDense,

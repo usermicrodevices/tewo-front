@@ -31,6 +31,8 @@ const RENAMER = {
   sync_date: 'priceSyncDate',
   status: 'status',
   description: 'description',
+  software_version: 'softwareVersion',
+  auth_key: 'authKey',
 };
 
 function converter(json, acceptor) {
@@ -59,6 +61,8 @@ function converter(json, acceptor) {
       lastoff: 'date',
       sync_date: 'date',
       description: 'string',
+      auth_key: 'string',
+      software_version: 'string',
     },
   )) {
     apiCheckConsole.error(`Неожиданный ответ по адресу ${LOCATION}`, json);

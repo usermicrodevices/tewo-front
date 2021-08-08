@@ -19,6 +19,7 @@ import NotificationSources from './notifications/sources';
 import DeviceModels from './devices/models';
 import DeviceTypes from './devices/types';
 import BeverageOperations from './beverages/operations';
+import BeverageIndicators from './beverages/indicators';
 import Prices from './price';
 import PriceGroups from './price/groups';
 import Currencies from './currencies';
@@ -47,6 +48,8 @@ class Session {
   nds = new NDS();
 
   beverageOperations = new BeverageOperations();
+
+  beverageIndicators = new BeverageIndicators();
 
   eventPriorities = new EventPriorities();
 

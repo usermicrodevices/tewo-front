@@ -36,6 +36,7 @@ const transform = (json, acceptor) => {
       company: 'number',
       cooking_time: 'number',
     }, {
+      product_uid: 'string',
       nds: 'number',
       code_ext: 'string',
     },

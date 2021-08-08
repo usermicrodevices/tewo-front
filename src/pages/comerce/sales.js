@@ -36,8 +36,8 @@ class Sales extends React.Component {
           Аналитика продаж
         </Typography.Title>
         <Space>
-          { <div style={{ display: isDistribution ? 'none' : 'block' }}><Provider filter={model.filter}><FiltersButton /></Provider></div> }
-          { <div style={{ display: isDistribution ? 'block' : 'none' }}><Provider filter={distributionModel.filter}><FiltersButton /></Provider></div> }
+          { !isDistribution && <div key="sales"><Provider filter={model.filter}><FiltersButton /></Provider></div> }
+          { isDistribution && <div key="distribution"><Provider filter={distributionModel.filter}><FiltersButton /></Provider></div> }
         </Space>
       </>
     );

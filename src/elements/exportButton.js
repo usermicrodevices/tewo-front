@@ -1,11 +1,13 @@
 import React from 'react';
-import { Button, Popconfirm, Tooltip } from 'antd';
+import {
+  Button, Popconfirm, Tooltip, Input, Form,
+} from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react';
 
 export default observer(({
   exporter,
-  text = 'Экспорт Excel',
+  text = 'Экспорт на email',
   icon = <DownloadOutlined />,
 }) => {
   if (!exporter) {
@@ -23,21 +25,41 @@ export default observer(({
     </Button>
   );
 
-  if (exporter.disabled) {
+  if (exporter.loading) {
     return (
-      <Tooltip title="Для выгрузки выберите в фильтрации диапазон дат и дождитесь загрузки данных">
+      <Tooltip title="Идет выгрузка">
         {buttonElement}
       </Tooltip>
     );
   }
 
+  if (exporter.disabled) {
+    return (
+      <Tooltip title="Для выгрузки выберите в фильтрации диапазон дат">
+        {buttonElement}
+      </Tooltip>
+    );
+  }
+
+  const TitleElement = (
+    <div>
+      <p>{exporter.confirmMessage}</p>
+      <Form onSubmitCapture={exporter.export}>
+        <Input value={exporter.email} placeholder="Email" type="email" onChange={(event) => exporter.onChangeEmail(event.target.value)} />
+      </Form>
+    </div>
+  );
+
   return (
     <Popconfirm
-      title={exporter.confirmMessage}
+      title={TitleElement}
       onConfirm={exporter.export}
       disabled={exporter.disabled}
       overlayStyle={{ width: 350 }}
-      okText="Выгрузить"
+      okButtonProps={{
+        disabled: exporter.isSendDisabled,
+      }}
+      okText="Отправить"
       cancelText="Отменить"
     >
       {buttonElement}
