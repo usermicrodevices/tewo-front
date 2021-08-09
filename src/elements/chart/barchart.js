@@ -32,6 +32,9 @@ const Barchart = ({
   const selectConstoller = ({ el }) => {
     if (typeof selected === 'number' && selected >= 0 && selected < x.length) {
       const selectedPath = el.querySelector(`path[j="${selected}"]`);
+      if (!selectedPath) {
+        return;
+      }
       selectedPath.setAttribute('fill', colors[1]);
       selectedPath.setAttribute('stroke', colors[1]);
     }
