@@ -124,7 +124,7 @@ class Overdue extends Table {
     }
     this.selectedPointId = id;
     this.filter.data[typeof id === 'number' ? 'set' : 'delete'](
-      'device__sale_point__id', id ? [this.downtimes[id].salePointId] : undefined,
+      'device__sale_point__id', typeof id === 'number' ? [this.downtimes[id].salePointId] : undefined,
     );
   }
 
