@@ -137,7 +137,6 @@ class Overdue extends Table {
 
     const update = () => {
       const newFilter = this.filter.search.replace(/[&]?device__sale_point__id__in=[\d,]+/, '');
-      console.log(this.lastChartSearch, newFilter);
       if (this.lastChartSearch !== newFilter) {
         this.downtimes = undefined;
         this.lastChartSearch = newFilter;
