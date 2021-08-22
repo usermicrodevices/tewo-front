@@ -22,6 +22,8 @@ class PriceGroup extends Datum {
 
   @observable lastUpdate = moment();
 
+  @observable decimalPlaces = 0;
+
   session;
 
   constructor(session) {
@@ -37,6 +39,7 @@ class PriceGroup extends Datum {
       companyId: this.companyId,
       conceptionId: this.conceptionId,
       systemKey: this.systemKey,
+      decimalPlaces: this.decimalPlaces,
       devicesIdSet: new Set([...this.devicesIdSet.values()]),
       pricesIdSet: new Set([...this.pricesIdSet.values()]),
     };
@@ -72,6 +75,11 @@ class PriceGroup extends Datum {
 
   @computed get drinksCount() {
     return this.pricesIdSet.size;
+  }
+
+  @action setDecimalPlaces(decimalPlaces) {
+    this.decimalPlaces = decimalPlaces;
+    return this.update(this.dump);
   }
 
   @action addPrices(aditionlDrinks) {

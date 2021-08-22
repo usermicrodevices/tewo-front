@@ -3,6 +3,11 @@
 .root {
   .card {
     margin-bottom: $generic-margin;
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
     .title {
       display: flex;
       align-items: center;

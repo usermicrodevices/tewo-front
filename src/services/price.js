@@ -102,6 +102,7 @@ const transform = (json, group) => {
     system_key: 'string',
     conception: 'number',
     last_update: 'date',
+    decimal_places: 'number',
   })) {
     apiCheckConsole.error(`Неожиданные данные для групп цен ${LOCATION}`, json);
   }
@@ -113,6 +114,7 @@ const transform = (json, group) => {
   group.devicesIdSet = observable.set(json.device_set);
   group.pricesIdSet = observable.set(json.price_set);
   group.lastUpdate = moment(json.last_update);
+  group.decimalPlaces = json.decimal_places;
   return group;
 };
 
@@ -136,6 +138,7 @@ const FORM = {
   systemKey: 'system_key',
   devicesIdSet: 'device_set',
   pricesIdSet: 'price_set',
+  decimalPlaces: 'decimal_places',
 };
 
 const applyPriceGroup = (id, changes, session, aditionlDrinks) => {
