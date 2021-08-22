@@ -32,10 +32,11 @@ class MenuItem {
   constructor(icon, text, act) {
     this.icon = icon;
     this.text = text;
-    this.act = act;
+    this.act = Array.isArray(act) ? act.filter((item) => !item.hidden) : act;
   }
 }
-const items = [
+
+const getData = (session) => [
   new MenuItem(
     <Icon name="pie-chart-outline" size="16" />,
     'Панель управления',
@@ -94,6 +95,7 @@ const items = [
       },
       {
         text: 'Обновление оборудования',
+        hidden: !session.permissions.packages.includes('view'),
         act: {
           ...deviceUpdate,
           path: deviceUpdate.path[0],
@@ -137,4 +139,4 @@ const items = [
   ),
 ];
 
-export default items;
+export default getData;

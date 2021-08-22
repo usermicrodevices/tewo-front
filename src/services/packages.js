@@ -216,6 +216,9 @@ const getDeviceStatuses = (acceptor) => get('/local_api/device_statuses/').then(
   }
 });
 
+const getPermissions = () => get('/local_api/handler/permissions/').then((json) => json.actions);
+
 export {
   getSessions, getPackets, getPacketTypes, getDevices, getSessionStatuses, postSession, getDeviceStatuses, getSession, cancelSession, restartSession, cancelDevice,
+  getPermissions,
 };

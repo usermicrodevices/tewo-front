@@ -27,6 +27,7 @@ import NDS from './nds';
 import Conceptions from './conceptions';
 import DashboardModel from './dashboard';
 import Units from './units';
+import Permissions from './permissions';
 
 class Session {
   user = null; // will set in AuthorizedRouter
@@ -46,6 +47,8 @@ class Session {
   сonceptions = new Conceptions();
 
   nds = new NDS();
+
+  permissions = new Permissions();
 
   beverageOperations = new BeverageOperations();
 
