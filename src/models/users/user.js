@@ -121,11 +121,11 @@ class User extends Datum {
   }
 
   @computed get companiesNamesList() {
-    return this.session?.companies.getSubset(new Set(this.companies))?.map((c) => c.name) || undefined;
+    return this.session?.companies.getSubset(new Set(this.companies))?.map((c) => c.name) || [];
   }
 
   @computed get salePointsNamesList() {
-    return this.session?.points.getSubset(new Set(this.salePoints))?.map((sp) => sp.name) || undefined;
+    return this.session?.points.getSubset(new Set(this.salePoints))?.map((sp) => sp.name) || [];
   }
 
   @computed get name() {
