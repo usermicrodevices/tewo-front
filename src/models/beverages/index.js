@@ -1,6 +1,8 @@
 /* eslint class-methods-use-this: off */
 import React from 'react';
-import { observable, action, autorun, when } from 'mobx';
+import {
+  observable, action, autorun, when,
+} from 'mobx';
 import { Button } from 'antd';
 
 import Table from 'models/table';
@@ -156,7 +158,7 @@ class Beverages extends Table {
 
     autorun(() => {
       this.exporter.onChangeEmail(session?.user?.email || '');
-    }
+    });
 
     when(() => session.permissions.isAllowDelete).then(() => {
       this.actions = {
