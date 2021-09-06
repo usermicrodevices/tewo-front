@@ -1,7 +1,9 @@
 import moment from 'moment';
 import { when } from 'mobx';
 
-import { get, blob, post } from 'utils/request';
+import {
+  get, blob, post, del,
+} from 'utils/request';
 import checkData from 'utils/dataCheck';
 import {
   daterangeToArgs, isDateRange, alineDates, momentToArg,
@@ -9,6 +11,8 @@ import {
 import Beverage from 'models/beverages/beverage';
 import BeveragesStats from 'models/beverages/stats';
 import apiCheckConsole from 'utils/console';
+
+const deleteBeverage = (id) => del(`https://stage.telemetry.work/api/data/beverages/${id}/`);
 
 const getBeverages = (session, getter = get) => (limit, offset = 0, filter = '') => new Promise((resolve, reject) => {
   apiCheckConsole.assert(limit >= 0 && offset >= 0, `Неверные параметры запроса наливов "${limit}" "${offset}"`);
@@ -333,5 +337,6 @@ export {
   getBeveragesDense,
   beveragesDenseToPrimeCostChartChar,
   getBeveragesDenseChart,
+  deleteBeverage,
   BEVERAGES_SALE_POINTS_STATS,
 };
