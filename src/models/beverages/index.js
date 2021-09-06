@@ -1,6 +1,6 @@
 /* eslint class-methods-use-this: off */
 import React from 'react';
-import { observable, action } from 'mobx';
+import { observable, action, when } from 'mobx';
 import { Button } from 'antd';
 
 import Table from 'models/table';
@@ -9,7 +9,7 @@ import ExporterToEmail from 'models/exporterToEmail';
 import { beverage as beverageRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { daterangeToArgs } from 'utils/date';
 import { OperationIcon, canceledIcon, indicatorsIcon } from 'elements/beverageIcons';
-import { getBeverages, sendBeveragesReport } from 'services/beverage';
+import { getBeverages, sendBeveragesReport, deleteBeverage } from 'services/beverage';
 import { tableItemLink } from 'elements/table/trickyCells';
 import { sequentialGet } from 'utils/request';
 
@@ -154,6 +154,16 @@ class Beverages extends Table {
     this.exporter = new ExporterToEmail(sendBeveragesReport, this.filter, {
       checkDisable: () => !this.filter.data.has('device_date'),
       generateConfirmMessage: () => 'Ссылка будет отправлена на указанную почту, файл храниться 30 дней.',
+    });
+
+    when(() => session.permissions.isAllowDelete).then(() => {
+      console.log('setActions');
+      this.actions = {
+        onDelete: ({ id: idToRemove }) => {
+          deleteBeverage(idToRemove).then(this.rawData.replace(this.rawData.filter(({ id }) => id !== idToRemove)));
+        },
+        isVisible: true,
+      };
     });
   }
 
