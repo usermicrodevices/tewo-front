@@ -5,13 +5,14 @@ import {
 } from 'antd';
 import { FilterOutlined, ReloadOutlined } from '@ant-design/icons';
 
-import DataRangePicker from 'elements/filters/daterangepicker';
-import CostRangeInput from 'elements/filters/costrangeinput';
-import Select from 'elements/filters/select';
+import DataRangePicker from './daterangepicker';
+import CostRangeInput from './costrangeinput';
+import Select from './select';
+import Salepoints from './salePoints';
 
 import style from './style.module.scss';
 
-const Filter = (
+export const Filter = (
   {
     type: typeVal,
     title,
@@ -30,6 +31,8 @@ const Filter = (
       return <CostRangeInput disabled={disabled} title={title} onChange={onChange} value={value} />;
     case 'text':
       return <Input allowClear disabled={disabled} placeholder={title} onChange={({ target }) => onChange(target.value)} value={value} />;
+    case 'salepoints':
+      return <Salepoints minWidth={330} disabled={disabled} value={value} onChange={onChange} />;
     case 'selector': case 'singleselector': {
       const isSingle = type === 'singleselector';
       return <Select minWidth={330} disabled={disabled} title={title} value={value} onChange={onChange} selector={selector} isSingle={isSingle} />;

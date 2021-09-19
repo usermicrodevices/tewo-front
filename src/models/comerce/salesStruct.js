@@ -56,10 +56,8 @@ class Sales extends Table {
         selector: () => session.companies.selector,
       },
       device__sale_point__id: {
-        type: 'selector',
-        title: 'Объект',
+        type: 'salepoints',
         apply: (general, data) => general(data.salePointId),
-        selector: () => session.points.selector,
       },
       device__id: {
         type: 'selector',
