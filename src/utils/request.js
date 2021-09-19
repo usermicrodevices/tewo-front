@@ -48,13 +48,13 @@ const get = (endpoint, config) => {
 const sequentialGet = (space) => {
   const lastRequest = {};
   const result = (endpoint, config) => new Promise((resolve, reject) => {
-    const req = get(endpoint, config).then((result) => {
+    const req = get(endpoint, config).then((response) => {
       if (req === lastRequest.id) {
-        resolve(result);
+        resolve(response);
       } else {
         lastRequest.req.then(resolve, reject);
       }
-      return result;
+      return response;
     });
     lastRequest.req = req;
   });
