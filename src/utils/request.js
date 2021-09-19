@@ -34,7 +34,7 @@ const get = (endpoint, config) => {
     return GET_REQUESTS[endpoint];
   }
   GET_REQUESTS[endpoint] = request.get(endpoint, config).then(({ data }) => data);
-  GET_REQUESTS[endpoint].then(() => {
+  GET_REQUESTS[endpoint].finally(() => {
     delete GET_REQUESTS[endpoint];
   });
   return GET_REQUESTS[endpoint];
@@ -48,13 +48,13 @@ const get = (endpoint, config) => {
 const sequentialGet = (space) => {
   const lastRequest = {};
   const result = (endpoint, config) => new Promise((resolve, reject) => {
-    const req = get(endpoint, config).then((result) => {
+    const req = get(endpoint, config).then((response) => {
       if (req === lastRequest.id) {
-        resolve(result);
+        resolve(response);
       } else {
         lastRequest.req.then(resolve, reject);
       }
-      return result;
+      return response;
     });
     lastRequest.req = req;
   });
