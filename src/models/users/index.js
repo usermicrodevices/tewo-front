@@ -84,8 +84,7 @@ const declareFilters = (session) => ({
     selector: () => session.companies.selector,
   },
   salePointId: {
-    type: 'selector',
-    title: 'Объект',
+    type: 'salepoints',
     apply: (general, data) => {
       if (Array.isArray(data.salePoints) && data.salePoints.length > 0) {
         return data.salePoints.some((salePointId) => general(salePointId));
@@ -97,7 +96,6 @@ const declareFilters = (session) => ({
 
       return false;
     },
-    selector: () => session.points.selector,
   },
 });
 
