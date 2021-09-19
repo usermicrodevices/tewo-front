@@ -1,0 +1,16 @@
+.wrap {
+    display: flex;
+    align-items: center;
+
+    & > :global(.ant-select > .ant-select-selector) {
+        padding-right: 53px;
+    }
+
+    & > :global(.ant-select > .ant-select-clear) {
+        right: 40px;
+    }
+
+    :global(.ant-btn) {
+        margin-left: -32px;
+    }
+}
