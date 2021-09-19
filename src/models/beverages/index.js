@@ -105,10 +105,8 @@ const declareFilters = (session) => ({
     selector: () => session.companies.selector,
   },
   device__sale_point__id: {
-    type: 'selector',
-    title: 'Объект',
+    type: 'salepoints',
     apply: (general, data) => general(data.salePointId),
-    selector: () => session.points.selector,
   },
   device__id: {
     type: 'selector',
@@ -157,7 +155,6 @@ class Beverages extends Table {
     });
 
     when(() => session.permissions.isAllowDelete).then(() => {
-      console.log('setActions');
       this.actions = {
         onDelete: ({ id: idToRemove }) => {
           deleteBeverage(idToRemove).then(this.rawData.replace(this.rawData.filter(({ id }) => id !== idToRemove)));
