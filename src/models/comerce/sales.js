@@ -64,6 +64,10 @@ class Sales extends Table {
     };
   }
 
+  get isStillSortable() {
+    return true;
+  }
+
   @computed get salesSeriaPrw() {
     return this.chart.prw.salesSeria;
   }

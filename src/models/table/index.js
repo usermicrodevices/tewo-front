@@ -230,6 +230,9 @@ class Table {
     if (this.isImpossibleToBeSync) {
       const isReverse = this.sort.direction === 'ascend' && false;
       const result = this.rawData.slice();
+      if (this.isStillSortable) {
+        return result.sort(this.sortPredicate);
+      }
       if (isReverse) {
         return result.reverse();
       }
