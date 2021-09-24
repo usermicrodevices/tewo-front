@@ -34,7 +34,7 @@ const get = (endpoint, config) => {
     return GET_REQUESTS[endpoint];
   }
   GET_REQUESTS[endpoint] = request.get(endpoint, config).then(({ data }) => data);
-  GET_REQUESTS[endpoint].then(() => {
+  GET_REQUESTS[endpoint].finally(() => {
     delete GET_REQUESTS[endpoint];
   });
   return GET_REQUESTS[endpoint];

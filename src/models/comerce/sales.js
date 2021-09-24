@@ -137,7 +137,7 @@ class Sales extends Table {
 
     super(declareColumns(session), salesLoader(session, filters, (cur, prw) => {
       this.chart = { prw, cur };
-    }, sequentialGet()), filters);
+    }, sequentialGet(), sequentialGet()), filters);
   }
 
   get isImpossibleToBeSync() { return true; }

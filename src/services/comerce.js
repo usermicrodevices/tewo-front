@@ -55,7 +55,7 @@ const joinToChart = (data) => {
   );
 };
 
-const salesLoader = (session, filter, commitChartData, getter = get) => () => {
+const salesLoader = (session, filter, commitChartData, getterForCur = get, getterForPrew = get) => () => {
   const curRange = filter.data.get('device_date');
   const prwRange = isDateRange(curRange) ? stepToPast(curRange) : [];
   const search = filter.searchSkip(new Set(['device_date']));
@@ -75,7 +75,10 @@ const salesLoader = (session, filter, commitChartData, getter = get) => () => {
     });
   }// */
   return Promise.all(
-    [curRange, prwRange].map((dateRange) => {
+    [
+      { dateRange: curRange, getter: getterForCur },
+      { dateRange: prwRange, getter: getterForPrew },
+    ].map(({ dateRange, getter }) => {
       const rangeArg = daterangeToArgs(dateRange, 'device_date');
       const lnk = `${BEVERAGES_SALE_POINTS_STATS.link}?step=86400${search ? `&${search}` : ''}${rangeArg}`;
       return getter(lnk);
