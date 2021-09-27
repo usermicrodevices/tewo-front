@@ -176,6 +176,7 @@ class SalePoint extends Datum {
       },
       statusId: {
         type: 'selector',
+        isRequired: true,
         selector: this.session.pointsStatuses.selector,
       },
       tags: {
