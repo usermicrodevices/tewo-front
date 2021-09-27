@@ -81,6 +81,7 @@ const getDevices = (session) => () => new Promise((resolve, reject) => {
   const general = get(LOCATION).then((result) => {
     if (!Array.isArray(result)) {
       apiCheckConsole.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
+      return [];
     }
     const responce = {
       count: result.length,
