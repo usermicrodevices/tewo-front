@@ -61,7 +61,7 @@ const transformSession = (session, manager) => (v) => (
   new DeviceSession(transformSessionData(v), session, manager)
 );
 
-const getSession = (id) => get(`/local_api/sessions/${id}`).then(transformSessionData);
+const getSession = (id) => get(`/local_api/sessions/${id}/`).then(transformSessionData);
 
 const getSessions = (session, manager) => () => get('/local_api/sessions/').then((json) => {
   if (!Array.isArray(json)) {
