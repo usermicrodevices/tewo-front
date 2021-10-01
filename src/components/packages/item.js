@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import {
-  Steps, Card, Popover, Button,
+  Steps, Card, Popover, Button, message,
 } from 'antd';
 import { Link } from 'react-router-dom';
 import Icon from 'elements/icon';
@@ -40,10 +40,12 @@ const Item = inject('uploadSession', 'manager')(observer(({
   const genericStatuses = deviceStatuses
     .filter(({ weight }) => weight < 5)
     .sort((a, b) => Math.sign(a.weight - b.weight));
-  const lastStatus = status.weight !== 5
+  const lastStatus = status?.weight !== 5
     ? deviceStatuses.find(({ weight, status: statusText }) => weight === 5 && statusText !== 'failed')
     : status;
   const allSteps = [...genericStatuses, lastStatus];
+  const onClickCancel = () => session.cancelDevice(packageUploadId).then(() => { message.success('Команда отмены отправлена, ожидайте'); });
+
   return (
     <CardWrap
       cover={(
@@ -55,7 +57,7 @@ const Item = inject('uploadSession', 'manager')(observer(({
             <Link to={`${salePointsRout.path}/${device.salePointId}`}><Format width={width}>{device.salePointName}</Format></Link>
           </div>
           {
-            status.isCancelable && <Button onClick={() => session.cancelDevice(packageUploadId)}>Отмена</Button>
+            status?.isCancelable && <Button disabled={session.isCanceling} onClick={onClickCancel}>Отмена</Button>
           }
         </div>
       )}
@@ -63,7 +65,7 @@ const Item = inject('uploadSession', 'manager')(observer(({
       <div className={classNames.progress}>
         <Steps
           size="small"
-          current={status.weight - 1}
+          current={status?.weight - 1}
           progressDot={(dot, { index }) => {
             const {
               name,
@@ -72,7 +74,7 @@ const Item = inject('uploadSession', 'manager')(observer(({
             } = allSteps[index];
             const isComplete = weight > status.weight;
             const iconName = isComplete ? icon : icon.replace('-outline', '');
-            const statuses = deviceStatuses.filter((s) => s.weight === weight && (status.weight !== weight || status === s))
+            const statuses = deviceStatuses.filter((s) => s.weight === weight && (status?.weight !== weight || status === s))
               .sort(({ name: a }, { name: b }) => a.localeCompare(b));
             const content = statuses.length === 1 ? name : (
               statuses.map(({ name: statusName, icon: statusIconName }) => (
