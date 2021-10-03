@@ -64,10 +64,10 @@ class Session {
   }
 
   @computed get devicesReadyCount() {
-    const DEVICE_LOADING_STATUS_ID = 5;
+    const DEVICE_LOADING_STATUS_NAME = 'progress';
     return this.devices.filter(({ statusId }) => {
       const status = this.manager.deviceStatuses.get(statusId);
-      return status.weight >= DEVICE_LOADING_STATUS_ID;
+      return status?.statusText !== DEVICE_LOADING_STATUS_NAME;
     }).length;
   }
 
@@ -105,9 +105,11 @@ class Session {
   }
 
   async cancelDevice(id) {
+    this.isCanceling = true;
     await this.manager.cancelDevice(id);
     this.applyData(await this.manager.getSession(this.id));
     await this.reload();
+    this.isCanceling = false;
   }
 
   async restart() {

@@ -46,8 +46,12 @@ const Actions = withRouter(inject('uploadSession')(observer(({
         { session.isLoadedWithEroors && (
           <Button loading={session.isRestarting} disabled={session.isRestarting} onClick={() => { session.restart(); }}>Перезапустить неудавшиеся</Button>
         )}
-        { session.isCancelable && (
-          <Button loading={session.isCanceling} disabled={session.isCanceling} onClick={() => { session.cancel().then(message.success('Сессия отменена')); }}>
+        { session?.isCancelable && (
+          <Button
+            loading={session.isCanceling}
+            disabled={session.isCanceling}
+            onClick={() => { session.cancel().then(() => { message.success('Команда отмены отправлена, ожидайте'); }); }}
+          >
             Отменить сессию
           </Button>
         )}
