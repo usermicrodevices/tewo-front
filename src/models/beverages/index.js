@@ -1,6 +1,6 @@
 /* eslint class-methods-use-this: off */
 import React from 'react';
-import { observable, action } from 'mobx';
+import { observable, action, autorun } from 'mobx';
 import { Button } from 'antd';
 
 import Table from 'models/table';
@@ -154,6 +154,10 @@ class Beverages extends Table {
     this.exporter = new ExporterToEmail(sendBeveragesReport, this.filter, {
       checkDisable: () => !this.filter.data.has('device_date'),
       generateConfirmMessage: () => 'Ссылка будет отправлена на указанную почту, файл храниться 30 дней.',
+    });
+
+    autorun(() => {
+      this.exporter.onChangeEmail(session?.user?.email || '');
     });
   }
 

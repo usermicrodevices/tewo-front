@@ -1,6 +1,7 @@
 /* eslint class-methods-use-this: off */
 import React from 'react';
 import { Tooltip } from 'antd';
+import { autorun } from 'mobx';
 import { daterangeToArgs, SemanticRanges } from 'utils/date';
 
 import { sequentialGet, get } from 'utils/request';
@@ -144,6 +145,10 @@ class Events extends Table {
     this.exporter = new ExporterToEmail(sendEventsReport, this.filter, {
       checkDisable: () => !this.filter.data.has('open_date'),
       generateConfirmMessage: () => 'Ссылка будет отправлена на указанную почту, файл храниться 30 дней.',
+    });
+
+    autorun(() => {
+      this.exporter.onChangeEmail(session?.user?.email || '');
     });
   }
 

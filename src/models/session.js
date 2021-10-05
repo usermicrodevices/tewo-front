@@ -1,3 +1,5 @@
+import { observable } from 'mobx';
+
 import Beverages from './beverages';
 import Companies from './companies';
 import Points from './salePoints';
@@ -30,7 +32,7 @@ import Units from './units';
 import Permissions from './permissions';
 
 class Session {
-  user = null; // will set in AuthorizedRouter
+  @observable user = null; // will set in AuthorizedRouter
 
   operations = new Operations();
 
