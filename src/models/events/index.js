@@ -1,7 +1,10 @@
 /* eslint class-methods-use-this: off */
 import React from 'react';
 import { Tooltip } from 'antd';
+import { autorun } from 'mobx';
 import { daterangeToArgs, SemanticRanges } from 'utils/date';
+
+import { sequentialGet, get } from 'utils/request';
 import Table from 'models/table';
 import Filters from 'models/filters';
 import {
@@ -135,13 +138,17 @@ class Events extends Table {
 
   constructor(session) {
     const filters = new Filters(declareFilters(session));
-    super(declareColumns(), getEvents(session), filters);
+    super(declareColumns(), getEvents(session, sequentialGet()), filters);
     this.filter.isShowSearch = false;
     this.session = session;
 
     this.exporter = new ExporterToEmail(sendEventsReport, this.filter, {
       checkDisable: () => !this.filter.data.has('open_date'),
       generateConfirmMessage: () => 'Ссылка будет отправлена на указанную почту, файл храниться 30 дней.',
+    });
+
+    autorun(() => {
+      this.exporter.onChangeEmail(session?.user?.email || '');
     });
   }
 
@@ -153,8 +160,8 @@ class Events extends Table {
     return `${eventsLogRout.path}/?device__id__in=${deviceId}`;
   }
 
-  getDeviceServiceEvents(deviceId) {
-    return getEvents(this.session)(1e3, 0, `event_reference__id=${TECH_SERVICE_EVENT_ID}&close_date__isnull=1&device__id__in=${deviceId}`);
+  getDeviceServiceEvents(deviceId, getter = get) {
+    return getEvents(this.session, getter)(1e3, 0, `event_reference__id=${TECH_SERVICE_EVENT_ID}&close_date__isnull=1&device__id__in=${deviceId}`);
   }
 
   getDeviceClearancesEventsLastWeekCount(deviceId) {
@@ -169,9 +176,9 @@ class Events extends Table {
 
   getClearances = getClearances;
 
-  getOverdueTasks(dateRange, salePointsFilter) {
+  getOverdueTasks(dateRange, salePointsFilter, getter) {
     const datefilter = daterangeToArgs(dateRange, 'open_date');
-    return getEvents(this.session)(3e4, 0, `overdued=1${datefilter}&${salePointsFilter}`);
+    return getEvents(this.session, getter)(3e4, 0, `overdued=1${datefilter}&${salePointsFilter}`);
   }
 
   getDeviceClearancesChart = getEventsClearancesChart;

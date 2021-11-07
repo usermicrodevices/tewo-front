@@ -6,12 +6,12 @@ import classnames from 'classnames';
 
 import * as device from 'utils/device';
 
-import data from './data';
+import getData from './getData';
 import Item from './item';
 import Submenu from './submenu';
 import style from './style.module.scss';
 
-const findCurrentElement = (currentPathname) => {
+const findCurrentElement = (data, currentPathname) => {
   for (const { act, text } of data) {
     if (Array.isArray(act)) {
       for (const { act: itemAct, text: itemText } of act) {
@@ -35,9 +35,10 @@ const findCurrentElement = (currentPathname) => {
   };
 };
 
-const MenuComponent = inject('menu')(observer(({ menu }) => {
+const MenuComponent = inject('menu', 'session')(observer(({ menu, session }) => {
+  const data = getData(session);
   const { pathname } = useLocation();
-  const { defaultSelectedKeys, defaultOpenKeys } = findCurrentElement(pathname);
+  const { defaultSelectedKeys, defaultOpenKeys } = findCurrentElement(data, pathname);
 
   function onClickMenu() {
     if (menu.isOpen && device.isMobile()) {

@@ -12,7 +12,7 @@ import Typography from 'elements/typography';
 import style from './style.module.scss';
 
 const List = observer(({
-  dataSource, toDataSource, columns, title, onAdd, isLoading,
+  dataSource, toDataSource, columns, title, onAdd, isLoading, actions,
 }) => {
   const [filterValue, setFilter] = useState('');
   const toSearch = filterValue.toLowerCase();
@@ -21,16 +21,19 @@ const List = observer(({
     ?.filter(({ name }) => typeof name !== 'string' || name.toLowerCase().indexOf(toSearch) >= 0);
   return (
     <Card className={style.card}>
-      <div className={style.title}>
-        <Typography.Title level={3} className={style.titletext}>
-          {title}
-        </Typography.Title>
-        <Button
-          type="text"
-          disabled={isLoading}
-          onClick={onAdd}
-          icon={isLoading ? <LoadingOutlined /> : <Icon size={22} name="plus-circle-outline" />}
-        />
+      <div className={style.header}>
+        <div className={style.title}>
+          <Typography.Title level={3} className={style.titletext}>
+            {title}
+          </Typography.Title>
+          <Button
+            type="text"
+            disabled={isLoading}
+            onClick={onAdd}
+            icon={isLoading ? <LoadingOutlined /> : <Icon size={22} name="plus-circle-outline" />}
+          />
+        </div>
+        {actions}
       </div>
       <Input
         placeholder="Поиск"

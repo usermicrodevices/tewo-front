@@ -11,6 +11,8 @@ class Price extends Datum {
 
   @observable value;
 
+  @observable codeExt;
+
   id;
 
   constructor(session) {
@@ -23,6 +25,10 @@ class Price extends Datum {
     value: {
       type: 'number',
       isRequired: true,
+    },
+    codeExt: {
+      type: 'number',
+      isRequired: false,
     },
   };
 
@@ -60,8 +66,8 @@ class Price extends Datum {
     return this.group?.currency?.name;
   }
 
-  @action setValue(v) {
-    return this.update({ value: v });
+  @action setValue(value, codeExt) {
+    return this.update({ value, codeExt });
   }
 }
 

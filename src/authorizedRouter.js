@@ -31,8 +31,8 @@ class AuthorizedRouter extends React.Component {
   render() {
     const { error } = this.state;
     return (
-      <AuthorizedPage>
-        <Provider session={this.session}>
+      <Provider session={this.session}>
+        <AuthorizedPage>
           { error
             ? <EroorPage error={error} />
             : (
@@ -47,8 +47,8 @@ class AuthorizedRouter extends React.Component {
                 </Route>
               </Switch>
             )}
-        </Provider>
-      </AuthorizedPage>
+        </AuthorizedPage>
+      </Provider>
     );
   }
 }

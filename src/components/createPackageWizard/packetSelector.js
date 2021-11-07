@@ -73,6 +73,7 @@ const selector = inject('manager')(observer(({
       width="75vw"
       bodyStyle={{
         maxHeight: '75vh',
+        overflowY: 'auto',
       }}
       onCancel={onCancel}
       footer={<Button onClick={onCancel}>Отмена</Button>}

@@ -7,6 +7,7 @@ import { getPrimecost } from 'services/comerce';
 import { DECLARE_BEVERAGES_FILTERS } from 'models/beverages';
 import Details from 'components/comerce/primecost/details';
 import { SemanticRanges } from 'utils/date';
+import { sequentialGet } from 'utils/request';
 
 const declareColumns = () => ({
   cityName: {
@@ -86,11 +87,14 @@ class PrimeCost extends Table {
 
   session;
 
+
   constructor(session) {
     const filters = new Filters(DECLARE_BEVERAGES_FILTERS(session));
 
     filters.isShowSearch = false;
     filters.set('device_date', SemanticRanges.prw30Days.resolver());
+
+    const sequentialPrimecost = sequentialGet();
 
     const i = { v: false };
     super(declareColumns(session), (limit, offset, search) => {
@@ -100,7 +104,7 @@ class PrimeCost extends Table {
       i.v = true;
       return getPrimecost(session, (chartData) => {
         this.chart = chartData;
-      })(limit, offset, search);
+      }, sequentialPrimecost)(limit, offset, search);
     }, filters);
 
     this.session = session;

@@ -229,7 +229,10 @@ class Table {
   @computed get data() {
     if (this.isImpossibleToBeSync) {
       const isReverse = this.sort.direction === 'ascend' && false;
-      const result = this.rawData.slice().sort(this.sortPredicate);
+      const result = this.rawData.slice();
+      if (this.isStillSortable) {
+        return result.sort(this.sortPredicate);
+      }
       if (isReverse) {
         return result.reverse();
       }
@@ -242,7 +245,10 @@ class Table {
   }
 
   @computed get rawData() {
-    return this.dataModel.manager.data;
+    if (this.additionalFilter === undefined) {
+      return this.dataModel.manager.data;
+    }
+    return this.dataModel.manager.data.filter(this.additionalFilter);
   }
 
   @computed get isLoaded() {

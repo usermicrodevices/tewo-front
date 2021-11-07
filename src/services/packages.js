@@ -61,7 +61,7 @@ const transformSession = (session, manager) => (v) => (
   new DeviceSession(transformSessionData(v), session, manager)
 );
 
-const getSession = (id) => get(`/local_api/sessions/${id}`).then(transformSessionData);
+const getSession = (id) => get(`/local_api/sessions/${id}/`).then(transformSessionData);
 
 const getSessions = (session, manager) => () => get('/local_api/sessions/').then((json) => {
   if (!Array.isArray(json)) {
@@ -216,6 +216,9 @@ const getDeviceStatuses = (acceptor) => get('/local_api/device_statuses/').then(
   }
 });
 
+const getPermissions = () => get('/local_api/handler/permissions/').then((json) => json.actions);
+
 export {
   getSessions, getPackets, getPacketTypes, getDevices, getSessionStatuses, postSession, getDeviceStatuses, getSession, cancelSession, restartSession, cancelDevice,
+  getPermissions,
 };

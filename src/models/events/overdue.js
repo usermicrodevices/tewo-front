@@ -1,5 +1,7 @@
 /* eslint class-methods-use-this: off */
-import { computed, observable, reaction } from 'mobx';
+import {
+  computed, observable, reaction, action,
+} from 'mobx';
 import moment from 'moment';
 
 import Table from 'models/table';
@@ -9,6 +11,7 @@ import colorizedCell from 'elements/table/colorizedCell';
 import { tableItemLink } from 'elements/table/trickyCells';
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { SemanticRanges } from 'utils/date';
+import { sequentialGet } from 'utils/request';
 
 const declareColumns = () => ({
   id: {
@@ -108,20 +111,55 @@ class Overdue extends Table {
 
   @observable downtimes;
 
+  @observable selectedPointId = null;
+
+  lastChartSearch = null;
+
+  internalPrevent = false;
+
+  setAdditionalFilterPoint = (id) => {
+    if (this.internalPrevent) {
+      this.internalPrevent = false;
+      return;
+    }
+    this.selectedPointId = id;
+    this.filter.data[typeof id === 'number' ? 'set' : 'delete'](
+      'device__sale_point__id', typeof id === 'number' ? [this.downtimes[id].salePointId] : undefined,
+    );
+  }
+
   constructor(session) {
     const filters = new Filters(declareFilters(session));
-    super(declareColumns(), getOverdued(session), filters);
+    super(declareColumns(), getOverdued(session, sequentialGet()), filters);
     this.filter.isShowSearch = false;
     this.filter.set('open_date', SemanticRanges.prw30Days.resolver());
     this.session = session;
 
     const update = () => {
-      this.downtimes = undefined;
-      getDowntimes(this.filter.search).then((downtimes) => {
-        this.downtimes = downtimes.sort((a, b) => Math.sign(b.downtime - a.downtime));
-      });
+      const newFilter = this.filter.search.replace(/[&]?device__sale_point__id__in=[\d,]+/, '');
+      if (this.lastChartSearch !== newFilter) {
+        this.downtimes = undefined;
+        this.lastChartSearch = newFilter;
+        getDowntimes(newFilter, sequentialGet()).then((downtimes) => {
+          this.downtimes = downtimes.sort((a, b) => Math.sign(b.downtime - a.downtime));
+        });
+      }
     };
     reaction(() => this.filter.search, update);
+    reaction(() => this.filter.search, () => {
+      const cur = this.filter.data.get('device__sale_point__id');
+      if (cur?.length !== 1) {
+        this.internalPrevent = true;
+        this.selectedPointId = null;
+        return;
+      }
+      if (this.downtimes && this.downtimes[this.selectedPointId].salePointId !== cur[0]) {
+        const id = this.downtimes.findIndex(({ salePointId }) => salePointId === cur[0]);
+        if (id > 0) {
+          this.setAdditionalFilterPoint(id);
+        }
+      }
+    });
     update();
   }
 

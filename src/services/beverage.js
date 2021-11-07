@@ -10,9 +10,9 @@ import Beverage from 'models/beverages/beverage';
 import BeveragesStats from 'models/beverages/stats';
 import apiCheckConsole from 'utils/console';
 
-const getBeverages = (session) => (limit, offset = 0, filter = '') => new Promise((resolve, reject) => {
+const getBeverages = (session, getter = get) => (limit, offset = 0, filter = '') => new Promise((resolve, reject) => {
   apiCheckConsole.assert(limit >= 0 && offset >= 0, `Неверные параметры запроса наливов "${limit}" "${offset}"`);
-  get(`/data/beverages/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
+  getter(`/data/beverages/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
     const beverageMustBe = {
       id: 'number',
       created_date: 'date',
@@ -126,7 +126,7 @@ const sendBeveragesReport = (filter = '', email = '') => {
   return post(url, data);
 };
 
-const getBeveragesStats = (daterange, filters, step) => {
+const getBeveragesStats = (daterange, filters, step, getter = get) => {
   const rangeArg = daterangeToArgs(daterange, 'device_date') || `&device_date__gt=${momentToArg(moment(1))}`;
   const location = `/data/beverages/stats/?step=${step}${rangeArg}${filters ? `&${filters}` : ''}`;
   const mustBe = {
@@ -134,7 +134,7 @@ const getBeveragesStats = (daterange, filters, step) => {
     total: 'number',
     sum: 'number',
   };
-  return get(location).then((result) => {
+  return getter(location).then((result) => {
     if (!Array.isArray(result)) {
       apiCheckConsole.error(`can not get data from ${location}`, result);
       return new BeveragesStats([]);
@@ -212,9 +212,9 @@ const getBeveragesSalePointsStats = (dateRange, step, salePoints) => {
   });
 };
 
-const getBeveragesDense = (search) => {
+const getBeveragesDense = (search, getter = get) => {
   const location = `/data/beverages/spoints_ingredients/${search ? `?${search}` : ''}`;
-  return get(location).then((rawData) => {
+  return getter(location).then((rawData) => {
     const result = new Map();
     if (typeof rawData !== 'object') {
       apiCheckConsole.error(`${location} ожидается объект, получен`, rawData);

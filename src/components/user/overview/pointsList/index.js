@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import cx from 'classnames';
 
 import { Row } from 'elements/collapse';
+import Loader from 'elements/loader';
 
 import styles from './styles.module.scss';
 
@@ -28,13 +29,16 @@ const UserPointsList = observer(({ user, className }) => {
   }, [user]);
 
   return (
-    <div className={cx([styles.content, className])}>
-      {loading ? null : points.map((sp) => (
-        <Row key={sp.id}>
-          <UserPointCheckbox point={sp} onChange={onChangePoint} />
-        </Row>
-      ))}
-    </div>
+    loading ? <Loader className={styles.loader} />
+      : (
+        <div className={cx([styles.content, className])}>
+          {points.map((sp) => (
+            <Row key={sp.id}>
+              <UserPointCheckbox point={sp} onChange={onChangePoint} />
+            </Row>
+          ))}
+        </div>
+      )
   );
 });
 
