@@ -1,6 +1,6 @@
 /* eslint class-methods-use-this: off */
 import React from 'react';
-import { observable, action, autorun } from 'mobx';
+import { observable, action, autorun, when } from 'mobx';
 import { Button } from 'antd';
 
 import Table from 'models/table';
@@ -9,7 +9,7 @@ import ExporterToEmail from 'models/exporterToEmail';
 import { beverage as beverageRout, devices as devicesRout, salePoints as salePointsRout } from 'routes';
 import { daterangeToArgs } from 'utils/date';
 import { OperationIcon, canceledIcon, indicatorsIcon } from 'elements/beverageIcons';
-import { getBeverages, sendBeveragesReport } from 'services/beverage';
+import { getBeverages, sendBeveragesReport, deleteBeverage } from 'services/beverage';
 import { tableItemLink } from 'elements/table/trickyCells';
 import { sequentialGet } from 'utils/request';
 
@@ -105,10 +105,8 @@ const declareFilters = (session) => ({
     selector: () => session.companies.selector,
   },
   device__sale_point__id: {
-    type: 'selector',
-    title: 'Объект',
+    type: 'salepoints',
     apply: (general, data) => general(data.salePointId),
-    selector: () => session.points.selector,
   },
   device__id: {
     type: 'selector',
@@ -158,6 +156,15 @@ class Beverages extends Table {
 
     autorun(() => {
       this.exporter.onChangeEmail(session?.user?.email || '');
+    });
+
+    when(() => session.permissions.isAllowDelete).then(() => {
+      this.actions = {
+        onDelete: ({ id: idToRemove }) => {
+          deleteBeverage(idToRemove).then(this.rawData.replace(this.rawData.filter(({ id }) => id !== idToRemove)));
+        },
+        isVisible: true,
+      };
     });
   }
 

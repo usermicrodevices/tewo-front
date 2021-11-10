@@ -87,10 +87,8 @@ const declareFilters = (session) => ({
     selector: (filter) => session.devices.salePointsSelector(filter.data.get('device__sale_point__id')),
   },
   device__sale_point__id: {
-    type: 'selector',
-    title: 'Объект',
+    type: 'salepoints',
     apply: (general, data) => general(data.salePointId),
-    selector: () => session.points.selector,
   },
   device__sale_point__company__id: {
     type: 'selector',
