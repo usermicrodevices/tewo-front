@@ -15,7 +15,7 @@ const Stats = ({ table: { wholeSales: { cur, prw } } }) => (
     { cur !== prw && (
       <div>
         <ChangesLabel typographySize="xl" value={(cur - prw) / prw * 100} />
-        <Typography.Caption>динамика наливов</Typography.Caption>
+        <Typography.Caption>динамика продаж</Typography.Caption>
       </div>
     )}
     <div>

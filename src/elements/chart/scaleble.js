@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable prefer-destructuring */
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { withSize } from 'react-sizeme';
@@ -5,6 +7,7 @@ import moment from 'moment';
 
 import colors from 'themes/chart';
 import NoData from 'elements/noData';
+import {FORMAT} from 'elements/format';
 
 import locale from './locale';
 import style from './style.module.scss';
@@ -37,6 +40,41 @@ const provideAxis = (name, seriesName, opposite) => (
   }
 );
 
+const makeDataLengthEqual = (data1, data2) => {
+  if (!data1 || !data2) {
+    return false;
+  }
+
+  if (data1.length === data2.length) {
+    return true;
+  }
+
+  if (data1.length > data2.length) {
+    data2.splice(data2.length, 0, ...Array(data1.length - data2.length).fill(0));
+    return true;
+  }
+
+  if (data1.length < data2.length) {
+    data1.splice(data1.length, 0, ...Array(data2.length - data1.length).fill(0));
+    return true;
+  }
+
+  return false;
+};
+
+const makeDatesLengthEqual = (dates1, dates2) => {
+  if (dates1 && dates2 && dates1.length < dates2.length) {
+    const lastDay = dates1[dates1.length - 1];
+
+    const additionalCount = dates2.length - dates1?.length;
+    for (let i = 0; i < additionalCount; i += 1) {
+      const dummyPoint = lastDay.clone().add(i + 1, 'day');
+      dummyPoint.isFake = true;
+      dates1.push(dummyPoint);
+    }
+  }
+};
+
 const ScalebleChart = ({
   size: { width, height },
   y, x,
@@ -45,6 +83,10 @@ const ScalebleChart = ({
   if (!Array.isArray(x) || !Array.isArray(y) || x.length <= 1 || y.length === 0) {
     return <NoData noMargin title="Недостаточно данных для построения графика" />;
   }
+
+  makeDataLengthEqual(y?.[0]?.data, y?.[1]?.data);
+  makeDatesLengthEqual(x, x?.prw);
+
   const categories = x.map((v) => +v);
   const series = y.map(({ name, data }) => ({ name, data, type: 'line' }));
   const isHaveOverviewChart = x.length > LENGTH_LIMIT;
@@ -77,18 +119,21 @@ const ScalebleChart = ({
       custom(args) {
         const { dataPointIndex, series: reduced } = args;
         return `
-          <div class="apexcharts-tooltip-title" style="font-family: Inter; font-size: 12px;">${x[dataPointIndex].format('D MMMM')}</div>
-          ${reduced.map((values, seriesIndex) => `
-            <div class="apexcharts-tooltip-series-group apexcharts-active" style="display: flex;">
-              <span class="apexcharts-tooltip-marker" style="background-color: ${colors[seriesIndex]};"></span>
-              <div class="apexcharts-tooltip-text" style="font-family: Inter; font-size: 12px;">
-                <div class="apexcharts-tooltip-y-group">
-                  <span class="apexcharts-tooltip-text-label">${(seriesIndex && x.prw ? x.prw : x)[dataPointIndex].format('D MMMM YYYY')}: </span>
-                  <span class="apexcharts-tooltip-text-value">${values[dataPointIndex]} ${y1.tooltipUnit || ''}</span>
+          <div class="apexcharts-tooltip-title" style="font-family: Inter; font-size: 12px;">${x[dataPointIndex].format('D MMM')}</div>
+          ${reduced.map((values, seriesIndex) => {
+    const point = (seriesIndex && x.prw ? x.prw : x)?.[dataPointIndex];
+    return `
+              <div class="apexcharts-tooltip-series-group apexcharts-active" style="display: flex;">
+                <span class="apexcharts-tooltip-marker" style="background-color: ${colors[seriesIndex]};"></span>
+                <div class="apexcharts-tooltip-text" style="font-family: Inter; font-size: 12px;">
+                  <div class="apexcharts-tooltip-y-group">
+                    <span class="apexcharts-tooltip-text-label">${point && !point.isFake ? point.format('D MMM YYYY, ddd') : 'Не учитывается (за пределами периода)'}: </span>
+                    <span class="apexcharts-tooltip-text-value">${FORMAT.format(values[dataPointIndex])} ${y1.tooltipUnit || ''}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          `).join('')}`;
+            `;
+  }).join('')}`;
       },
     };
   }

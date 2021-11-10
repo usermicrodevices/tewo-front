@@ -17,11 +17,30 @@ const daterangeToArgs = (range, name) => {
 
 const isDateRange = (d) => daterangeToArgs(d) !== '';
 
+const isEndOfMonth = (date) => date.clone().endOf('month').isSame(date, 'day');
+const isStartOfMonth = (date) => date.clone().startOf('month').isSame(date, 'day');
+const isEndOfYear = (date) => date.clone().endOf('year').isSame(date, 'day');
+const isStartOfYear = (date) => date.clone().endOf('year').isSame(date, 'day');
+
 const stepToPast = (range) => {
+  if (isEndOfYear(range[1]) && isStartOfYear(range[0])) {
+    return [
+      range[0].clone().subtract(1, 'years').startOf('year'),
+      range[1].clone().subtract(1, 'years').endOf('year'),
+    ];
+  }
+
+  if (isEndOfMonth(range[1]) && isStartOfMonth(range[0])) {
+    return [
+      range[0].clone().subtract(1, 'months').startOf('month'),
+      range[1].clone().subtract(1, 'months').endOf('month'),
+    ];
+  }
+
   const d = range[1] - range[0];
   return [
     moment(range[0] - d),
-    range[0],
+    range[0].clone().subtract(1, 'seconds'),
   ];
 };
 
