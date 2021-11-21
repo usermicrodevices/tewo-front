@@ -293,7 +293,7 @@ const getWaterQuality = (deviceId, daterange) => {
         finalDateRange,
         step,
         result,
-        (item) => ({ quality: item ? item.pcb_tds1 : 0 }),
+        (item) => ({ quality: item ? item.pcb_tds1 : [0, 0] }),
         'device_date',
       )];
     });

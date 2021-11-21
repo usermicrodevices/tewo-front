@@ -1,6 +1,8 @@
 /* eslint class-methods-use-this: off */
 import React from 'react';
-import { observable, action, autorun, when } from 'mobx';
+import {
+  observable, action, autorun, when,
+} from 'mobx';
 import { Button } from 'antd';
 
 import Table from 'models/table';
