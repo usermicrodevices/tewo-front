@@ -6,9 +6,9 @@ import { withSize } from 'react-sizeme';
 import Loader from 'elements/loader';
 import moment from 'moment';
 
-const renderVoltageTooltip = ({ date, range }) => `
+const renderWaterQualityTooltip = ({ date, range }) => `
   <div style="padding: 4px 16px; font-size: 14px;">
-    <div><span style="color: #454545">(${moment(date).format('DD.MM HH:mm')})</span><div/>
+    <div><span style="color: #454545">(${moment(date).format('DD.MM')})</span><div/>
     <div><b>${range[0]} - ${range[1]}</b></div>
   </div>
 `;
@@ -46,7 +46,7 @@ const WaterChart = ({ size: { width }, element: { details } }) => {
       }) => {
         const { name } = w.config.series[seriesIndex];
         const date = w.config.series[seriesIndex].data[dataPointIndex].x;
-        return renderVoltageTooltip({
+        return renderWaterQualityTooltip({
           name,
           date,
           range: [y1, y2],
@@ -66,7 +66,7 @@ const WaterChart = ({ size: { width }, element: { details } }) => {
     },
     yaxis: {
       title: {
-        text: 'Напряжение, В',
+        text: 'Жесткость воды',
       },
     },
   };
