@@ -9,7 +9,7 @@ import moment from 'moment';
 const renderVoltageTooltip = ({ date, range }) => `
   <div style="padding: 4px 16px; font-size: 14px;">
     <div><span style="color: #454545">(${moment(date).format('DD.MM HH:mm')})</span><div/>
-    <div><b>${range[0]} - ${range[1]}</b></div>
+    <div><b>${range[0]} - ${range[1]} ppm</b></div>
   </div>
 `;
 
