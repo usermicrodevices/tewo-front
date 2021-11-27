@@ -95,8 +95,8 @@ const getBeverageIndicators = (map) => get('/local_api/indicator_references/').t
   if (Array.isArray(data)) {
     for (const datum of data) {
       if (!checkData(datum, {
-        id: 'number', name: 'string', description: 'string', unit: 'number',
-      })) {
+        id: 'number', name: 'string', description: 'string',
+      }, { unit: 'number' })) {
         apiCheckConsole.error('Неожиданные данные для операций /local_api/indicator_references/', datum);
       }
       map.set(datum.id, datum);

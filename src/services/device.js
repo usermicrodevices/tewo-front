@@ -33,6 +33,8 @@ const RENAMER = {
   description: 'description',
   software_version: 'softwareVersion',
   auth_key: 'authKey',
+  tags: 'tags',
+  ppm_divider: 'ppmDivider',
 };
 
 function converter(json, acceptor) {
@@ -53,6 +55,7 @@ function converter(json, acceptor) {
       tech: 'boolean',
       downtime: 'number',
       change_null_sum_bev_by_cost: 'boolean',
+      tags: 'array',
     }, {
       serial: 'string',
       device_model: 'number',
@@ -63,6 +66,7 @@ function converter(json, acceptor) {
       description: 'string',
       auth_key: 'string',
       software_version: 'string',
+      ppm_divider: 'number',
     },
   )) {
     apiCheckConsole.error(`Неожиданный ответ по адресу ${LOCATION}`, json);

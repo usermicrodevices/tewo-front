@@ -1,4 +1,5 @@
 /* eslint valid-typeof: "off", max-len: off */
+import parseLocation from 'utils/parseLocation';
 import apiCheckConsole from './console';
 import { isColor } from './color';
 
@@ -85,7 +86,7 @@ function typecheck(datum, key, type) {
   }
   if (type === 'location') {
     if (typeof datum === 'string') {
-      const location = datum.split(',').map(parseFloat);
+      const location = parseLocation(datum);
       if (location.length === 2 && location.filter(isFinite).length === 2) {
         return true;
       }

@@ -4,11 +4,12 @@ import {
 } from 'antd';
 import { Map as YandexMap, Placemark } from 'react-yandex-maps';
 import Icon from 'elements/icon';
+import parseLocation from 'utils/parseLocation';
 
 import style from './style.module.scss';
 
 const MapLocationPicker = ({ location, setValue }) => {
-  const center = location.split(',').map(parseFloat);
+  const center = parseLocation(location);
   const round = (v) => Math.round(v * 1e5) / 1e5;
   return (
     <div>
