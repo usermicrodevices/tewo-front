@@ -3,6 +3,8 @@ import {
   Input, Form, Select, InputNumber, Checkbox, DatePicker,
 } from 'antd';
 
+import TagsInput from 'components/tags/input';
+
 import IngredientsPicker from './ingredientspicker';
 import LocationPicker from './locationpicker';
 import ColorPicker from './colorpicker';
@@ -127,15 +129,7 @@ const CellEditor = ({
     case 'tags': {
       return (
         <Form.Item name={name} shouldUpdate>
-          <Select mode="tags" style={{ width: '100%' }} placeholder={placeholder || 'Значение не задано'}>
-            {
-                Array.isArray(selector) && selector.map(([key, text]) => (
-                  <Select.Option key={key} value={key}>
-                    {text}
-                  </Select.Option>
-                ))
-              }
-          </Select>
+          <TagsInput />
         </Form.Item>
       );
     }

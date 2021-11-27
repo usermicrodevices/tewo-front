@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 
 import { devices as devicesRout } from 'routes';
+import Tag from 'components/tags';
 import Format from 'elements/format';
 import plural from 'utils/plural';
 import ChangesLabel from 'elements/changesLabel';
@@ -156,6 +157,49 @@ const sophisticatedPopconfirm = (rowData, actions) => () => {
   );
 };
 
+const tagsCell = (tags, _, width, onViewer = false) => {
+  if (!Array.isArray(tags)) {
+    return <Format>{tags}</Format>;
+  }
+  if (tags.length === 0) {
+    return <Format>{null}</Format>;
+  }
+  const APROPRIATE_ELEM_WIDTH = 200;
+  const MENU_TITLE_WIDDTH = 150;
+  let forShow = Math.max(1, Math.floor((width - MENU_TITLE_WIDDTH) / APROPRIATE_ELEM_WIDTH));
+  if (forShow + 1 === tags.length) {
+    forShow = tags.length;
+  }
+  const isNeedDropdown = forShow < tags.length;
+  return (
+    <div className={onViewer ? undefined : classNames.devices}>
+      {tags.slice(0, forShow).map((id) => (
+        <Tag key={id} id={id} />
+      ))}
+      { isNeedDropdown && (
+        <Dropdown
+          overlay={(
+            <Menu style={{ maxHeight: 300, overflowY: 'auto' }}>
+              {
+                tags.slice(forShow).map((id) => (
+                  <Menu.Item key={id}>
+                    <Tag id={id} />
+                  </Menu.Item>
+                ))
+              }
+            </Menu>
+          )}
+          placement="bottomRight"
+        >
+          <span>
+            {`${forShow > 0 ? ' и ещё ' : ''}${tags.length - forShow} ${plural(tags.length - forShow, ['тег', 'тегов', 'тега'])}`}
+          </span>
+        </Dropdown>
+      )}
+    </div>
+  );
+};
+
 export {
-  tableItemLink, linkedCell, devicesCell, durationCell, rangeMetricCompareCell, explainedTitleCell, sophisticatedPopconfirm, popoverCell,
+  tableItemLink, linkedCell, devicesCell, durationCell, rangeMetricCompareCell, explainedTitleCell, sophisticatedPopconfirm, popoverCell, tagsCell,
 };

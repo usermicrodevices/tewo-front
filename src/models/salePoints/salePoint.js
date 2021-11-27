@@ -4,6 +4,7 @@ import * as routes from 'routes';
 import Datum from 'models/datum';
 import { deleteFavorite, addFavorite } from 'services/salePoints';
 import parseLocation from 'utils/parseLocation';
+import { tagsCell } from 'elements/table/trickyCells';
 
 import Details from './details';
 
@@ -119,7 +120,7 @@ class SalePoint extends Datum {
       {
         dataIndex: 'tags',
         title: 'Теги',
-        value: this.tags.join(', '),
+        value: tagsCell(this.tags, this, 600, true),
       },
     ];
   }
@@ -183,9 +184,7 @@ class SalePoint extends Datum {
         selector: this.session.pointsStatuses.selector,
       },
       tags: {
-        type: 'selector',
-        isMultiple: true,
-        selector: [],
+        type: 'tags',
       },
     };
   }

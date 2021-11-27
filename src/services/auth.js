@@ -10,7 +10,6 @@ import Profile from 'models/profile';
 function login(data) {
   return new Promise((resolve, reject) => {
     post('login', data).then((response) => {
-      console.log(response);
       if (typeof response.token !== 'string') {
         reject(new Error(response));
       }

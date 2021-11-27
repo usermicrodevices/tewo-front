@@ -4,7 +4,7 @@ import Filter from 'models/filters';
 import { computed } from 'mobx';
 
 import { devices as devicesRout, salePoints as salePointsRout } from 'routes';
-import { tableItemLink } from 'elements/table/trickyCells';
+import { tableItemLink, tagsCell } from 'elements/table/trickyCells';
 import {
   getDevices, getStats, getSalesChart, applyDevice,
   getVoltage, getWaterQuality, getQR, getUncleaned, getDisabled,
@@ -31,6 +31,12 @@ const COLUMNS = {
     title: 'Объект',
     grow: 3,
     transform: (_, datum, width) => tableItemLink(datum.salePointName, `${salePointsRout.path}/${datum.salePointId}`, width),
+  },
+  tags: {
+    isVisibleByDefault: true,
+    title: 'Теги',
+    grow: 4,
+    transform: tagsCell,
   },
   companyName: {
     isVisibleByDefault: true,
@@ -111,6 +117,19 @@ const declareFilters = (session) => ({
     title: 'Модель оборудования',
     apply: (general, data) => general(data.deviceModelId),
     selector: () => session.deviceModels.selector,
+  },
+  tag: {
+    type: 'tag',
+    title: 'Тег',
+    apply: (general, data) => {
+      for (const tagId of data.tags) {
+        if (general(tagId)) {
+          return true;
+        }
+      }
+      return false;
+    },
+    selector: () => [],
   },
   serial: {
     type: 'text',

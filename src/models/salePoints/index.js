@@ -8,7 +8,7 @@ import {
 } from 'services/salePoints';
 import Filters from 'models/filters';
 import { salePoints as salePointsRout } from 'routes';
-import { tableItemLink } from 'elements/table/trickyCells';
+import { tableItemLink, tagsCell } from 'elements/table/trickyCells';
 import { daterangeToArgs } from 'utils/date';
 import Format from 'elements/format';
 
@@ -37,9 +37,10 @@ const COLUMNS = {
     sortDirections: 'both',
   },
   tags: {
-    isVisibleByDefault: false,
+    isVisibleByDefault: true,
     title: 'Теги',
-    grow: 2,
+    grow: 4,
+    transform: tagsCell,
   },
   regionName: {
     isVisibleByDefault: false,
@@ -97,12 +98,17 @@ const declareFilters = (session) => ({
     selector: () => session.companies.selector,
   },
   tag: {
-    type: 'selector',
+    type: 'tag',
     title: 'Тег',
-    apply: (general, data) => general(data.drink),
-    selector: () => [
-    ],
-    disabled: true,
+    apply: (general, data) => {
+      for (const tagId of data.tags) {
+        if (general(tagId)) {
+          return true;
+        }
+      }
+      return false;
+    },
+    selector: () => [],
   },
   regionId: {
     type: 'singleselector',
