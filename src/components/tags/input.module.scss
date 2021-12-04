@@ -1,5 +1,12 @@
 .tags {
+  display: flex;
+  align-items: center;
+
   :global(.ant-btn-sm) {
     padding: 0;
+  }
+
+  :global(.ant-select) {
+    margin-right: 5px;
   }
 }

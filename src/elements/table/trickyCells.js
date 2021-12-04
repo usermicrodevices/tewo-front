@@ -174,7 +174,7 @@ const tagsCell = (tags, _, width, onViewer = false) => {
   return (
     <div className={onViewer ? undefined : classNames.devices}>
       {tags.slice(0, forShow).map((id) => (
-        <Tag key={id} id={id} />
+        <Tag key={id} id={id} width={APROPRIATE_ELEM_WIDTH} />
       ))}
       { isNeedDropdown && (
         <Dropdown

@@ -48,7 +48,7 @@ const InputButton = ({ session: { tags }, onCreate }) => {
       <Button onClick={edit} type="text" size="small">
         <Tag>
           <PlusOutlined />
-          Добавить
+          Создать
         </Tag>
       </Button>
     );

@@ -1,10 +1,11 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Tag as AntdTag } from 'antd';
+import Format from 'elements/format';
 
 import { randomColor } from 'utils/color';
 
-const Tag = ({ session: { tags }, id }) => {
+const Tag = ({ session: { tags }, id, width }) => {
   const tag = tags.get(id);
   if (!tag) {
     return null;
@@ -14,7 +15,7 @@ const Tag = ({ session: { tags }, id }) => {
       color={randomColor(tag.name)}
       selector={tags.selector}
     >
-      {tag.name}
+      <Format width={width}>{tag.name}</Format>
     </AntdTag>
   );
 };
