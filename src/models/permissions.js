@@ -1,24 +1,39 @@
-import { observable, computed } from 'mobx';
-import { getPermissions as getPackagesPermissions } from 'services/packages';
+import { observable } from 'mobx';
+import { getPackagesPermissions, getBeveragesPermissions } from 'services/packages';
 
 class Permissions {
-  @observable packages = [];
+  @observable permissions = {
+    packages: [],
+    beverages: [],
+  }
 
   constructor() {
     this.getPackagesPermissions();
+    this.getBeveragesPermissions();
   }
 
-  checkPermission(permission) {
-    return Boolean(this.packages.find((perm) => perm === permission));
+  checkPermission(scope, permission) {
+    if (!this.permissions[scope] || !Array.isArray(this.permissions[scope])) {
+      console.warn(`Undefined permission scope ${scope}!`);
+      return false;
+    }
+
+    return this.permissions[scope].includes(permission);
   }
 
-  @computed get isAllowDelete() {
-    return this.checkPermission('delete');
+  isAllowDelete(scope) {
+    return this.checkPermission(scope, 'delete');
   }
 
   getPackagesPermissions = () => {
     getPackagesPermissions().then((permissions) => {
-      this.packages = permissions;
+      this.permissions.packages = permissions;
+    });
+  }
+
+  getBeveragesPermissions = () => {
+    getBeveragesPermissions().then((permissions) => {
+      this.permissions.beverages = permissions;
     });
   }
 }

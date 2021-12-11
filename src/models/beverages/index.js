@@ -3,7 +3,7 @@ import React from 'react';
 import {
   observable, action, autorun, when,
 } from 'mobx';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 
 import Table from 'models/table';
 import Filters from 'models/filters';
@@ -14,6 +14,8 @@ import { OperationIcon, canceledIcon, indicatorsIcon } from 'elements/beverageIc
 import { getBeverages, sendBeveragesReport, deleteBeverage } from 'services/beverage';
 import { tableItemLink } from 'elements/table/trickyCells';
 import { sequentialGet } from 'utils/request';
+
+const BEVERAGE_DELETE_MESSAGE_KEY = 'BEVERAGE_DELETE_MESSAGE_KEY';
 
 const declareColumns = (session) => ({
   id: {
@@ -160,10 +162,16 @@ class Beverages extends Table {
       this.exporter.onChangeEmail(session?.user?.email || '');
     });
 
-    when(() => session.permissions.isAllowDelete).then(() => {
+    when(() => session.permissions.isAllowDelete('beverages')).then(() => {
       this.actions = {
         onDelete: ({ id: idToRemove }) => {
-          deleteBeverage(idToRemove).then(this.rawData.replace(this.rawData.filter(({ id }) => id !== idToRemove)));
+          message.loading({ content: 'Идет удаление налива..', duration: 0, key: BEVERAGE_DELETE_MESSAGE_KEY });
+          deleteBeverage(idToRemove).then(() => {
+            message.success({ content: 'Налив успешно удален!', duration: 2, key: BEVERAGE_DELETE_MESSAGE_KEY });
+            this.rawData.replace(this.rawData.filter(({ id }) => id !== idToRemove));
+          }).catch((err) => {
+            message.error({ content: `Произошла ошибка при удалении налива: ${err}`, duration: 2, key: BEVERAGE_DELETE_MESSAGE_KEY });
+          });
         },
         isVisible: true,
       };
