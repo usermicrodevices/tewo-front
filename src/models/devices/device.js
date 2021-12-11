@@ -47,6 +47,10 @@ class Device extends Datum {
 
   @observable authKey;
 
+  @observable tags = [];
+
+  @observable ppmDivider;
+
   status;
 
   detailsData = null;
@@ -80,9 +84,8 @@ class Device extends Datum {
         type: 'selector',
         selector: this.session.deviceModels.selector,
       },
-      timeZone: {
-        type: 'selector',
-        selector: zones.RU.map((v) => [v, v]),
+      tags: {
+        type: 'tags',
       },
       salePointId: {
         type: 'selector',
@@ -97,6 +100,10 @@ class Device extends Datum {
       },
       ingredients: {
         type: 'ingredients',
+      },
+      timeZone: {
+        type: 'selector',
+        selector: zones.RU.map((v) => [v, v]),
       },
     };
   }
@@ -221,6 +228,11 @@ class Device extends Datum {
         dataIndex: 'conception',
         title: 'Концепция',
         value: this.conceptionName,
+      },
+      {
+        dataIndex: 'tags',
+        title: 'Теги',
+        value: this.tags,
       },
       {
         dataIndex: 'name',
