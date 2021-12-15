@@ -79,7 +79,7 @@ class DataManager {
         return result;
       })();
       // Находим первый элемент, который не подгружен с сервера
-      const firstOld = dataHead.findIndex(({ id }) => !(id in appearences));
+      const firstOld = dataHead.findIndex((item) => !(item?.id in appearences));
       // Ничего не подгружено. Все новые элементы найдены среди старых
       if (firstOld < 0) {
         // Можно ввообще проверить массивы на тождественность но ограничимся чем попроще

@@ -1,7 +1,9 @@
 import moment from 'moment';
 import { when } from 'mobx';
 
-import { get, blob, post } from 'utils/request';
+import {
+  get, blob, post, del,
+} from 'utils/request';
 import checkData from 'utils/dataCheck';
 import {
   daterangeToArgs, isDateRange, alineDates, momentToArg,
@@ -9,6 +11,8 @@ import {
 import Beverage from 'models/beverages/beverage';
 import BeveragesStats from 'models/beverages/stats';
 import apiCheckConsole from 'utils/console';
+
+const deleteBeverage = (id) => del(`https://stage.telemetry.work/api/data/beverages/${id}/`);
 
 const getBeverages = (session, getter = get) => (limit, offset = 0, filter = '') => new Promise((resolve, reject) => {
   apiCheckConsole.assert(limit >= 0 && offset >= 0, `Неверные параметры запроса наливов "${limit}" "${offset}"`);
@@ -91,8 +95,8 @@ const getBeverageIndicators = (map) => get('/local_api/indicator_references/').t
   if (Array.isArray(data)) {
     for (const datum of data) {
       if (!checkData(datum, {
-        id: 'number', name: 'string', description: 'string', unit: 'number',
-      })) {
+        id: 'number', name: 'string', description: 'string',
+      }, { unit: 'number' })) {
         apiCheckConsole.error('Неожиданные данные для операций /local_api/indicator_references/', datum);
       }
       map.set(datum.id, datum);
@@ -333,5 +337,6 @@ export {
   getBeveragesDense,
   beveragesDenseToPrimeCostChartChar,
   getBeveragesDenseChart,
+  deleteBeverage,
   BEVERAGES_SALE_POINTS_STATS,
 };

@@ -64,6 +64,17 @@ const DATE_RANGE_TYPE = {
   },
 };
 
+const SELECTOR_FILTER_TYPE = {
+  operators: ['in'],
+  convertor: (v) => [v.join(',')],
+  parser: (v) => v.split(',').map((id) => parseInt(id, 10)),
+  initialValue: [],
+  complement: selectorsComparator,
+  apply: (value, selected) => selected.findIndex((i) => i === value) >= 0 || typeof value === 'undefined',
+  order: 3,
+  isNullValue: (value) => !Array.isArray(value) || value.length === 0,
+};
+
 const FILTER_TYPES = {
   checkbox: {
     operators: ['exact'],
@@ -75,16 +86,8 @@ const FILTER_TYPES = {
     order: 5,
     isNullValue: (value, filter) => value === filter.passiveValue,
   },
-  selector: {
-    operators: ['in'],
-    convertor: (v) => [v.join(',')],
-    parser: (v) => v.split(',').map((id) => parseInt(id, 10)),
-    initialValue: [],
-    complement: selectorsComparator,
-    apply: (value, selected) => selected.findIndex((i) => i === value) >= 0 || typeof value === 'undefined',
-    order: 3,
-    isNullValue: (value) => !Array.isArray(value) || value.length === 0,
-  },
+  selector: SELECTOR_FILTER_TYPE,
+  salepoints: SELECTOR_FILTER_TYPE,
   singleselector: {
     operators: ['exact'],
     convertor: (v) => [v],

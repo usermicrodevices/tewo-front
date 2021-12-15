@@ -7,6 +7,15 @@ import DetailsProps from 'models/detailsProps';
 
 const STORAGE_KEY = 'devices_inputs_storage';
 
+function createMapRangeBar(rangeKey, dateKey) {
+  return function mapRangeBar(item) {
+    return {
+      x: item[dateKey].format(),
+      y: item[rangeKey],
+    };
+  };
+}
+
 class Details {
   @observable waterQuality;
 
@@ -31,15 +40,6 @@ class Details {
   @observable lastClearances = [];
 
   @computed get voltageSeries() {
-    function createMapRangeBar(rangeKey, dateKey) {
-      return function mapRangeBar(item) {
-        return {
-          x: item[dateKey].format(),
-          y: item[rangeKey],
-        };
-      };
-    }
-
     return [
       {
         data: this.voltage.map(createMapRangeBar('pcbV1', 'moment')),
@@ -54,6 +54,13 @@ class Details {
         name: 'L3',
       },
     ];
+  }
+
+  @computed get waterSeries() {
+    if (!Array.isArray(this.waterQuality)) {
+      return this.waterQuality;
+    }
+    return this.waterQuality.map(createMapRangeBar('quality', 'moment'));
   }
 
   @computed get waterQualityXSeria() {

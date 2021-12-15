@@ -6,7 +6,7 @@ import SalePoint from 'models/salePoints/salePoint';
 
 import apiCheckConsole from 'utils/console';
 import {
-  get, post, patch, del, sequentialGet
+  get, post, patch, del, sequentialGet,
 } from 'utils/request';
 import checkData from 'utils/dataCheck';
 import { daterangeToArgs, SemanticRanges, SmallSemanticRanges } from 'utils/date';
@@ -39,6 +39,7 @@ const SHUILD_BE = {
   created_date: 'date',
   opened_tasks: 'boolean',
   status_reference: 'number',
+  tags: 'array',
 };
 
 const MAY_BE = {
@@ -52,6 +53,7 @@ const MAY_BE = {
   has_off_devices: 'boolean',
   need_tech_service: 'boolean',
   downtime: 'number',
+  sd: 'number',
 };
 
 const converter = (data, result) => {

@@ -18,6 +18,10 @@ class Company extends Datum {
 
   @observable currencyId;
 
+  @observable tags = [];
+
+  @observable sd;
+
   created;
 
   session;

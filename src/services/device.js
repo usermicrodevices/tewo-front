@@ -33,6 +33,8 @@ const RENAMER = {
   description: 'description',
   software_version: 'softwareVersion',
   auth_key: 'authKey',
+  tags: 'tags',
+  ppm_divider: 'ppmDivider',
 };
 
 function converter(json, acceptor) {
@@ -53,6 +55,7 @@ function converter(json, acceptor) {
       tech: 'boolean',
       downtime: 'number',
       change_null_sum_bev_by_cost: 'boolean',
+      tags: 'array',
     }, {
       serial: 'string',
       device_model: 'number',
@@ -63,6 +66,7 @@ function converter(json, acceptor) {
       description: 'string',
       auth_key: 'string',
       software_version: 'string',
+      ppm_divider: 'number',
     },
   )) {
     apiCheckConsole.error(`Неожиданный ответ по адресу ${LOCATION}`, json);
@@ -81,6 +85,7 @@ const getDevices = (session) => () => new Promise((resolve, reject) => {
   const general = get(LOCATION).then((result) => {
     if (!Array.isArray(result)) {
       apiCheckConsole.error(`по ${LOCATION} ожидается массив, получен ${typeof result}`, result);
+      return [];
     }
     const responce = {
       count: result.length,
@@ -271,7 +276,7 @@ const getVoltage = (deviceId, daterange) => {
 const getWaterQuality = (deviceId, daterange) => {
   const dateRangeArg = daterangeToArgs(daterange, 'device_date');
   const step = dateRangeArg === '' ? 86400 : Math.max(60, ...[3600, 86400].filter((s) => (daterange[1] - daterange[0]) / s / 1000 > 10));
-  return get(`/data/counters/pcb_tds/?step=${step}&device=${deviceId}${dateRangeArg}`)
+  return get(`/data/counters/pcb_water_hardness/?step=${step}&device=${deviceId}${dateRangeArg}`)
     .then((result) => {
       const mustBe = {
         device_date: 'date',
@@ -292,7 +297,7 @@ const getWaterQuality = (deviceId, daterange) => {
         finalDateRange,
         step,
         result,
-        (item) => ({ quality: item ? item.pcb_tds1 : 0 }),
+        (item) => ({ quality: item ? item.pcb_tds1 : [0, 0] }),
         'device_date',
       )];
     });

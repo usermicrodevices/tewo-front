@@ -24,6 +24,8 @@ const transform = (data, company) => {
     contact_people: 'string',
     threshold_drinks_cleaning: 'number',
     currency: 'number',
+    sd: 'number',
+    tags: 'array',
   };
 
   if (!checkData(data, shouldBe, mayBe)) {
@@ -40,6 +42,8 @@ const transform = (data, company) => {
   company.contactPeople = data.contact_people;
   company.currencyId = data.currency;
   company.created = moment(data.created_date);
+  company.tags = data.tags;
+  company.sd = data.sd;
 
   return company;
 };

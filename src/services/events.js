@@ -110,6 +110,7 @@ const TYPES_RENAMER = {
   color: 'color',
   description: 'description',
   hidden: 'isHidden',
+  cid_close: 'cidClose',
 };
 
 const TYPES_LOCATION = '/refs/event_references/';
@@ -131,6 +132,7 @@ const transform = (json, acceptor) => {
     }, {
       priority: 'number',
       description: 'string',
+      cid_close: 'number',
     },
   )) {
     apiCheckConsole.error(`Неожиданный ответ по адресу ${TYPES_LOCATION}`, eventType);

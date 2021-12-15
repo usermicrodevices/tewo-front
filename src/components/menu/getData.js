@@ -95,7 +95,7 @@ const getData = (session) => [
       },
       {
         text: 'Обновление оборудования',
-        hidden: !session.permissions.packages.includes('view'),
+        hidden: !session.permissions.checkPermission('packages', 'view'),
         act: {
           ...deviceUpdate,
           path: deviceUpdate.path[0],

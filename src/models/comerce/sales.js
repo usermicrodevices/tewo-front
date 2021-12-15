@@ -114,10 +114,8 @@ class Sales extends Table {
         selector: () => session.companies.selector,
       },
       device__sale_point__id: {
-        type: 'selector',
-        title: 'Объект',
+        type: 'salepoints',
         apply: (general, data) => general(data.salePointId),
-        selector: () => session.points.selector,
       },
       device__id: {
         type: 'selector',
@@ -133,7 +131,7 @@ class Sales extends Table {
         disabled: (filter) => !filter.data.has('device__id'),
       },
     });
-    filters.set('device_date', SemanticRanges.prw30Days.resolver());
+    filters.set('device_date', SemanticRanges.curWeek.resolver());
 
     filters.isShowSearch = false;
 

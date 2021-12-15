@@ -3,63 +3,82 @@ import { inject, observer } from 'mobx-react';
 import { Card } from 'antd';
 import Chart from 'react-apexcharts';
 import { withSize } from 'react-sizeme';
+import Loader from 'elements/loader';
+import moment from 'moment';
 
-import Typography from 'elements/typography';
+const renderWaterQualityTooltip = ({ date, range }) => `
+  <div style="padding: 4px 16px; font-size: 14px;">
+    <div><span style="color: #454545">(${moment(date).format('DD.MM')})</span><div/>
+    <div><b>${range[0]} - ${range[1]} ppm</b></div>
+  </div>
+`;
 
-const COLORS = ['#228148'];
+const COLOR = '#66C7F4';
 
-const WaterChart = ({ size, element: { details } }) => {
-  const series = [{
-    name: 'Жесткость воды',
-    type: 'line',
-    data: details.waterQuality.map(({ quality }) => quality),
-  }];
-  const dates = details.waterQualityXSeria;
+const WaterChart = ({ size: { width }, element: { details } }) => {
+  if (typeof details.waterSeries === 'undefined') {
+    return (
+      <Card>
+        <Loader size="large" />
+      </Card>
+    );
+  }
 
-  const data = {
-    colors: COLORS,
+  const series = [{ data: details.waterSeries }];
+
+  const options = {
+    colors: COLOR,
     chart: {
-      type: 'line',
-      stacked: false,
+      type: 'rangeBar',
+      toolbar: {
+        show: false,
+      },
+      selection: {
+        enabled: false,
+      },
+      zoom: {
+        enabled: false,
+      },
     },
-    dataLabels: {
-      enabled: true,
+    tooltip: {
+      custom: ({
+        seriesIndex, y1, y2, w, dataPointIndex,
+      }) => {
+        const { name } = w.config.series[seriesIndex];
+        const date = w.config.series[seriesIndex].data[dataPointIndex].x;
+        return renderWaterQualityTooltip({
+          name,
+          date,
+          range: [y1, y2],
+        });
+      },
     },
-    stroke: {
-      width: 2,
-      curve: 'smooth',
+    plotOptions: {
+      bar: {
+        horizontal: false,
+      },
     },
     xaxis: {
-      categories: dates.map((d) => d.format('D MMM HH:mm')),
+      type: 'datetime',
       labels: {
         datetimeUTC: false,
       },
     },
     yaxis: {
-      axisTicks: {
-        show: true,
-      },
-      axisBorder: {
-        show: true,
-        color: 'black',
-      },
-      labels: {
-        style: {
-          color: 'black',
-        },
-        step: 0.1,
-        formatter: (v) => Math.round(v * 1000) / 1000,
+      title: {
+        text: 'Жесткость воды',
       },
     },
   };
+
   return (
     <Card>
-      <Typography.Title level={3}>Жесткость воды</Typography.Title>
       <Chart
         series={series}
-        width={size.width - 55}
-        height={400}
-        options={data}
+        width={width - 55}
+        height={555}
+        type="rangeBar"
+        options={options}
       />
     </Card>
   );

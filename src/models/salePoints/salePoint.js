@@ -3,6 +3,7 @@ import { observable, computed, action } from 'mobx';
 import * as routes from 'routes';
 import Datum from 'models/datum';
 import { deleteFavorite, addFavorite } from 'services/salePoints';
+import parseLocation from 'utils/parseLocation';
 
 import Details from './details';
 
@@ -42,6 +43,8 @@ class SalePoint extends Datum {
   @observable downtime;
 
   @observable tags = [];
+
+  @observable sd;
 
   @observable isFavorite;
 
@@ -137,7 +140,7 @@ class SalePoint extends Datum {
     if (typeof this.mapPoint !== 'string') {
       return null;
     }
-    const location = this.mapPoint.split(',').map((v) => parseFloat(v));
+    const location = parseLocation(this.mapPoint);
     if (location.length !== 2 || isNaN(location[0]) || isNaN(location[1])) {
       return null;
     }
