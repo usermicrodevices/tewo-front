@@ -70,7 +70,7 @@ const SELECTOR_FILTER_TYPE = {
   parser: (v) => v.split(',').map((id) => parseInt(id, 10)),
   initialValue: [],
   complement: selectorsComparator,
-  apply: (value, selected) => selected.findIndex((i) => i === value) >= 0 || typeof value === 'undefined',
+  apply: (value, selected) => selected.includes(value) || typeof value === 'undefined',
   order: 3,
   isNullValue: (value) => !Array.isArray(value) || value.length === 0,
 };
@@ -88,6 +88,7 @@ const FILTER_TYPES = {
   },
   selector: SELECTOR_FILTER_TYPE,
   salepoints: SELECTOR_FILTER_TYPE,
+  tag: SELECTOR_FILTER_TYPE,
   singleselector: {
     operators: ['exact'],
     convertor: (v) => [v],
@@ -290,7 +291,7 @@ class Filters {
     if (this.data.has(key)) {
       return this.data.get(key);
     }
-    if (type === 'selector') {
+    if (type === 'selector' || type === 'tag' || type === 'salepoints') {
       return [];
     }
     return null;

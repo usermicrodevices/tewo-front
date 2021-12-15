@@ -5,6 +5,8 @@ import {
 } from 'antd';
 import { FilterOutlined, ReloadOutlined } from '@ant-design/icons';
 
+import TagSelect from 'components/tags/select';
+
 import DataRangePicker from './daterangepicker';
 import CostRangeInput from './costrangeinput';
 import Select from './select';
@@ -37,6 +39,8 @@ export const Filter = (
       const isSingle = type === 'singleselector';
       return <Select minWidth={330} disabled={disabled} title={title} value={value} onChange={onChange} selector={selector} isSingle={isSingle} />;
     }
+    case 'tag':
+      return <TagSelect minWidth={330} disabled={disabled} title={title} value={value} onChange={onChange} />;
     case 'checkbox':
       return <Checkbox disabled={disabled} checked={value} onChange={({ target: { checked } }) => onChange(checked)}>{title}</Checkbox>;
     default:
