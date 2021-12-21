@@ -12,7 +12,7 @@ import Beverage from 'models/beverages/beverage';
 import BeveragesStats from 'models/beverages/stats';
 import apiCheckConsole from 'utils/console';
 
-const deleteBeverage = (id) => del(`https://stage.telemetry.work/api/data/beverages/${id}/`);
+const deleteBeverage = (id) => del(`/data/beverages/${id}/`);
 
 const getBeverages = (session, getter = get) => (limit, offset = 0, filter = '') => new Promise((resolve, reject) => {
   apiCheckConsole.assert(limit >= 0 && offset >= 0, `Неверные параметры запроса наливов "${limit}" "${offset}"`);
