@@ -62,6 +62,7 @@ const InputButton = ({ session: { tags }, onCreate }) => {
         size="small"
         value={inputValue}
         onChange={handleOnChange}
+        onPressEnter={handleSubmitTag}
       />
       <Button type="text" icon={<CloseOutlined />} disabled={isLoading} onClick={handleCancel} size="small" />
       <Button type="text" icon={<PlusOutlined />} disabled={inputValue.length === 0 && !isLoading} loading={isLoading} onClick={handleSubmitTag} size="small" />

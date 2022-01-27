@@ -7,9 +7,12 @@ import { getTags, addTag } from 'services/tags';
 class Tags {
   data = observable.map();
 
+  @observable loaded = false;
+
   constructor() {
     getTags().then((tags) => {
       transaction(() => {
+        this.loaded = true;
         for (const tag of tags) {
           this.set(tag);
         }
@@ -33,7 +36,7 @@ class Tags {
   }
 
   @computed get selector() {
-    if (this.data.size === 0) {
+    if (!this.loaded) {
       return undefined;
     }
     return [...this.data.entries()].map(([id, { name }]) => [id, name]).sort(([idA], [idB]) => idA - idB);

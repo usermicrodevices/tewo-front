@@ -20,7 +20,6 @@ const TagsInput = ({
   const onSelect = useCallback((selected) => {
     onChange([...value, selected]);
   }, [value, onChange]);
-  console.log('value', value);
 
   if (tags.selector === undefined) {
     return <Loader />;
@@ -52,7 +51,7 @@ const TagsInput = ({
           }
         </Select>
       )}
-      <TagsInputButton onCreate={(id) => onSelect(id)()} />
+      <TagsInputButton onCreate={(id) => onSelect(id)} />
     </div>
   );
 };
