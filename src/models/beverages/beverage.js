@@ -44,6 +44,7 @@ class Beverage {
 
     return this.indicators.map((indicatorInfo) => ({
       name: this.session.beverageIndicators.get(indicatorInfo.indicator)?.name,
+      description: this.session.beverageIndicators.get(indicatorInfo.indicator)?.description,
       value: indicatorInfo.value,
       unit: getUnitFromIndicator(this.session, indicatorInfo),
     }));

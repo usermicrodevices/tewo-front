@@ -7,8 +7,8 @@ import NoData from 'elements/noData';
 const columns = [
   {
     title: 'Показатель',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'description',
+    key: 'description',
   },
   {
     title: 'Значение',
