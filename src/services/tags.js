@@ -24,10 +24,10 @@ const addTag = (data) => post('/refs/tags/', data)
   })
   .catch((reason) => {
     const { response } = reason;
-    if (response.status === 403) {
+    if (response?.status === 403) {
       message.error(response.data.detail);
-    } else if (Array.isArray(response.data.non_field_errors)) {
-      message.error(response.data.non_field_errors.join(', '));
+    } else if (response?.status === 400) {
+      message.error('Такой тег уже существует');
     } else {
       message.error('Произошла ошибка при создании тега');
     }
