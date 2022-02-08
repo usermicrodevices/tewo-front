@@ -27,6 +27,7 @@ const RENAMER = {
   emails: 'email',
   opened_tasks: 'isHaveOpenedTasks',
   status_reference: 'statusId',
+  tags: 'tags',
 };
 
 const LOCATION = '/refs/sale_points/';

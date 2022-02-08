@@ -30,9 +30,12 @@ import Conceptions from './conceptions';
 import DashboardModel from './dashboard';
 import Units from './units';
 import Permissions from './permissions';
+import Tags from './tags';
 
 class Session {
   @observable user = null; // will set in AuthorizedRouter
+
+  tags = new Tags();
 
   operations = new Operations();
 

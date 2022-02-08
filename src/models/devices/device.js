@@ -3,6 +3,7 @@ import { zones } from 'utils/timezone';
 
 import * as routes from 'routes';
 import Datum from 'models/datum';
+import { tagsCell } from 'elements/table/trickyCells';
 
 import Details from './details';
 
@@ -232,7 +233,7 @@ class Device extends Datum {
       {
         dataIndex: 'tags',
         title: 'Теги',
-        value: this.tags,
+        value: tagsCell(this.tags, this, 600, true),
       },
       {
         dataIndex: 'name',
