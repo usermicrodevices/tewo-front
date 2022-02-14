@@ -1,4 +1,6 @@
-import { post, get, del } from 'utils/request';
+import {
+  post, get, del, patch,
+} from 'utils/request';
 import checkData from 'utils/dataCheck';
 import apiCheckConsole from 'utils/console';
 
@@ -12,6 +14,11 @@ const MUST_BE = {
 };
 
 function convert(datum) {
+  if (typeof datum?.amount === 'string') {
+    // eslint-disable-next-line no-param-reassign
+    datum.amount = Number(datum.amount);
+  }
+
   if (!checkData(datum, MUST_BE)) {
     apiCheckConsole.error(`ошиюка при проверке данных ${RECIPES_LOCATION}, данные проигнорированы`, datum);
     return null;
@@ -41,14 +48,21 @@ const getRecipes = () => get(RECIPES_LOCATION).then((data) => {
   return result;
 });
 
-const applyRecipe = (drink, recipe) => new Promise((resolve, reject) => {
-  Promise.all(recipe.filter(({ recipeNoteId }) => recipeNoteId !== null).map(({ recipeNoteId }) => del(`/refs/recipes/${recipeNoteId}/`))).then(() => {
-    Promise.all(recipe.map(({ id: ingredient, amount }) => post('/refs/recipes/', { ingredient, amount, drink: drink.id }))).then((response) => {
-      if (!Array.isArray(response)) {
-        apiCheckConsole.error('Неожиданный ответ на обновление ингредиентов', response);
-      }
-      resolve(response.map((datum) => convert(datum)).filter((v) => v !== null));
-    }).catch(reject);
+const applyRecipe = (drink, recipe, deletedRecipesIds) => new Promise((resolve, reject) => {
+  deletedRecipesIds.forEach((id) => {
+    del(`/refs/recipes/${id}/`);
+  });
+
+  Promise.all(recipe.map(({ id: ingredient, amount, recipeNoteId }) => {
+    if (recipeNoteId) {
+      return patch(`/refs/recipes/${recipeNoteId}/`, { ingredient, amount, drink: drink.id });
+    }
+    return post('/refs/recipes/', { ingredient, amount, drink: drink.id });
+  })).then((response) => {
+    if (!Array.isArray(response)) {
+      apiCheckConsole.error('Неожиданный ответ на обновление ингредиентов', response);
+    }
+    resolve(response.map((datum) => convert(datum)).filter((v) => v !== null));
   }).catch(reject);
 });
 

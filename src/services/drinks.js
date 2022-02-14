@@ -15,6 +15,7 @@ const RENAMER = {
   company: 'companyId',
   nds: 'nds',
   code_ext: 'codeExt',
+  product_uid: 'productUid',
 };
 
 const form = (data) => {

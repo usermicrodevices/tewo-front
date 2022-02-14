@@ -10,6 +10,8 @@ class RecipeEditor {
 
   @observable recipe;
 
+  deletedRecipes = [];
+
   session;
 
   constructor(drink, session) {
@@ -56,7 +58,9 @@ class RecipeEditor {
   }
 
   @action remove(id) {
-    this.recipe.splice(id, 1);
+    const [deletedRecipeRow] = this.recipe.splice(id, 1);
+    this.deletedRecipes.push(deletedRecipeRow.recipeNoteId);
+
     if (this.recipe.length === 0) {
       this.recipe = [{ id: null, amount: null, recipeNoteId: null }];
     }
@@ -76,7 +80,7 @@ class RecipeEditor {
       this.cancel();
       return Promise.resolve();
     }
-    return applyRecipe(this.drink, recipe).then((response) => {
+    return applyRecipe(this.drink, recipe, this.deletedRecipes).then((response) => {
       this.drink.recipe = response;
     });
   }

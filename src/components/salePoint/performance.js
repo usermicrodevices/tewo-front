@@ -46,11 +46,21 @@ const colorRanges = (scale, data, textScale) => {
 const settings = (data) => ({
   series: data,
   options: {
+    states: {
+      active: {
+        filter: {
+          type: 'none',
+        },
+      },
+    },
     chart: {
       height: 750,
       type: 'heatmap',
       toolbar: {
         show: false,
+      },
+      selection: {
+        enabled: false,
       },
     },
     plotOptions: {

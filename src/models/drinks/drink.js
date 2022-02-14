@@ -5,6 +5,8 @@ import Datum from 'models/datum';
 class Drink extends Datum {
   @observable id = null;
 
+  @observable productUid = null;
+
   @observable plu = null;
 
   @observable name = '';
@@ -47,6 +49,16 @@ class Drink extends Datum {
         value: this.id,
       },
       {
+        dataIndex: 'plu',
+        title: 'PLU',
+        value: this.plu,
+      },
+      {
+        dataIndex: 'productUid',
+        title: 'uid продукта',
+        value: this.productUid,
+      },
+      {
         dataIndex: 'name',
         title: 'Название',
         value: this.name,
@@ -55,11 +67,6 @@ class Drink extends Datum {
         dataIndex: 'companyId',
         title: 'Компания',
         value: this.companyName,
-      },
-      {
-        dataIndex: 'plu',
-        title: 'PLU',
-        value: this.plu,
       },
       {
         dataIndex: 'nds',
@@ -80,6 +87,9 @@ class Drink extends Datum {
       name: {
         type: 'text',
         isRequired: true,
+      },
+      productUid: {
+        type: 'text',
       },
       companyId: {
         type: 'selector',

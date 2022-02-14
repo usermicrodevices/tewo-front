@@ -10,11 +10,13 @@ import EventType from 'models/events/eventType';
 import Event from 'models/events/event';
 import { daterangeToArgs, alineDates, isDateRange } from 'utils/date';
 
-const TECH_CLEARANCE_EVENT_ID = 8;
+const createEventsUrl = (limit, offset, filter) => `/data/events/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`;
 
-const getEvents = (session, getter = get) => (limit, offset = 0, filter = '') => {
+const createCleaningsEventsUrl = (limit, offset, filter) => `/data/events/cleanings_direct/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`;
+
+const getEvents = (session, getter = get, createUrl = createEventsUrl) => (limit, offset = 0, filter = '') => {
   apiCheckConsole.assert(limit > 0 && offset >= 0, `Неверные параметры запроса событий "${limit}" "${offset}"`);
-  return getter(`/data/events/?limit=${limit}&offset=${offset || 0}${filter !== '' ? `&${filter}` : filter}`).then((response) => {
+  return getter(createUrl(limit, offset, filter)).then((response) => {
     const mustBe = {
       id: 'number',
       cid: 'string',
@@ -57,9 +59,13 @@ const getEvents = (session, getter = get) => (limit, offset = 0, filter = '') =>
       event_reference: 'eventId',
       overdued: 'isOverdued',
     };
+
+    const count = Array.isArray(response) ? response.length : response.count;
+    const results = Array.isArray(response) ? response : response.results;
+
     return {
-      count: response.count,
-      results: response.results.map((data) => {
+      count,
+      results: results.map((data) => {
         const result = new Event(session);
         for (const [key, value] of Object.entries(data)) {
           if (key.indexOf('date') >= 0) {
@@ -74,10 +80,6 @@ const getEvents = (session, getter = get) => (limit, offset = 0, filter = '') =>
   });
 };
 
-/**
- * @deprecated use sendEventsReport instead
- * @param {*} filter ;
- */
 const exportEvents = (filter = '') => blob(`/data/events/xlsx/${filter !== '' ? `?${filter}` : filter}`);
 
 const sendEventsReport = (filter = '', email = '') => {
@@ -90,10 +92,10 @@ const sendEventsReport = (filter = '', email = '') => {
 };
 
 const getClearances = (session, getter = get) => (limit, offset = 0, filter = '') => (
-  getEvents(session, getter)(
+  getEvents(session, getter, createCleaningsEventsUrl)(
     limit,
     offset,
-    `event_reference__id=${TECH_CLEARANCE_EVENT_ID}${filter !== '' ? `&${filter}` : filter}`,
+    filter,
   )
 );
 

@@ -15,6 +15,18 @@ const daterangeToArgs = (range, name) => {
   return `&${name}__gte=${v[0]}&${name}__lte=${v[1]}`;
 };
 
+const daterangeFromArgs = (args, name) => {
+  const decodedArgs = decodeURIComponent(args);
+  const dateStartMatch = decodedArgs.match(new RegExp(`${name}__gte=([^&]+)`));
+  const dateEndMatch = decodedArgs.match(new RegExp(`${name}__lte=([^&]+)`));
+
+  if (!dateStartMatch || !dateEndMatch) {
+    return false;
+  }
+
+  return [moment(dateStartMatch[1]), moment(dateEndMatch[1])];
+};
+
 const isDateRange = (d) => daterangeToArgs(d) !== '';
 
 const isEndOfMonth = (date) => date.clone().endOf('month').isSame(date, 'day');
@@ -195,4 +207,5 @@ const formatDuration = (duration) => {
 
 export {
   daterangeToArgs, momentToArg, isDateRange, stepToPast, humanizeSeconds, alineDates, SemanticRanges, SmallSemanticRanges, formatDuration,
+  daterangeFromArgs,
 };
