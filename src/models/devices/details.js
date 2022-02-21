@@ -141,7 +141,10 @@ class Details {
       const datesMap = {};
       results.forEach(({ openDate }) => {
         const key = openDate.format('YYYYMMDD');
-        datesMap[key] = (datesMap[key] || 0) + 1;
+        if (!datesMap[key]) {
+          datesMap[key] = [];
+        }
+        datesMap[key].push(openDate);
       });
       this.allClearancesDates = datesMap;
     });

@@ -1,7 +1,7 @@
 /* eslint react/no-array-index-key: off */
 import React from 'react';
 import {
-  Button, Calendar, Select, Dropdown, Menu,
+  Button, Calendar, Select, Dropdown, Menu, Popover,
 } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import moment from 'moment';
@@ -21,11 +21,34 @@ const MonthSelector = ({ date, onChange }) => {
   const items = [];
   while (i < 12 && it < now) {
     const onClick = ({ key }) => { onChange(date.clone().month(parseInt(key, 10))); };
-    items.push(<Menu.Item key={i} onClick={onClick}>{ it.format('MMMM') }</Menu.Item>);
+    items.push(<Menu.Item key={i} onClick={onClick}>{it.format('MMMM')}</Menu.Item>);
     i += 1;
     it.add(1, 'month');
   }
   return <Menu selectedKeys={[`${date.month()}`]}>{items}</Menu>;
+};
+
+const ClearencesCellLabel = ({ clearances }) => {
+  if (Array.isArray(clearances)) {
+    const formatClearanceText = (date, index) => `${index + 1}. Очистка начата в ${date.format('HH:mm')}`;
+    const popoverContent = clearances
+      .sort((openDate1, openDate2) => (openDate1.diff(openDate2, 'seconds') > 0 ? 1 : -1))
+      .map((clearanceOpenDate, index) => <div>{formatClearanceText(clearanceOpenDate, index)}</div>);
+
+    return (
+      <Popover content={popoverContent}>
+        <div style={{ backgroundColor: colors.clearance }}>
+          <Format>{clearances.length}</Format>
+        </div>
+      </Popover>
+    );
+  }
+
+  if (clearances > 0) {
+    return <div style={{ backgroundColor: colors.clearance }}><Format>{clearances}</Format></div>;
+  }
+
+  return null;
 };
 
 const CalendarWidget = ({
@@ -35,8 +58,8 @@ const CalendarWidget = ({
     const key = value.format('YYYYMMDD');
     return (
       <div className={style.items}>
-        { clearances && clearances[key] > 0 && <div style={{ backgroundColor: colors.clearance }}><Format>{clearances[key]}</Format></div> }
-        { beverages && beverages[key] > 0 && <div style={{ backgroundColor: colors.beverages }}><Format>{beverages[key]}</Format></div> }
+        <ClearencesCellLabel clearances={clearances?.[key]} />
+        {beverages && beverages[key] > 0 && <div style={{ backgroundColor: colors.beverages }}><Format>{beverages[key]}</Format></div>}
       </div>
     );
   };
@@ -78,12 +101,12 @@ const CalendarWidget = ({
             style={{ width: 120 }}
             onChange={(v) => onChange(moment(Math.min(moment(), value.clone().set('year', v))))}
           >
-            { new Array(moment().year() - START_YEAR + 1).fill(null).map((_, id) => (
+            {new Array(moment().year() - START_YEAR + 1).fill(null).map((_, id) => (
               <Select.Option key={id} value={START_YEAR + id}>{START_YEAR + id}</Select.Option>
-            )) }
+            ))}
           </Select>
         </div>
-        { isLoading && <div className={style.loader}><Loader size="large" /></div> }
+        {isLoading && <div className={style.loader}><Loader size="large" /></div>}
       </>
     );
   };
