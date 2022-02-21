@@ -58,9 +58,10 @@ const Editor = ({
   const isHaveErrors = form.getFieldsError().filter(({ errors }) => errors.length).length !== 0;
 
   const { values, editable } = data;
-  const formDataInitialValues = {};
+  const formDataInitialValues = form.getFieldsValue() || {};
 
-  if (editable) {
+  // We need to check if there are any fields in the form and only if it's empty fill it with defaults
+  if (editable && !Object.keys(formDataInitialValues).length) {
     for (const { dataIndex } of values) {
       if (dataIndex in editable) {
         formDataInitialValues[dataIndex] = data[dataIndex];

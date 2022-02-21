@@ -49,6 +49,8 @@ class SalePoint extends Datum {
 
   @observable isFavorite;
 
+  @observable clientCode;
+
   session;
 
   detailsData;
@@ -118,6 +120,11 @@ class SalePoint extends Datum {
         value: this.email,
       },
       {
+        dataIndex: 'clientCode',
+        title: 'Код клиента',
+        value: this.clientCode,
+      },
+      {
         dataIndex: 'tags',
         title: 'Теги',
         value: tagsCell(this.tags, this, 600, true),
@@ -185,6 +192,9 @@ class SalePoint extends Datum {
       },
       tags: {
         type: 'tags',
+      },
+      clientCode: {
+        type: 'text',
       },
     };
   }

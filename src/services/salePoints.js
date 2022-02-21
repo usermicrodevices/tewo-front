@@ -28,6 +28,7 @@ const RENAMER = {
   opened_tasks: 'isHaveOpenedTasks',
   status_reference: 'statusId',
   tags: 'tags',
+  client_code: 'clientCode',
 };
 
 const LOCATION = '/refs/sale_points/';
@@ -54,6 +55,7 @@ const MAY_BE = {
   has_off_devices: 'boolean',
   need_tech_service: 'boolean',
   downtime: 'number',
+  client_code: 'string',
   sd: 'number',
 };
 

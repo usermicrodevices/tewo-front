@@ -1,9 +1,11 @@
+import React from 'react';
 import { computed, observable } from 'mobx';
 import { zones } from 'utils/timezone';
 
 import * as routes from 'routes';
 import Datum from 'models/datum';
 import { tagsCell } from 'elements/table/trickyCells';
+import JsonDictTextFormat from 'components/jsonDictInput/jsonDictTextFormat';
 
 import Details from './details';
 
@@ -51,6 +53,8 @@ class Device extends Datum {
   @observable tags = [];
 
   @observable ppmDivider;
+
+  extInfo;
 
   status;
 
@@ -105,6 +109,9 @@ class Device extends Datum {
       timeZone: {
         type: 'selector',
         selector: zones.RU.map((v) => [v, v]),
+      },
+      extInfo: {
+        type: 'json_dict',
       },
     };
   }
@@ -274,6 +281,11 @@ class Device extends Datum {
         dataIndex: 'ingredients',
         title: 'Настройка прогнозируемого пополнения ингредиентов',
         value: null,
+      },
+      {
+        dataIndex: 'extInfo',
+        title: 'Дополнительные поля',
+        value: <JsonDictTextFormat json={this.extInfo} />,
       },
     ];
   }

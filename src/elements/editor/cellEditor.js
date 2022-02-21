@@ -4,6 +4,7 @@ import {
 } from 'antd';
 
 import TagsInput from 'components/tags/input';
+import JsonDictInput from 'components/jsonDictInput';
 
 import IngredientsPicker from './ingredientspicker';
 import LocationPicker from './locationpicker';
@@ -130,6 +131,13 @@ const CellEditor = ({
       return (
         <Form.Item name={name} shouldUpdate>
           <TagsInput />
+        </Form.Item>
+      );
+    }
+    case 'json_dict': {
+      return (
+        <Form.Item name={name} shouldUpdate>
+          <JsonDictInput />
         </Form.Item>
       );
     }
