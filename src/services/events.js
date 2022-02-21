@@ -296,7 +296,9 @@ const getEventPriorities = (acceptor) => get('refs/event_priorities/').then(((da
   }
 }));
 
+const getEventReferencesPermissions = () => get('/refs/event_references/permissions/').then((json) => json.actions);
+
 export {
   getEvents, getEventTypes, getEventsClearancesChart, getClearances, getDetergents, getOverdued, getDowntimes, getEventPriorities, patchEventType,
-  exportEvents, patchCustomEventType, sendEventsReport,
+  exportEvents, patchCustomEventType, sendEventsReport, getEventReferencesPermissions,
 };

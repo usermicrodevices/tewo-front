@@ -134,6 +134,7 @@ const getData = (session) => [
       {
         text: 'События',
         act: eventTypes,
+        hidden: !session.permissions.checkPermission('eventReferences', 'view'),
       },
     ],
   ),

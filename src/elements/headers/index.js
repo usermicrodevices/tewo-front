@@ -70,7 +70,7 @@ const SubpageHeader = withRouter(({
         <div className={styles.submenu}>
           <Menu selectedKeys={menuItemKeyFromAction(menu, action === `${parseInt(action, 10)}` ? undefined : action)} mode="horizontal">
             { Array.isArray(menu)
-              && menu.map(({
+              && menu.filter((item) => !item.hidden).map(({
                 icon, text, path: subPath, explains,
               }) => (
                 <Menu.Item key={menuItemKeyFromAction(menu, subPath)} icon={icon} theme="none">

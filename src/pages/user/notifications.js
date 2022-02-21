@@ -1,4 +1,5 @@
 import React from 'react';
+import { inject, observer } from 'mobx-react';
 
 import SubPage from 'elements/subpage';
 import Typography from 'elements/typography';
@@ -6,7 +7,7 @@ import Typography from 'elements/typography';
 import NotificationsList from 'components/notifications/notificationsList';
 import NotificationsDelayList from 'components/notifications/notificationsDelayList';
 
-const Notifications = () => (
+const Notifications = ({ session }) => (
   <SubPage
     menu={[
       {
@@ -18,6 +19,7 @@ const Notifications = () => (
         path: 'alert_time',
         text: 'Время оповещения',
         widget: () => <NotificationsDelayList />,
+        hidden: !session.permissions.checkPermission('eventReferences', 'view'),
       },
     ]}
     title={(
@@ -30,4 +32,4 @@ const Notifications = () => (
   />
 );
 
-export default Notifications;
+export default inject('session')(observer(Notifications));

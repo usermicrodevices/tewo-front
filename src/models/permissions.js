@@ -1,15 +1,18 @@
 import { observable } from 'mobx';
 import { getPackagesPermissions, getBeveragesPermissions } from 'services/packages';
+import { getEventReferencesPermissions } from 'services/events';
 
 class Permissions {
   @observable permissions = {
     packages: [],
     beverages: [],
+    eventReferences: [],
   }
 
   constructor() {
-    this.getPackagesPermissions();
-    this.getBeveragesPermissions();
+    this.registerScopePermissions('packages', getPackagesPermissions);
+    this.registerScopePermissions('beverages', getBeveragesPermissions);
+    this.registerScopePermissions('eventReferences', getEventReferencesPermissions);
   }
 
   checkPermission(scope, permission) {
@@ -21,19 +24,17 @@ class Permissions {
     return this.permissions[scope].includes(permission);
   }
 
+  isAllowView(scope) {
+    return this.checkPermission(scope, 'view');
+  }
+
   isAllowDelete(scope) {
     return this.checkPermission(scope, 'delete');
   }
 
-  getPackagesPermissions = () => {
-    getPackagesPermissions().then((permissions) => {
-      this.permissions.packages = permissions;
-    });
-  }
-
-  getBeveragesPermissions = () => {
-    getBeveragesPermissions().then((permissions) => {
-      this.permissions.beverages = permissions;
+  registerScopePermissions = (scope, getter) => {
+    getter().then((permissions) => {
+      this.permissions[scope] = permissions;
     });
   }
 }
